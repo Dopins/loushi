@@ -1,0 +1,17 @@
+//注册
+//发送
+{
+	"mobile_phone":"19992010212",
+	"password":"123asdasd",
+	"verify_code":"1112",
+	"token":"2131EF"
+}
+
+//接收
+{
+	state: 1,//状态即是否操作成功bool类型
+	code: "10000",//错误码暂时没用到
+	return_info: "错误信息",
+	body: 
+	{}//数据体
+}

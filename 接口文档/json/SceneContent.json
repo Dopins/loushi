@@ -1,0 +1,64 @@
+//获取场景内容
+//发送
+{
+	"user_id" : 223,		//用户id
+	"scene_id": 22, 		//场景id
+}
+
+//接收
+{
+	state: 1,//状态即是否操作成功bool类型
+	code: "10000",//错误码暂时没用到
+	return_info: "错误信息",
+	body: 
+	[
+		{			
+			"id":21,
+			"sort":0,//排序
+			"type":2,//内容类型（0：标题，1：正文，2：场景图片）
+			"content":"neirong",//具体内容（若是图片为html文件的路径）
+			"sceneID": 22,
+			"scene":
+			{
+				"id":22,
+				"name":"海贼宿舍",
+				"label": "海贼王",
+				"groupID":22,
+				"sceneGroup":
+				{
+					"id":22,
+					"name":"动漫风",
+				},
+				"collectionNum":333,
+				"collected":0,//该用户是否已收藏
+				"forwordNum":12,//转发次数
+				"commentNum":6,//评论数
+				"imgUrl":"asd",
+			}
+		},
+		{			
+			"id":22,
+			"sort":1,//排序
+			"type":2,//内容类型（0：标题，1：正文，2：场景图片）
+			"content":"neirong",//具体内容（若是图片为html文件的路径）
+			"sceneID": 22,
+			"scene":
+			{
+				"id":22,
+				"name":"海贼宿舍",
+				"label": "海贼王",
+				"groupID":22,
+				"sceneGroup":
+				{
+					"id":22,
+					"name":"动漫风",
+				},
+				"collectionNum":333,
+				"collected":0,//该用户是否已收藏
+				"forwordNum":12,//转发次数
+				"commentNum":6,//评论数
+				"imgUrl":"asd",
+			}
+		}
+	]//数据体
+}

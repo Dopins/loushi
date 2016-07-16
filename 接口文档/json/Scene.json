@@ -1,0 +1,51 @@
+//获取场景
+//发送
+{
+	"user_id" : 223,			//用户id
+	"scene_group_id": 22, 	//场景组id
+	"recommended":0,		//是否推荐
+	"skip":20,				//跳过多少数据用于分页（次）获取
+	"take":20,				//取多少条数据	
+}
+
+//接收
+{
+	state: 1,//状态即是否操作成功bool类型
+	code: "10000",//错误码暂时没用到
+	return_info: "错误信息",
+	body: 
+	[
+		{
+			"id":21,
+			"name":"海贼宿舍",
+			"label": "海贼王",
+			"groupID":22,
+			"sceneGroup":
+			{
+				"id":22,
+				"name":"动漫风",
+			},
+			"collectionNum":333,
+			"collected":0,//该用户是否已收藏
+			"forwordNum":12,//转发次数
+			"commentNum":6,//评论数
+			"imgUrl":"asd",
+		},
+		{
+			"id":221,
+			"name":"宫崎骏宿舍",
+			"label": "宫崎骏",
+			"groupID":22,
+			"sceneGroup":
+			{
+				"id":22,
+				"name":"动漫风",
+			},
+			"collectionNum":333,
+			"collected":0,//该用户是否已收藏
+			"forwordNum":12,//转发次数
+			"commentNum":6,//评论数
+			"imgUrl":"asd",
+		}
+	]//数据体
+}

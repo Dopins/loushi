@@ -1,0 +1,57 @@
+//获取评论
+//发送
+{
+	"user_id": 22, 			//用户id
+	"type": 1				//评论类型（0：场景，1：专题，2：攻略，3：商品，4：小秘书对个人，5：小秘书群发）
+	"pid":223				//评论的场景/专题/攻略/商品的id
+}
+
+//接收
+{
+	state: 1,//状态即是否操作成功bool类型
+	code: "10000",//错误码暂时没用到
+	return_info: "错误信息",
+	body: 
+	[
+		{
+			"id":31,
+			"cDate":2008-08-09 23:22:24,//创建时间
+			"userID":0,
+			"userInfo":
+			{
+				"nickname":"阿瑟斯",
+				"headImgUrl":"http://23.jpg",
+			},
+			"replyedID":22,
+			"replyedInfo":
+			{
+				"nickname":"小刀",
+				"headImgUrl":"http://23.jpg",
+			},
+			"type":4,//评论类型（0：场景1：专题2：攻略3：商品4：小秘书对个人5：小秘书群发）
+			"pid":0,//评论的场景/专题/攻略/商品的id
+			"pidImgUrl":"http://loushi.com/jsadj.png",//评论的场景/专题/攻略/商品/系统消息的图片地址
+			"content":"是的",
+		},
+		{
+			"id":222,
+			"cDate":2008-08-09 23:22:24,//创建时间
+			"userID":0,
+			"userInfo":
+			{
+				"nickname":"艾奥瓦",
+				"headImgUrl":"http://23.jpg",
+			},
+			"replyedID":22,
+			"replyedInfo":
+			{
+				"nickname":"小刀",
+				"headImgUrl":"http://23.jpg",
+			},
+			"type":4,//评论类型（0：场景，1：专题，2：攻略，3：商品，4：小秘书对个人，5：小秘书群发）
+			"pid":0,//评论的场景/专题/攻略/商品的id
+			"pidImgUrl":"http://loushi.com/jsadj.png",//评论的场景/专题/攻略/商品/系统消息的图片地址
+			"content":"呵呵",
+		}
+	]//数据体
+}

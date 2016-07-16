@@ -1,0 +1,49 @@
+//获取专题
+//发送
+{
+	"user_id" : 223,			//用户id
+	"type": 0, 				//类型（0：场景，1：专题，2：攻略，3：商品）
+	"keyword": "搜索词汇",   
+	"skip":20,				//跳过多少数据用于分页（次）获取
+	"take":20,				//取多少条数据	
+}
+
+//接收
+{
+	state: 1,//状态即是否操作成功bool类型
+	code: "10000",//错误码暂时没用到
+	return_info: "错误信息",
+	body: 
+	[//对应类型来返回
+		{
+			"id":21,
+			"name":"好枕头",
+			"groupID":22,
+			"topicGroup":
+			{
+				"id":22,
+				"name":"枕头",
+			},
+			"collectionNum":333,
+			"collected":0,//该用户是否已收藏
+			"forwordNum":12,//转发次数
+			"commentNum":6,//评论数
+			"imgUrl":"asd",
+		},
+		{
+			"id":221,
+			"name":"坏枕头",
+			"groupID":22,
+			"topicGroup":
+			{
+				"id":22,
+				"name":"枕头",
+			},
+			"collectionNum":333,
+			"collected":0,//该用户是否已收藏
+			"forwordNum":12,//转发次数
+			"commentNum":6,//评论数
+			"imgUrl":"asd",
+		}
+	]//数据体
+}
