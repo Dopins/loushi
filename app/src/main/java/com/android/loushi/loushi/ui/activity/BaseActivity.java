@@ -11,7 +11,7 @@ import com.android.loushi.loushi.R;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     public static final String url="";
-    private Toolbar mToolbar;
+    public Toolbar mToolbar;
     protected abstract int getLayoutId();
     @Override
     protected void onCreate(Bundle savedInstanceState) {

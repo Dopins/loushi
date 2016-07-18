@@ -1,10 +1,14 @@
 package com.android.loushi.loushi.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 
@@ -13,12 +17,19 @@ import com.android.loushi.loushi.R;
  */
 
 //场景
-public class SceneFragment extends  BaseFragment {
+public class SceneFragment extends BaseFragment {
     private View rootView;
-
+    private Toolbar mToolbar;
+    private TextView mTv_index;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        //setContentView(findViewById(R.layout.fragment_scene));
+        mToolbar=(Toolbar)getView().findViewById(R.id.program_toolbar);
+        mToolbar.setTitle("");
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        mTv_index=(TextView)mToolbar.findViewById(R.id.toolbar_index);
+        mTv_index.setText("场景");
     }
 
     @Override
@@ -39,6 +50,7 @@ public class SceneFragment extends  BaseFragment {
         return rootView;
 
     }
+
 
     public void onSaveInstanceState(Bundle outState) {
         // TODO Auto-generated method stub
