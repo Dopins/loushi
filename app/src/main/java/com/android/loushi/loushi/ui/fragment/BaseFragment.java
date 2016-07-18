@@ -18,7 +18,7 @@ import java.lang.reflect.Field;
 /**
  * Created by Administrator on 2016/7/18.
  */
-public class  BaseFragment extends Fragment {
+public  class  BaseFragment extends Fragment {
     public static String url = "";
     protected LayoutInflater inflater;
     private View contentView;

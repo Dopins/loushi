@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.ui.activity.BaseActivity;
 
 /**
  * Created by Administrator on 2016/7/18.
@@ -48,6 +49,7 @@ public class SceneFragment extends BaseFragment {
             parent.removeView(rootView);
         }
         return rootView;
+
 
     }
 

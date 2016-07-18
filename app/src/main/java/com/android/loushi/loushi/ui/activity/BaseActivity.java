@@ -10,7 +10,7 @@ import com.android.loushi.loushi.R;
  * Created by Administrator on 2016/7/17.
  */
 public abstract class BaseActivity extends AppCompatActivity {
-    public static final String url="";
+    public static final String url="111";
     public Toolbar mToolbar;
     protected abstract int getLayoutId();
     @Override
