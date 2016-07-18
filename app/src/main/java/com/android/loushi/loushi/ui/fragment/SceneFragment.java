@@ -11,6 +11,8 @@ import com.android.loushi.loushi.R;
 /**
  * Created by Administrator on 2016/7/18.
  */
+
+//场景
 public class SceneFragment extends  BaseFragment {
     private View rootView;
 
