@@ -9,9 +9,11 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.ui.fragment.CategoryFragment;
 import com.android.loushi.loushi.ui.fragment.MyFragment;
+import com.android.loushi.loushi.ui.fragment.PersonFragment;
 import com.android.loushi.loushi.ui.fragment.SceneFragment;
 
 public class MainActivity extends BaseActivity {
@@ -20,7 +22,7 @@ public class MainActivity extends BaseActivity {
     private Class fragmentArray[] = {SceneFragment.class,CategoryFragment.class,MyFragment.class};
     private String mTextviewArray[] = {"场景", "指南", "我的"};
     //定义数组来存放按钮图片
-    private int mImageViewArray[] = {R.drawable.tab_scene_button,R.drawable.tab_category_button,R.drawable.tab_my_button
+    private int mImageViewArray[] = {R.drawable.tab_scene_button, R.drawable.tab_category_button,R.drawable.tab_my_button
     };
     @Override
     protected int getLayoutId() {

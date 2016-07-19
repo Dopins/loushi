@@ -21,11 +21,11 @@ public class MyFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-        mToolbar=(Toolbar)getView().findViewById(R.id.program_toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
-        mToolbar.setTitle("");
-        mTv_index=(TextView)mToolbar.findViewById(R.id.toolbar_index);
-        mTv_index.setText("我的");
+//        mToolbar=(Toolbar)getView().findViewById(R.id.program_toolbar);
+//        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+//        mToolbar.setTitle("");
+//        mTv_index=(TextView)mToolbar.findViewById(R.id.toolbar_index);
+//        mTv_index.setText("我的");
 
         //mToolbar.setTitle("loushi");
     }
@@ -36,6 +36,6 @@ public class MyFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_my, null);
 
 
-        return inflater.inflate(R.layout.fragment_category, container, false);
+        return inflater.inflate(R.layout.fragment_my, container, false);
     }
 }
