@@ -1,6 +1,8 @@
 package com.android.loushi.loushi.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -10,11 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.ViewPagerAdapter;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
+import com.android.loushi.loushi.ui.activity.SearchActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +52,15 @@ public class SceneFragment extends BaseFragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         mTv_index=(TextView)mToolbar.findViewById(R.id.toolbar_index);
         mTv_index.setText("场景");
+
+        ImageView search_image=(ImageView)getView().findViewById(R.id.search_image);
+        search_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
         initViewPager();
     }
 

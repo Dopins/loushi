@@ -46,11 +46,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (mToolbar != null) {
-            //将Toolbar显示到界面
-            setSupportActionBar(mToolbar);
-        }
+
         initView();
     }
     private void initView(){

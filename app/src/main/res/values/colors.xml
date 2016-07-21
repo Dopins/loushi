@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3289fa</color>
-    <color name="gray">#f7f7f7</color>
-    <color name="dark_gray">#e1e1e1</color>
+    <color name="colorPrimary">#69B8BB</color>
+    <color name="colorLine">#D9D8DE</color>
+    <color name="colorDetail">#BBBBBB</color>
+    <color name="colorDate">#D9D8DE</color>
+    <color name="colorWatch">#A5AA86</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhite">#ffffff</color>
-    <color name="black">#333</color>
+    <color name="colorWhite70">#b4ffffff</color>
+    <color name="colorTitle">#3D3D3D</color>
 </resources>
