@@ -26,7 +26,7 @@ public class HotWordRecycleViewAdapter extends RecyclerView.Adapter<HotWordRecyc
         public HotwordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         return new HotwordViewHolder(LayoutInflater.from(
-                context).inflate(R.layout.hot_word_cardview, parent,
+                context).inflate(R.layout.cardview_hotword, parent,
                 false));
     }
 
