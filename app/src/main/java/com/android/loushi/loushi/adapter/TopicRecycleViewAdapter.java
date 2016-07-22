@@ -9,10 +9,21 @@ import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by binpeiluo on 2016/7/21 0021.
  */
-public class TopicRecycleViewAdapter extends RecyclerView.Adapter{
+public class TopicRecycleViewAdapter extends RecyclerView.Adapter<TopicRecycleViewAdapter.ViewHolder>{
+
+    private static final int topicCount=8;
+    private final int[] mTopicImageId={
+            R.drawable.project_light,R.drawable.project_it,
+            R.drawable.project_food,R.drawable.project_strange,
+            R.drawable.project_old,R.drawable.project_star,
+            R.drawable.project_store,R.drawable.project_cartoon};
+
 
     private Context mContext;
     private OnItemClickListener mOnItemClickListener;
@@ -21,31 +32,30 @@ public class TopicRecycleViewAdapter extends RecyclerView.Adapter{
         this.mContext=context;
     }
 
+
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TopicRecycleViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view=View.inflate(mContext, R.layout.item_recyclerview_guide,null);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+    public void onBindViewHolder(TopicRecycleViewAdapter.ViewHolder holder, int position) {
+        holder.imageView.setImageResource(mTopicImageId[position]);
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return this.topicCount;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageView imageView;
-        private TextView textView;
+        public ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             imageView= (ImageView) itemView.findViewById(R.id.item_imageView_guide);
-            textView= (TextView) itemView.findViewById(R.id.item_textView_guide);
             itemView.setOnClickListener(this);
         }
 

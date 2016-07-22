@@ -5,9 +5,11 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.CategoryViewPagerAdapter;
@@ -20,6 +22,8 @@ import java.util.List;
  */
 public class CategoryFragment extends BaseFragment {
 
+    private static final String TAG="CategoryFragment";
+
     private Toolbar toolbar;
     private TabLayout tablayout_category;
     private ViewPager viewPager_category;
@@ -28,18 +32,20 @@ public class CategoryFragment extends BaseFragment {
     private List<Fragment> mFragmentList;
     private CategoryViewPagerAdapter mAdapter;
 
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-
+//        Log.e(TAG,"onActivityCreated");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_category, container, false);
-        initView(view);
+//        view=inflater.inflate(R.layout.fragment_category, container, false);
+        View view=inflater.inflate(R.layout.fragment_category,null);
+        Log.e(TAG,"onCreateView");
         return view;
     }
 
@@ -56,6 +62,7 @@ public class CategoryFragment extends BaseFragment {
 
         toolbar= (Toolbar) view.findViewById(R.id.toolbar);
         tablayout_category= (TabLayout) view.findViewById(R.id.tablayout_category);
+        tablayout_category.setTabMode(TabLayout.MODE_FIXED);
         viewPager_category= (ViewPager) view.findViewById(R.id.viewPager_category);
 
         for(String title:mTitleList){
@@ -63,7 +70,8 @@ public class CategoryFragment extends BaseFragment {
         }
 
         mAdapter=new CategoryViewPagerAdapter(
-                getActivity().getSupportFragmentManager(),mTitleList,mFragmentList);
+                getChildFragmentManager(),mTitleList,mFragmentList);
+//                getActivity().getSupportFragmentManager(),mTitleList,mFragmentList);
         viewPager_category.setAdapter(mAdapter);
         tablayout_category.setupWithViewPager(viewPager_category);
     }
