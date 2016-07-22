@@ -36,7 +36,7 @@ app/*.iml
 
 .gradle
 .idea
-grable
+gradle
 build.gradle
 gradle.properties
 local.properties
