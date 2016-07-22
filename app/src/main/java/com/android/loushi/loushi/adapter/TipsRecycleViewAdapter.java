@@ -23,7 +23,7 @@ public class TipsRecycleViewAdapter extends RecyclerView.Adapter{
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view=View.inflate(mContext, R.layout.item_recyclerview_guide,null);
+        View view=View.inflate(mContext, R.layout.cardview_tip,null);
         return new ViewHolder(view);
     }
 
@@ -39,13 +39,24 @@ public class TipsRecycleViewAdapter extends RecyclerView.Adapter{
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageView imageView;
-        private TextView textView;
+        private ImageView imageViewCard;
+        private TextView textViewTitle;
+        private TextView textViewDate;
+        private ImageView imageViewPrefer;
+        private TextView textViewPreferCount;
+        private ImageView imageViewWatch;
+        private TextView textViewWatchCount;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imageView= (ImageView) itemView.findViewById(R.id.item_imageView_guide);
-            textView= (TextView) itemView.findViewById(R.id.item_textView_guide);
+            imageViewCard= (ImageView) itemView.findViewById(R.id.card_image);
+            textViewTitle= (TextView) itemView.findViewById(R.id.card_title);
+            textViewDate= (TextView) itemView.findViewById(R.id.date);
+            textViewDate= (TextView) itemView.findViewById(R.id.num_prefer);
+            imageViewPrefer= (ImageView) itemView.findViewById(R.id.image_prefer);
+            textViewPreferCount= (TextView) itemView.findViewById(R.id.num_prefer);
+            imageViewWatch= (ImageView) itemView.findViewById(R.id.image_watch);
+            textViewWatchCount= (TextView) itemView.findViewById(R.id.num_watch);
             itemView.setOnClickListener(this);
         }
 
