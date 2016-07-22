@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
@@ -54,8 +55,8 @@ public class SceneFragment extends BaseFragment {
         mTv_index = (TextView) mToolbar.findViewById(R.id.toolbar_index);
         mTv_index.setText("场景");
 
-        ImageView search_image = (ImageView) getView().findViewById(R.id.search_image);
-        search_image.setOnClickListener(new View.OnClickListener() {
+        LinearLayout btn_search=(LinearLayout)getView().findViewById(R.id.btn_search);
+        btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), SearchActivity.class);

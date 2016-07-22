@@ -46,6 +46,7 @@ public class CategoryFragment extends BaseFragment {
 //        view=inflater.inflate(R.layout.fragment_category, container, false);
         View view=inflater.inflate(R.layout.fragment_category,null);
         Log.e(TAG,"onCreateView");
+        initView(view);
         return view;
     }
 
