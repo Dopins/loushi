@@ -10,13 +10,13 @@
         android:layout_height="wrap_content"
         >
         <android.support.v7.widget.Toolbar
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/program_toolbar"
-            app:layout_scrollFlags="scroll|enterAlways"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:background="@color/colorPrimary"
-            android:minHeight="?actionBarSize">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/program_toolbar"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/colorPrimary"
+        android:minHeight="?actionBarSize">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

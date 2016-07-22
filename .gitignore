@@ -32,3 +32,12 @@ app/*.iml
 
 *.*~
 */*.iml
+
+
+.gradle
+.idea
+grable
+build.gradle
+gradle.properties
+local.properties
+settings.gradle
