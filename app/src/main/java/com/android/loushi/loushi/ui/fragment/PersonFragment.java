@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.ui.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -16,7 +17,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.adapter.PersonCollectTabAdapter;
 import com.android.loushi.loushi.adapter.ViewPagerAdapter;
+import com.android.loushi.loushi.util.SlidingTabLayout;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +35,15 @@ public class PersonFragment extends BaseFragment {
 
     private Toolbar mToolbar;
     private TextView mTv_index;
-    private TabLayout mtoorbar_tab;
-    private ViewPager vp_FindFragment_pager;                             //定义viewPager
-    private ViewPagerAdapter fAdapter;                               //定义adapter
-
+    //private TabLayout mtoorbar_tab;
+    private SlidingTabLayout mtoorbar_tab;
+                            //定义viewPager
+    private PersonCollectTabAdapter personCollectTabAdapter;                               //定义adapter
     private List<Fragment> list_fragment;                                //定义要装fragment的列表
-    private List<String> list_title;
-    private CategoryFragment categoryFragment;
+    private List<String> list_cate;
+    private List<String> list_count;
+    //private CategoryFragment categoryFragment;
+    private CollectGoodFragment collectGoodFragment;
     private ViewPager mViewPager;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     @Override
@@ -71,23 +78,42 @@ public class PersonFragment extends BaseFragment {
     private void initTablayout() {
         mViewPager = (ViewPager)getView().findViewById(R.id.main_vp_container);
         list_fragment = new ArrayList<>();
-        categoryFragment=new CategoryFragment();
-        list_fragment.add(categoryFragment);
-        categoryFragment=new CategoryFragment();
-        list_fragment.add(categoryFragment);
-        categoryFragment=new CategoryFragment();
-        list_fragment.add(categoryFragment);
-        list_title = new ArrayList<>();
-        list_title.add("场景");
-        list_title.add("指南");
-        list_title.add("单品");
-        mtoorbar_tab.setTabMode(TabLayout.MODE_FIXED);
-        mtoorbar_tab.addTab(mtoorbar_tab.newTab().setText(list_title.get(0)));
-        mtoorbar_tab.addTab(mtoorbar_tab.newTab().setText(list_title.get(1)));
-        mtoorbar_tab.addTab(mtoorbar_tab.newTab().setText(list_title.get(2)));
-        fAdapter = new ViewPagerAdapter(getChildFragmentManager(),list_fragment,list_title);
-        mViewPager.setAdapter(fAdapter);
-        mtoorbar_tab.setupWithViewPager(mViewPager);
+        collectGoodFragment=new CollectGoodFragment();
+        list_fragment.add(collectGoodFragment);
+        collectGoodFragment=new CollectGoodFragment();
+        list_fragment.add(collectGoodFragment);
+        collectGoodFragment=new CollectGoodFragment();
+        list_fragment.add(collectGoodFragment);
+        list_cate = new ArrayList<>();
+        list_count = new ArrayList<>();
+        list_cate.add("场景");
+        list_cate.add("指南");
+        list_cate.add("单品");
+        list_count.add("32");
+
+        list_count.add("32");
+        list_count.add("32");
+
+        personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(),list_fragment,list_cate,list_count,getContext());
+        mViewPager.setAdapter(personCollectTabAdapter);
+
+
+        mtoorbar_tab.setTabStripWidth(120);
+
+
+        //mtoorbar_tab.setSelectedIndicatorColors(R.color.colorPrimary);
+        mtoorbar_tab.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return Color.rgb(105,184,187);
+            }
+        });
+        mtoorbar_tab.setDistributeEvenly(true);
+        mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, R.id.tv_tab_view_count);
+
+        //mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, 0);
+        mtoorbar_tab.setViewPager(mViewPager);
+
         AppBarLayout app_bar_layout = (AppBarLayout)getView(). findViewById(R.id.app_bar_layout);
         app_bar_layout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -106,7 +132,7 @@ public class PersonFragment extends BaseFragment {
         mToolbar=(Toolbar)getView().findViewById(R.id.program_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         mToolbar.setTitle("");
-        mtoorbar_tab=(TabLayout)getView().findViewById(R.id.toolbar_tab);
+        mtoorbar_tab=(SlidingTabLayout)getView().findViewById(R.id.toolbar_tab);
     }
 
 }

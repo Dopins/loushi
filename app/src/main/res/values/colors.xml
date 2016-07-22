@@ -14,4 +14,7 @@
     <color name="colorWhite70">#b4ffffff</color>
     <color name="colorTitle">#3D3D3D</color>
 
+    <color name="colorCollectTabText">#DEDDE2</color>
+    <color name="btnprofileborder">#7DC1C4</color>
+
 </resources>

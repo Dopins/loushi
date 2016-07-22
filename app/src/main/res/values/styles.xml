@@ -20,5 +20,7 @@
     <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">14sp</item>
     </style>
-
+    <style name="TipsZanTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/cb_zan</item>
+    </style>
 </resources>

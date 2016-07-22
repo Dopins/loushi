@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="44dp"
+    android:background="#fff"
+    android:layout_marginLeft="27dp"
+    android:layout_marginRight="27dp"
+    android:id="@+id/collect_bar">
+
+        <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:id="@+id/collect_bar_linear_like"
+            android:clickable="true"
+    >
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cb_zan"
+        android:id="@+id/collect_bar_btn_like"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:text="1364"
+        android:textSize="10sp"
+        android:textColor="@color/PrimaryText"
+        android:id="@+id/collect_bar_tv_like"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="点赞"/>
+
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:id="@+id/collect_bar_linear_comment"
+        android:layout_marginLeft="29dp"
+
+        android:clickable="true">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/reply"
+            android:id="@+id/collect_bar_btn_comment"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="1364"
+            android:textSize="10sp"
+            android:textColor="@color/PrimaryText"
+            android:id="@+id/collect_bar_tv_comment"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="评论"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:id="@+id/collect_bar_linear_share"
+        android:layout_marginLeft="29dp"
+
+        android:clickable="true">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/share"
+            android:id="@+id/collect_bar_btn_share"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="1364"
+            android:textSize="10sp"
+            android:textColor="@color/PrimaryText"
+            android:id="@+id/collect_bar_tv_share"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="转发"/>
+
+    </LinearLayout>
+
+</LinearLayout>

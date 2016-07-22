@@ -1,9 +1,10 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:imagecontrol="http://schemas.Android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+
     >
 
     <android.support.design.widget.AppBarLayout
@@ -24,17 +25,65 @@
             app:expandedTitleTextAppearance="@style/transparentText"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-          <LinearLayout
+          <RelativeLayout
               android:layout_width="match_parent"
               android:layout_height="338dp"
               android:background="#fff">
-            <ImageView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
-                android:background="@drawable/list1"
+                android:background="@drawable/my_slogan"
                 >
 
-            </ImageView></LinearLayout>
+
+
+
+            </LinearLayout>
+              <com.android.loushi.loushi.util.RoundImageView
+                  android:layout_width="80dp"
+                  android:layout_height="80dp"
+                  android:layout_marginTop="130dp"
+                  android:id="@+id/img_head"
+                  imagecontrol:border_thickness="2dp"
+                  imagecontrol:border_inside_color="#fff"
+                  imagecontrol:border_outside_color="#bc0978"
+                  android:layout_centerHorizontal="true"
+                  android:src="@drawable/test_collect_good"
+                  >
+
+
+          </com.android.loushi.loushi.util.RoundImageView>
+              <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="215dp"
+                  android:text="matf5"
+                  android:id="@+id/tv_nickname"
+                  android:textColor="#ACB7C1"
+                  android:textSize="20sp"
+                  android:layout_centerHorizontal="true"/>
+              <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="华南理工大学"
+                  android:id="@+id/tv_school"
+                  android:layout_below="@+id/tv_nickname"
+                  android:layout_centerHorizontal="true"
+                  android:textColor="#D9D8DE"
+                  android:layout_marginTop="5dp"
+                  android:textSize="15sp"/>
+              <Button
+                  android:layout_width="122dp"
+                  android:layout_height="30dp"
+                  android:text="个人资料"
+                  android:gravity="center"
+                  android:textColor="#ffffff"
+                  android:layout_below="@+id/tv_school"
+                  android:background="@drawable/bg_btn_profile"
+                  android:layout_marginTop="10dp"
+                  android:shadowRadius="4"
+                  android:layout_centerHorizontal="true"/>
+          </RelativeLayout>
 
 
 
@@ -46,37 +95,70 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:theme="@style/ThemeOverlay.AppCompat.Light"
                 >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:text="反馈"
+                        android:textSize="16sp"
+                        android:textColor="#ffffff"
+                        android:layout_alignParentLeft="true"
+                        />
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="20dp"
+
+                        android:background="@drawable/settings"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/my_settings"/>
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="30dp"
+                        android:background="@drawable/message"
+                        android:id="@+id/my_message"
+                        android:layout_toLeftOf="@+id/my_settings"/>
+                </RelativeLayout>
 
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/toolbar_tab"
+        <!--<android.support.design.widget.TabLayout-->
+            <!--android:id="@+id/toolbar_tab"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:background="#ffffff"-->
+            <!--android:fillViewport="false"-->
+            <!--app:tabPaddingStart="20dp"-->
+            <!--app:tabPaddingEnd="20dp"-->
+            <!--app:layout_scrollFlags="scroll"-->
+            <!--app:tabIndicatorColor="@color/colorPrimary"-->
+            <!--app:tabIndicatorHeight="2.0dp"-->
+            <!--app:tabSelectedTextColor="#0835f8"-->
+            <!--app:tabTextColor="#ced0d3">-->
+
+
+
+
+        <!--</android.support.design.widget.TabLayout>-->
+        <com.android.loushi.loushi.util.SlidingTabLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="bottom"
-            android:background="#ffffff"
-            android:fillViewport="false"
-            app:layout_scrollFlags="scroll"
-            app:tabIndicatorColor="#0835f8"
-            app:tabIndicatorHeight="2.0dp"
-            app:tabSelectedTextColor="#0835f8"
-            app:tabTextColor="#ced0d3">
-
-
-
-
-        </android.support.design.widget.TabLayout>
+            android:layout_height="51dp"
+            android:background="#fff"
+            android:id="@+id/toolbar_tab"></com.android.loushi.loushi.util.SlidingTabLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:scrollbars="none"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
 
         <android.support.v4.view.ViewPager
             android:id="@+id/main_vp_container"
@@ -84,5 +166,5 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    </android.support.v4.widget.NestedScrollView>
+
 </android.support.design.widget.CoordinatorLayout>

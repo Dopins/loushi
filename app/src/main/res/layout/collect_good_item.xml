@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:layout_width="116dp"
+    android:padding="6dp"
+    >
+
+    <ImageView
+        android:layout_width="104dp"
+        android:layout_height="133dp"
+        android:src="@drawable/test_collect_good"
+        android:id="@+id/collect_good_item_img_good"
+        android:background="@drawable/bg_collect_item"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="7dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginRight="5dp"
+
+            android:text="$"/>
+        <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/tv_price"
+    android:textSize="25sp"
+
+
+
+    android:text="222"
+        android:textColor="#fff"
+    />
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="木头质感"
+        android:id="@+id/collect_good_item_tv_name"
+        android:textColor="#fff"
+        android:layout_marginTop="92dp"
+        android:layout_marginLeft="12dp"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:layout_marginLeft="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/collect_good_item_btn_like"
+            style="@style/TipsZanTheme"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="555"
+        android:textColor="@color/PrimaryText"
+        android:layout_toRightOf="@+id/collect_good_item_btn_like"
+        android:id="@+id/collect_good_item_tv_like_count"
+        android:layout_marginLeft="10dp"
+       />
+</LinearLayout>
+
+
+
+</RelativeLayout>
