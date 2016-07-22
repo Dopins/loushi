@@ -1,26 +1,34 @@
 package com.android.loushi.loushi.ui.activity;
 
 import android.app.Activity;
-import android.graphics.Rect;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import android.text.Editable;
+import android.text.TextWatcher;
+
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
+import android.widget.TextView;
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.adapter.HotWordRecycleViewAdapter;
-import com.android.loushi.loushi.util.SpacesItemDecoration;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.android.loushi.loushi.ui.fragment.SearchFragment;
+import com.android.loushi.loushi.ui.fragment.SearchResultFragment;
+import com.android.loushi.loushi.util.SearchWords;
+
 
 /**
  * Created by dopin on 2016/7/18.
  */
 public class SearchActivity extends Activity {
-    private RecyclerView mRecyclerView;
-    private List<String> mDatas;
-    private HotWordRecycleViewAdapter hRecycleAdapter;
+
+    public static EditText editText_search;
+    static FragmentManager fragmentManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,20 +36,74 @@ public class SearchActivity extends Activity {
         init();
     }
     private void init(){
-        initData();
-        hRecycleAdapter= new HotWordRecycleViewAdapter(SearchActivity.this,mDatas);
-        mRecyclerView = (RecyclerView)findViewById(R.id.hotWordRecycleView);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this,3));
-        mRecyclerView.setAdapter(hRecycleAdapter);
+        fragmentManager = getFragmentManager();
+        SearchFragment searchFragment=new SearchFragment();
+        fragmentManager.beginTransaction().replace(R.id.search_frame, searchFragment).commit();
 
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(20,20, 20, 20));//设置recycleview间距
+        editText_search=(EditText)findViewById(R.id.search_word);
+
+        final TextView btn_search=(TextView)findViewById(R.id.search_text);
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String str=btn_search.getText().toString();
+                if(str.equals("搜索")){
+                    String keyword = editText_search.getText().toString();
+                    search(keyword);
+                }
+               else{
+                    finish();
+                }
+            }
+        });
+
+        editText_search.addTextChangedListener(new TextWatcher() {
+            boolean flag=false;
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(count>0){
+                    flag=true;//添加搜索关键词
+                }else{
+                    flag=false;
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String keyword = editText_search.getText().toString();
+                if(keyword.length()!=0) btn_search.setText("取消");
+                else btn_search.setText("搜索");
+                if(flag) {
+                    search(keyword);
+                }
+            }
+        });
+
     }
-    protected void initData()
-    {
-        mDatas = new ArrayList<String>();
-        for (int i = 0; i < 5; i++)
-        {
-            mDatas.add("热搜词"+(i+1));
+    public static void search(String keyword){
+        if(!keyword.equals("")){
+            if(keyword.length()>10){
+                keyword=keyword.substring(0,9);
+            }
+            SearchWords searchWords = new SearchWords();
+            searchWords.setWords(keyword);
+            android.text.format.Time time=new android.text.format.Time();
+            time.setToNow();
+            String date=(time.month+1)+"/"+time.monthDay;
+            searchWords.setDate(date);
+
+            searchWords.save();
+
+            SearchResultFragment searchResultFragment = new SearchResultFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("keyword",keyword);
+            searchResultFragment.setArguments(bundle);
+            fragmentManager.beginTransaction().replace(R.id.search_frame, searchResultFragment).commit();
+
         }
     }
 }

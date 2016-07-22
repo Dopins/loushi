@@ -44,4 +44,16 @@ proguard-project.txt
 
 .idea/
 
-*.iml
+
+*.*~
+*/*.iml
+
+
+.gradle
+.idea
+gradle
+build.gradle
+gradle.properties
+local.properties
+settings.gradle
+

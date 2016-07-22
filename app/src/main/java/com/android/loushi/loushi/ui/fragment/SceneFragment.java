@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
@@ -43,21 +44,22 @@ public class SceneFragment extends BaseFragment {
     private InterestFragment interestFragment;
     private StyleFragment styleFragment;
     private HabitFragment habitFragment;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //setContentView(findViewById(R.layout.fragment_scene));
-        mToolbar=(Toolbar)getView().findViewById(R.id.program_toolbar);
+        mToolbar = (Toolbar) getView().findViewById(R.id.program_toolbar);
         mToolbar.setTitle("");
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
-        mTv_index=(TextView)mToolbar.findViewById(R.id.toolbar_index);
+        mTv_index = (TextView) mToolbar.findViewById(R.id.toolbar_index);
         mTv_index.setText("场景");
 
-        ImageView search_image=(ImageView)getView().findViewById(R.id.search_image);
-        search_image.setOnClickListener(new View.OnClickListener() {
+        LinearLayout btn_search=(LinearLayout)getView().findViewById(R.id.btn_search);
+        btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getContext(), SearchActivity.class);
+                Intent intent = new Intent(getContext(), SearchActivity.class);
                 startActivity(intent);
             }
         });
@@ -68,24 +70,23 @@ public class SceneFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-       if (rootView == null)
-        {
-        rootView = inflater.inflate(R.layout.fragment_scene, null);
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_scene, null);
         }
         // 缓存的rootView需要判断是否已经被加过parent，如果有parent需要从parent删除，要不然会发生这个rootview已经有parent的错误。
         ViewGroup parent = (ViewGroup) rootView.getParent();
-        if (parent != null)
-        {
+        if (parent != null) {
             parent.removeView(rootView);
         }
 
 
         return rootView;
     }
+
     private void initViewPager() {
 
-        tabLayout = (TabLayout)rootView.findViewById(R.id.tab_FindFragment_title);
-        viewPager = (ViewPager)rootView.findViewById(R.id.viewPager);
+        tabLayout = (TabLayout) rootView.findViewById(R.id.tab_FindFragment_title);
+        viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
 
         //初始化各fragment
         recommendFragment = new RecommendFragment();
@@ -115,7 +116,7 @@ public class SceneFragment extends BaseFragment {
         tabLayout.addTab(tabLayout.newTab().setText(list_title.get(2)));
         tabLayout.addTab(tabLayout.newTab().setText(list_title.get(3)));
 
-        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(),list_fragment,list_title);
+        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), list_fragment, list_title);
 
         //viewpager加载adapter
         viewPager.setAdapter(viewPagerAdapter);

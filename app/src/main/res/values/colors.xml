@@ -4,7 +4,7 @@
     <color name="colorLine">#D9D8DE</color>
     <color name="colorDetail">#BBBBBB</color>
     <color name="colorDate">#D9D8DE</color>
-    <color name="colorWatch">#A5AA86</color>
+    <color name="colorWatch">#A5AAB6</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhite">#ffffff</color>
 
@@ -12,6 +12,7 @@
     <color name="PrimaryText">#C5CAE9</color>
 
     <color name="colorWhite70">#b4ffffff</color>
+    <color name="colorWhite20">#31ffffff</color>
     <color name="colorTitle">#3D3D3D</color>
 
     <color name="colorCollectTabText">#DEDDE2</color>
