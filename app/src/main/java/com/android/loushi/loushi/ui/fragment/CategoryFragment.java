@@ -1,32 +1,37 @@
 package com.android.loushi.loushi.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.adapter.CategoryRecycleViewAdapter;
-import com.android.loushi.loushi.util.SpaceItemDecoration;
+import com.android.loushi.loushi.adapter.CategoryViewPagerAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/7/18.
  */
 public class CategoryFragment extends BaseFragment {
 
+    private Toolbar toolbar;
+    private TabLayout tablayout_category;
+    private ViewPager viewPager_category;
 
-    private TextView textView_title;
-    private RecyclerView recyclerView;
-    private CategoryRecycleViewAdapter mAdapter;
+    private List<String> mTitleList;
+    private List<Fragment> mFragmentList;
+    private CategoryViewPagerAdapter mAdapter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-
 
     }
 
@@ -40,12 +45,26 @@ public class CategoryFragment extends BaseFragment {
 
 
     private void initView(View view){
-        textView_title= (TextView) view.findViewById(R.id.textView_guideTitle);
-        recyclerView= (RecyclerView) view.findViewById(R.id.recycleView_guide);
-        mAdapter=new CategoryRecycleViewAdapter(getContext());
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
-        recyclerView.addItemDecoration(new SpaceItemDecoration(getContext(),16));
-        recyclerView.setAdapter(mAdapter);
 
+        mTitleList=new ArrayList<String>();
+        mTitleList.add("专题");
+        mTitleList.add("贴士");
+        mFragmentList=new ArrayList<Fragment>();
+        mFragmentList.add(new TopicFragment());
+        mFragmentList.add(new TipsFragment());
+
+
+        toolbar= (Toolbar) view.findViewById(R.id.toolbar);
+        tablayout_category= (TabLayout) view.findViewById(R.id.tablayout_category);
+        viewPager_category= (ViewPager) view.findViewById(R.id.viewPager_category);
+
+        for(String title:mTitleList){
+            tablayout_category.addTab(tablayout_category.newTab().setText(title));
+        }
+
+        mAdapter=new CategoryViewPagerAdapter(
+                getActivity().getSupportFragmentManager(),mTitleList,mFragmentList);
+        viewPager_category.setAdapter(mAdapter);
+        tablayout_category.setupWithViewPager(viewPager_category);
     }
 }

@@ -12,12 +12,12 @@ import com.android.loushi.loushi.R;
 /**
  * Created by binpeiluo on 2016/7/21 0021.
  */
-public class CategoryRecycleViewAdapter extends RecyclerView.Adapter{
+public class TopicRecycleViewAdapter extends RecyclerView.Adapter{
 
     private Context mContext;
     private OnItemClickListener mOnItemClickListener;
 
-    public CategoryRecycleViewAdapter(Context context){
+    public TopicRecycleViewAdapter(Context context){
         this.mContext=context;
     }
 
