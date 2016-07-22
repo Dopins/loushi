@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+  <dbname value="search" ></dbname>
+  <dbname value="initial" ></dbname>
+  <version value="1" ></version>
+
+  <list>
+    <mapping class="com.android.loushi.loushi.util.SearchWords"></mapping>
+    <mapping class="com.android.loushi.loushi.util.InitialPersonInfo"></mapping>
+  </list>
+</litepal>

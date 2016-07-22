@@ -9,9 +9,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.callback.NormalCallBack;
 import com.android.loushi.loushi.callback.SceneCallBack;
+import com.android.loushi.loushi.json.ResponseJson;
 import com.android.loushi.loushi.json.SceneJson;
 import com.android.loushi.loushi.viewpager.CarouselViewPager;
 import com.squareup.picasso.Picasso;
@@ -25,40 +28,46 @@ import okhttp3.Call;
 /**
  * Created by dopin on 2016/7/17.
  */
-public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-{
+public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public OnItemClickListener itemClickListener;
-    private int mHeaderCount=1;//头部View个数
+    private OnItemClickListener itemClickListener;
+    private List<SceneJson.BodyBean> adList;
+    private ArrayList<ImageView> views;
+    private AdViewpagerAdapter adViewpagerAdapter;
+    private int mHeaderCount = 1;//头部View个数
     //item类型
     public static final int ITEM_TYPE_HEADER = 0;
     public static final int ITEM_TYPE_SCENE = 1;
-    public static final int ITEM_TYPE_TIP=2;
-    public static final int ITEM_TYPE_TOPIC=3;
+    public static final int ITEM_TYPE_TIP = 2;
+    public static final int ITEM_TYPE_TOPIC = 3;
     private Context context;
-    private List<SceneJson.BodyBean> bodyBeanList =new ArrayList<SceneJson.BodyBean>();
-    public SceneRecycleViewAdapter(Context context, List<SceneJson.BodyBean> bodyBeanList ){
-        this.context=context;
-        this.bodyBeanList=bodyBeanList;
+    private List<SceneJson.BodyBean> bodyBeanList = new ArrayList<SceneJson.BodyBean>();
 
+    public SceneRecycleViewAdapter(Context context, List<SceneJson.BodyBean> bodyBeanList) {
+        this.context = context;
+        this.bodyBeanList = bodyBeanList;
+        adList= new ArrayList<>();
     }
+
     //内容长度
-    public int getContentItemCount(){
+    public int getContentItemCount() {
         return bodyBeanList.size();
     }
+
     //判断当前item类型
     @Override
     public int getItemViewType(int position) {
 
-        if (position==0) {
+        if (position == 0) {
 //头部View
             return ITEM_TYPE_HEADER;
-        } if(position%3==1){
+        }
+        if (position % 3 == 1) {
 //内容View
             return ITEM_TYPE_SCENE;
-        }else if(position%3==2){
+        } else if (position % 3 == 2) {
             return ITEM_TYPE_TIP;
-        }else if(position%3==0&&position!=0){
+        } else if (position % 3 == 0 && position != 0) {
             return ITEM_TYPE_TOPIC;
         }
         return 0;
@@ -75,74 +84,82 @@ public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        if (viewType ==ITEM_TYPE_HEADER) {
-          return new HeaderViewHolder(LayoutInflater.from(
+        if (viewType == ITEM_TYPE_HEADER) {
+            return new HeaderViewHolder(LayoutInflater.from(
                     context).inflate(R.layout.ad_header, parent,
                     false));
         } else if (viewType == ITEM_TYPE_SCENE) {
-           return new SceneViewHolder(LayoutInflater.from(
+            return new SceneViewHolder(LayoutInflater.from(
                     context).inflate(R.layout.cardview_scene, parent,
                     false));
-        }else if(viewType==ITEM_TYPE_TIP){
+        } else if (viewType == ITEM_TYPE_TIP) {
             return new TipViewHolder(LayoutInflater.from(
                     context).inflate(R.layout.cardview_tip, parent,
                     false));
-        }else{
+        } else {
             return new TopicViewHolder(LayoutInflater.from(
                     context).inflate(R.layout.cardview_topic, parent,
                     false));
         }
     }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HeaderViewHolder) {
             setImageView(((HeaderViewHolder) holder).mCarouselView);
-        }else if(holder instanceof SceneViewHolder){
-            setSceneView(((SceneViewHolder) holder),position);
-        }else if(holder instanceof TipViewHolder){
+        }else if (holder instanceof SceneViewHolder) {
+            setSceneView(((SceneViewHolder) holder), position);
+        } else if (holder instanceof TipViewHolder) {
             setTipView(((TipViewHolder) holder), position);
-        }else{
-            setTopicView(((TopicViewHolder) holder),position);
+        } else {
+            setTopicView(((TopicViewHolder) holder), position);
         }
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return mHeaderCount + getContentItemCount();
     }
 
-    private void setTipView(TipViewHolder holder,int position){
+    private void setTipView(TipViewHolder holder, int position) {
 
-            SceneJson.BodyBean body= bodyBeanList.get(position-1);
+        SceneJson.BodyBean body = bodyBeanList.get(position - 1);
 
-            Picasso.with(context).load(body.getImgUrl()).fit().
-                    into(holder.image);
+        Picasso.with(context).load(body.getImgUrl()).fit().
+                into(holder.image);
 
-            holder.title.setText(body.getName());
-
+        holder.title.setText(body.getName());
+        holder.numPrefer.setText(body.getCollectionNum() + "");
+        holder.image_prefer.setSelected(body.isCollected());
     }
-    private void setTopicView(TopicViewHolder holder,int position){
 
-            SceneJson.BodyBean body= bodyBeanList.get(position-1);
+    private void setTopicView(TopicViewHolder holder, int position) {
 
-            Picasso.with(context).load(body.getImgUrl()).fit().
-                    into(holder.image);
+        SceneJson.BodyBean body = bodyBeanList.get(position - 1);
 
-            holder.title.setText(body.getName());
+        Picasso.with(context).load(body.getImgUrl()).fit().
+                into(holder.image);
 
+        holder.title.setText(body.getName());
+        holder.numPrefer.setText(body.getCollectionNum()+"");
+        holder.image_prefer.setSelected(body.isCollected());
     }
-    private void setSceneView(SceneViewHolder holder,int position){
 
-            SceneJson.BodyBean body= bodyBeanList.get(position-1);
+    private void setSceneView(SceneViewHolder holder, int position) {
 
-            Picasso.with(context).load(body.getImgUrl()).fit().
-                    into(holder.image);
+        SceneJson.BodyBean body = bodyBeanList.get(position - 1);
 
-            holder.title.setText(body.getName());
+        Picasso.with(context).load(body.getImgUrl()).fit().
+                into(holder.image);
+
+        holder.title.setText(body.getName());
+
+        holder.numPrefer.setText(body.getCollectionNum()+"");
+        holder.image_prefer.setSelected(body.isCollected());
     }
-    private void setImageView(CarouselViewPager viewPager){
-        ImageView view1 = (ImageView)LayoutInflater.from(
+
+    private void setImageView(CarouselViewPager viewPager) {
+        ImageView view1 = (ImageView) LayoutInflater.from(
                 context).inflate(R.layout.ad_image, null);
         ImageView view2 = (ImageView) LayoutInflater.from(
                 context).inflate(R.layout.ad_image, null);
@@ -150,26 +167,33 @@ public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 context).inflate(R.layout.ad_image, null);
         ImageView view4 = (ImageView) LayoutInflater.from(
                 context).inflate(R.layout.ad_image, null);
-        ArrayList<ImageView> views = new ArrayList<ImageView>();
+        views = new ArrayList<ImageView>();
         views.add(view1);
         views.add(view2);
         views.add(view3);
         views.add(view4);
 
-        //List<SceneJson.BodyBean> adList=getAdList();
-
-//        for(int i=0;i<4;i++){
-//            String imgUrl=adList.get(i).getImgUrl();
-//            Picasso.with(views.get(i).getContext()).load(imgUrl).fit().
-//                    into(views.get(i));
-//        }
-
-        AdViewpagerAdapter adViewpagerAdapter=new AdViewpagerAdapter(views);
+        adViewpagerAdapter = new AdViewpagerAdapter(views);
+        adViewpagerAdapter.setOnItemClickListener(new AdViewpagerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(view.getContext(), "点击adItem"+position, Toast.LENGTH_SHORT).show();
+            }
+        });
         viewPager.setAdapter(adViewpagerAdapter);
 
+        getAdList();
     }
-    private List<SceneJson.BodyBean> getAdList(){
-        final List<SceneJson.BodyBean>  adList = new ArrayList<SceneJson.BodyBean>();
+
+    private void loadAdImage(){
+        for(int i=0;i<4;i++){
+            String imgUrl=adList.get(i).getImgUrl();
+            Picasso.with(views.get(i).getContext()).load(imgUrl).fit().
+                    into(views.get(i));
+        }
+        //adViewpagerAdapter.notifyDataSetChanged();
+    }
+    private void getAdList() {
         OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/base/scene.action")
                 .addParams("user_id", "0").addParams("scene_group_id", Integer.toString(1))
                 .addParams("recommended", "true")
@@ -178,85 +202,151 @@ public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             @Override
             public void onError(Call call, Exception e) {
                 e.printStackTrace();
-                Log.d("TAG3", Log.getStackTraceString(e));
+                Log.d("tag", Log.getStackTraceString(e));
             }
 
             @Override
             public void onResponse(SceneJson sceneJson) {
                 if (sceneJson.isState()) {
-                    Log.d("TAG3", sceneJson.getBody().size()+"");
                     adList.addAll(sceneJson.getBody());
+                    loadAdImage();
                 }
             }
         });
+    }
 
-        return adList;
-    }
     //场景holder
-    class SceneViewHolder extends RecyclerView.ViewHolder
-    {
+    class SceneViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView image;
         TextView title;
         TextView detail;
         TextView numPrefer;
         TextView numWatch;
         TextView publishTime;
-        public SceneViewHolder(View view)
-        {
+        ImageView image_prefer;
+
+        public SceneViewHolder(View view) {
             super(view);
-            image=(ImageView)view.findViewById(R.id.card_image);
+            image = (ImageView) view.findViewById(R.id.card_image);
             title = (TextView) view.findViewById(R.id.card_title);
             detail = (TextView) view.findViewById(R.id.card_detail);
             numPrefer = (TextView) view.findViewById(R.id.num_prefer);
             numWatch = (TextView) view.findViewById(R.id.num_watch);
             publishTime = (TextView) view.findViewById(R.id.publish_time);
+            image_prefer=(ImageView)view.findViewById(R.id.image_prefer);
+            image_prefer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "item"+getPosition()+" 点赞", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            view.setOnClickListener(this);
+        }
+        @Override
+        public void onClick(View v){
+            if(itemClickListener!=null){
+                itemClickListener.onItemClick(v,getPosition());
+            }
         }
     }
-    class TipViewHolder extends RecyclerView.ViewHolder
-    {
+
+    class TipViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView image;
         TextView title;
         TextView detail;
         TextView numPrefer;
         TextView numWatch;
         TextView publishTime;
-        public TipViewHolder(View view)
-        {
+        ImageView image_prefer;
+
+        public TipViewHolder(View view) {
             super(view);
-            image=(ImageView)view.findViewById(R.id.card_image);
+            image = (ImageView) view.findViewById(R.id.card_image);
             title = (TextView) view.findViewById(R.id.card_title);
             detail = (TextView) view.findViewById(R.id.card_detail);
             numPrefer = (TextView) view.findViewById(R.id.num_prefer);
             numWatch = (TextView) view.findViewById(R.id.num_watch);
             publishTime = (TextView) view.findViewById(R.id.publish_time);
+            image_prefer=(ImageView)view.findViewById(R.id.image_prefer);
+
+            view.setOnClickListener(this);
+        }
+        @Override
+        public void onClick(View v){
+            if(itemClickListener!=null){
+                itemClickListener.onItemClick(v,getPosition());
+            }
         }
     }
-    class TopicViewHolder extends RecyclerView.ViewHolder
-    {
+
+    class TopicViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView image;
         TextView title;
         TextView detail;
         TextView numPrefer;
         TextView numWatch;
         TextView publishTime;
-        public TopicViewHolder(View view)
-        {
+        ImageView image_prefer;
+
+        public TopicViewHolder(View view) {
             super(view);
-            image=(ImageView)view.findViewById(R.id.card_image);
+            image = (ImageView) view.findViewById(R.id.card_image);
             title = (TextView) view.findViewById(R.id.card_title);
             detail = (TextView) view.findViewById(R.id.card_detail);
             numPrefer = (TextView) view.findViewById(R.id.num_prefer);
             numWatch = (TextView) view.findViewById(R.id.num_watch);
             publishTime = (TextView) view.findViewById(R.id.publish_time);
+            image_prefer=(ImageView)view.findViewById(R.id.image_prefer);
+
+            view.setOnClickListener(this);
+        }
+        @Override
+        public void onClick(View v) {
+            if (itemClickListener != null) {
+                itemClickListener.onItemClick(v, getPosition());
+            }
         }
     }
+
     //头部 ViewHolder
-     class HeaderViewHolder extends RecyclerView.ViewHolder {
+    class HeaderViewHolder extends RecyclerView.ViewHolder{
         private CarouselViewPager mCarouselView;
+
         public HeaderViewHolder(View itemView) {
             super(itemView);
-            mCarouselView=(CarouselViewPager)itemView.findViewById(R.id.ad_viewPager);
+            mCarouselView = (CarouselViewPager) itemView.findViewById(R.id.ad_viewPager);
+
         }
+
     }
+//    private void CollectOrNot(String user_id, String type, String pid) {
+//        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/user/userCollect.action"
+//        ).addParams("user_id", user_id).addParams("type", type)
+//                .addParams("pid", pid).build().execute(new NormalCallBack() {
+//            @Override
+//            public void onError(Call call, Exception e) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(ResponseJson responseJson) {
+//                if (responseJson.getState()) {
+//                    if (btn_collect.isSelected()) {
+//                        btn_collect.setSelected(false);
+//                        int num = Integer.parseInt(btn_collect.getText().toString()) - 1;
+//
+//                        btn_collect.setText(Integer.toString(num));
+//                    } else {
+//                        btn_collect.setSelected(true);
+//                        int num = Integer.parseInt(btn_collect.getText().toString()) + 1;
+//
+//                        btn_collect.setText(Integer.toString(num));
+//                    }
+//                }
+//
+//            }
+//        });
+//    }
 }
 

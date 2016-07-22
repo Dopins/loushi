@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/search_record_text"
+        android:layout_marginTop="11dp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/colorWhite70"
+        android:textSize="16sp"
+        android:text="搜索记录"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/date"
+            android:text="06/25"
+            android:layout_marginTop="11dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorWhite70"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <View
+        android:layout_marginTop="11dp"
+        android:background="@color/colorWhite20"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+</LinearLayout>

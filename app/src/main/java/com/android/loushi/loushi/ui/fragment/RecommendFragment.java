@@ -72,6 +72,7 @@ public class RecommendFragment extends LazyFragment {
         sceneRecycleViewAdapter.setOnItemClickListener(new SceneRecycleViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                Toast.makeText(getContext(), "点击item"+position, Toast.LENGTH_SHORT).show();
 //                Intent intent = new Intent(getActivity(), WebViewActivity.class);
 //                //intent.putExtra
 //                //传入参数 给webview Post
@@ -111,7 +112,7 @@ public class RecommendFragment extends LazyFragment {
                 addSomething2Scene();
                 swipeRefreshLayout.setRefreshing(false);
                 sceneRecycleViewAdapter.notifyDataSetChanged();
-                Toast.makeText(getContext(), "下拉更新完成", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "下拉更新完成", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -120,7 +121,7 @@ public class RecommendFragment extends LazyFragment {
     private void addSomething2Scene() {
 
        // if(get_total<getArguments().getInt(SCENE_GROUP_NUM)) {
-            GetSomeScene(3, user_id, get_total);
+            GetSomeScene(6, user_id, get_total);
        // }
 //        else
 //            Toast.makeText(getContext(),"已加载全部",Toast.LENGTH_SHORT).show();
@@ -138,13 +139,13 @@ public class RecommendFragment extends LazyFragment {
             @Override
             public void onError(Call call, Exception e) {
                 e.printStackTrace();
-                Log.d("TAG3", Log.getStackTraceString(e));
+                Log.d("tag", Log.getStackTraceString(e));
             }
 
             @Override
             public void onResponse(SceneJson sceneJson) {
                 if (sceneJson.isState()) {
-                    Log.e("scene", "加载一些");
+                    Log.e("tag", "加载一些");
                     sceneJsons = sceneJson;
                     //sceneAdapter=new SceneAdapter(getContext(),bodyBeanList,null,0);
                     bodyBeanList.addAll(sceneJson.getBody());
