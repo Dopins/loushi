@@ -23,7 +23,7 @@ public class TipsRecycleViewAdapter extends RecyclerView.Adapter{
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        View view=View.inflate(mContext, R.layout.item_recyclerview_guide,null);
+        View view=View.inflate(mContext, R.layout.item_recyclerview_guide,null);
         return new ViewHolder(view);
     }
 

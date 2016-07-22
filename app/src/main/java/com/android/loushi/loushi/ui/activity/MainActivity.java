@@ -32,7 +32,7 @@ public class MainActivity extends BaseActivity {
 
     public FragmentTabHost mTabHost;
     private LayoutInflater layoutInflater;
-    private Class fragmentArray[] = {SceneFragment.class,CategoryFragment.class,MyFragment.class};
+    private Class fragmentArray[] = {SceneFragment.class,CategoryFragment.class,PersonFragment.class};
     private String mTextviewArray[] = {"场景", "指南", "我的"};
     //定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.tab_scene_button, R.drawable.tab_category_button,R.drawable.tab_my_button
@@ -46,11 +46,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (mToolbar != null) {
-            //将Toolbar显示到界面
-            setSupportActionBar(mToolbar);
-        }
+
         initView();
     }
     private void initView(){

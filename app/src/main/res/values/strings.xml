@@ -3,4 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="scene">场景</string>
+    <string name = "category">指南</string>
+    <string name="good">单品</string>
 </resources>

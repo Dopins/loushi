@@ -1,12 +1,15 @@
 package com.android.loushi.loushi.ui.activity;
 
 import android.app.Activity;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.HotWordRecycleViewAdapter;
+import com.android.loushi.loushi.util.SpacesItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,8 @@ public class SearchActivity extends Activity {
         mRecyclerView = (RecyclerView)findViewById(R.id.hotWordRecycleView);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this,3));
         mRecyclerView.setAdapter(hRecycleAdapter);
+
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(20,20, 20, 20));//设置recycleview间距
     }
     protected void initData()
     {
