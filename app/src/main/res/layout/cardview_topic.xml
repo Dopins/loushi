@@ -54,6 +54,7 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
                 <TextView
+                    android:id="@+id/card_detail"
                     android:maxLines="2"
                     android:ellipsize="end"
                     android:textColor="@color/colorDetail"
