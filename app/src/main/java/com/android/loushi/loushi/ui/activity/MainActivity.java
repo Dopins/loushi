@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.ui.fragment.CategoryFragment;
+import com.android.loushi.loushi.ui.fragment.MyFragment;
 import com.android.loushi.loushi.ui.fragment.PersonFragment;
 import com.android.loushi.loushi.ui.fragment.SceneFragment;
 

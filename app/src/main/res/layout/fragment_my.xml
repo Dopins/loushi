@@ -1,24 +1,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:indicator="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
     android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="216dp"
-        android:background="@drawable/my_slogan" />
 
-    <com.loushi.indicator.ViewPagerIndicator
+    <ImageView
+        android:id="@+id/image_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/my_slogan" />
+
+    <com.android.loushi.loushi.util.ViewPagerIndicator
         android:id="@+id/id_indicator"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#D8EBEC"
         android:orientation="horizontal"
-        indicator:item_count="2"></com.loushi.indicator.ViewPagerIndicator>
-
+        indicator:item_count="2"></com.android.loushi.loushi.util.ViewPagerIndicator>
 
 
     <android.support.v4.view.ViewPager
@@ -26,5 +27,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"></android.support.v4.view.ViewPager>
+
 
 </LinearLayout>
