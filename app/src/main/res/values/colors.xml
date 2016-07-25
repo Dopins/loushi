@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#69B8BB</color>
-    <color name="colorLine">#D9D8DE</color>
+    <color name="colorLine">#c4f9f9f9</color>
     <color name="colorDetail">#BBBBBB</color>
     <color name="colorDate">#D9D8DE</color>
     <color name="colorWatch">#A5AAB6</color>

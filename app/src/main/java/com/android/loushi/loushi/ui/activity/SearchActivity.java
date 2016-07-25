@@ -1,12 +1,11 @@
 package com.android.loushi.loushi.ui.activity;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
+
 import android.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 
@@ -25,10 +24,16 @@ import com.android.loushi.loushi.util.SearchWords;
 /**
  * Created by dopin on 2016/7/18.
  */
-public class SearchActivity extends Activity {
+public class SearchActivity extends BaseActivity {
 
     public static EditText editText_search;
     static FragmentManager fragmentManager;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_search;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +41,7 @@ public class SearchActivity extends Activity {
         init();
     }
     private void init(){
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         SearchFragment searchFragment=new SearchFragment();
         fragmentManager.beginTransaction().replace(R.id.search_frame, searchFragment).commit();
 
