@@ -14,10 +14,10 @@ import android.view.ViewGroup;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.TipsRecycleViewAdapter;
-import com.android.loushi.loushi.callback.StrategyCallBack;
-import com.android.loushi.loushi.json.Strategyjson;
+
+import com.android.loushi.loushi.jsonbean.StrategyJson;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
-import com.zhy.http.okhttp.OkHttpUtils;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class TipsFragment extends BaseFragment {
     private String tempPsw="mtf071330";
 
     private Integer skip=0;
-    private List<Strategyjson.BodyBean> mTipsList;
+    private List<StrategyJson.BodyBean> mTipsList;
     private TipsRecycleViewAdapter mAdapter;
 
     @Override
@@ -60,33 +60,34 @@ public class TipsFragment extends BaseFragment {
 
     private void loadData(){
 
-        OkHttpUtils.post()
-                .url("http://119.29.187.58/LouShi/base/strategy.action")
-                .addParams("user_id", tempUserID)
-                .addParams("skip", skip.toString())
-                .addParams("take", "20")
-                .build()
-                .execute(new StrategyCallBack() {
-                    @Override
-                    public void onError(Call call, Exception e) {
-                        Log.e(TAG,"error");
-                    }
-
-                    @Override
-                    public void onResponse(Strategyjson response) {
-                        Log.e(TAG,"success"+response.toString());
-                        for (int i = 0; i < response.getBody().size(); i++) {
-                            Strategyjson.BodyBean temp = response.getBody().get(i);
-                            mTipsList.add(temp);
-                        }
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
+//        OkHttpUtils.post()
+//                .url("http://119.29.187.58/LouShi/base/strategy.action")
+//                .addParams("user_id", tempUserID)
+//                .addParams("skip", skip.toString())
+//                .addParams("take", "20")
+//                .build()
+//                .execute(new StrategyCallBack() {
+//                    @Override
+//                    public void onError(Call call, Exception e) {
+//                        Log.e(TAG,"error");
+//                    }
+//
+//                    @Override
+//                    public void onResponse(Strategyjson response) {
+//                        Log.e(TAG,"success"+response.toString());
+//                        for (int i = 0; i < response.getBody().size(); i++) {
+//                            Strategyjson.BodyBean temp = response.getBody().get(i);
+//                            mTipsList.add(temp);
+//                        }
+//                        mAdapter.notifyDataSetChanged();
+//                    }
+//                });
+        //xuyao
 
     }
 
     private void initView(View view){
-        mTipsList=new ArrayList<Strategyjson.BodyBean>();
+        mTipsList=new ArrayList<StrategyJson.BodyBean>();
         swipeRefreshLayout_tips= (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout_tips);
         swipeRefreshLayout_tips.setColorSchemeColors(Color.BLUE,Color.RED,Color.GREEN,Color.YELLOW);
         swipeRefreshLayout_tips.setSize(SwipeRefreshLayout.LARGE);

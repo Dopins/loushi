@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -14,11 +15,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.PersonCollectTabAdapter;
 import com.android.loushi.loushi.adapter.ViewPagerAdapter;
+import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
+import com.android.loushi.loushi.util.RoundImageView;
 import com.android.loushi.loushi.util.SlidingTabLayout;
 
 import org.w3c.dom.Text;
@@ -37,6 +42,11 @@ public class PersonFragment extends BaseFragment {
     private TextView mTv_index;
     //private TabLayout mtoorbar_tab;
     private SlidingTabLayout mtoorbar_tab;
+    private TextView tv_name;
+    private RoundImageView img_head;
+    private TextView tv_feed;
+    private TextView tv_name_small;
+    private RoundImageView img_head_small;
                             //定义viewPager
     private PersonCollectTabAdapter personCollectTabAdapter;                               //定义adapter
     private List<Fragment> list_fragment;                                //定义要装fragment的列表
@@ -46,6 +56,7 @@ public class PersonFragment extends BaseFragment {
     private CollectGoodFragment collectGoodFragment;
     private ViewPager mViewPager;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private Button btn_profile;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -73,6 +84,7 @@ public class PersonFragment extends BaseFragment {
 
         initToolBar();
         initTablayout();
+        initButton();
     }
 
     private void initTablayout() {
@@ -118,11 +130,19 @@ public class PersonFragment extends BaseFragment {
         app_bar_layout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                Log.e("vertical", Integer.toString(verticalOffset));
-                if (verticalOffset <= -732) {
+                int[] location = new int[2];
+                img_head.getLocationOnScreen(location);
+                Log.e("vertical", Integer.toString(location[1]));
+                //Log.e("vertical", Integer.toString(verticalOffset));
+                if (location[1] <0) {
+                    tv_feed.setVisibility(View.GONE);
+                    img_head_small.setVisibility(View.VISIBLE);
+                    tv_name_small.setVisibility(View.VISIBLE);
                     //mToolbar.setLogo(R.mipmap.ic_launcher);
                 } else {
-
+                    tv_feed.setVisibility(View.VISIBLE);
+                    img_head_small.setVisibility(View.INVISIBLE);
+                    tv_name_small.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -133,6 +153,22 @@ public class PersonFragment extends BaseFragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         mToolbar.setTitle("");
         mtoorbar_tab=(SlidingTabLayout)getView().findViewById(R.id.toolbar_tab);
+        tv_name=(TextView)getView().findViewById(R.id.tv_nickname);
+        img_head=(RoundImageView)getView().findViewById(R.id.img_head);
+        img_head_small = (RoundImageView)mToolbar.findViewById(R.id.img_head_small);
+        tv_feed=(TextView)mToolbar.findViewById(R.id.tv_feed);
+        tv_name_small=(TextView)mToolbar.findViewById(R.id.tv_nickname_small);
+
+    }
+    private void initButton(){
+        btn_profile = (Button)getView().findViewById(R.id.btn_profile);
+        btn_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), SceneDetailActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }

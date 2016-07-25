@@ -8,7 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.json.UserMessageJson;
+
+import com.android.loushi.loushi.jsonbean.UserMessageJson;
 import com.android.loushi.loushi.util.CircleImageTransformation;
 import com.squareup.picasso.Picasso;
 
@@ -43,10 +44,10 @@ public class MyMessageAdapter extends RecyclerView.Adapter<MyMessageAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final UserMessageJson.BodyBean myMessage = myMessageList.get(position);
-        Picasso.with(mContext).load(myMessage.getComment().getUserinfo().getHeadImgUrl())
+        Picasso.with(mContext).load(myMessage.getComment().getUserInfo().getHeadImgUrl())
                 .transform(mTransformation)
                 .into(holder.imageView_User);
-        holder.textView_UserName.setText(myMessage.getComment().getUserinfo().getNickname());
+        holder.textView_UserName.setText(myMessage.getComment().getUserInfo().getNickname());
         holder.textView_userContont.setText(myMessage.getComment().getContent());
         String  time_cha = myMessage.getComment().getCDate().replace('T',' ');
         holder.textView_MessageDate.setText(CalulateDate(time_cha));

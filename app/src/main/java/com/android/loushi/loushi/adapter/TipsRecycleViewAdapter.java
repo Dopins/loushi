@@ -9,7 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.json.Strategyjson;
+
+import com.android.loushi.loushi.jsonbean.StrategyJson;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -21,9 +22,9 @@ public class TipsRecycleViewAdapter extends RecyclerView.Adapter<TipsRecycleView
 
     private Context mContext;
     private OnItemClickListener mOnItemClickListener;
-    private List<Strategyjson.BodyBean> mTipsList;
+    private List<StrategyJson.BodyBean> mTipsList;
 
-    public TipsRecycleViewAdapter(Context context,List<Strategyjson.BodyBean> tipsList){
+    public TipsRecycleViewAdapter(Context context,List<StrategyJson.BodyBean> tipsList){
         this.mContext=context;
         this.mTipsList=tipsList;
     }
@@ -36,7 +37,7 @@ public class TipsRecycleViewAdapter extends RecyclerView.Adapter<TipsRecycleView
 
     @Override
     public void onBindViewHolder(TipsRecycleViewAdapter.ViewHolder holder, int position) {
-        final Strategyjson.BodyBean strategy = mTipsList.get(position);
+        final StrategyJson.BodyBean strategy = mTipsList.get(position);
         holder.textViewTitle.setText(strategy.getName());
         String url = strategy.getImgUrl();
         if(url.indexOf("|||")>=0)
@@ -67,7 +68,7 @@ public class TipsRecycleViewAdapter extends RecyclerView.Adapter<TipsRecycleView
 //                })
                 .into(holder.imageViewCard);
         holder.textViewPreferCount.setText(Integer.toString(strategy.getCollectionNum()));
-        if (strategy.isCollected())
+        if (strategy.getCollected()!=0)
             holder.checkBoxPrefer.setChecked(true);
         else
             holder.checkBoxPrefer.setChecked(false);

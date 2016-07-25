@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="100dp"
+    android:layout_height="140dp"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="4dp">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="@drawable/bg_collect_item"/>
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_alignParentBottom="true"
+        android:textSize="10sp"
+        android:background="@drawable/bg_good_item_tag"
+        android:text="可以"
+        android:textColor="#ffffff"
+        android:gravity="center"/>
+
+</CardView>

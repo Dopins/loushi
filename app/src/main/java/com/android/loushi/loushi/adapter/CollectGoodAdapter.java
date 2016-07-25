@@ -14,11 +14,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.callback.NormalCallBack;
-import com.android.loushi.loushi.json.CollectionsJson;
-import com.android.loushi.loushi.json.ResponseJson;
+
+import com.android.loushi.loushi.jsonbean.UserCollectionsJson;
 import com.squareup.picasso.Picasso;
-import com.zhy.http.okhttp.OkHttpUtils;
+
 
 import java.util.List;
 
@@ -30,8 +29,8 @@ import okhttp3.Call;
 public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter.CollectGoodViewHolder> {
 
     private Context context;
-    private List<CollectionsJson.BodyBean.GoodsBean> goodsBeanList;
-    public CollectGoodAdapter(Context context,List<CollectionsJson.BodyBean.GoodsBean> goodsBeanList){
+    private List<UserCollectionsJson.BodyBean.GoodsBean> goodsBeanList;
+    public CollectGoodAdapter(Context context,List<UserCollectionsJson.BodyBean.GoodsBean> goodsBeanList){
         this.context = context;
         this.goodsBeanList=goodsBeanList;
     }
@@ -44,47 +43,47 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
 
     @Override
     public void onBindViewHolder(final CollectGoodViewHolder holder, final int position) {
-        final CollectionsJson.BodyBean.GoodsBean goodsBean =goodsBeanList.get(position);
+        final UserCollectionsJson.BodyBean.GoodsBean goodsBean =goodsBeanList.get(position);
         holder.tv_name.setText(goodsBean.getName());
         Picasso.with(context).load(goodsBean.getImages().get(0).getUrl()).fit().into(holder.img_good);
 
         holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
         holder.btn_like.setChecked(true);
-        holder.btn_like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-                OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/user/userCollect.action"
-                ).addParams("user_id", "32").addParams("type", "3")
-                        .addParams("pid", Integer.toString(goodsBean.getId())).build().execute(new NormalCallBack() {
-                    @Override
-                    public void onError(Call call, Exception e) {
-                        Log.e("goodadapter", Log.getStackTraceString(e));
-                    }
-
-                    @Override
-                    public void onResponse(ResponseJson responseJson) {
-                        if (responseJson.getState()) {
-
-                            if (isChecked) {
-
-                                //good.setCollectionNum(good.getCollectionNum() + 1);
-                                holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
-                                //goodsList.remove(position);
-                            } else {
-
-                                //good.setCollectionNum(good.getCollectionNum() - 1);
-                                holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
-
-                            }
-                            goodsBeanList.remove(position);
-
-                            notifyDataSetChanged();
-                        }
-
-                    }
-                });
-            }
-        });
+//        holder.btn_like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+//                OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/user/userCollect.action"
+//                ).addParams("user_id", "32").addParams("type", "3")
+//                        .addParams("pid", Integer.toString(goodsBean.getId())).build().execute(new NormalCallBack() {
+//                    @Override
+//                    public void onError(Call call, Exception e) {
+//                        Log.e("goodadapter", Log.getStackTraceString(e));
+//                    }
+//
+//                    @Override
+//                    public void onResponse(ResponseJson responseJson) {
+//                        if (responseJson.getState()) {
+//
+//                            if (isChecked) {
+//
+//                                //good.setCollectionNum(good.getCollectionNum() + 1);
+//                                holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
+//                                //goodsList.remove(position);
+//                            } else {
+//
+//                                //good.setCollectionNum(good.getCollectionNum() - 1);
+//                                holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
+//
+//                            }
+//                            goodsBeanList.remove(position);
+//
+//                            notifyDataSetChanged();
+//                        }
+//
+//                    }
+//                });
+//            }
+//        });
 
     }
 
