@@ -2,23 +2,19 @@ package com.android.loushi.loushi.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.ViewPagerAdapter;
-import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.SearchActivity;
 
 import java.util.ArrayList;
@@ -41,9 +37,9 @@ public class SceneFragment extends BaseFragment {
     private List<String> list_title;                                     //tab名称列表
 
     private RecommendFragment recommendFragment;
-    private InterestFragment interestFragment;
-    private StyleFragment styleFragment;
-    private HabitFragment habitFragment;
+    private SceneListFragment interestFragment;
+    private SceneListFragment styleFragment;
+    private SceneListFragment habitFragment;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -90,9 +86,9 @@ public class SceneFragment extends BaseFragment {
 
         //初始化各fragment
         recommendFragment = new RecommendFragment();
-        interestFragment = new InterestFragment();
-        styleFragment = new StyleFragment();
-        habitFragment = new HabitFragment();
+        interestFragment = new SceneListFragment();
+        styleFragment = new SceneListFragment();
+        habitFragment = new SceneListFragment();
 
         //将fragment装进列表中
         list_fragment = new ArrayList<>();
@@ -129,7 +125,5 @@ public class SceneFragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         // TODO Auto-generated method stub
         super.onSaveInstanceState(outState);
-
-
     }
 }

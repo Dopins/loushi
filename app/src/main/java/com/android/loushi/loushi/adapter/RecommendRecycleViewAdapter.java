@@ -14,7 +14,12 @@ import android.widget.Toast;
 import com.android.loushi.loushi.R;
 
 
+
 import com.android.loushi.loushi.jsonbean.SceneJson;
+
+import com.android.loushi.loushi.jsonbean.ResponseJson;
+import com.android.loushi.loushi.jsonbean.SceneJson;
+
 import com.android.loushi.loushi.viewpager.CarouselViewPager;
 import com.squareup.picasso.Picasso;
 
@@ -27,7 +32,7 @@ import okhttp3.Call;
 /**
  * Created by dopin on 2016/7/17.
  */
-public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private OnItemClickListener itemClickListener;
     private List<SceneJson.BodyBean> adList;
@@ -40,9 +45,9 @@ public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public static final int ITEM_TYPE_TIP = 2;
     public static final int ITEM_TYPE_TOPIC = 3;
     private Context context;
-    private List<SceneJson.BodyBean> bodyBeanList = new ArrayList<SceneJson.BodyBean>();
+    private List<SceneJson.BodyBean> bodyBeanList = new ArrayList<>();
 
-    public SceneRecycleViewAdapter(Context context, List<SceneJson.BodyBean> bodyBeanList) {
+    public RecommendRecycleViewAdapter(Context context, List<SceneJson.BodyBean> bodyBeanList) {
         this.context = context;
         this.bodyBeanList = bodyBeanList;
         adList= new ArrayList<>();
@@ -58,11 +63,8 @@ public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public int getItemViewType(int position) {
 
         if (position == 0) {
-//头部View
             return ITEM_TYPE_HEADER;
-        }
-        if (position % 3 == 1) {
-//内容View
+        }if (position % 3 == 1) {
             return ITEM_TYPE_SCENE;
         } else if (position % 3 == 2) {
             return ITEM_TYPE_TIP;
@@ -193,6 +195,7 @@ public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         //adViewpagerAdapter.notifyDataSetChanged();
     }
     private void getAdList() {
+
 //        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/base/scene.action")
 //                .addParams("user_id", "0").addParams("scene_group_id", Integer.toString(1))
 //                .addParams("recommended", "true")
@@ -213,11 +216,10 @@ public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 //            }
 //        });
 
-        //xuyao
+
     }
 
-    //场景holder
-    class SceneViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class mViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView image;
         TextView title;
         TextView detail;
@@ -225,9 +227,10 @@ public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         TextView numWatch;
         TextView publishTime;
         CheckBox checkBox_prefer;
-
-        public SceneViewHolder(View view) {
+        mViewHolder holder;
+        public mViewHolder(View view){
             super(view);
+            holder=this;
             image = (ImageView) view.findViewById(R.id.card_image);
             title = (TextView) view.findViewById(R.id.card_title);
             detail = (TextView) view.findViewById(R.id.card_detail);
@@ -239,9 +242,10 @@ public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(), "item"+getPosition()+" 点赞", Toast.LENGTH_SHORT).show();
+                    //setPrefer()
+                    changeSelectedState(holder);
                 }
             });
-
             view.setOnClickListener(this);
         }
         @Override
@@ -250,63 +254,27 @@ public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 itemClickListener.onItemClick(v,getPosition());
             }
         }
+
+    }
+    //场景holder
+    class SceneViewHolder extends mViewHolder  {
+
+        public SceneViewHolder(View view) {
+            super(view);
+        }
     }
 
-    class TipViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView image;
-        TextView title;
-        TextView detail;
-        TextView numPrefer;
-        TextView numWatch;
-        TextView publishTime;
-        CheckBox checkBox_prefer;
+    class TipViewHolder extends mViewHolder  {
 
         public TipViewHolder(View view) {
             super(view);
-            image = (ImageView) view.findViewById(R.id.card_image);
-            title = (TextView) view.findViewById(R.id.card_title);
-            detail = (TextView) view.findViewById(R.id.card_detail);
-            numPrefer = (TextView) view.findViewById(R.id.num_prefer);
-            numWatch = (TextView) view.findViewById(R.id.num_watch);
-            publishTime = (TextView) view.findViewById(R.id.publish_time);
-            checkBox_prefer= (CheckBox) view.findViewById(R.id.checkbox_prefer);
-
-            view.setOnClickListener(this);
-        }
-        @Override
-        public void onClick(View v){
-            if(itemClickListener!=null){
-                itemClickListener.onItemClick(v,getPosition());
-            }
         }
     }
 
-    class TopicViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView image;
-        TextView title;
-        TextView detail;
-        TextView numPrefer;
-        TextView numWatch;
-        TextView publishTime;
-        CheckBox checkBox_prefer;
+    class TopicViewHolder extends mViewHolder  {
 
         public TopicViewHolder(View view) {
             super(view);
-            image = (ImageView) view.findViewById(R.id.card_image);
-            title = (TextView) view.findViewById(R.id.card_title);
-            detail = (TextView) view.findViewById(R.id.card_detail);
-            numPrefer = (TextView) view.findViewById(R.id.num_prefer);
-            numWatch = (TextView) view.findViewById(R.id.num_watch);
-            publishTime = (TextView) view.findViewById(R.id.publish_time);
-            checkBox_prefer= (CheckBox) view.findViewById(R.id.checkbox_prefer);
-
-            view.setOnClickListener(this);
-        }
-        @Override
-        public void onClick(View v) {
-            if (itemClickListener != null) {
-                itemClickListener.onItemClick(v, getPosition());
-            }
         }
     }
 
@@ -317,37 +285,34 @@ public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         public HeaderViewHolder(View itemView) {
             super(itemView);
             mCarouselView = (CarouselViewPager) itemView.findViewById(R.id.ad_viewPager);
-
         }
-
     }
-//    private void CollectOrNot(String user_id, String type, String pid) {
+    private void changeSelectedState(mViewHolder holder){
+        if (holder.checkBox_prefer.isSelected()) {
+            int num = Integer.parseInt(holder.numPrefer.getText().toString()) + 1;
+            holder.numPrefer.setText(Integer.toString(num));
+        } else {
+            int num = Integer.parseInt(holder.numPrefer.getText().toString()) - 1;
+            holder.numPrefer.setText(Integer.toString(num));
+        }
+    }
+    private void setPrefer(String user_id, String type, String pid,final mViewHolder holder) {
 //        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/user/userCollect.action"
 //        ).addParams("user_id", user_id).addParams("type", type)
 //                .addParams("pid", pid).build().execute(new NormalCallBack() {
 //            @Override
 //            public void onError(Call call, Exception e) {
-//
+//                Log.d("tag",e.getStackTrace().toString());
 //            }
 //
 //            @Override
 //            public void onResponse(ResponseJson responseJson) {
 //                if (responseJson.getState()) {
-//                    if (btn_collect.isSelected()) {
-//                        btn_collect.setSelected(false);
-//                        int num = Integer.parseInt(btn_collect.getText().toString()) - 1;
-//
-//                        btn_collect.setText(Integer.toString(num));
-//                    } else {
-//                        btn_collect.setSelected(true);
-//                        int num = Integer.parseInt(btn_collect.getText().toString()) + 1;
-//
-//                        btn_collect.setText(Integer.toString(num));
-//                    }
+//                    changeSelectedState(holder);
 //                }
 //
 //            }
 //        });
-//    }
+    }
 }
 
