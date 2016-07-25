@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp">
+
+    <TextView
+        android:id="@+id/text_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="29dp"
+        android:text="手机 "
+        android:textSize="12dp"
+        android:textColor="@color/dark_gray"/>
+
+    <com.loushi.indicator.UnderLineEditText
+        android:id="@+id/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@id/text_phone"
+        android:background="@null"
+        android:ems="13"
+        android:inputType="phone"
+        android:lineSpacingMultiplier="2" />
+
+
+    <TextView
+        android:id="@+id/text_keyword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="密码 "
+        android:textSize="12dp"
+        android:textColor="@color/dark_gray"/>
+
+    <com.loushi.indicator.UnderLineEditText
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@id/text_keyword"
+        android:background="@null"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:lineSpacingMultiplier="2" />
+
+    <TextView
+        android:id="@+id/text_cheakword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="验证码 "
+        android:textSize="12dp"
+        android:textColor="@color/dark_gray"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_cheakword"
+        android:orientation="horizontal">
+
+        <com.loushi.indicator.UnderLineEditText
+            android:id="@+id/cheakword"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:lineSpacingMultiplier="2" />
+        
+        <Button
+            android:layout_width="94dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/shape_btn_cheakword"
+            android:text="获取验证码"
+            android:textSize="12dp"
+            android:textColor="@color/colorPrimary"/>
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="246dp"
+        android:layout_height="46dp"
+        android:id="@+id/btn_finish"
+        android:text="完成"
+        android:textSize="15dp"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/shape_btn_finish"
+        android:layout_gravity="center_horizontal"/>
+
+</LinearLayout>
