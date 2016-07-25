@@ -1,8 +1,8 @@
 package com.android.loushi.loushi.ui.fragment;
 
-import android.app.Fragment;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -70,6 +70,7 @@ public class SearchFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 String keyword=search_record_list.get(position).get("record");
                 SearchActivity.editText_search.setText(keyword);
+                SearchActivity.editText_search.setSelection(keyword.length());
             }
         });
     }

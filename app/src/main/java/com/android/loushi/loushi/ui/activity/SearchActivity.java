@@ -1,12 +1,11 @@
 package com.android.loushi.loushi.ui.activity;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
+
 import android.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 
@@ -42,7 +41,7 @@ public class SearchActivity extends BaseActivity {
         init();
     }
     private void init(){
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         SearchFragment searchFragment=new SearchFragment();
         fragmentManager.beginTransaction().replace(R.id.search_frame, searchFragment).commit();
 
