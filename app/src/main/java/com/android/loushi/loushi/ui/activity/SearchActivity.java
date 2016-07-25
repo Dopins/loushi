@@ -25,10 +25,16 @@ import com.android.loushi.loushi.util.SearchWords;
 /**
  * Created by dopin on 2016/7/18.
  */
-public class SearchActivity extends Activity {
+public class SearchActivity extends BaseActivity {
 
     public static EditText editText_search;
     static FragmentManager fragmentManager;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_search;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

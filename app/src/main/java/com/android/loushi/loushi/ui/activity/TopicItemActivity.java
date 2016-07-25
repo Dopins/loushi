@@ -10,13 +10,8 @@ import android.widget.TextView;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.TipsRecycleViewAdapter;
 import com.android.loushi.loushi.adapter.TopicItemRecycleViewAdapter;
-import com.android.loushi.loushi.callback.TopicCallBack;
-import com.android.loushi.loushi.callback.TopicGroupCallBack;
-import com.android.loushi.loushi.json.Strategyjson;
-import com.android.loushi.loushi.json.TopicGroupjson;
-import com.android.loushi.loushi.json.Topicjson;
+import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
-import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +33,7 @@ public class TopicItemActivity extends BaseActivity {
 
     private Integer mSkip = 0; //数据从哪里开始取
     private Integer mTake = 20;   //一次加载多少item
-    private List<Topicjson.BodyBean> mTopicList;
+    private List<TopicJson.BodyBean> mTopicList;
     private Integer topic_id = 0;     //专题分类的item id
 
     private RecyclerView recyclerView;
@@ -62,7 +57,7 @@ public class TopicItemActivity extends BaseActivity {
 
     //初始化变量
     private void initVariables() {
-        mTopicList = new ArrayList<Topicjson.BodyBean>();
+        mTopicList = new ArrayList<TopicJson.BodyBean>();
         topic_id = getIntent().getIntExtra(TOPIC_ID, 0);
     }
 

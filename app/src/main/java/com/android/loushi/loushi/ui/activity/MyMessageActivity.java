@@ -15,10 +15,10 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.MyMessageAdapter;
-import com.android.loushi.loushi.callback.UserMessageCallBack;
-import com.android.loushi.loushi.json.UserMessageJson;
+
+import com.android.loushi.loushi.jsonbean.UserMessageJson;
 import com.google.gson.Gson;
-import com.zhy.http.okhttp.OkHttpUtils;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,23 +84,25 @@ public class MyMessageActivity extends BaseActivity{
     }
 
     private void loadMessage(){
-        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/user/userMessage")
-                .addParams("user_id",temp_id).build().execute(new UserMessageCallBack() {
-            @Override
-            public void onError(Call call, Exception e) {
-                Log.e("mymessage",Log.getStackTraceString(e));
-            }
+//        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/user/userMessage")
+//                .addParams("user_id",temp_id).build().execute(new UserMessageCallBack() {
+//            @Override
+//            public void onError(Call call, Exception e) {
+//                Log.e("mymessage",Log.getStackTraceString(e));
+//            }
+//
+//            @Override
+//            public void onResponse(UserMessageJson userMessageJson) {
+//                if(userMessageJson.isState()) {
+//                    Log.e("message",new Gson().toJson(userMessageJson));
+//                    mBodyBeanList.addAll(userMessageJson.getBody());
+//                    mMessageAdapter.notifyDataSetChanged();
+//                }
+//
+//            }
+//        });
 
-            @Override
-            public void onResponse(UserMessageJson userMessageJson) {
-                if(userMessageJson.isState()) {
-                    Log.e("message",new Gson().toJson(userMessageJson));
-                    mBodyBeanList.addAll(userMessageJson.getBody());
-                    mMessageAdapter.notifyDataSetChanged();
-                }
-
-            }
-        });
+        //xuyao
     }
 
 }

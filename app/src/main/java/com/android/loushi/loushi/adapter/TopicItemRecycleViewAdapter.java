@@ -12,11 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.callback.NormalCallBack;
-import com.android.loushi.loushi.json.Topicjson;
+import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
-import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.List;
 
@@ -28,9 +25,9 @@ import okhttp3.Call;
 public class TopicItemRecycleViewAdapter extends RecyclerView.Adapter<TopicItemRecycleViewAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<Topicjson.BodyBean> mTopicList;
+    private List<TopicJson.BodyBean> mTopicList;
 
-    public TopicItemRecycleViewAdapter(Context context,List<Topicjson.BodyBean> topicList) {
+    public TopicItemRecycleViewAdapter(Context context,List<TopicJson.BodyBean> topicList) {
         this.mContext = context;
         this.mTopicList=topicList;
     }
@@ -43,13 +40,13 @@ public class TopicItemRecycleViewAdapter extends RecyclerView.Adapter<TopicItemR
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Topicjson.BodyBean topic = mTopicList.get(position);
+        final TopicJson.BodyBean topic = mTopicList.get(position);
         holder.card_title.setText(topic.getName());
         Picasso.with(mContext)
                 .load(topic.getImgUrl())
                 .into(holder.card_image);
         holder.num_prefer.setText(Integer.toString(topic.getCollectionNum()));
-        holder.checkbox_prefer.setChecked(topic.isCollected());
+//        holder.checkbox_prefer.setChecked(topic.isCollected());
 //        holder.card_date.setText(topic.get);
         // 设置点赞响应
         //TODO

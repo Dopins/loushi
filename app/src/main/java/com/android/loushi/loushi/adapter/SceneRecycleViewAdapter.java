@@ -12,11 +12,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.callback.SceneCallBack;
-import com.android.loushi.loushi.json.SceneJson;
+
+
+import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.viewpager.CarouselViewPager;
 import com.squareup.picasso.Picasso;
-import com.zhy.http.okhttp.OkHttpUtils;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -192,25 +193,27 @@ public class SceneRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         //adViewpagerAdapter.notifyDataSetChanged();
     }
     private void getAdList() {
-        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/base/scene.action")
-                .addParams("user_id", "0").addParams("scene_group_id", Integer.toString(1))
-                .addParams("recommended", "true")
-                .addParams("skip", Integer.toString(0))
-                .addParams("take", Integer.toString(4)).build().execute(new SceneCallBack() {
-            @Override
-            public void onError(Call call, Exception e) {
-                e.printStackTrace();
-                Log.d("tag", Log.getStackTraceString(e));
-            }
+//        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/base/scene.action")
+//                .addParams("user_id", "0").addParams("scene_group_id", Integer.toString(1))
+//                .addParams("recommended", "true")
+//                .addParams("skip", Integer.toString(0))
+//                .addParams("take", Integer.toString(4)).build().execute(new SceneCallBack() {
+//            @Override
+//            public void onError(Call call, Exception e) {
+//                e.printStackTrace();
+//                Log.d("tag", Log.getStackTraceString(e));
+//            }
+//
+//            @Override
+//            public void onResponse(SceneJson sceneJson) {
+//                if (sceneJson.isState()) {
+//                    adList.addAll(sceneJson.getBody());
+//                    loadAdImage();
+//                }
+//            }
+//        });
 
-            @Override
-            public void onResponse(SceneJson sceneJson) {
-                if (sceneJson.isState()) {
-                    adList.addAll(sceneJson.getBody());
-                    loadAdImage();
-                }
-            }
-        });
+        //xuyao
     }
 
     //场景holder

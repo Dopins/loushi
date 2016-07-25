@@ -17,12 +17,12 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.SceneRecycleViewAdapter;
-import com.android.loushi.loushi.callback.SceneCallBack;
-import com.android.loushi.loushi.json.SceneJson;
+
+import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
 import com.google.gson.Gson;
-import com.zhy.http.okhttp.OkHttpUtils;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,30 +131,31 @@ public class RecommendFragment extends LazyFragment {
     private void GetSomeScene(int take, String user_id, int skip) {
         String is_recommend = "true";
 
-        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/base/scene.action")
-                .addParams("user_id", user_id).addParams("scene_group_id", Integer.toString(tabIndex))
-                .addParams("recommended", is_recommend)
-                .addParams("skip", Integer.toString(skip))
-                .addParams("take", Integer.toString(take)).build().execute(new SceneCallBack() {
-            @Override
-            public void onError(Call call, Exception e) {
-                e.printStackTrace();
-                Log.d("tag", Log.getStackTraceString(e));
-            }
-
-            @Override
-            public void onResponse(SceneJson sceneJson) {
-                if (sceneJson.isState()) {
-                    Log.e("tag", "加载一些");
-                    sceneJsons = sceneJson;
-                    //sceneAdapter=new SceneAdapter(getContext(),bodyBeanList,null,0);
-                    bodyBeanList.addAll(sceneJson.getBody());
-                    get_total += 5;
-                    //Log.d("tag", Integer.toString(sceneJson.getBody().size()));
-                    sceneRecycleViewAdapter.notifyDataSetChanged();
-
-                }
-            }
-        });
+//        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/base/scene.action")
+//                .addParams("user_id", user_id).addParams("scene_group_id", Integer.toString(tabIndex))
+//                .addParams("recommended", is_recommend)
+//                .addParams("skip", Integer.toString(skip))
+//                .addParams("take", Integer.toString(take)).build().execute(new SceneCallBack() {
+//            @Override
+//            public void onError(Call call, Exception e) {
+//                e.printStackTrace();
+//                Log.d("tag", Log.getStackTraceString(e));
+//            }
+//
+//            @Override
+//            public void onResponse(SceneJson sceneJson) {
+//                if (sceneJson.isState()) {
+//                    Log.e("tag", "加载一些");
+//                    sceneJsons = sceneJson;
+//                    //sceneAdapter=new SceneAdapter(getContext(),bodyBeanList,null,0);
+//                    bodyBeanList.addAll(sceneJson.getBody());
+//                    get_total += 5;
+//                    //Log.d("tag", Integer.toString(sceneJson.getBody().size()));
+//                    sceneRecycleViewAdapter.notifyDataSetChanged();
+//
+//                }
+//            }
+//        });
+        //xuyao
     }
 }

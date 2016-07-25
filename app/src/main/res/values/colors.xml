@@ -18,4 +18,7 @@
     <color name="colorCollectTabText">#DEDDE2</color>
     <color name="btnprofileborder">#7DC1C4</color>
 
+    <color name="hint">#D9D8DE</color>
+    <color name="dark_gray">#8A8A8A</color>
+
 </resources>
