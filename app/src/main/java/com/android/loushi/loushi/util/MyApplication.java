@@ -6,6 +6,7 @@ import android.util.Log;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
+import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
 
@@ -28,13 +29,13 @@ public class MyApplication extends LitePalApplication {
         super.onCreate();
 
         OkHttpUtils.init(this);
-        //kookie设置为持久化
+        //cookie设置为持久化
         //debug是打印调试信息 可不要
-        //域名放在baseactivity的静态变量里
+        //域名放在baseActivity的静态变量里
         OkHttpUtils.getInstance()//
                 .debug("OkHttpUtils").setCookieStore(new PersistentCookieStore());
 
-        OkHttpUtils.post("http://119.29.187.58:10000/LouShi/user/userLogin.action")
+        OkHttpUtils.post(BaseActivity.url + "/LouShi/user/userLogin.action")
                 // 请求方式和请求url
                 .tag(this).params("mobile_phone", "13750065622").params("password", "mtf071330")
                 .params("isThird", "false")

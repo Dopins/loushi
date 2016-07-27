@@ -8,19 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 
 
+import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.jsonbean.CarouselJson;
+import com.android.loushi.loushi.jsonbean.RecommendJson;
 
-import com.android.loushi.loushi.jsonbean.SceneJson;
 
 import com.android.loushi.loushi.jsonbean.ResponseJson;
-import com.android.loushi.loushi.jsonbean.SceneJson;
-
+import com.android.loushi.loushi.ui.activity.BaseActivity;
+import com.android.loushi.loushi.ui.fragment.RecommendFragment;
 import com.android.loushi.loushi.viewpager.CarouselViewPager;
+import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
 
 
@@ -28,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by dopin on 2016/7/17.
@@ -35,19 +41,20 @@ import okhttp3.Call;
 public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private OnItemClickListener itemClickListener;
-    private List<SceneJson.BodyBean> adList;
+    private List<CarouselJson.BodyBean> adList;
     private ArrayList<ImageView> views;
     private AdViewpagerAdapter adViewpagerAdapter;
     private int mHeaderCount = 1;//头部View个数
     //item类型
-    public static final int ITEM_TYPE_HEADER = 0;
-    public static final int ITEM_TYPE_SCENE = 1;
-    public static final int ITEM_TYPE_TIP = 2;
-    public static final int ITEM_TYPE_TOPIC = 3;
-    private Context context;
-    private List<SceneJson.BodyBean> bodyBeanList = new ArrayList<>();
 
-    public RecommendRecycleViewAdapter(Context context, List<SceneJson.BodyBean> bodyBeanList) {
+    public static final int ITEM_TYPE_SCENE = 0;
+    public static final int ITEM_TYPE_TOPIC = 1;
+    public static final int ITEM_TYPE_TIP = 2;
+    public static final int ITEM_TYPE_HEADER = 3;
+    private Context context;
+    private List<RecommendJson.BodyBean> bodyBeanList = new ArrayList<>();
+
+    public RecommendRecycleViewAdapter(Context context, List<RecommendJson.BodyBean> bodyBeanList) {
         this.context = context;
         this.bodyBeanList = bodyBeanList;
         adList= new ArrayList<>();
@@ -61,7 +68,9 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     //判断当前item类型
     @Override
     public int getItemViewType(int position) {
-
+       return getViewType(position);
+    }
+    private int getViewType(int position){
         if (position == 0) {
             return ITEM_TYPE_HEADER;
         }if (position % 3 == 1) {
@@ -73,7 +82,6 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
         return 0;
     }
-
     public void setOnItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
@@ -109,11 +117,11 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
         if (holder instanceof HeaderViewHolder) {
             setImageView(((HeaderViewHolder) holder).mCarouselView);
         }else if (holder instanceof SceneViewHolder) {
-            setSceneView(((SceneViewHolder) holder), position);
+            setSceneView(((SceneViewHolder) holder), (position/3));
         } else if (holder instanceof TipViewHolder) {
-            setTipView(((TipViewHolder) holder), position);
+            setTipView(((TipViewHolder) holder), (position/3));
         } else {
-            setTopicView(((TopicViewHolder) holder), position);
+            setTopicView(((TopicViewHolder) holder), (position/3));
         }
     }
 
@@ -124,39 +132,52 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private void setTipView(TipViewHolder holder, int position) {
 
-        SceneJson.BodyBean body = bodyBeanList.get(position - 1);
+        RecommendJson.BodyBean body = bodyBeanList.get(position);
 
-        Picasso.with(context).load(body.getImgUrl()).fit().
+        Picasso.with(context).load(body.getStrategy().getImgUrl()).fit().
                 into(holder.image);
 
-        holder.title.setText(body.getName());
-        holder.numPrefer.setText(body.getCollectionNum() + "");
-        holder.checkBox_prefer.setSelected(body.isCollected());
+        holder.title.setText(body.getStrategy().getName());
+        holder.detail.setText(body.getStrategy().getDigest());
+        holder.numPrefer.setText(body.getStrategy().getCollectionNum() + "");
+        holder.checkBox_prefer.setChecked(body.getStrategy().getCollected());
+        holder.numWatch.setText(body.getStrategy().getBrowseNum()+"");
     }
 
     private void setTopicView(TopicViewHolder holder, int position) {
 
-        SceneJson.BodyBean body = bodyBeanList.get(position - 1);
+        RecommendJson.BodyBean body = bodyBeanList.get(position);
 
-        Picasso.with(context).load(body.getImgUrl()).fit().
+        Picasso.with(context).load(body.getTopic().getImgUrl()).fit().
                 into(holder.image);
-
-        holder.title.setText(body.getName());
-        holder.numPrefer.setText(body.getCollectionNum()+"");
-        holder.checkBox_prefer.setSelected(body.isCollected());
+        holder.title.setText(body.getTopic().getName());
+        holder.detail.setText(body.getTopic().getDigest());
+        holder.numPrefer.setText(body.getTopic().getCollectionNum() + "");
+        holder.checkBox_prefer.setChecked(body.getTopic().getCollected());
+        holder.numWatch.setText(body.getTopic().getBrowseNum()+"");
     }
 
     private void setSceneView(SceneViewHolder holder, int position) {
 
-        SceneJson.BodyBean body = bodyBeanList.get(position - 1);
+        RecommendJson.BodyBean body = bodyBeanList.get(position);
 
-        Picasso.with(context).load(body.getImgUrl()).fit().
+        Picasso.with(context).load(body.getScene().getImgUrl()).fit().
                 into(holder.image);
 
-        holder.title.setText(body.getName());
+        holder.title.setText(body.getScene().getName());
+        holder.detail.setText(body.getScene().getDigest());
+        holder.numPrefer.setText(body.getScene().getCollectionNum() + "");
+        holder.checkBox_prefer.setChecked(body.getScene().getCollected());
+        holder.numWatch.setText(body.getScene().getBrowseNum() + "");
 
-        holder.numPrefer.setText(body.getCollectionNum()+"");
-        holder.checkBox_prefer.setSelected(body.isCollected());
+        if(position==0){
+            holder.dateText.setText("今天");
+        }else if(position==1){
+            holder.dateText.setText("昨天");
+        }else{
+            holder.dateText.setText(RecommendFragment.str_date);
+        }
+
     }
 
     private void setImageView(CarouselViewPager viewPager) {
@@ -187,36 +208,28 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     private void loadAdImage(){
-        for(int i=0;i<4;i++){
+        for(int i=0;i<adList.size()&&i<4;i++){
             String imgUrl=adList.get(i).getImgUrl();
             Picasso.with(views.get(i).getContext()).load(imgUrl).fit().
                     into(views.get(i));
         }
-        //adViewpagerAdapter.notifyDataSetChanged();
     }
     private void getAdList() {
 
-//        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/base/scene.action")
-//                .addParams("user_id", "0").addParams("scene_group_id", Integer.toString(1))
-//                .addParams("recommended", "true")
-//                .addParams("skip", Integer.toString(0))
-//                .addParams("take", Integer.toString(4)).build().execute(new SceneCallBack() {
-//            @Override
-//            public void onError(Call call, Exception e) {
-//                e.printStackTrace();
-//                Log.d("tag", Log.getStackTraceString(e));
-//            }
-//
-//            @Override
-//            public void onResponse(SceneJson sceneJson) {
-//                if (sceneJson.isState()) {
-//                    adList.addAll(sceneJson.getBody());
-//                    loadAdImage();
-//                }
-//            }
-//        });
-
-
+        OkHttpUtils.post(BaseActivity.url + "/LouShi/base/carousel")
+                // 请求方式和请求url
+                .tag(this).params("user_id", BaseActivity.user_id)
+                .execute(new JsonCallback<CarouselJson>(CarouselJson.class) {
+                    @Override
+                    public void onResponse(boolean b, CarouselJson carouselJson, Request request, Response response) {
+                        if (carouselJson.getState()) {
+                            adList.addAll(carouselJson.getBody());
+                            loadAdImage();
+                        } else {
+                            Log.d("error", carouselJson.getReturn_info());
+                        }
+                    }
+                });
     }
 
     public class mViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -227,6 +240,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
         TextView numWatch;
         TextView publishTime;
         CheckBox checkBox_prefer;
+        LinearLayout btn_prefer;
         mViewHolder holder;
         public mViewHolder(View view){
             super(view);
@@ -238,12 +252,22 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
             numWatch = (TextView) view.findViewById(R.id.num_watch);
             publishTime = (TextView) view.findViewById(R.id.publish_time);
             checkBox_prefer= (CheckBox) view.findViewById(R.id.checkbox_prefer);
-            checkBox_prefer.setOnClickListener(new View.OnClickListener() {
+            btn_prefer=(LinearLayout)view.findViewById(R.id.btn_prefer);
+            btn_prefer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "item"+getPosition()+" 点赞", Toast.LENGTH_SHORT).show();
-                    //setPrefer()
-                    changeSelectedState(holder);
+                    int type=getViewType(getPosition());
+                    int pid;
+                    int position=(getPosition()/3)+1;
+                    RecommendJson.BodyBean body = bodyBeanList.get(position);
+                    if(type==ITEM_TYPE_SCENE){
+                        pid=body.getScene().getId();
+                    }else if(type==ITEM_TYPE_TIP){
+                        pid=body.getTopic().getId();
+                    }else{
+                        pid=body.getStrategy().getId();
+                    }
+                    setPrefer(type+"",pid+"",holder ,position);
                 }
             });
             view.setOnClickListener(this);
@@ -258,9 +282,10 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
     //场景holder
     class SceneViewHolder extends mViewHolder  {
-
+        TextView dateText;
         public SceneViewHolder(View view) {
             super(view);
+            dateText=(TextView)view.findViewById(R.id.date);
         }
     }
 
@@ -272,7 +297,6 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     class TopicViewHolder extends mViewHolder  {
-
         public TopicViewHolder(View view) {
             super(view);
         }
@@ -287,32 +311,53 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
             mCarouselView = (CarouselViewPager) itemView.findViewById(R.id.ad_viewPager);
         }
     }
-    private void changeSelectedState(mViewHolder holder){
-        if (holder.checkBox_prefer.isSelected()) {
-            int num = Integer.parseInt(holder.numPrefer.getText().toString()) + 1;
-            holder.numPrefer.setText(Integer.toString(num));
-        } else {
-            int num = Integer.parseInt(holder.numPrefer.getText().toString()) - 1;
-            holder.numPrefer.setText(Integer.toString(num));
+    private void changeBodyList(int type,int position,int num,boolean is_collected){
+        if(type==ITEM_TYPE_SCENE){
+            bodyBeanList.get(position).getScene().setCollected(is_collected);
+            bodyBeanList.get(position).getScene().setCollectionNum(num);
+        }else if(type==ITEM_TYPE_TIP){
+            bodyBeanList.get(position).getStrategy().setCollected(is_collected);
+            bodyBeanList.get(position).getStrategy().setCollectionNum(num);
+        }else if(type==ITEM_TYPE_TOPIC){
+            bodyBeanList.get(position).getTopic().setCollected(is_collected);
+            bodyBeanList.get(position).getTopic().setCollectionNum(num);
         }
     }
-    private void setPrefer(String user_id, String type, String pid,final mViewHolder holder) {
-//        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/user/userCollect.action"
-//        ).addParams("user_id", user_id).addParams("type", type)
-//                .addParams("pid", pid).build().execute(new NormalCallBack() {
-//            @Override
-//            public void onError(Call call, Exception e) {
-//                Log.d("tag",e.getStackTrace().toString());
-//            }
-//
-//            @Override
-//            public void onResponse(ResponseJson responseJson) {
-//                if (responseJson.getState()) {
-//                    changeSelectedState(holder);
-//                }
-//
-//            }
-//        });
+    private void changeSelectedState(String str_type,mViewHolder holder,int position){
+        int type =Integer.parseInt(str_type);
+
+        if (holder.checkBox_prefer.isSelected()) {
+            int num = Integer.parseInt(holder.numPrefer.getText().toString()) - 1;
+            holder.numPrefer.setText(Integer.toString(num));
+            holder.checkBox_prefer.setChecked(false);
+
+            changeBodyList(type,position,num,false);
+        } else {
+            int num = Integer.parseInt(holder.numPrefer.getText().toString()) + 1;
+            holder.numPrefer.setText(Integer.toString(num));
+            holder.checkBox_prefer.setChecked(true);
+
+            changeBodyList(type, position, num, true);
+        }
+    }
+    private void setPrefer(final String type, String pid,final mViewHolder holder,final int position) {
+
+        OkHttpUtils.post(BaseActivity.url + "/LouShi/user/userCollect")
+                // 请求方式和请求url
+                .tag(this)
+                .params("user_id", BaseActivity.user_id)
+                .params("type", type)
+                .params("pid", pid)
+                .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
+                    @Override
+                    public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
+                        if (responseJson.getState()) {
+                            changeSelectedState(type,holder,position);
+                        } else {
+                            Log.d("error", responseJson.getReturn_info());
+                        }
+                    }
+                });
     }
 }
 
