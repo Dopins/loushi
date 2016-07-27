@@ -7,10 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-<<<<<<< HEAD
-
-=======
->>>>>>> newloushi
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -21,11 +17,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_LOGS" />
-<<<<<<< HEAD
 
-
-=======
->>>>>>> newloushi
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
@@ -35,10 +27,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-<<<<<<< HEAD
 
-=======
->>>>>>> newloushi
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activity.MainActivity"
@@ -49,8 +38,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-
         <activity android:name=".ui.activity.MyMessageActivity">
 
         </activity>
@@ -58,14 +45,8 @@
         <activity android:name=".ui.activity.TopicItemActivity"/>
         <activity android:name=".ui.activity.SceneDetailActivity"></activity>
         <activity android:name=".ui.activity.GoodDetailActivity"></activity>
-=======
-        <activity android:name=".ui.activity.MyMessageActivity" />
-        <activity android:name=".ui.activity.SearchActivity" />
-        <activity android:name=".ui.activity.TopicItemActivity" />
-        <activity android:name=".ui.activity.SceneDetailActivity" />
         <activity android:name=".ui.activity.ForgetPasswordActivity" />
         <activity android:name=".ui.activity.PersonalInformationActivity"></activity>
->>>>>>> newloushi
     </application>
 
 </manifest>
