@@ -14,7 +14,7 @@ public class TopicJson  implements Serializable {
      * body : [{"id":21,"wDate":"2016/07/29","name":"好枕头","groupID":22,"topicGroup":{"id":22,"name":"枕头"},"collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6,"browseNum":7812,"imgUrl":"asd"},{"id":221,"wDate":"2016/07/29","name":"坏枕头","groupID":22,"topicGroup":{"id":22,"name":"枕头"},"collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6,"browseNum":7812,"imgUrl":"asd"}]
      */
 
-    private int state;
+    private boolean state;
     private String code;
     private String return_info;
     /**
@@ -33,11 +33,11 @@ public class TopicJson  implements Serializable {
 
     private List<BodyBean> body;
 
-    public int getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 
@@ -77,7 +77,7 @@ public class TopicJson  implements Serializable {
 
         private TopicGroupBean topicGroup;
         private int collectionNum;
-        private int collected;
+        private boolean collected;
         private int forwordNum;
         private int commentNum;
         private int browseNum;
@@ -131,11 +131,11 @@ public class TopicJson  implements Serializable {
             this.collectionNum = collectionNum;
         }
 
-        public int getCollected() {
+        public boolean getCollected() {
             return collected;
         }
 
-        public void setCollected(int collected) {
+        public void setCollected(boolean collected) {
             this.collected = collected;
         }
 

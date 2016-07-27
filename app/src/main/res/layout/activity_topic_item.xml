@@ -5,24 +5,36 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_title"
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
-        android:layout_height="?android:attr/actionBarSize">
-
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/colorPrimary">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:gravity="center_vertical"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/imageView_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?@android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:padding="15dp"
+                android:scaleType="center"
+                android:src="@drawable/arrow_back" />
 
 
             <TextView
-                android:textSize="14sp"
-                android:textColor="#ffffff"
                 android:id="@+id/textView_title"
                 android:layout_width="wrap_content"
-                android:text="hahahah"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/imageView_back"
+                android:text="文艺"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/imageView_search"
@@ -30,18 +42,15 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"
-                android:src="@drawable/search_black" />
+                android:background="?@android:attr/selectableItemBackground"
+                android:src="@drawable/search" />
 
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycleView_topic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </android.support.v7.widget.RecyclerView>
+    <include
+        layout="@layout/layout_recyclerview" />
 
 
 </LinearLayout>
