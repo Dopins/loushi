@@ -47,6 +47,7 @@
         <activity android:name=".ui.activity.SearchActivity"/>
         <activity android:name=".ui.activity.TopicItemActivity"/>
         <activity android:name=".ui.activity.SceneDetailActivity"></activity>
+        <activity android:name=".ui.activity.GoodDetailActivity"></activity>
     </application>
 
 </manifest>

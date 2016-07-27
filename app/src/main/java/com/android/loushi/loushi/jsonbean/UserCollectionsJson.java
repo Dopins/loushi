@@ -14,7 +14,7 @@ public class UserCollectionsJson  implements Serializable {
      * body : [{"id":22,"type":2,"pid":23,"scene":{"id":21,"name":"海贼宿舍","label":"海贼王","groupID":22,"sceneGroup":{"id":22,"name":"动漫风"},"collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6,"imgUrl":"asd"},"strategy":{"id":22,"name":"名称","collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6,"imgUrl":"asd"},"topic":{"id":21,"name":"好枕头","groupID":22,"topicGroup":{"id":22,"name":"枕头"},"collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6,"imgUrl":"asd"},"goods":{"id":21,"name":"无脸人台灯","price":33.21,"introduction":"介绍","url":"导流链接","images":[{"id":21,"sort":0,"url":"图片链接","type":1,"pid":2},{"id":23,"sort":1,"url":"图片链接","type":1,"pid":2}],"collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6}}]
      */
 
-    private int state;
+    private boolean state;
     private String code;
     private String return_info;
     /**
@@ -29,11 +29,11 @@ public class UserCollectionsJson  implements Serializable {
 
     private List<BodyBean> body;
 
-    public int getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 
@@ -186,7 +186,7 @@ public class UserCollectionsJson  implements Serializable {
 
             private SceneGroupBean sceneGroup;
             private int collectionNum;
-            private int collected;
+            private boolean collected;
             private int forwordNum;
             private int commentNum;
             private String imgUrl;
@@ -239,11 +239,11 @@ public class UserCollectionsJson  implements Serializable {
                 this.collectionNum = collectionNum;
             }
 
-            public int getCollected() {
+            public boolean getCollected() {
                 return collected;
             }
 
-            public void setCollected(int collected) {
+            public void setCollected(boolean collected) {
                 this.collected = collected;
             }
 
@@ -297,7 +297,7 @@ public class UserCollectionsJson  implements Serializable {
             private int id;
             private String name;
             private int collectionNum;
-            private int collected;
+            private boolean collected;
             private int forwordNum;
             private int commentNum;
             private String imgUrl;
@@ -326,11 +326,11 @@ public class UserCollectionsJson  implements Serializable {
                 this.collectionNum = collectionNum;
             }
 
-            public int getCollected() {
+            public boolean getCollected() {
                 return collected;
             }
 
-            public void setCollected(int collected) {
+            public void setCollected(boolean collected) {
                 this.collected = collected;
             }
 
@@ -370,7 +370,7 @@ public class UserCollectionsJson  implements Serializable {
 
             private TopicGroupBean topicGroup;
             private int collectionNum;
-            private int collected;
+            private boolean collected;
             private int forwordNum;
             private int commentNum;
             private String imgUrl;
@@ -415,11 +415,11 @@ public class UserCollectionsJson  implements Serializable {
                 this.collectionNum = collectionNum;
             }
 
-            public int getCollected() {
+            public boolean getCollected() {
                 return collected;
             }
 
-            public void setCollected(int collected) {
+            public void setCollected(boolean collected) {
                 this.collected = collected;
             }
 
