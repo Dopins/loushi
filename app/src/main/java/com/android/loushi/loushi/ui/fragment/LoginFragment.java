@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.util.UnderLineEditText;
@@ -22,13 +23,17 @@ import com.android.loushi.loushi.util.UnderLineEditText;
 public class LoginFragment extends Fragment {
     public static final String BUNDLE_TITLE = "title";
 
-    private EditText edit_phone;
-    private EditText edit_password;
-    private Button btn_login;
-    private ImageView btn_xinlang;
-    private ImageView btn_weixin;
-    private ImageView btn_qq;
-    private Button btn_forgetpassword;
+    // Content View Elements
+
+    private View view;
+    private TextView text_phone;
+    private UnderLineEditText regist_edit_phone;
+    private TextView text_keyword;
+    private UnderLineEditText regist_edit_password;
+    private TextView text_cheakword;
+    private UnderLineEditText regist_edit_checkword;
+    private Button btn_getcheckword;
+    private Button btn_finish;
 
 
     @Override
@@ -38,43 +43,60 @@ public class LoginFragment extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
-
-        btn_login = (Button) view.findViewById(R.id.btn_login);
-        btn_xinlang = (ImageView) view.findViewById(R.id.btn_xinlang);
-        btn_weixin = (ImageView) view.findViewById(R.id.btn_weixin);
-        btn_qq = (ImageView) view.findViewById(R.id.btn_qq);
-        btn_forgetpassword = (Button) view.findViewById(R.id.btn_forgetpassword);
-
-        edit_phone = (UnderLineEditText) view.findViewById(R.id.login_edit_phone);
-        SpannableString ss2 = new SpannableString(" 密码");
-        AbsoluteSizeSpan ass2 = new AbsoluteSizeSpan(12,true);
-        ss2.setSpan(ass2, 0, ss2.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        edit_phone.setHint(ss2);
-        edit_phone.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                MyFragment.Gone();
-                return false;
-            }
-        });
-
-        edit_password = (EditText) view.findViewById(R.id.login_edit_password);
-        SpannableString ss1 = new SpannableString(" 手机");
-        AbsoluteSizeSpan ass1 = new AbsoluteSizeSpan(12,true);
-        ss1.setSpan(ass1, 0, ss1.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        edit_password.setHint(ss1);
-        edit_password.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                MyFragment.Gone();
-                return false;
-            }
-
-        });
-
-
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_login, container, false);
+            bindViews();
+            initView();
+            initEvent();
+        }
         return view;
+    }
+
+    private void initEvent() {
+
+        regist_edit_password.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                MyFragment.Gone();
+                return false;
+            }
+
+        });
+
+        regist_edit_phone.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                MyFragment.Gone();
+                return false;
+            }
+        });
+    }
+
+    private void initView() {
+
+        SpannableString ss_phone = new SpannableString(" 手机");
+        AbsoluteSizeSpan ass_phone = new AbsoluteSizeSpan(12, true);
+        ss_phone.setSpan(ass_phone, 0, ss_phone.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        regist_edit_password.setHint(ss_phone);
+
+        SpannableString ss_keyword = new SpannableString(" 密码");
+        AbsoluteSizeSpan ass_keyword = new AbsoluteSizeSpan(12, true);
+        ss_keyword.setSpan(ass_keyword, 0, ss_keyword.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        regist_edit_phone.setHint(ss_keyword);
+
+    }
+
+
+    private void bindViews() {
+
+        text_phone = (TextView) view.findViewById(R.id.text_phone);
+        regist_edit_phone = (UnderLineEditText) view.findViewById(R.id.regist_edit_phone);
+        text_keyword = (TextView) view.findViewById(R.id.text_keyword);
+        regist_edit_password = (UnderLineEditText) view.findViewById(R.id.regist_edit_password);
+        text_cheakword = (TextView) view.findViewById(R.id.text_cheakword);
+        regist_edit_checkword = (UnderLineEditText) view.findViewById(R.id.regist_edit_checkword);
+        btn_getcheckword = (Button) view.findViewById(R.id.btn_getcheckword);
+        btn_finish = (Button) view.findViewById(R.id.btn_finish);
     }
 
     public static LoginFragment newInstance(String title) {
