@@ -14,7 +14,7 @@ public class StrategyJson  implements Serializable {
      * body : [{"id":21,"wDate":"2016/07/29","name":"名称","collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6,"browseNum":7812,"imgUrl":"asd"},{"id":22,"wDate":"2016/07/29","name":"名称","collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6,"browseNum":7812,"imgUrl":"asd"}]
      */
 
-    private int state;
+    private boolean state;
     private String code;
     private String return_info;
     /**
@@ -31,11 +31,11 @@ public class StrategyJson  implements Serializable {
 
     private List<BodyBean> body;
 
-    public int getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 
@@ -68,7 +68,7 @@ public class StrategyJson  implements Serializable {
         private String wDate;
         private String name;
         private int collectionNum;
-        private int collected;
+        private boolean collected;
         private int forwordNum;
         private int commentNum;
         private int browseNum;
@@ -106,11 +106,11 @@ public class StrategyJson  implements Serializable {
             this.collectionNum = collectionNum;
         }
 
-        public int getCollected() {
+        public boolean getCollected() {
             return collected;
         }
 
-        public void setCollected(int collected) {
+        public void setCollected(boolean collected) {
             this.collected = collected;
         }
 

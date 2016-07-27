@@ -42,7 +42,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
 
     private Integer mSkip = 0; //数据从哪里开始取
     private Integer mTake = 20;   //一次加载多少item
-    private List<TopicJson.BodyBean> mTopicList;
+    private List mTopicList;
     private Integer mTopic_id = 0;     //专题分类的item id
 
     private RecyclerView recyclerView;
@@ -85,7 +85,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
         imageViewBack.setOnClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new TopicItemRecycleViewAdapter(this, mTopicList);
+        mAdapter = new TopicItemRecycleViewAdapter(this, mTopicList, TopicItemRecycleViewAdapter.AdapterType.TOPIC);
         recyclerView.addItemDecoration(new SpaceItemDecoration(this, 10));
         recyclerView.setAdapter(mAdapter);
         loadSomeData(MainActivity.user_id, mTopic_id, mSkip, mTake);
@@ -122,7 +122,6 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
                     public void onResponse(boolean isFromCache, TopicJson topicJson, Request request, @Nullable Response response) {
                         if (topicJson == null || topicJson.getBody() == null)
                             return;
-                        Log.e("test", new Gson().toJson(topicJson));
                         mTopicList.addAll(topicJson.getBody());
                         mAdapter.notifyDataSetChanged();
                     }
