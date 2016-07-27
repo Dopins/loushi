@@ -91,7 +91,7 @@
         android:text="忘记密码？请点击此处找回密码"
         android:textColor="@color/hint"
         android:layout_below="@+id/btn_layout"
-        android:paddingTop="10dp"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"/>
 
 

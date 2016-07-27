@@ -19,6 +19,7 @@ public class UnderLineEditText extends EditText {
         super(context, paramAttributeSet);
         // TODO Auto-generated constructor stub
         this.linePaint = new Paint();
+        linePaint.setStrokeWidth(5);
         linePaint.setColor(0x77D9D8DE);//设置下划线颜色
     }
 

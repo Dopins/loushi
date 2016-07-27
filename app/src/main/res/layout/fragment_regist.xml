@@ -61,7 +61,7 @@
 
         <com.android.loushi.loushi.util.UnderLineEditText
             android:id="@+id/regist_edit_checkword"
-            android:layout_width="180dp"
+            android:layout_width="210dp"
             android:layout_height="50dp"
             android:background="@null"
             android:ems="10"
@@ -73,6 +73,7 @@
             android:layout_width="94dp"
             android:layout_height="32dp"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:background="@drawable/shape_btn_checkword"
             android:text="获取验证码"
             android:textSize="12dp"
