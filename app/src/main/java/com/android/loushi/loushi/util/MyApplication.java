@@ -7,6 +7,7 @@ import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.cookie.store.MemoryCookieStore;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
 
 import org.litepal.LitePalApplication;
@@ -32,7 +33,8 @@ public class MyApplication extends LitePalApplication {
         //debug是打印调试信息 可不要
         //域名放在baseactivity的静态变量里
         OkHttpUtils.getInstance()//
-                .debug("OkHttpUtils").setCookieStore(new PersistentCookieStore());
+                .debug("OkHttpUtils")
+                .setCookieStore(new PersistentCookieStore());
 
         OkHttpUtils.post("http://119.29.187.58:10000/LouShi/user/userLogin.action")
                 // 请求方式和请求url
@@ -47,8 +49,8 @@ public class MyApplication extends LitePalApplication {
                 .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
                     @Override
                     public void onResponse(boolean b, UserLoginJson userLoginJson, Request request, Response response) {
-                        Log.e(TAG,Integer.toString(userLoginJson.getBody()));
-                        //这里现在是48了
+                        Log.e(TAG,request.header("Cookie"));
+                        //这里现在是48
 
                     }
 
