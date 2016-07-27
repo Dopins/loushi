@@ -12,6 +12,7 @@ import com.android.loushi.loushi.adapter.CollectGoodAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
+import com.android.loushi.loushi.jsonbean.UserCollectionsGood;
 import com.android.loushi.loushi.jsonbean.UserCollectionsJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.google.gson.Gson;
@@ -29,9 +30,10 @@ import okhttp3.Response;
  */
 public class CollectGoodFragment extends LazyFragment {
     private RecyclerView recyclerView;
-    private List<UserCollectionsJson.BodyBean.GoodsBean> goodsBeanList;
+    private List<UserCollectionsJson.BodyBean> beanList;
     private UserCollectionsJson.BodyBean.GoodsBean goodsBean;
     private CollectGoodAdapter collectGoodAdapter;
+    private String type="3";
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
@@ -47,8 +49,9 @@ public class CollectGoodFragment extends LazyFragment {
         initview();
     }
     private void initview(){
-        goodsBeanList = new ArrayList<>();
-        collectGoodAdapter =new CollectGoodAdapter(getContext(),goodsBeanList);
+        beanList = new ArrayList<UserCollectionsJson.BodyBean>();
+        Log.e("tes1",beanList.size()+"");
+        collectGoodAdapter =new CollectGoodAdapter(getContext(),beanList,type);
         addSomething2Good();
         addSomething2Good();
         addSomething2Good();
@@ -59,17 +62,17 @@ public class CollectGoodFragment extends LazyFragment {
     }
     private void addSomething2Good(){
 
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollect.action")
-                .tag(getContext())
-
-                .params("user_id","48")
-                .params("pid","1").params("type","3")
-                .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
-                    @Override
-                    public void onResponse(boolean isFromCache, ResponseJson responseJson, Request request, Response response) {
-                        Log.e("res", new Gson().toJson(responseJson));
-                    }
-                });
+//        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollect.action")
+//                .tag(getContext())
+//
+//                .params("user_id","48")
+//                .params("pid","1").params("type","3")
+//                .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
+//                    @Override
+//                    public void onResponse(boolean isFromCache, ResponseJson responseJson, Request request, Response response) {
+//                        Log.e("res", new Gson().toJson(responseJson));
+//                    }
+//                });
                 OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollections")
                 // 请求方式和请求url
                 .tag(this).params("type", "3").params("user_id", "48")
@@ -79,19 +82,31 @@ public class CollectGoodFragment extends LazyFragment {
                 .execute(new JsonCallback<UserCollectionsJson>(UserCollectionsJson.class) {
                     @Override
                     public void onResponse(boolean b, UserCollectionsJson userCollectionsJson, Request request, Response response) {
-                        Log.e("tes",new Gson().toJson(userCollectionsJson));
                         for (int i = 0; i < userCollectionsJson.getBody().size(); i++) {
-                        goodsBeanList.add(userCollectionsJson.getBody().get(i).getGoods());
-
-
-                    }
-                        Log.e("te",goodsBeanList.size()+"");
-                    collectGoodAdapter.notifyDataSetChanged();
+                            beanList.add(userCollectionsJson.getBody().get(i));
+                        }
+                        collectGoodAdapter.notifyDataSetChanged();
                     }
 
+                    }
+
+                );
+
+//                    @Override
+//                    public void onResponse(boolean b, UserCollectionsJson userCollectionsJson, Request request, Response response) {
+//                        Log.e("tes",new Gson().toJson(userCollectionsJson));
+//                        for (int i = 0; i < userCollectionsJson.getBody().size(); i++) {
+//                        goodsBeanList.add(userCollectionsJson.getBody().get(i).getGoods());
+//
+//
+//                    }
+//                        Log.e("te",goodsBeanList.size()+"");
+//                    collectGoodAdapter.notifyDataSetChanged();
+//                    }
 
 
 
-                });
+
+                //});
     }
 }

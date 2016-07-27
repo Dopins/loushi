@@ -476,7 +476,7 @@ public class UserCollectionsJson  implements Serializable {
             private String introduction;
             private String url;
             private int collectionNum;
-            private int collected;
+            private boolean collected;
             private int forwordNum;
             private int commentNum;
             /**
@@ -537,11 +537,11 @@ public class UserCollectionsJson  implements Serializable {
                 this.collectionNum = collectionNum;
             }
 
-            public int getCollected() {
+            public boolean getCollected() {
                 return collected;
             }
 
-            public void setCollected(int collected) {
+            public void setCollected(boolean collected) {
                 this.collected = collected;
             }
 
