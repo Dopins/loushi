@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.loushi.loushi.R;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 
