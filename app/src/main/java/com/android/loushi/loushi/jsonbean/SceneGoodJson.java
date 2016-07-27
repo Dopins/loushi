@@ -14,7 +14,7 @@ public class SceneGoodJson  implements Serializable {
      * body : [{"id":21,"name":"无脸人台灯","price":33.21,"introduction":"介绍","url":"导流链接","images":[{"id":21,"sort":0,"url":"图片链接","type":1,"pid":2},{"id":23,"sort":1,"url":"图片链接","type":1,"pid":2}],"collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6}]
      */
 
-    private int state;
+    private  Boolean state;
     private String code;
     private String return_info;
     /**
@@ -32,11 +32,11 @@ public class SceneGoodJson  implements Serializable {
 
     private List<BodyBean> body;
 
-    public int getState() {
+    public Boolean isState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(Boolean state) {
         this.state = state;
     }
 
