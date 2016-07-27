@@ -22,7 +22,9 @@ import android.widget.TextView;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.PersonCollectTabAdapter;
 import com.android.loushi.loushi.adapter.ViewPagerAdapter;
+import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
 import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
+
 import com.android.loushi.loushi.util.RoundImageView;
 import com.android.loushi.loushi.util.SlidingTabLayout;
 
@@ -42,6 +44,7 @@ public class PersonFragment extends BaseFragment {
     private TextView mTv_index;
     //private TabLayout mtoorbar_tab;
     private SlidingTabLayout mtoorbar_tab;
+    private AppBarLayout appBarLayout;
     private TextView tv_name;
     private RoundImageView img_head;
     private TextView tv_feed;
@@ -57,6 +60,13 @@ public class PersonFragment extends BaseFragment {
     private ViewPager mViewPager;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Button btn_profile;
+    private CollapsingToolbarLayoutState state;
+
+    private enum CollapsingToolbarLayoutState {
+        EXPANDED,
+        COLLAPSED,
+        INTERNEDIATE
+    }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -85,6 +95,7 @@ public class PersonFragment extends BaseFragment {
         initToolBar();
         initTablayout();
         initButton();
+        initAppBar();
     }
 
     private void initTablayout() {
@@ -126,26 +137,26 @@ public class PersonFragment extends BaseFragment {
         //mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, 0);
         mtoorbar_tab.setViewPager(mViewPager);
 
-        AppBarLayout app_bar_layout = (AppBarLayout)getView(). findViewById(R.id.app_bar_layout);
-        app_bar_layout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                int[] location = new int[2];
-                img_head.getLocationOnScreen(location);
-                Log.e("vertical", Integer.toString(location[1]));
-                //Log.e("vertical", Integer.toString(verticalOffset));
-                if (location[1] <0) {
-                    tv_feed.setVisibility(View.GONE);
-                    img_head_small.setVisibility(View.VISIBLE);
-                    tv_name_small.setVisibility(View.VISIBLE);
-                    //mToolbar.setLogo(R.mipmap.ic_launcher);
-                } else {
-                    tv_feed.setVisibility(View.VISIBLE);
-                    img_head_small.setVisibility(View.INVISIBLE);
-                    tv_name_small.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+       // AppBarLayout app_bar_layout = (AppBarLayout)getView(). findViewById(R.id.app_bar_layout);
+//        app_bar_layout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                int[] location = new int[2];
+//                img_head.getLocationOnScreen(location);
+//                Log.e("vertical", Integer.toString(location[1]));
+//                Log.e("verti", Integer.toString(verticalOffset));
+//                if (location[1] <0) {
+//                    tv_feed.setVisibility(View.GONE);
+//                    img_head_small.setVisibility(View.VISIBLE);
+//                    tv_name_small.setVisibility(View.VISIBLE);
+//                    //mToolbar.setLogo(R.mipmap.ic_launcher);
+//                } else {
+//                    tv_feed.setVisibility(View.VISIBLE);
+//                    img_head_small.setVisibility(View.INVISIBLE);
+//                    tv_name_small.setVisibility(View.INVISIBLE);
+//                }
+//            }
+//        });
     }
 
     public void initToolBar(){
@@ -165,8 +176,47 @@ public class PersonFragment extends BaseFragment {
         btn_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SceneDetailActivity.class);
+                Intent intent = new Intent(getContext(), GoodDetailActivity.class);
                 startActivity(intent);
+            }
+        });
+    }
+    private void initAppBar(){
+        appBarLayout = (AppBarLayout)getView().findViewById(R.id.app_bar_layout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+                if (verticalOffset == 0) {
+                    if (state != CollapsingToolbarLayoutState.EXPANDED) {
+                        Log.e("coll","展开");
+                        state = CollapsingToolbarLayoutState.EXPANDED;//修改状态标记为展开
+
+                        //collapsingToolbarLayout.setTitle("EXPANDED");//设置title为EXPANDED
+                    }
+                } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
+                    if (state != CollapsingToolbarLayoutState.COLLAPSED) {
+                        Log.e("coll", "折叠");
+                        tv_feed.setVisibility(View.GONE);
+                        img_head_small.setVisibility(View.VISIBLE);
+                        tv_name_small.setVisibility(View.VISIBLE);
+                        //collapsingToolbarLayout.setTitle("");//设置title不显示
+                        //playButton.setVisibility(View.VISIBLE);//隐藏播放按钮
+                        state = CollapsingToolbarLayoutState.COLLAPSED;//修改状态标记为折叠
+                    }
+                } else {
+                    if (state != CollapsingToolbarLayoutState.INTERNEDIATE) {
+                        Log.e("coll","中间");
+                        if(state == CollapsingToolbarLayoutState.COLLAPSED){
+                            img_head_small.setVisibility(View.GONE);
+                            tv_name_small.setVisibility(View.GONE);
+                            tv_feed.setVisibility(View.VISIBLE);
+                            //playButton.setVisibility(View.GONE);//由折叠变为中间状态时隐藏播放按钮
+                        }
+                        //collapsingToolbarLayout.setTitle("INTERNEDIATE");//设置title为INTERNEDIATE
+                        state = CollapsingToolbarLayoutState.INTERNEDIATE;//修改状态标记为中间
+                    }
+                }
             }
         });
     }

@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.lzy.okhttputils.callback.AbsCallback;
 
 import java.lang.reflect.Type;
 
@@ -28,8 +29,10 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
     //该方法是子线程处理，不能做ui相关的工作
     @Override
     public T parseNetworkResponse(Response response) throws Exception {
-        Log.e("te",response.toString());
+
+        Log.e("te", response.headers().toString());
         String responseData = response.body().string();
+        Log.e("te",responseData);
         if (TextUtils.isEmpty(responseData)) return null;
 
         /**

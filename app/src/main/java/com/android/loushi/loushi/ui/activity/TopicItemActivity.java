@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import com.android.loushi.loushi.callback.TopicCallback;
 import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
+import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -86,7 +88,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
         mAdapter = new TopicItemRecycleViewAdapter(this, mTopicList);
         recyclerView.addItemDecoration(new SpaceItemDecoration(this, 10));
         recyclerView.setAdapter(mAdapter);
-        loadSomeData(tempUserID, mTopic_id, mSkip, mTake);
+        loadSomeData(MainActivity.user_id, mTopic_id, mSkip, mTake);
     }
 
     private void loadSomeData(String userID, Integer groupId, Integer skip, Integer take) {
@@ -120,6 +122,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
                     public void onResponse(boolean isFromCache, TopicJson topicJson, Request request, @Nullable Response response) {
                         if (topicJson == null || topicJson.getBody() == null)
                             return;
+                        Log.e("test", new Gson().toJson(topicJson));
                         mTopicList.addAll(topicJson.getBody());
                         mAdapter.notifyDataSetChanged();
                     }

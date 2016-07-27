@@ -65,35 +65,36 @@ public class TopicItemRecycleViewAdapter extends RecyclerView.Adapter<TopicItemR
         holder.num_watch.setText(topic.getBrowseNum() + "");
         holder.card_title.setText(topic.getName());
         // 设置点赞响应
-        holder.checkbox_prefer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-                //TODO 获取用户id
-                //TODO 收藏取消收藏的textview相应  要后台的topic isCollected参数支持
-                OkHttpUtils.post(UrlConstant.USERCOLLECTURL)
-                        .tag(this)
-                        .params(KeyConstant.USER_ID, MainActivity.user_id)
-                        .params(KeyConstant.TYPE, "1")
-                        .params(KeyConstant.PID, topic.getId() + "")
-                        .execute(new UserCollecCallback() {
-                            @Override
-                            public void onResponse(boolean isFromCache, ResponseJson responseJson, Request request, @Nullable Response response) {
-                                if (responseJson.getState()) {
-                                    if(isChecked){
-                                        Toast.makeText(mContext, "收藏成功啦", Toast.LENGTH_SHORT).show();
-                                        holder.num_prefer.setText(topic.getCollectionNum() + 1 + "");
-                                    }else{
-                                        Toast.makeText(mContext, "取消收藏成功啦", Toast.LENGTH_SHORT).show();
-                                        holder.num_prefer.setText(topic.getCollectionNum() - 1 + "");
-                                    }
-                                } else {
-                                    Toast.makeText(mContext, "出了点小问题，请重试" + responseJson.getReturn_info(), Toast.LENGTH_SHORT).show();
-                                    holder.checkbox_prefer.setChecked(!isChecked);
-                                }
-                            }
-                        });
-            }
-        });
+//        holder.checkbox_prefer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+//                //TODO 获取用户id
+//                //TODO 收藏取消收藏的textview相应  要后台的topic isCollected参数支持
+//                OkHttpUtils.post(UrlConstant.USERCOLLECTURL)
+//                        .tag(this)
+//                        .params(KeyConstant.USER_ID, MainActivity.user_id)
+//                        .params(KeyConstant.TYPE, "1")
+//                        .params(KeyConstant.PID, topic.getId() + "")
+//                        .execute(new UserCollecCallback() {
+//                            @Override
+//                            public void onResponse(boolean isFromCache, ResponseJson responseJson, Request request, @Nullable Response response) {
+//                                Log.e(TAG,"isFromCache=="+isFromCache);
+//                                if (responseJson.getState()) {
+//                                    if(isChecked){
+//                                        Toast.makeText(mContext, "收藏成功啦", Toast.LENGTH_SHORT).show();
+//                                        holder.num_prefer.setText(topic.getCollectionNum() + 1 + "");
+//                                    }else{
+//                                        Toast.makeText(mContext, "取消收藏成功啦", Toast.LENGTH_SHORT).show();
+//                                        holder.num_prefer.setText(topic.getCollectionNum() - 1 + "");
+//                                    }
+//                                } else {
+//                                    Toast.makeText(mContext, "出了点小问题，请重试" + responseJson.getReturn_info(), Toast.LENGTH_SHORT).show();
+////                                    holder.checkbox_prefer.setChecked(!isChecked);
+//                                }
+//                            }
+//                        });
+//            }
+//        });
 //        holder.mCheckBox_zan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {

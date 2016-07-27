@@ -16,8 +16,8 @@
         android:textSize="12dp"
         android:textColor="@color/dark_gray"/>
 
-    <com.loushi.indicator.UnderLineEditText
-        android:id="@+id/phone"
+    <com.android.loushi.loushi.util.UnderLineEditText
+        android:id="@+id/regist_edit_phone"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_below="@id/text_phone"
@@ -35,8 +35,8 @@
         android:textSize="12dp"
         android:textColor="@color/dark_gray"/>
 
-    <com.loushi.indicator.UnderLineEditText
-        android:id="@+id/password"
+    <com.android.loushi.loushi.util.UnderLineEditText
+        android:id="@+id/regist_edit_password"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_below="@id/text_keyword"
@@ -59,9 +59,9 @@
         android:layout_below="@id/text_cheakword"
         android:orientation="horizontal">
 
-        <com.loushi.indicator.UnderLineEditText
-            android:id="@+id/cheakword"
-            android:layout_width="180dp"
+        <com.android.loushi.loushi.util.UnderLineEditText
+            android:id="@+id/regist_edit_checkword"
+            android:layout_width="210dp"
             android:layout_height="50dp"
             android:background="@null"
             android:ems="10"
@@ -69,10 +69,12 @@
             android:lineSpacingMultiplier="2" />
         
         <Button
+            android:id="@+id/btn_getcheckword"
             android:layout_width="94dp"
             android:layout_height="32dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/shape_btn_cheakword"
+            android:layout_centerVertical="true"
+            android:background="@drawable/shape_btn_checkword"
             android:text="获取验证码"
             android:textSize="12dp"
             android:textColor="@color/colorPrimary"/>

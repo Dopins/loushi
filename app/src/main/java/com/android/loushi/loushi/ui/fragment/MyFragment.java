@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,15 @@ public class MyFragment extends BaseFragment {
     private ViewPager mViewPager;
     private List<String> mDatas = Arrays.asList("登录", "注册");
     private ViewPagerIndicator mIndicator;
+    public static View view;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -42,27 +52,32 @@ public class MyFragment extends BaseFragment {
 //        mToolbar.setTitle("");
 //        mTv_index=(TextView)mToolbar.findViewById(R.id.toolbar_index);
 //        mTv_index.setText("我的");
-
         //mToolbar.setTitle("loushi");
-
-
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my, null);
-
-        initView();
-        initDatas();
-        //设置Tab上的标题
-        mIndicator.setTabItemTitles(mDatas);
-        mViewPager.setAdapter(mAdapter);
-        //设置关联的ViewPager
-        mIndicator.setViewPager(mViewPager, 0);
-
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_my, null);
+            initView(view);
+            initDatas();
+        }
+        Visible();
         return view;
+    }
+
+    static public void Gone() {
+        view.findViewById(R.id.image_top).setVisibility(View.GONE);
+        return;
+    }
+
+    static public void Visible() {
+        Log.d("Visible", view.toString());
+        Log.d("Visible", view.toString());
+        view.findViewById(R.id.image_top).setVisibility(View.VISIBLE);
+        return;
     }
 
     private void initDatas() {
@@ -92,10 +107,16 @@ public class MyFragment extends BaseFragment {
                 return mTabContents.get(position);
             }
         };
+
+        mIndicator.setTabItemTitles(mDatas);
+        mViewPager.setAdapter(mAdapter);
+        mIndicator.setViewPager(mViewPager, 0);
     }
 
-    private void initView() {
-        mViewPager = (ViewPager) findViewById(R.id.id_vp);
-        mIndicator = (ViewPagerIndicator) findViewById(R.id.id_indicator);
+    private void initView(View view) {
+        Log.d("initView", "initView");
+        mViewPager = (ViewPager) view.findViewById(R.id.id_vp);
+        mIndicator = (ViewPagerIndicator) view.findViewById(R.id.id_indicator);
+        Visible();
     }
 }
