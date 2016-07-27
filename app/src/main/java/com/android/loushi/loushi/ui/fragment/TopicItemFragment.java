@@ -24,7 +24,7 @@ public class TopicItemFragment extends BaseFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        return super.onCreateView(inflater, container, savedInstanceState);
         View view=inflater.inflate(R.layout.activity_topic_item,container,false);
-        recyclerView= (RecyclerView) view.findViewById(R.id.recycleView_topic);
+        recyclerView= (RecyclerView) view.findViewById(R.id.recycleView);
         imageViewSearch= (ImageView) view.findViewById(R.id.imageView_search);
         textViewTitle= (TextView) view.findViewById(R.id.textView_title);
         return view;

@@ -56,6 +56,8 @@ public class MyApplication extends LitePalApplication {
                 .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
                     @Override
                     public void onResponse(boolean b, UserLoginJson userLoginJson, Request request, Response response) {
+
+                        //这里现在是48
                         Log.e(TAG, Integer.toString(userLoginJson.getBody()));
                         //这里现在是48了
                         Log.e("test", response.toString());

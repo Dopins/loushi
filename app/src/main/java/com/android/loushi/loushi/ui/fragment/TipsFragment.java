@@ -19,6 +19,8 @@ import com.android.loushi.loushi.adapter.TipsRecycleViewAdapter;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.jsonbean.StrategyJson;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
+import com.android.loushi.loushi.util.UrlConstant;
+import com.lzy.okhttputils.OkHttpUtils;
 
 
 import java.util.ArrayList;
@@ -32,8 +34,6 @@ import okhttp3.Call;
 public class TipsFragment extends BaseFragment {
 
     private static final String TAG = "TipsFragment";
-
-    private static final String tipsUrl = "http://119.29.187.58/LouShi/base/strategy.action";
 
     private RecyclerView recycleView_tips;
     private SwipeRefreshLayout swipeRefreshLayout_tips;
@@ -63,8 +63,12 @@ public class TipsFragment extends BaseFragment {
         return view;
     }
 
-    //<<<<<<< HEAD
-//    private void loadData(String userId,Integer skip,Integer take){
+    private void loadData(String userId,Integer skip,Integer take){
+//
+//        OkHttpUtils.post(UrlConstant.TIPSCURL)
+//                .params()
+
+
 //        OkHttpUtils.post()
 //                .url(tipsUrl)
 //                .addParams("user_id", tempUserID)
@@ -88,32 +92,6 @@ public class TipsFragment extends BaseFragment {
 //                    }
 //                });
 //        mSkip+=mTake;
-//=======
-    private void loadData() {
-
-//        OkHttpUtils.post()
-//                .url("http://119.29.187.58/LouShi/base/strategy.action")
-//                .addParams("user_id", tempUserID)
-//                .addParams("skip", skip.toString())
-//                .addParams("take", "20")
-//                .build()
-//                .execute(new StrategyCallBack() {
-//                    @Override
-//                    public void onError(Call call, Exception e) {
-//                        Log.e(TAG,"error");
-//                    }
-//
-//                    @Override
-//                    public void onResponse(Strategyjson response) {
-//                        Log.e(TAG,"success"+response.toString());
-//                        for (int i = 0; i < response.getBody().size(); i++) {
-//                            Strategyjson.BodyBean temp = response.getBody().get(i);
-//                            mTipsList.add(temp);
-//                        }
-//                        mAdapter.notifyDataSetChanged();
-//                    }
-//                });
-        //xuyao
 
     }
 
