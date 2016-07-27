@@ -9,13 +9,20 @@ import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.CollectGoodAdapter;
 
 
+import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.jsonbean.ResponseJson;
+import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.jsonbean.UserCollectionsJson;
+import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.google.gson.Gson;
+import com.lzy.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Administrator on 2016/7/22.
@@ -51,27 +58,40 @@ public class CollectGoodFragment extends LazyFragment {
         recyclerView.setAdapter(collectGoodAdapter);
     }
     private void addSomething2Good(){
-//        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/user/userCollections").addParams("user_id", "32")
-//                .addParams("type", "3").addParams("skip","0")
-//                .addParams("take","3").build().execute(new CollecttionsCallBack() {
-//            @Override
-//            public void onError(Call call, Exception e) {
-//                Log.e("CollectScene", Log.getStackTraceString(e));
-//            }
-//
-//            @Override
-//            public void onResponse(CollectionsJson collectionsJson) {
-//                if (collectionsJson.isState()) {
-//                    for (int i = 0; i < collectionsJson.getBody().size(); i++) {
-//                        goodsBeanList.add(collectionsJson.getBody().get(i).getGoods());
-//                        Log.e("goodfra",new Gson().toJson(collectionsJson.getBody().get(i).getGoods()));
-//
-//                    }
-//                    collectGoodAdapter.notifyDataSetChanged();
-//                    //Log.e("CollectScene",collectionsJson.getBody().get(0).getScene().getName());
-//                    //Toast.makeText(getContext(), collectionsJson.getBody().get(0).getScene().getName(), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollect.action")
+                .tag(getContext())
+
+                .params("user_id","48")
+                .params("pid","1").params("type","3")
+                .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
+                    @Override
+                    public void onResponse(boolean isFromCache, ResponseJson responseJson, Request request, Response response) {
+                        Log.e("res", new Gson().toJson(responseJson));
+                    }
+                });
+                OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollections")
+                // 请求方式和请求url
+                .tag(this).params("type", "3").params("user_id", "48")
+                .params("skip", "0").params("take", "5")
+                        // 请求的 tag, 主要用于取消对应的请求
+                   // 缓存模式，详细请看缓存介绍
+                .execute(new JsonCallback<UserCollectionsJson>(UserCollectionsJson.class) {
+                    @Override
+                    public void onResponse(boolean b, UserCollectionsJson userCollectionsJson, Request request, Response response) {
+                        Log.e("tes",new Gson().toJson(userCollectionsJson));
+                        for (int i = 0; i < userCollectionsJson.getBody().size(); i++) {
+                        goodsBeanList.add(userCollectionsJson.getBody().get(i).getGoods());
+
+
+                    }
+                        Log.e("te",goodsBeanList.size()+"");
+                    collectGoodAdapter.notifyDataSetChanged();
+                    }
+
+
+
+
+                });
     }
 }

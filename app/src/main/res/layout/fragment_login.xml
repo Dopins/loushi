@@ -5,13 +5,11 @@
     android:orientation="vertical"
     android:paddingLeft="58dp"
     android:paddingRight="58dp"
-    android:paddingTop="5dp"
-    tools:context=".LoginFragment">
+    android:paddingTop="5dp">
     <!-- TODO: Update blank fragment layout -->
 
-
-    <com.loushi.indicator.UnderLineEditText
-        android:id="@+id/phone_edit"
+    <com.android.loushi.loushi.util.UnderLineEditText
+        android:id="@+id/login_edit_phone"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:background="@null"
@@ -23,11 +21,11 @@
         android:drawableLeft="@drawable/call"
         android:drawablePadding="5dp"/>
 
-    <com.loushi.indicator.UnderLineEditText
-        android:id="@+id/password_edit"
+    <com.android.loushi.loushi.util.UnderLineEditText
+        android:id="@+id/login_edit_password"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_below="@id/phone_edit"
+        android:layout_below="@id/login_edit_phone"
         android:background="@null"
         android:ems="10"
 
@@ -41,7 +39,7 @@
         android:id="@+id/btn_login"
         android:layout_width="246dp"
         android:layout_height="46dp"
-        android:layout_below="@id/password_edit"
+        android:layout_below="@id/login_edit_password"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:background="@drawable/shape_btn_login"
@@ -86,13 +84,14 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/btn_forgetpassword"
         android:layout_width="wrap_content"
         android:layout_height="46dp"
         android:background="@null"
         android:text="忘记密码？请点击此处找回密码"
         android:textColor="@color/hint"
         android:layout_below="@+id/btn_layout"
-        android:paddingTop="10dp"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"/>
 
 

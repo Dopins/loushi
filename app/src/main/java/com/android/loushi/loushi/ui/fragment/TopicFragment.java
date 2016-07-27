@@ -1,9 +1,9 @@
 package com.android.loushi.loushi.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.TopicRecycleViewAdapter;
+import com.android.loushi.loushi.ui.activity.TopicItemActivity;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 
 /**
@@ -46,7 +47,7 @@ public class TopicFragment extends BaseFragment{
     private void initView(View view){
 
         textView_title= (TextView) view.findViewById(R.id.textView_topicTitle);
-        recyclerView= (RecyclerView) view.findViewById(R.id.recycleView_topic);
+        recyclerView= (RecyclerView) view.findViewById(R.id.recycleView);
         mAdapter=new TopicRecycleViewAdapter(getContext());
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         recyclerView.addItemDecoration(new SpaceItemDecoration(getContext(),16));
@@ -54,9 +55,19 @@ public class TopicFragment extends BaseFragment{
             @Override
             public void onItemClick(View v, int position) {
                 Toast.makeText(getContext(),""+position,Toast.LENGTH_SHORT).show();
+                clickTopicItem(position);
             }
         });
         recyclerView.setAdapter(mAdapter);
 
     }
+
+    private void clickTopicItem(int position){
+        Intent intent=new Intent(getContext(), TopicItemActivity.class);
+        intent.putExtra(TopicItemActivity.TOPIC_ID,position);
+        startActivity(intent);
+    }
+
+
+
 }

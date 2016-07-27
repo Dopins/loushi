@@ -34,7 +34,7 @@ public class RecycleViewPreferSetter {
 
         String pid=bodyBeanList.get(position).getId()+"";
 
-        OkHttpUtils.post(BaseActivity.url + "/LouShi/user/userCollect")
+        OkHttpUtils.post(BaseActivity.url + "/user/userCollect")
                 // 请求方式和请求url
                 //.tag(this)
                 .params("user_id", BaseActivity.user_id)
@@ -70,7 +70,7 @@ public class RecycleViewPreferSetter {
 
         String pid=bodyBeanList.get(position).getId()+"";
 
-        OkHttpUtils.post(BaseActivity.url + "/LouShi/user/userCollect")
+        OkHttpUtils.post(BaseActivity.url + "/user/userCollect")
                 // 请求方式和请求url
                 //.tag(this)
                 .params("user_id", BaseActivity.user_id)
@@ -106,7 +106,7 @@ public class RecycleViewPreferSetter {
 
         String pid=bodyBeanList.get(position).getId()+"";
 
-        OkHttpUtils.post(BaseActivity.url + "/LouShi/user/userCollect")
+        OkHttpUtils.post(BaseActivity.url + "/user/userCollect")
                 // 请求方式和请求url
                 //.tag(this)
                 .params("user_id", BaseActivity.user_id)

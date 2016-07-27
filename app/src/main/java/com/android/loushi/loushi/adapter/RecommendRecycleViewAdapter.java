@@ -216,7 +216,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
     private void getAdList() {
 
-        OkHttpUtils.post(BaseActivity.url + "/LouShi/base/carousel")
+        OkHttpUtils.post(BaseActivity.url + "/base/carousel")
                 // 请求方式和请求url
                 .tag(this).params("user_id", BaseActivity.user_id)
                 .execute(new JsonCallback<CarouselJson>(CarouselJson.class) {
@@ -342,7 +342,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
     private void setPrefer(final String type, String pid,final mViewHolder holder,final int position) {
 
-        OkHttpUtils.post(BaseActivity.url + "/LouShi/user/userCollect")
+        OkHttpUtils.post(BaseActivity.url + "/user/userCollect")
                 // 请求方式和请求url
                 .tag(this)
                 .params("user_id", BaseActivity.user_id)

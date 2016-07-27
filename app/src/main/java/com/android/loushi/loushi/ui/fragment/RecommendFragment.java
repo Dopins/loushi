@@ -117,7 +117,7 @@ public class RecommendFragment extends LazyFragment {
         Date date=new Date();
         str_date=simpleDateFormat.format(date.getTime()-timeCycle*get_total).substring(0,10);
         //Log.d("tag",str_date);
-        OkHttpUtils.post(BaseActivity.url+"/LouShi/base/recommendation")
+        OkHttpUtils.post(BaseActivity.url+"/base/recommendation")
                 // 请求方式和请求url
                 .tag(this)
                 .params("rdate",str_date)

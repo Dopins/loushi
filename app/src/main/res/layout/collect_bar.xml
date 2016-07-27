@@ -3,8 +3,7 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="44dp"
     android:background="#fff"
-    android:paddingLeft="27dp"
-    android:paddingRight="27dp"
+
     android:id="@+id/collect_bar">
 
         <LinearLayout
@@ -20,7 +19,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/cb_zan"
         android:id="@+id/collect_bar_btn_like"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="20dp"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -34,7 +33,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:text="点赞"/>
+        android:textSize="10sp"
+        android:text="收藏"/>
 
 </LinearLayout>
     <LinearLayout
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/reply"
             android:id="@+id/collect_bar_btn_comment"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="20dp"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -64,6 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:textSize="10sp"
             android:text="评论"/>
 
     </LinearLayout>
@@ -79,7 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/share"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="20dp"
             android:id="@+id/collect_bar_btn_share"
             />
         <TextView
@@ -94,6 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:textSize="10sp"
             android:text="转发"/>
 
     </LinearLayout>

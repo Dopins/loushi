@@ -117,7 +117,7 @@ public class StyleFragment extends LazyFragment {
     }
     private void GetSomeScene(int take, int skip) {
 
-        OkHttpUtils.post(BaseActivity.url + "/LouShi/base/scene")
+        OkHttpUtils.post(BaseActivity.url + "/base/scene")
                 // 请求方式和请求url
                 .tag(this).params("user_id", BaseActivity.user_id)
                 .params("scene_group_id",1+"")

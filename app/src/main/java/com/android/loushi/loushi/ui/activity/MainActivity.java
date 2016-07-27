@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -11,11 +12,11 @@ import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.ui.fragment.CategoryFragment;
+import com.android.loushi.loushi.ui.fragment.MyFragment;
 import com.android.loushi.loushi.ui.fragment.PersonFragment;
 import com.android.loushi.loushi.ui.fragment.SceneFragment;
 
 public class MainActivity extends BaseActivity {
-
     public FragmentTabHost mTabHost;
     private LayoutInflater layoutInflater;
     private Class fragmentArray[] = {SceneFragment.class,CategoryFragment.class,PersonFragment.class};

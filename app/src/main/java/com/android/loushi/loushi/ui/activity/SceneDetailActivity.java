@@ -14,6 +14,7 @@ import com.android.loushi.loushi.adapter.AdViewpagerAdapter;
 import com.android.loushi.loushi.adapter.ViewPagerAdapter;
 import com.android.loushi.loushi.ui.fragment.CollectGoodFragment;
 import com.android.loushi.loushi.ui.fragment.SceneDetailDesignFragment;
+import com.android.loushi.loushi.ui.fragment.SceneDetailGoodFragment;
 import com.android.loushi.loushi.viewpager.CarouselViewPager;
 import com.squareup.picasso.Picasso;
 
@@ -25,7 +26,7 @@ import java.util.List;
  */
 public class SceneDetailActivity extends  BaseActivity {
     private CarouselViewPager carouselViewPager;
-    private CollectGoodFragment collectGoodFragment;
+    private SceneDetailGoodFragment sceneDetailGoodFragment;
     private SceneDetailDesignFragment sceneDetailDesignFragment;
     private List<Fragment> list_fragment;                                //定义要装fragment的列表
     private List<String> list_title;
@@ -33,6 +34,8 @@ public class SceneDetailActivity extends  BaseActivity {
     private Toolbar mToolbar;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
+    public static String scene_id="SCENE_ID";
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_scene_detail;
@@ -77,13 +80,13 @@ public class SceneDetailActivity extends  BaseActivity {
     private void initTablayout(){
         tabLayout=(TabLayout)findViewById(R.id.toolbar_tab);
         viewPager = (ViewPager)findViewById(R.id.main_vp_container);
-        collectGoodFragment = new CollectGoodFragment();
+        sceneDetailGoodFragment = new SceneDetailGoodFragment();
         sceneDetailDesignFragment = new SceneDetailDesignFragment();
         list_fragment = new ArrayList<>();
         list_title = new ArrayList<>();
         list_fragment.add(sceneDetailDesignFragment);
-        collectGoodFragment = new CollectGoodFragment();
-        list_fragment.add(collectGoodFragment);
+
+        list_fragment.add(sceneDetailGoodFragment);
         //list_fragment.add(collectGoodFragment);
 
         list_title.add("设计");
