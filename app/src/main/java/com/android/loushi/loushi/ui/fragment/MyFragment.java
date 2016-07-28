@@ -51,7 +51,7 @@ public class MyFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-        Log.e("Test: " + TAG, "onActivityCreated");
+        Log.e(TAG, "onActivityCreated");
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
         Boolean LoginOrNot = sharedPreferences.getBoolean("LoginOrNot",false);
         if(LoginOrNot) {
@@ -73,7 +73,11 @@ public class MyFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (view == null) {
-            Log.e("Test: " + TAG, "onCreateView");
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserLogin",Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("LoginOrNot",false);
+            editor.commit();
+
             view = inflater.inflate(R.layout.fragment_my, null);
             initView(view);
             initDatas();
@@ -150,7 +154,7 @@ public class MyFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e("Test: " + TAG, "onDestroy");
+        Log.e(TAG, "onDestroy");
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 }

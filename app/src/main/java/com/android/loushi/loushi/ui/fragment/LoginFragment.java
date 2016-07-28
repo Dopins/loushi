@@ -176,12 +176,16 @@ public class LoginFragment extends Fragment {
     }
 
     private void getUserInfo(int id) {
+        Log.e(TAG, "getUserInfo");
         final String user_id = id + "";
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userInfo.action")
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfo")
                 .params("user_id", user_id)
                 .execute(new JsonCallback<UserInfoJson>(UserLoginJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
+                        Log.e(TAG, "onResponse");
+                        Log.e(TAG, request.toString());
+                        Log.e(TAG, response.toString());
                         UserInfoJson.BodyBean body = userInfoJson.getBody();
                         sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
                         editor = sharedPreferences.edit();
@@ -194,6 +198,8 @@ public class LoginFragment extends Fragment {
                         editor.putInt("messageCount", body.getMessageCount());
                         editor.putInt("userID", body.getUserID());
                         editor.commit();
+                        Log.e(TAG, "onResponse: "+ body.getMobilePhone());
+
                     }
                 });
     }
