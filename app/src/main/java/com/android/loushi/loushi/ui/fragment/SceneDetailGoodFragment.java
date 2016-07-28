@@ -38,7 +38,7 @@ public class SceneDetailGoodFragment extends  LazyFragment {
 
     private void init() {
         recyclerView = (RecyclerView)getView().findViewById(R.id.recycleView);
-       
+
         sceneDetailGoodAdapter = new SceneDetailGoodAdapter(getApplicationContext(),bodyBeanList);
         getSceneGood();
         final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
