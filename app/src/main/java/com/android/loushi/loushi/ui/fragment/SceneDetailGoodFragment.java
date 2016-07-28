@@ -27,12 +27,13 @@ public class SceneDetailGoodFragment extends  LazyFragment {
     private RecyclerView recyclerView;
     private SceneDetailGoodAdapter sceneDetailGoodAdapter;
     private List<SceneGoodJson.BodyBean> bodyBeanList=new ArrayList<SceneGoodJson.BodyBean>();;
-
+    private String scene_id="1";
 
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
         setContentView(R.layout.fragment_scene_detail_good);
+        scene_id=getArguments().getString("SCENE_ID");
         init();
     }
 
@@ -49,7 +50,7 @@ public class SceneDetailGoodFragment extends  LazyFragment {
     private void getSceneGood(){
         OkHttpUtils.post("http://www.loushi666.com/LouShi/base/sceneGoods.action")
 
-                .tag(getApplicationContext()).params("user_id", "48").params("scene_id", "1")
+                .tag(getApplicationContext()).params("user_id", BaseActivity.user_id).params("scene_id", scene_id)
                 .execute(new JsonCallback<SceneGoodJson>(SceneGoodJson.class) {
                     @Override
                     public void onResponse(boolean b, SceneGoodJson sceneGoodJson, Request request, Response response) {

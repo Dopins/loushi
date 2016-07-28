@@ -84,7 +84,7 @@ public class SceneDetailDesignFragment extends BaseFragment {
 //        cookieManager.setAcceptCookie(true);
 //        cookieManager.setCookie(url, cookies);  //cookies是要设置的cookie字符串
 //        CookieSyncManager.getInstance().sync();
-        webView.loadUrl("http://119.29.187.58:8080/loushi/scene-detail.html?user_id=0&scene_id=1");
+        webView.loadUrl("http://172.16.1.218:8020/111/topicDetail.html");
     }
     private void initCollectBar(){
         collect_bar=(LinearLayout)getView().findViewById(R.id.collect_bar);

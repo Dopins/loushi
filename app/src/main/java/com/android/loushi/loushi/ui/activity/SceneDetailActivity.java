@@ -34,7 +34,10 @@ public class SceneDetailActivity extends  BaseActivity {
     private Toolbar mToolbar;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
-    public static String scene_id="SCENE_ID";
+    public static  String SCENE_ID="SCENE_ID";
+
+
+    public  String scene_id="1";
 
     @Override
     protected int getLayoutId() {
@@ -44,6 +47,7 @@ public class SceneDetailActivity extends  BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scene_detail);
+        scene_id = getIntent().getStringExtra(SCENE_ID);
 
         initView();
         initTablayout();
@@ -81,7 +85,11 @@ public class SceneDetailActivity extends  BaseActivity {
         tabLayout=(TabLayout)findViewById(R.id.toolbar_tab);
         viewPager = (ViewPager)findViewById(R.id.main_vp_container);
         sceneDetailGoodFragment = new SceneDetailGoodFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("SCENE_ID",scene_id);
+        sceneDetailGoodFragment.setArguments(bundle);
         sceneDetailDesignFragment = new SceneDetailDesignFragment();
+        sceneDetailDesignFragment.setArguments(bundle);
         list_fragment = new ArrayList<>();
         list_title = new ArrayList<>();
         list_fragment.add(sceneDetailDesignFragment);
