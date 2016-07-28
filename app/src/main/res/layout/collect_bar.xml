@@ -13,11 +13,13 @@
     android:id="@+id/collect_bar_linear_like"
             android:clickable="true"
             android:layout_weight="1"
+
     >
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/cb_zan"
+        android:clickable="false"
         android:id="@+id/collect_bar_btn_like"
         android:layout_marginLeft="20dp"
         />

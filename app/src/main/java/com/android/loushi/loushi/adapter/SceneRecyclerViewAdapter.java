@@ -7,14 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.jsonbean.SceneJson;
+import com.android.loushi.loushi.util.RecycleViewPreferSetter;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,9 +58,10 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                 into(holder.image);
 
         holder.title.setText(body.getName());
-
+        holder.detail.setText(body.getDigest());
+        holder.numWatch.setText(body.getBrowseNum()+"");
         holder.numPrefer.setText(body.getCollectionNum()+"");
-        holder.checkBox_prefer.setSelected(body.isCollected());
+        holder.checkBox_prefer.setChecked(body.getCollected());
     }
     class SceneViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView image;
@@ -70,7 +71,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         TextView numWatch;
         TextView publishTime;
         CheckBox checkBox_prefer;
-
+        LinearLayout btn_prefer;
         public SceneViewHolder(View view) {
             super(view);
             image = (ImageView) view.findViewById(R.id.card_image);
@@ -80,10 +81,22 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             numWatch = (TextView) view.findViewById(R.id.num_watch);
             publishTime = (TextView) view.findViewById(R.id.publish_time);
             checkBox_prefer= (CheckBox) view.findViewById(R.id.checkbox_prefer);
-            checkBox_prefer.setOnClickListener(new View.OnClickListener() {
+            btn_prefer=(LinearLayout)view.findViewById(R.id.btn_prefer);
+            btn_prefer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "item" + getPosition() + " 点赞", Toast.LENGTH_SHORT).show();
+
+                    String type="0";         //场景的type为0
+
+                    RecycleViewPreferSetter recycleViewPreferSetter=new RecycleViewPreferSetter();
+                    recycleViewPreferSetter.setSelectedStateSetter(new RecycleViewPreferSetter.SelectedStateSetter() {
+                        @Override
+                        public void SetSelectedState(String num, boolean is_collected) {
+                            numPrefer.setText(num);
+                            checkBox_prefer.setChecked(is_collected);
+                        }
+                    });
+                    recycleViewPreferSetter.setScenePrefer(type,getPosition(),bodyBeanList);
                 }
             });
 
@@ -101,4 +114,5 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     public int getItemCount() {
         return bodyBeanList.size();
     }
+
 }

@@ -59,7 +59,7 @@ public class GuideRecyclerViewAdapter extends RecyclerView.Adapter<GuideRecycler
         holder.title.setText(body.getName());
 
         holder.numPrefer.setText(body.getCollectionNum()+"");
-        holder.checkBox_prefer.setSelected(body.isCollected());
+        holder.checkBox_prefer.setSelected(body.getCollected());
     }
     class SceneViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView image;

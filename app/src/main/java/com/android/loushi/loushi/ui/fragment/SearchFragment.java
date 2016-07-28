@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.android.loushi.loushi.R;
@@ -35,6 +36,8 @@ public class SearchFragment extends Fragment {
     private HotWordRecycleViewAdapter hRecycleAdapter;
     private RecyclerView sRecyclerView;
     private SearchRecordAdapter searchRecordAdapter;
+
+    private LinearLayout linearLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_search, container, false);
@@ -42,19 +45,27 @@ public class SearchFragment extends Fragment {
         return view;
     }
     private void init(View view){
+        SQLiteDatabase db = Connector.getDatabase();
+        linearLayout=(LinearLayout)view.findViewById(R.id.search_record_layout);
         setSearchRecode(view);
         setHotWord(view);
+        Button btn_clear_search=(Button)view.findViewById(R.id.btn_clear_search);
+        btn_clear_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DataSupport.deleteAll(SearchWords.class);
+                linearLayout.setVisibility(View.GONE);
+            }
+        });
     }
     private void setSearchRecode(View view){
-        SQLiteDatabase db = Connector.getDatabase();
         allNews = DataSupport.findAll(SearchWords.class);
         int len = allNews.size();
         final List<Map<String,String>> search_record_list=new ArrayList<>();
         if(len==0){
-            LinearLayout linearLayout=(LinearLayout)view.findViewById(R.id.search_record_layout);
             linearLayout.setVisibility(View.GONE);
         }else{
-            for(int i=len-1;i>0&&len-i-1<5;i--){
+            for(int i=len-1;i>=0&&len-i-1<5;i--){
                 Map map=new HashMap();
                 map.put("record",allNews.get(i).getWords());
                 map.put("date", allNews.get(i).getDate());

@@ -1,19 +1,15 @@
 package com.android.loushi.loushi.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.ViewPagerAdapter;
-import com.android.loushi.loushi.ui.activity.SearchActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +26,7 @@ public class SearchResultFragment extends Fragment {
     private List<android.support.v4.app.Fragment> list_fragment;    //定义要装fragment的列表
     private List<String> list_title;                                     //tab名称列表
 
-    private SceneListFragment sceneFragment;
+    private HabitFragment sceneFragment;
     private GuideListFragment guideFragment;
     private CollectGoodFragment goodsFragment;
     @Override
@@ -63,7 +59,7 @@ public class SearchResultFragment extends Fragment {
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
 
         //初始化各fragment
-        sceneFragment = new SceneListFragment();
+        sceneFragment = new HabitFragment();
         guideFragment = new GuideListFragment();
         goodsFragment = new CollectGoodFragment();
 
