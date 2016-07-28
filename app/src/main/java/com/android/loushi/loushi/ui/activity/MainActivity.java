@@ -95,5 +95,8 @@ public class MainActivity extends BaseActivity {
 //
 //        return super.onOptionsItemSelected(item);
 //    }
+protected void onSaveInstanceState(Bundle outState) {
+    // super.onSaveInstanceState(outState);
 
+}
 }

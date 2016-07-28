@@ -24,6 +24,8 @@ public class CategoryFragment extends BaseFragment {
 
     private static final String TAG="CategoryFragment";
 
+    private View rootView;
+
     private Toolbar toolbar;
     private TabLayout tablayout_category;
     private ViewPager viewPager_category;
@@ -44,10 +46,21 @@ public class CategoryFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 //        view=inflater.inflate(R.layout.fragment_category, container, false);
-        View view=inflater.inflate(R.layout.fragment_category,null);
-        Log.e(TAG,"onCreateView");
-        initView(view);
-        return view;
+//        View view=inflater.inflate(R.layout.fragment_category,null);
+//        Log.e(TAG,"onCreateView");
+//        initView(view);
+//        return view;
+
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_category, null);
+        }
+// 缓存的rootView需要判断是否已经被加过parent，如果有parent需要从parent删除，要不然会发生这个rootview已经有parent的错误。
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+        initView(rootView);
+        return rootView;
     }
 
 

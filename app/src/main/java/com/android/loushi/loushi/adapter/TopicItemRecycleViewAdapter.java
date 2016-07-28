@@ -72,14 +72,25 @@ public class TopicItemRecycleViewAdapter extends RecyclerView.Adapter<TopicItemR
     }
 
     /**
-     * 为topicadapter类型设置viewholder
+     * 为tipsadapter类型设置viewholder
      * @param holder
      * @param position
      */
     private void bindTipsViewHolder(final ViewHolder holder, int position) {
         final StrategyJson.BodyBean tips = mTipsList.get(position);
+//        Log.i(TAG,"imaurl=="+tips.getImgUrl()+
+//                ",date=="+tips.getWDate()+
+//                ",collected=="+tips.getCollected()
+//                +",id=="+tips.getId()
+//                +",browsenum=="+tips.getBrowseNum());
+
+        String[] urls=tips.getImgUrl().split("\\|\\|\\|");
+        String urlImg=urls[0];
+//        String urlClick=urls[1];
+//        Log.i(TAG,"urlImg=="+urlImg+",urlClick=="+urlClick);
+
         Picasso.with(mContext)
-                .load(tips.getImgUrl())
+                .load(urlImg)
                 .into(holder.card_image);
         holder.num_prefer.setText(Integer.toString(tips.getCollectionNum()));
         holder.checkbox_prefer.setChecked(tips.getCollected());

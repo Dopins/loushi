@@ -2,6 +2,7 @@ package com.android.loushi.loushi.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -49,6 +50,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
     private ImageView imageViewSearch;
     private TextView textViewTitle;
     private ImageView imageViewBack;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private TopicItemRecycleViewAdapter mAdapter;
 
@@ -78,6 +80,10 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
         //init title
         textViewTitle = (TextView) findViewById(R.id.textView_title);
         textViewTitle.setText(titlesName[mTopic_id]);
+        //init swipe
+        swipeRefreshLayout= (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        swipeRefreshLayout.setColorSchemeColors(this.getResources().getColor(R.color.colorPrimary));
         //init imageview
         imageViewSearch = (ImageView) findViewById(R.id.imageView_search);
         imageViewBack = (ImageView) findViewById(R.id.imageView_back);

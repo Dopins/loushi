@@ -73,6 +73,15 @@ public class StrategyJson  implements Serializable {
         private int commentNum;
         private int browseNum;
         private String imgUrl;
+        private String digest;
+
+        public String getDigest() {
+            return digest;
+        }
+
+        public void setDigest(String digest) {
+            this.digest = digest;
+        }
 
         public int getId() {
             return id;
