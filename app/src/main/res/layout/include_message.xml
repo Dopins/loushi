@@ -60,6 +60,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:id="@+id/btn_cleanComment"
+            android:background="?android:attr/selectableItemBackground"
             android:orientation="horizontal">
 
 
@@ -70,7 +73,6 @@
                 android:src="@drawable/my_delete_hdpi"/>
 
             <Button
-                android:id="@+id/btn_cleanComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"

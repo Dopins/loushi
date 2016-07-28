@@ -6,42 +6,46 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.MyMessageAdapter;
 
+import com.android.loushi.loushi.callback.EncryptCallback;
 import com.android.loushi.loushi.jsonbean.UserMessageJson;
+import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.UrlConstant;
 import com.google.gson.Gson;
+import com.lzy.okhttputils.OkHttpUtils;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by binpeiluo on 2016/7/21 0021.
  */
-public class MyMessageActivity extends BaseActivity{
+public class MyMessageActivity extends BaseActivity implements View.OnClickListener {
 
-    private TextView textView_toolbar;//标题
-    private SwipeRefreshLayout swipeRefreshLayout_message;
-    private RecyclerView recycleView_newComment;
-    private RecyclerView recycleView_oldComment;
-    private Button btn_cleanComment;
-    private Toolbar toolbar;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView recycleViewNewComment;
+    private RecyclerView recycleViewOldComment;
+    private LinearLayout btnCleanComment;
+    //toolbar
+    private ImageView imageViewBack;
+    private TextView textViewTitle;
+    private ImageView imageViewSearch;
 
     private MyMessageAdapter mMessageAdapter;
     private List<UserMessageJson.BodyBean> mBodyBeanList=new ArrayList<UserMessageJson.BodyBean>() ;
-
-    //TODO
-    private String temp_id="22";
 
     @Override
     protected int getLayoutId() {
@@ -58,17 +62,21 @@ public class MyMessageActivity extends BaseActivity{
 
     private void initView(){
 
-        textView_toolbar= (TextView) findViewById(R.id.toolbar_index);
-        textView_toolbar.setText("");
-        getSupportActionBar().setTitle("我的消息");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        imageViewBack= (ImageView) findViewById(R.id.imageView_back);
+        textViewTitle= (TextView) findViewById(R.id.textView_title);
+        imageViewSearch= (ImageView) findViewById(R.id.imageView_search);
 
+        //init toolbar
+        imageViewBack.setOnClickListener(this);
+        textViewTitle.setText("我的消息");
+        imageViewSearch.setVisibility(View.GONE);
 
-        swipeRefreshLayout_message= (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout_message);
-        recycleView_newComment= (RecyclerView) findViewById(R.id.recycleView_newComment);
-        recycleView_oldComment= (RecyclerView) findViewById(R.id.recycleView_oldComment);
-        btn_cleanComment= (Button) findViewById(R.id.btn_cleanComment);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout_message);
+        recycleViewNewComment = (RecyclerView) findViewById(R.id.recycleView_newComment);
+        recycleViewOldComment = (RecyclerView) findViewById(R.id.recycleView_oldComment);
+
+        btnCleanComment = (LinearLayout) findViewById(R.id.btn_cleanComment);
+        btnCleanComment.setOnClickListener(this);
 
         mMessageAdapter=new MyMessageAdapter(this,mBodyBeanList);
         mMessageAdapter.setmOnItemClickListener(new MyMessageAdapter.OnItemClickListener() {
@@ -77,13 +85,30 @@ public class MyMessageActivity extends BaseActivity{
                 Toast.makeText(MyMessageActivity.this, ""+postion, Toast.LENGTH_SHORT).show();
             }
         });
-        recycleView_newComment.setLayoutManager(new LinearLayoutManager(this));
-        recycleView_newComment.setItemAnimator(new DefaultItemAnimator());
-        recycleView_newComment.setAdapter(mMessageAdapter);
+        recycleViewNewComment.setLayoutManager(new LinearLayoutManager(this));
+        recycleViewNewComment.setItemAnimator(new DefaultItemAnimator());
+        recycleViewNewComment.setAdapter(mMessageAdapter);
 
     }
 
     private void loadMessage(){
+        OkHttpUtils.post(UrlConstant.MYMESSAGE)
+                .params(KeyConstant.USER_ID,MainActivity.user_id)
+                .execute(new EncryptCallback<UserMessageJson>() {
+                    @Override
+                    public UserMessageJson parseNetworkResponse(Response response) throws Exception {
+                        return new Gson().fromJson(response.body().string(),UserMessageJson.class);
+                    }
+                    @Override
+                    public void onResponse(boolean isFromCache, UserMessageJson userMessageJson, Request request, @Nullable Response response) {
+                        if(userMessageJson.getState()){
+                            mBodyBeanList.addAll(userMessageJson.getBody());
+                        }else
+                            Toast.makeText(MyMessageActivity.this,"获取消息失败",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
 //        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/user/userMessage")
 //                .addParams("user_id",temp_id).build().execute(new UserMessageCallBack() {
 //            @Override
@@ -105,4 +130,15 @@ public class MyMessageActivity extends BaseActivity{
         //xuyao
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_cleanComment:
+                Toast.makeText(this,"click clean ",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.imageView_back:
+                finish();
+                break;
+        }
+    }
 }

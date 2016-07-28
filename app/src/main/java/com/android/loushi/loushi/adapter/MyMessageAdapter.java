@@ -104,9 +104,6 @@ public class MyMessageAdapter extends RecyclerView.Adapter<MyMessageAdapter.View
 
     }
 
-
-
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView imageView_User;

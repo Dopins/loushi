@@ -49,19 +49,25 @@ public class TipsFragment extends LazyFragment {
     private SwipeRefreshLayout swipeRefreshLayout_tips;
 
     private Integer mSkip = 0;
-    private Integer mTake = 1;
-    private List mTipsList;
+    private Integer mTake = 20;
+    private List mTipsList= new ArrayList();;
     private TopicItemRecycleViewAdapter mAdapter;
+
+    private boolean isFirstShow=true;  //判断是否是第一次加载
 
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
         setContentView(R.layout.fragment_tips);
-        initView(getContentView());
-        loadData(MainActivity.user_id, mSkip, mTake);
+        initView();
+        if(isFirstShow){
+            loadData(MainActivity.user_id, mSkip, mTake);
+            isFirstShow=false;
+        }
     }
 
     private void loadData(String userId, Integer skip, final Integer take){
+        Log.i("test","GetSomeScene--skip,take=="+skip+","+take+",,,isFirstShow=="+isFirstShow);
         OkHttpUtils.post(UrlConstant.TIPSCURL)
                 .tag(this)
                 .params(KeyConstant.USER_ID, userId)
@@ -70,51 +76,28 @@ public class TipsFragment extends LazyFragment {
                 .execute(new AbsCallback<StrategyJson>() {
                     @Override
                     public StrategyJson parseNetworkResponse(Response response) throws Exception {
-//                        Log.i(TAG,"parse--  "+response.body().string());
                         return new Gson().fromJson(response.body().string(),StrategyJson.class);
                     }
-
                     @Override
                     public void onResponse(boolean isFromCache, StrategyJson bodyBean, Request request, @Nullable Response response) {
                         Log.i(TAG,"onResponse-- "+new Gson().toJson(bodyBean));
+                        if(bodyBean.getState()){
+                            mSkip+=mTake;
+                            mTipsList.addAll(bodyBean.getBody());
+                            mAdapter.notifyDataSetChanged();
+                        }else
+                            Toast.makeText(getContext(),""+bodyBean.getReturn_info(),Toast.LENGTH_SHORT).show();
 //                        Log.e(TAG,bodyBean.getBody().size()+"");
-                        mTipsList.addAll(bodyBean.getBody());
-                        mAdapter.notifyDataSetChanged();
                     }
                 });
-//        OkHttpUtils.post()
-//                .url(tipsUrl)
-//                .addParams("user_id", tempUserID)
-//                .addParams("skip", skip.toString())
-//                .addParams("take", take.toString())
-//                .build()
-//                .execute(new StrategyCallBack() {
-//                    @Override
-//                    public void onError(Call call, Exception e) {
-//                        Log.e(TAG,"error");
-//                    }
-//
-//                    @Override
-//                    public void onResponse(Strategyjson response) {
-//                        Log.e(TAG,"success"+response.toString());
-//                        for (int i = 0; i < response.getBody().size(); i++) {
-//                            Strategyjson.BodyBean temp = response.getBody().get(i);
-//                            mTipsList.add(temp);
-//                        }
-//                        mAdapter.notifyDataSetChanged();
-//                    }
-//                });
-//        mSkip+=mTake;
 
     }
 
-    private void initView(View view) {
-        mTipsList = new ArrayList();
-        swipeRefreshLayout_tips = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+    private void initView() {
+        swipeRefreshLayout_tips = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout_tips.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         swipeRefreshLayout_tips.setSize(SwipeRefreshLayout.DEFAULT);
-//        swipeRefreshLayout_tips.setOnRefreshListener();
-        recycleView_tips = (RecyclerView) view.findViewById(R.id.recycleView);
+        recycleView_tips = (RecyclerView) findViewById(R.id.recycleView);
         mAdapter = new TopicItemRecycleViewAdapter(getContext(),
                 mTipsList,
                 TopicItemRecycleViewAdapter.AdapterType.TIPS);
@@ -155,12 +138,12 @@ public class TipsFragment extends LazyFragment {
                 mSkip = 0;
                 mTipsList.clear();
                 loadData(MainActivity.user_id, mSkip, mTake);
-                mAdapter.notifyDataSetChanged();
                 swipeRefreshLayout_tips.setRefreshing(false);
                 Toast.makeText(getContext(), "刷新成功", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
 
 }
