@@ -55,7 +55,7 @@ public class SceneJson implements Serializable {
         this.return_info = return_info;
     }
 
-    public boolean isState() {
+    public boolean getState() {
         return state;
     }
 
@@ -78,9 +78,19 @@ public class SceneJson implements Serializable {
         private int forwordNum;
         private int groupID;
         private int id;
+        private int browseNum;
         private String imgUrl;
         private String label;
         private String name;
+        private String digest;
+
+        public String getDigest() {
+            return digest;
+        }
+
+        public void setDigest(String digest) {
+            this.digest = digest;
+        }
 
         @Override
         public String toString() {
@@ -106,7 +116,7 @@ public class SceneJson implements Serializable {
 
         private SceneGroupBean sceneGroup;
 
-        public boolean isCollected() {
+        public boolean getCollected() {
             return collected;
         }
 
@@ -180,6 +190,14 @@ public class SceneJson implements Serializable {
 
         public SceneGroupBean getSceneGroup() {
             return sceneGroup;
+        }
+
+        public int getBrowseNum() {
+            return browseNum;
+        }
+
+        public void setBrowseNum(int browseNum) {
+            this.browseNum = browseNum;
         }
 
         public void setSceneGroup(SceneGroupBean sceneGroup) {

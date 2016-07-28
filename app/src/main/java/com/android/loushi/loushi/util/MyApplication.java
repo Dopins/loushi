@@ -37,6 +37,8 @@ public class MyApplication extends LitePalApplication {
 
 
 
+
+
         //kookie设置为持久化
         //debug是打印调试信息 可不要
         //域名放在baseactivity的静态变量里

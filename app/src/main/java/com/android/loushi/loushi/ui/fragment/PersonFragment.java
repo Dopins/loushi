@@ -50,6 +50,7 @@ public class PersonFragment extends BaseFragment {
     private TextView tv_feed;
     private TextView tv_name_small;
     private RoundImageView img_head_small;
+    private View rootView;
                             //定义viewPager
     private PersonCollectTabAdapter personCollectTabAdapter;                               //定义adapter
     private List<Fragment> list_fragment;                                //定义要装fragment的列表
@@ -83,10 +84,21 @@ public class PersonFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_personal, null);
+//        View view = inflater.inflate(R.layout.fragment_personal, null);
+//
+//
+//        return inflater.inflate(R.layout.fragment_personal, container, false);
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_personal, null);
+        }
+        // 缓存的rootView需要判断是否已经被加过parent，如果有parent需要从parent删除，要不然会发生这个rootview已经有parent的错误。
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
 
 
-        return inflater.inflate(R.layout.fragment_personal, container, false);
+        return rootView;
     }
 
     public void initView(){
@@ -189,7 +201,7 @@ public class PersonFragment extends BaseFragment {
 
                 if (verticalOffset == 0) {
                     if (state != CollapsingToolbarLayoutState.EXPANDED) {
-                        Log.e("coll","展开");
+                        Log.e("coll", "展开");
                         state = CollapsingToolbarLayoutState.EXPANDED;//修改状态标记为展开
 
                         //collapsingToolbarLayout.setTitle("EXPANDED");//设置title为EXPANDED
@@ -206,8 +218,8 @@ public class PersonFragment extends BaseFragment {
                     }
                 } else {
                     if (state != CollapsingToolbarLayoutState.INTERNEDIATE) {
-                        Log.e("coll","中间");
-                        if(state == CollapsingToolbarLayoutState.COLLAPSED){
+                        Log.e("coll", "中间");
+                        if (state == CollapsingToolbarLayoutState.COLLAPSED) {
                             img_head_small.setVisibility(View.GONE);
                             tv_name_small.setVisibility(View.GONE);
                             tv_feed.setVisibility(View.VISIBLE);
@@ -220,5 +232,6 @@ public class PersonFragment extends BaseFragment {
             }
         });
     }
+
 
 }

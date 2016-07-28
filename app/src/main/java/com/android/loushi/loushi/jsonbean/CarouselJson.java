@@ -24,7 +24,7 @@ public class CarouselJson  implements Serializable {
      * body : [{"id":21,"type":1,"content":"11","imgUrl":"333"},{"id":21,"type":1,"content":"111","imgUrl":333}]
      */
 
-    private int state;
+    private boolean state;
     private String code;
     private String return_info;
     /**
@@ -36,11 +36,11 @@ public class CarouselJson  implements Serializable {
 
     private List<BodyBean> body;
 
-    public int getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 

@@ -68,7 +68,7 @@ public class TipsRecycleViewAdapter extends RecyclerView.Adapter<TipsRecycleView
 //                })
                 .into(holder.imageViewCard);
         holder.textViewPreferCount.setText(Integer.toString(strategy.getCollectionNum()));
-        if (strategy.getCollected()!=0)
+        if (strategy.getCollected())
             holder.checkBoxPrefer.setChecked(true);
         else
             holder.checkBoxPrefer.setChecked(false);
