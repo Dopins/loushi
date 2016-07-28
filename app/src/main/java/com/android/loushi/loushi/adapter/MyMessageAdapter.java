@@ -2,6 +2,7 @@ package com.android.loushi.loushi.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ public class MyMessageAdapter extends RecyclerView.Adapter<MyMessageAdapter.View
         this.mContext=mContext;
         this.myMessageList=myMessageList;
         this.mTransformation=new CircleImageTransformation();
+        Log.i("test","myMessageList.size"+myMessageList.size());
     }
 
     @Override
@@ -43,7 +45,8 @@ public class MyMessageAdapter extends RecyclerView.Adapter<MyMessageAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final UserMessageJson.BodyBean myMessage = myMessageList.get(position);
+        UserMessageJson.BodyBean myMessage = myMessageList.get(position);
+        Log.i("test","myMessage=="+myMessage.getComment().getContent());
         Picasso.with(mContext).load(myMessage.getComment().getUserInfo().getHeadImgUrl())
                 .transform(mTransformation)
                 .into(holder.imageView_User);
@@ -135,5 +138,6 @@ public class MyMessageAdapter extends RecyclerView.Adapter<MyMessageAdapter.View
 
     public void setmOnItemClickListener(OnItemClickListener mOnItemClickListener) {
         this.mOnItemClickListener = mOnItemClickListener;
+        Log.i("test","setmOnItemClickListener");
     }
 }

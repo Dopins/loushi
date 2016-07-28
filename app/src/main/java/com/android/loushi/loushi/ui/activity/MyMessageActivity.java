@@ -1,11 +1,13 @@
 package com.android.loushi.loushi.ui.activity;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -57,7 +59,6 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         initView();
         loadMessage();
-
     }
 
     private void initView(){
@@ -77,11 +78,12 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
 
         btnCleanComment = (LinearLayout) findViewById(R.id.btn_cleanComment);
         btnCleanComment.setOnClickListener(this);
-
+//
         mMessageAdapter=new MyMessageAdapter(this,mBodyBeanList);
         mMessageAdapter.setmOnItemClickListener(new MyMessageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int postion) {
+
                 Toast.makeText(MyMessageActivity.this, ""+postion, Toast.LENGTH_SHORT).show();
             }
         });
@@ -103,31 +105,13 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
                     public void onResponse(boolean isFromCache, UserMessageJson userMessageJson, Request request, @Nullable Response response) {
                         if(userMessageJson.getState()){
                             mBodyBeanList.addAll(userMessageJson.getBody());
+                            Log.i("test",""+mBodyBeanList.get(0).getCDate());
+                            Log.i("test",""+mBodyBeanList.size());
+                            mMessageAdapter.notifyDataSetChanged();
                         }else
                             Toast.makeText(MyMessageActivity.this,"获取消息失败",Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
-//        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/user/userMessage")
-//                .addParams("user_id",temp_id).build().execute(new UserMessageCallBack() {
-//            @Override
-//            public void onError(Call call, Exception e) {
-//                Log.e("mymessage",Log.getStackTraceString(e));
-//            }
-//
-//            @Override
-//            public void onResponse(UserMessageJson userMessageJson) {
-//                if(userMessageJson.isState()) {
-//                    Log.e("message",new Gson().toJson(userMessageJson));
-//                    mBodyBeanList.addAll(userMessageJson.getBody());
-//                    mMessageAdapter.notifyDataSetChanged();
-//                }
-//
-//            }
-//        });
-
-        //xuyao
     }
 
     @Override

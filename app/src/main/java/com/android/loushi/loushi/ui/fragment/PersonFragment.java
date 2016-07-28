@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.PersonCollectTabAdapter;
 import com.android.loushi.loushi.adapter.ViewPagerAdapter;
 import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
+import com.android.loushi.loushi.ui.activity.MyMessageActivity;
 import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
 
 import com.android.loushi.loushi.util.RoundImageView;
@@ -63,6 +65,7 @@ public class PersonFragment extends BaseFragment {
     private ViewPager mViewPager;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Button btn_profile;
+    private ImageButton btn_my_message;
     private CollapsingToolbarLayoutState state;
 
     private enum CollapsingToolbarLayoutState {
@@ -195,6 +198,16 @@ public class PersonFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+
+        btn_my_message= (ImageButton) findViewById(R.id.my_message);
+        btn_my_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(), MyMessageActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
     private void initAppBar(){
         appBarLayout = (AppBarLayout)getView().findViewById(R.id.app_bar_layout);
