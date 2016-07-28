@@ -33,6 +33,8 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.security.auth.login.LoginException;
+
 /**
  * Created by Administrator on 2016/7/18.
  */
@@ -71,6 +73,7 @@ public class PersonFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
+        Log.e("Test: "+"PersonFragment", "onActivityCreated");
 //        mToolbar=(Toolbar)getView().findViewById(R.id.program_toolbar);
 //        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
 //        mToolbar.setTitle("");
@@ -221,4 +224,9 @@ public class PersonFragment extends BaseFragment {
         });
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("Test: "+"PersonFragment","onDestroy");
+    }
 }

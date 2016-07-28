@@ -1,10 +1,14 @@
 package com.android.loushi.loushi.ui.fragment;
 
+
+import android.app.ProgressDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.BoolRes;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -23,11 +27,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
+
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.callback.UserCollecCallback;
+import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.ui.activity.ForgetPasswordActivity;
+import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.lzy.okhttputils.OkHttpUtils;
@@ -40,8 +47,9 @@ import okhttp3.Response;
  */
 public class LoginFragment extends Fragment {
     public static final String TAG = "LoginFragment";
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    public static SharedPreferences sharedPreferences;
+    public static SharedPreferences.Editor editor;
+    private AlertDialog dialog;
 
     // Content View Elements
 
@@ -60,29 +68,15 @@ public class LoginFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        logJudge();
+        setLoginInfoFromCache();
     }
 
-    private void logJudge() {
-        sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        Boolean log = sharedPreferences.getBoolean("LoginOrNot",false);
-        if (log){
-            String phone = sharedPreferences.getString("phone","10086");
-            String password = sharedPreferences.getString("password","10086");
-            OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
-                    .params("mobile_phone",phone)
-                    .params("password",password)
-                    .params("isThird", "false")
-                    .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
-                        @Override
-                        public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request,Response response) {
-                            transferMyFragmentToPersonalFragment();
-                        }
-                    });
-        }else {
-            Log.e(TAG, " Have not login !");
-        }
+    private void setLoginInfoFromCache() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+        String phone = sharedPreferences.getString("phone", "10086");
+        String password = sharedPreferences.getString("password", "10086");
+        login_edit_phone.setText(phone);
+        login_edit_password.setText(password);
     }
 
     public void transferMyFragmentToPersonalFragment() {
@@ -124,41 +118,44 @@ public class LoginFragment extends Fragment {
 
         });
 
-        login_edit_phone.setText("13750065622");
-        login_edit_password.setText("mtf071330");
-
         btn_login.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(final View view) {
-                Log.e(TAG,"login_edit_phone.length() : "+login_edit_phone.length());
-                Log.e(TAG,"login_edit_password.length() : "+login_edit_password.length());
-                if(login_edit_phone.length() != 11||login_edit_password.length() == 0){
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                dialog = builder.create();
+                dialog.show();
+                Log.e(TAG, "login_edit_phone.length() : " + login_edit_phone.length());
+                Log.e(TAG, "login_edit_password.length() : " + login_edit_password.length());
+                if (login_edit_phone.length() != 11 || login_edit_password.length() == 0) {
                     Log.e(TAG, "请输入有效的电话号码和密码 !");
-                }else {
-                    Log.e(TAG,login_edit_phone.getText().toString());
-                    Log.e(TAG,login_edit_password.getText().toString());
+                } else {
+                    Log.e(TAG, login_edit_phone.getText().toString());
+                    Log.e(TAG, login_edit_password.getText().toString());
                     OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
-                            .params("mobile_phone",login_edit_phone.getText().toString())
-                            .params("password",login_edit_password.getText().toString())
+                            .params("mobile_phone", login_edit_phone.getText().toString())
+                            .params("password", login_edit_password.getText().toString())
                             .params("isThird", "false")
                             .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
                                 @Override
-                                public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request,Response response) {
+                                public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
                                     Log.e(TAG, request.toString());
-                                    Log.e(TAG,response.toString());
-                                    if(userLoginJson.getState()){
+                                    Log.e(TAG, response.toString());
+                                    if (userLoginJson.getState()) {
                                         Log.e(TAG, "登录成功！");
-                                        getUserInfo();
-                                        editor.putString("phone",login_edit_phone.getText().toString());
-                                        editor.putString("password",login_edit_password.getText().toString());
+
+                                        sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+                                        editor = sharedPreferences.edit();
+                                        editor.putBoolean("LoginOrNot", true);
+                                        editor.putString("phone", login_edit_phone.getText().toString());
+                                        editor.putString("password", login_edit_password.getText().toString());
                                         editor.commit();
+                                        getUserInfo(userLoginJson.getBody());
 
-
-                                        InputMethodManager imm = (InputMethodManager) view.getContext( ).getSystemService( Context.INPUT_METHOD_SERVICE );
-                                        imm.hideSoftInputFromWindow( view.getApplicationWindowToken( ) , 0 );
+                                        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
                                         transferMyFragmentToPersonalFragment();
-                                    }else {
+                                    } else {
                                         Log.e(TAG, "登录失败！");
                                     }
                                 }
@@ -178,8 +175,27 @@ public class LoginFragment extends Fragment {
 
     }
 
-    private void getUserInfo() {
-        OkHttpUtils.post()
+    private void getUserInfo(int id) {
+        final String user_id = id + "";
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userInfo.action")
+                .params("user_id", user_id)
+                .execute(new JsonCallback<UserInfoJson>(UserLoginJson.class) {
+                    @Override
+                    public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
+                        UserInfoJson.BodyBean body = userInfoJson.getBody();
+                        sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+                        editor = sharedPreferences.edit();
+                        editor.putString("nickname", body.getNickname());
+                        editor.putString("mobilePhone", body.getMobilePhone());
+                        editor.putString("email", body.getEmail());
+                        editor.putString("headImgUrl", body.getHeadImgUrl());
+                        editor.putString("schoolName", body.getSchoolName());
+                        editor.putInt("sex", body.getSex());
+                        editor.putInt("messageCount", body.getMessageCount());
+                        editor.putInt("userID", body.getUserID());
+                        editor.commit();
+                    }
+                });
     }
 
     private void initView() {

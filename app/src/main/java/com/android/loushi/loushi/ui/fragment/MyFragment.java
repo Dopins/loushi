@@ -3,6 +3,7 @@ package com.android.loushi.loushi.ui.fragment;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -50,6 +51,14 @@ public class MyFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
+        Log.e("Test: " + TAG, "onActivityCreated");
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+        Boolean LoginOrNot = sharedPreferences.getBoolean("LoginOrNot",false);
+        if(LoginOrNot) {
+            transferToPersonalFragment();
+        }else {
+            Log.e(TAG, " Have not login !");
+        }
 
 //        mToolbar=(Toolbar)getView().findViewById(R.id.program_toolbar);
 //        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
@@ -64,6 +73,7 @@ public class MyFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (view == null) {
+            Log.e("Test: " + TAG, "onCreateView");
             view = inflater.inflate(R.layout.fragment_my, null);
             initView(view);
             initDatas();
@@ -140,6 +150,7 @@ public class MyFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.e("Test: " + TAG, "onDestroy");
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 }
