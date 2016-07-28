@@ -37,9 +37,9 @@ public class SceneFragment extends BaseFragment {
     private List<String> list_title;                                     //tab名称列表
 
     private RecommendFragment recommendFragment;
-    private SceneListFragment interestFragment;
-    private SceneListFragment styleFragment;
-    private SceneListFragment habitFragment;
+    private InterestFragment interestFragment;
+    private StyleFragment styleFragment;
+    private HabitFragment habitFragment;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -86,9 +86,9 @@ public class SceneFragment extends BaseFragment {
 
         //初始化各fragment
         recommendFragment = new RecommendFragment();
-        interestFragment = new SceneListFragment();
-        styleFragment = new SceneListFragment();
-        habitFragment = new SceneListFragment();
+        interestFragment = new InterestFragment();
+        styleFragment = new StyleFragment();
+        habitFragment = new HabitFragment();
 
         //将fragment装进列表中
         list_fragment = new ArrayList<>();

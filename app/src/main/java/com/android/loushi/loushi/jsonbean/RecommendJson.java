@@ -14,7 +14,7 @@ public class RecommendJson  implements Serializable {
      * body : [{"rDate":"日期","scene":{"id":21,"name":"海贼宿舍","label":"海贼王","groupID":22,"sceneGroup":{"id":22,"name":"动漫风"},"collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6,"imgUrl":"asd"},"topic":{"id":21,"name":"好枕头","groupID":22,"topicGroup":{"id":22,"name":"枕头"},"collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6,"imgUrl":"asd"},"strategy":{"id":22,"name":"名称","collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6,"imgUrl":"asd"}}]
      */
 
-    private int state;
+    private boolean state;
     private String code;
     private String return_info;
     /**
@@ -26,11 +26,11 @@ public class RecommendJson  implements Serializable {
 
     private List<BodyBean> body;
 
-    public int getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 
@@ -143,10 +143,24 @@ public class RecommendJson  implements Serializable {
 
             private SceneGroupBean sceneGroup;
             private int collectionNum;
-            private int collected;
+            private boolean collected;
             private int forwordNum;
             private int commentNum;
             private String imgUrl;
+            private int browseNum;
+            private String digest;
+
+            public String getDigest() {
+                return digest;
+            }
+
+            public void setDigest(String digest) {
+                this.digest = digest;
+            }
+
+            public boolean isCollected() {
+                return collected;
+            }
 
             public int getId() {
                 return id;
@@ -196,11 +210,11 @@ public class RecommendJson  implements Serializable {
                 this.collectionNum = collectionNum;
             }
 
-            public int getCollected() {
+            public boolean getCollected() {
                 return collected;
             }
 
-            public void setCollected(int collected) {
+            public void setCollected(boolean collected) {
                 this.collected = collected;
             }
 
@@ -218,6 +232,14 @@ public class RecommendJson  implements Serializable {
 
             public void setCommentNum(int commentNum) {
                 this.commentNum = commentNum;
+            }
+
+            public int getBrowseNum() {
+                return browseNum;
+            }
+
+            public void setBrowseNum(int browseNum) {
+                this.browseNum = browseNum;
             }
 
             public String getImgUrl() {
@@ -261,10 +283,25 @@ public class RecommendJson  implements Serializable {
 
             private TopicGroupBean topicGroup;
             private int collectionNum;
-            private int collected;
+            private boolean collected;
             private int forwordNum;
             private int commentNum;
             private String imgUrl;
+            private int browseNum;
+
+            public boolean isCollected() {
+                return collected;
+            }
+
+            public String getDigest() {
+                return digest;
+            }
+
+            public void setDigest(String digest) {
+                this.digest = digest;
+            }
+
+            private String digest;
 
             public int getId() {
                 return id;
@@ -306,11 +343,11 @@ public class RecommendJson  implements Serializable {
                 this.collectionNum = collectionNum;
             }
 
-            public int getCollected() {
+            public boolean getCollected() {
                 return collected;
             }
 
-            public void setCollected(int collected) {
+            public void setCollected(boolean collected) {
                 this.collected = collected;
             }
 
@@ -336,6 +373,14 @@ public class RecommendJson  implements Serializable {
 
             public void setImgUrl(String imgUrl) {
                 this.imgUrl = imgUrl;
+            }
+
+            public int getBrowseNum() {
+                return browseNum;
+            }
+
+            public void setBrowseNum(int browseNum) {
+                this.browseNum = browseNum;
             }
 
             public static class TopicGroupBean  implements Serializable {
@@ -364,13 +409,27 @@ public class RecommendJson  implements Serializable {
             private int id;
             private String name;
             private int collectionNum;
-            private int collected;
+            private boolean collected;
             private int forwordNum;
             private int commentNum;
             private String imgUrl;
+            private int browseNum;
+            private String digest;
+
+            public String getDigest() {
+                return digest;
+            }
+
+            public void setDigest(String digest) {
+                this.digest = digest;
+            }
 
             public int getId() {
                 return id;
+            }
+
+            public boolean isCollected() {
+                return collected;
             }
 
             public void setId(int id) {
@@ -393,11 +452,11 @@ public class RecommendJson  implements Serializable {
                 this.collectionNum = collectionNum;
             }
 
-            public int getCollected() {
+            public boolean getCollected() {
                 return collected;
             }
 
-            public void setCollected(int collected) {
+            public void setCollected(boolean collected) {
                 this.collected = collected;
             }
 
@@ -415,6 +474,14 @@ public class RecommendJson  implements Serializable {
 
             public void setCommentNum(int commentNum) {
                 this.commentNum = commentNum;
+            }
+
+            public int getBrowseNum() {
+                return browseNum;
+            }
+
+            public void setBrowseNum(int browseNum) {
+                this.browseNum = browseNum;
             }
 
             public String getImgUrl() {

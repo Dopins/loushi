@@ -8,54 +8,55 @@ import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.adapter.RecommendRecycleViewAdapter;
+import com.android.loushi.loushi.adapter.SceneRecyclerViewAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.RecommendJson;
+import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
-import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
-import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
 import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 
+
 /**
  * Created by dopin on 2016/7/17.
  */
-public class RecommendFragment extends LazyFragment {
+public class HabitFragment extends LazyFragment {
 
     private RecyclerView mRecyclerView;
-    private List<RecommendJson.BodyBean> bodyBeanList = new ArrayList<>();
-    private RecommendRecycleViewAdapter recommendRecycleViewAdapter;
+    private List<SceneJson.BodyBean> bodyBeanList = new ArrayList<SceneJson.BodyBean>();
+    private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
 
-    public static String str_date;
+    private final int oneTakeNum=10;
     private int get_total=0;
-    private final int oneTakeNum = 3 ;
-    private final int timeCycle=oneTakeNum * 24 * 60 * 60 * 1000;
 
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
-        setContentView(R.layout.fragment_recommend);
+        setContentView(R.layout.fragment_scene_list);
         init();
     }
+
+
     private void init() {
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_widget);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
 
-        recommendRecycleViewAdapter = new RecommendRecycleViewAdapter(getContext(), bodyBeanList);
+        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(getContext(), bodyBeanList);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycleView);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0,0,0,10));//设置recycleview间距
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0,0,0,10));//设置recycleView间距
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(recommendRecycleViewAdapter);
+        mRecyclerView.setAdapter(sceneRecyclerViewAdapter);
 
         setClickListener();
         setRefreshingListener();
@@ -63,7 +64,7 @@ public class RecommendFragment extends LazyFragment {
         addSomething2Scene();
     }
     private void setClickListener(){
-        recommendRecycleViewAdapter.setOnItemClickListener(new RecommendRecycleViewAdapter.OnItemClickListener() {
+        sceneRecyclerViewAdapter.setOnItemClickListener(new SceneRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
@@ -77,6 +78,8 @@ public class RecommendFragment extends LazyFragment {
 //                intent.putExtra(WebViewActivity.TYPE, "0");
 //                //将scene以json格式传入
 //                intent.putExtra(WebViewActivity.SCENE, new Gson().toJson(bodyBeanList.get(pos)));
+//
+//
 //                startActivityForResult(intent, 2);
             }
         });
@@ -96,42 +99,41 @@ public class RecommendFragment extends LazyFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                //Handler handler = new Handler();
+                //handler.sendEmptyMessageAtTime(0, 1000);
+                /* do some thing here*/
                 get_total = 0;
                 bodyBeanList.clear();
                 addSomething2Scene();
                 swipeRefreshLayout.setRefreshing(false);
-                recommendRecycleViewAdapter.notifyDataSetChanged();
+                sceneRecyclerViewAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), "下拉更新完成", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
 
     private void addSomething2Scene() {
-
-            GetSomeScene(oneTakeNum);
+        GetSomeScene(oneTakeNum, get_total);
 
     }
-    private void GetSomeScene(int take) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date=new Date();
-        str_date=simpleDateFormat.format(date.getTime()-timeCycle*get_total).substring(0,10);
-        //Log.d("tag",str_date);
-        OkHttpUtils.post(BaseActivity.url+"/base/recommendation")
-                // 请求方式和请求url
-                .tag(this)
-                .params("rdate",str_date)
-                .params("take", take + "")
-                .execute(new JsonCallback<RecommendJson>(RecommendJson.class) {
-                    @Override
-                    public void onResponse(boolean b, RecommendJson recommendJson, Request request, Response response) {
-                        if (recommendJson.getState()) {
-                            bodyBeanList.addAll(recommendJson.getBody());
-                            get_total += oneTakeNum;
-                            recommendRecycleViewAdapter.notifyDataSetChanged();
+    private void GetSomeScene(int take, int skip) {
 
+        OkHttpUtils.post(BaseActivity.url + "/base/scene")
+                // 请求方式和请求url
+                .tag(this).params("user_id", BaseActivity.user_id)
+                .params("scene_group_id",2+"")
+                .params("skip", skip+"")
+                .params("take",take+"")
+                .execute(new JsonCallback<SceneJson>(SceneJson.class) {
+                    @Override
+                    public void onResponse(boolean b, SceneJson sceneJson, Request request, Response response) {
+                        if (sceneJson.getState()) {
+                            bodyBeanList.addAll(sceneJson.getBody());
+                            get_total+=oneTakeNum;
+                            sceneRecyclerViewAdapter.notifyDataSetChanged();
                         } else {
-                            Log.d("error", recommendJson.getReturn_info());
+                            Log.d("error", sceneJson.getReturn_info());
                         }
                     }
                 });

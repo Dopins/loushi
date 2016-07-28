@@ -30,9 +30,9 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
     @Override
     public T parseNetworkResponse(Response response) throws Exception {
 
-        Log.e("te", response.headers().toString());
+        //Log.e("te", response.headers().toString());
         String responseData = response.body().string();
-        Log.e("te",responseData);
+        //Log.e("te",responseData);
         if (TextUtils.isEmpty(responseData)) return null;
 
         /**

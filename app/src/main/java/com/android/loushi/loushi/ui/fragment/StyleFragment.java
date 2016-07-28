@@ -10,30 +10,33 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.SceneRecyclerViewAdapter;
+import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.SceneJson;
+import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
+import com.lzy.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 /**
  * Created by dopin on 2016/7/17.
  */
-public class SceneListFragment extends LazyFragment {
+public class StyleFragment extends LazyFragment {
 
     private RecyclerView mRecyclerView;
     private List<SceneJson.BodyBean> bodyBeanList = new ArrayList<SceneJson.BodyBean>();
     private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
 
-    public SceneJson sceneJsons;
-    private int tabIndex=1;
+
     private int get_total=0;
-    private String user_id="0";
+    private final int oneTakeNum=10;
 
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
@@ -109,35 +112,28 @@ public class SceneListFragment extends LazyFragment {
     }
 
     private void addSomething2Scene() {
-        GetSomeScene(6, user_id, get_total);
+        GetSomeScene(oneTakeNum, get_total);
 
     }
-    private void GetSomeScene(int take, String user_id, int skip) {
+    private void GetSomeScene(int take, int skip) {
 
-//        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/base/scene.action")
-//                .addParams("user_id", user_id)
-//                .addParams("scene_group_id", Integer.toString(tabIndex))
-//                .addParams("skip", Integer.toString(skip))
-//                .addParams("take", Integer.toString(take)).build().execute(new SceneCallBack() {
-//            @Override
-//            public void onError(Call call, Exception e) {
-//                e.printStackTrace();
-//                Log.d("tag", Log.getStackTraceString(e));
-//            }
-//
-//            @Override
-//            public void onResponse(SceneJson sceneJson) {
-//                if (sceneJson.isState()) {
-//                    Log.e("tag", "加载一些");
-//                    sceneJsons = sceneJson;
-//                    //sceneAdapter=new SceneAdapter(getContext(),bodyBeanList,null,0);
-//                    bodyBeanList.addAll(sceneJson.getBody());
-//                    get_total += 5;
-//                    //Log.d("tag", Integer.toString(sceneJson.getBody().size()));
-//                    sceneRecyclerViewAdapter.notifyDataSetChanged();
-//
-//                }
-//            }
-//        });
+        OkHttpUtils.post(BaseActivity.url + "/base/scene")
+                // 请求方式和请求url
+                .tag(this).params("user_id", BaseActivity.user_id)
+                .params("scene_group_id",1+"")
+                .params("skip", skip+"")
+                .params("take",take+"")
+                .execute(new JsonCallback<SceneJson>(SceneJson.class) {
+                    @Override
+                    public void onResponse(boolean b, SceneJson sceneJson, Request request, Response response) {
+                        if (sceneJson.getState()) {
+                            bodyBeanList.addAll(sceneJson.getBody());
+                            get_total+=oneTakeNum;
+                            sceneRecyclerViewAdapter.notifyDataSetChanged();
+                        } else {
+                            Log.d("error", sceneJson.getReturn_info());
+                        }
+                    }
+                });
     }
 }
