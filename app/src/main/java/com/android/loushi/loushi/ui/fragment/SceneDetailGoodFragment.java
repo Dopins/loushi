@@ -26,7 +26,7 @@ import okhttp3.Response;
 public class SceneDetailGoodFragment extends  LazyFragment {
     private RecyclerView recyclerView;
     private SceneDetailGoodAdapter sceneDetailGoodAdapter;
-    private List<SceneGoodJson.BodyBean> bodyBeanList;
+    private List<SceneGoodJson.BodyBean> bodyBeanList=new ArrayList<SceneGoodJson.BodyBean>();;
 
 
     @Override
@@ -38,7 +38,7 @@ public class SceneDetailGoodFragment extends  LazyFragment {
 
     private void init() {
         recyclerView = (RecyclerView)getView().findViewById(R.id.recycleView);
-        bodyBeanList=new ArrayList<SceneGoodJson.BodyBean>();
+
         sceneDetailGoodAdapter = new SceneDetailGoodAdapter(getApplicationContext(),bodyBeanList);
         getSceneGood();
         final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);

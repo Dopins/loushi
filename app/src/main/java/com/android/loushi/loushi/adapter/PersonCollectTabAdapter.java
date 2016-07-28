@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
@@ -27,7 +28,10 @@ public class PersonCollectTabAdapter extends FragmentPagerAdapter {
         this.list_count=list_count;
         this.context = context;
     }
-
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        //super.destroyItem(container, position, object);
+    }
     @Override
     public Fragment getItem(int position) {
         return list_fragment.get(position);

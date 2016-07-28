@@ -58,8 +58,8 @@
 
         <CheckBox
             android:id="@+id/collect_good_item_btn_like"
-            style="@style/TipsZanTheme"
 
+            android:button="@drawable/selector_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

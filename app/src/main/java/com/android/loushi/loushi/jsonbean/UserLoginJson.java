@@ -14,16 +14,16 @@ public class UserLoginJson implements Serializable {
      * body : 3
      */
 
-    private int state;
+    private boolean state;
     private String code;
     private String return_info;
     private int body;
 
-    public int getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 
