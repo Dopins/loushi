@@ -1,5 +1,8 @@
 package com.android.loushi.loushi.ui.fragment;
 
+
+
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,7 +19,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.ViewPagerIndicator;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +33,7 @@ import java.util.List;
  * Created by Administrator on 2016/7/18.
  */
 public class MyFragment extends BaseFragment {
+    public static final String TAG = "MyFragment";
     private Toolbar mToolbar;
     private TextView mTv_index;
 
@@ -37,16 +45,12 @@ public class MyFragment extends BaseFragment {
     public static View view;
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
+
 //        mToolbar=(Toolbar)getView().findViewById(R.id.program_toolbar);
 //        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
 //        mToolbar.setTitle("");
@@ -63,6 +67,7 @@ public class MyFragment extends BaseFragment {
             view = inflater.inflate(R.layout.fragment_my, null);
             initView(view);
             initDatas();
+            EventBus.getDefault().register(this);
         }
         Visible();
         return view;
@@ -78,6 +83,12 @@ public class MyFragment extends BaseFragment {
         Log.d("Visible", view.toString());
         view.findViewById(R.id.image_top).setVisibility(View.VISIBLE);
         return;
+    }
+
+    public void transferToPersonalFragment() {
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content,new PersonFragment())
+                .commit();
     }
 
     private void initDatas() {
@@ -118,5 +129,17 @@ public class MyFragment extends BaseFragment {
         mViewPager = (ViewPager) view.findViewById(R.id.id_vp);
         mIndicator = (ViewPagerIndicator) view.findViewById(R.id.id_indicator);
         Visible();
+    }
+
+    @Subscribe
+    public void onEventMainThread(MyfragmentEvent event){
+        Log.e(TAG,event.getmMsg());
+        transferToPersonalFragment();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 }
