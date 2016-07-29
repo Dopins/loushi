@@ -14,7 +14,6 @@
         android:layout_height="50dp"
         android:background="@null"
         android:ems="13"
-
         android:textColorHint="@color/hint"
         android:inputType="phone"
         android:lineSpacingMultiplier="2"
