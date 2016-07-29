@@ -2,17 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground"
+    android:clickable="true"
     android:gravity="center_vertical">
-
-    <ImageView
+    <!--TODO 图片大小设置-->
+    <com.android.loushi.loushi.util.RoundImageView
         android:id="@+id/item_imageView_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/temp_icon"
-        android:layout_marginRight="16dp"/>
+        android:layout_marginRight="16dp"
+        android:src="@drawable/project_cartoon" />
 
     <LinearLayout
+        android:id="@+id/layout_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -24,9 +27,9 @@
             android:id="@+id/item_textView_messageUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="提利昂"
             android:layout_marginBottom="2dp"
-            android:textColor="#4D4D4D"
+            android:text="提利昂"
+            android:textColor="@color/colorCommentName"
             android:textSize="14sp" />
 
         <TextView
@@ -38,7 +41,7 @@
             android:maxLength="10"
             android:singleLine="true"
             android:text="提利昂提利昂提利昂提利昂提利昂提利昂提利昂提利昂提利昂提利昂提利昂"
-            android:textColor="#A2A2A2"
+            android:textColor="@color/colorCommentContent"
             android:textSize="12sp" />
 
     </LinearLayout>
@@ -55,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="10:09"
-            android:textColor="#80000000"
+            android:textColor="@color/colorCommentContent"
             android:textSize="14sp" />
 
         <TextView
@@ -64,9 +67,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:text="刚刚"
-            android:textColor="#A2A2A2"
+            android:textColor="@color/colorCommentContent"
             android:textSize="12sp" />
-
 
     </LinearLayout>
 

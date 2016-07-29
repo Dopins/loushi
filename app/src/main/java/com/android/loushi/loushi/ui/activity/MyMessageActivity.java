@@ -19,12 +19,13 @@ import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.MyMessageAdapter;
 
 import com.android.loushi.loushi.callback.EncryptCallback;
+import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.UserMessageJson;
 import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,7 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
         loadMessage();
@@ -87,20 +88,18 @@ public class MyMessageActivity extends BaseActivity implements View.OnClickListe
                 Toast.makeText(MyMessageActivity.this, ""+postion, Toast.LENGTH_SHORT).show();
             }
         });
-        recycleViewNewComment.setLayoutManager(new LinearLayoutManager(this));
-        recycleViewNewComment.setItemAnimator(new DefaultItemAnimator());
         recycleViewNewComment.setAdapter(mMessageAdapter);
 
+        recycleViewNewComment.setLayoutManager(new LinearLayoutManager(this));
+        recycleViewNewComment.addItemDecoration(new SpaceItemDecoration(this,14));
+        recycleViewNewComment.setItemAnimator(new DefaultItemAnimator());
     }
 
     private void loadMessage(){
         OkHttpUtils.post(UrlConstant.MYMESSAGE)
                 .params(KeyConstant.USER_ID,MainActivity.user_id)
-                .execute(new EncryptCallback<UserMessageJson>() {
-                    @Override
-                    public UserMessageJson parseNetworkResponse(Response response) throws Exception {
-                        return new Gson().fromJson(response.body().string(),UserMessageJson.class);
-                    }
+                .execute(new JsonCallback<UserMessageJson>(UserMessageJson.class) {
+
                     @Override
                     public void onResponse(boolean isFromCache, UserMessageJson userMessageJson, Request request, @Nullable Response response) {
                         if(userMessageJson.getState()){

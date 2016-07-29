@@ -98,7 +98,7 @@ public class UserMessageJson  implements Serializable {
              * headImgUrl : http://23.jpg
              */
 
-            private UserInfoBean userInfo;
+            private UserInfoBean userinfo;
             private int replyed_id;
             /**
              * nickname : 小刀
@@ -136,11 +136,11 @@ public class UserMessageJson  implements Serializable {
             }
 
             public UserInfoBean getUserInfo() {
-                return userInfo;
+                return userinfo;
             }
 
             public void setUserInfo(UserInfoBean userInfo) {
-                this.userInfo = userInfo;
+                this.userinfo = userInfo;
             }
 
             public int getReplyed_id() {
@@ -210,6 +210,14 @@ public class UserMessageJson  implements Serializable {
                 public void setHeadImgUrl(String headImgUrl) {
                     this.headImgUrl = headImgUrl;
                 }
+
+                @Override
+                public String toString() {
+                    return "UserInfoBean{" +
+                            "nickname='" + nickname + '\'' +
+                            ", headImgUrl='" + headImgUrl + '\'' +
+                            '}';
+                }
             }
 
             public static class ReplyedInfoBean  implements Serializable {
@@ -231,7 +239,41 @@ public class UserMessageJson  implements Serializable {
                 public void setHeadImgUrl(String headImgUrl) {
                     this.headImgUrl = headImgUrl;
                 }
+
+                @Override
+                public String toString() {
+                    return "ReplyedInfoBean{" +
+                            "nickname='" + nickname + '\'' +
+                            ", headImgUrl='" + headImgUrl + '\'' +
+                            '}';
+                }
             }
+
+            @Override
+            public String toString() {
+                return "CommentBean{" +
+                        "id=" + id +
+                        ", cDate='" + cDate + '\'' +
+                        ", userID=" + userID +
+                        ", userInfo=" + userinfo +
+                        ", replyed_id=" + replyed_id +
+                        ", replyedInfo=" + replyedInfo +
+                        ", type=" + type +
+                        ", pid=" + pid +
+                        ", pidImgUrl='" + pidImgUrl + '\'' +
+                        ", content='" + content + '\'' +
+                        '}';
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "BodyBean{" +
+                    "id=" + id +
+                    ", cDate='" + cDate + '\'' +
+                    ", commentID=" + commentID +
+                    ", comment=" + comment.toString() +
+                    '}';
         }
     }
 }
