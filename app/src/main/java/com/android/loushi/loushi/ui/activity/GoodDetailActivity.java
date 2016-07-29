@@ -169,7 +169,7 @@ public class GoodDetailActivity extends  BaseActivity {
         btn_buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showItemDetailPage(show_taobao,"520835764780");
+                showItemDetailPage(show_taobao,"520273718234");
             }
         });
     }

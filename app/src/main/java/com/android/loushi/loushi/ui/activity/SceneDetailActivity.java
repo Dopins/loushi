@@ -47,8 +47,9 @@ public class SceneDetailActivity extends  BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scene_detail);
+        if(getIntent().getStringExtra(SCENE_ID)!=null)
         scene_id = getIntent().getStringExtra(SCENE_ID);
-
+        Log.e("scene_id",scene_id);
         initView();
         initTablayout();
     }

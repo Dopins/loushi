@@ -11,6 +11,7 @@ import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.SceneGoodJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
+import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
@@ -26,7 +27,7 @@ import okhttp3.Response;
 public class SceneDetailGoodFragment extends  LazyFragment {
     private RecyclerView recyclerView;
     private SceneDetailGoodAdapter sceneDetailGoodAdapter;
-    private List<SceneGoodJson.BodyBean> bodyBeanList=new ArrayList<SceneGoodJson.BodyBean>();;
+    private List<SceneGoodJson.BodyBean> bodyBeanList;
     private String scene_id="1";
 
     @Override
@@ -39,25 +40,29 @@ public class SceneDetailGoodFragment extends  LazyFragment {
 
     private void init() {
         recyclerView = (RecyclerView)getView().findViewById(R.id.recycleView);
-
-        sceneDetailGoodAdapter = new SceneDetailGoodAdapter(getApplicationContext(),bodyBeanList);
+        bodyBeanList=new ArrayList<SceneGoodJson.BodyBean>();
+        sceneDetailGoodAdapter = new SceneDetailGoodAdapter(getContext(),bodyBeanList);
         getSceneGood();
         final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+        SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(getContext(),5);
+        recyclerView.addItemDecoration(spaceItemDecoration);
         recyclerView.setAdapter(sceneDetailGoodAdapter);
 
     }
     private void getSceneGood(){
         OkHttpUtils.post("http://www.loushi666.com/LouShi/base/sceneGoods.action")
 
-                .tag(getApplicationContext()).params("user_id", BaseActivity.user_id).params("scene_id", scene_id)
+                .tag(getContext()).params("user_id", BaseActivity.user_id).params("scene_id", scene_id)
                 .execute(new JsonCallback<SceneGoodJson>(SceneGoodJson.class) {
                     @Override
                     public void onResponse(boolean b, SceneGoodJson sceneGoodJson, Request request, Response response) {
                         Log.e("test", new Gson().toJson(sceneGoodJson));
                         if (sceneGoodJson.isState()) {
                             bodyBeanList.addAll(sceneGoodJson.getBody());
+                            //Log.e("test22",sceneGoodJson.isState()+"");
                         }
+                        Log.e("test222", bodyBeanList.size() + "");
                         sceneDetailGoodAdapter.notifyDataSetChanged();
 
                     }

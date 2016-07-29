@@ -125,7 +125,7 @@ public class StyleFragment extends LazyFragment {
         OkHttpUtils.post(BaseActivity.url + "/base/scene")
                 // 请求方式和请求url
                 .tag(this).params("user_id", BaseActivity.user_id)
-                .params("scene_group_id",1+"")
+                .params("scene_group_id",2+"")
                 .params("skip", skip+"")
                 .params("take",take+"")
                 .execute(new JsonCallback<SceneJson>(SceneJson.class) {

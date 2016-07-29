@@ -188,7 +188,7 @@ public class PersonFragment extends BaseFragment {
         btn_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SceneDetailActivity.class);
+                Intent intent = new Intent(getContext(), GoodDetailActivity.class);
                 startActivity(intent);
             }
         });

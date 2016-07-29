@@ -4,7 +4,9 @@ package com.android.loushi.loushi.adapter;
  * Created by Administrator on 2016/7/24.
  */
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,13 +40,17 @@ public class SceneDetailGoodAdapter extends RecyclerView.Adapter<SceneDetailGood
 
     @Override
     public void onBindViewHolder(SceneDetailGoodAdapter.SceneDetailGoodViewHolder holder, int position) {
-         SceneGoodJson.BodyBean bodyBean = bodyBeanList.get(position);
+        Log.e("pos",position+"");
+        Log.e("size",bodyBeanList.size()+"");
+        final SceneGoodJson.BodyBean bodyBean = bodyBeanList.get(position);
+
+         //Log.e("scenedetail", bodyBean.getImages().get(0).getUrl());
          Picasso.with(context).load(bodyBean.getImages().get(0).getUrl()).fit().into(holder.img_good);
          holder.tv_name.setText(bodyBean.getName());
          holder.img_good.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-
+                  showBigImage(bodyBean.getImages().get(0).getUrl());
              }
          });
     }
@@ -62,6 +68,20 @@ public class SceneDetailGoodAdapter extends RecyclerView.Adapter<SceneDetailGood
             tv_name=(TextView)view.findViewById(R.id.tv_name);
         }
 
+
+    }
+    private void showBigImage(String url){
+        ImageView img_big =new ImageView(context);
+        Picasso.with(context).load(url).into(img_big);
+        final AlertDialog dialog = new AlertDialog.Builder(context).create();
+        dialog.setView(img_big);
+        dialog.show();
+        img_big.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             dialog.dismiss();
+            }
+        });
 
     }
 
