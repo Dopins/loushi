@@ -16,8 +16,14 @@ import android.widget.LinearLayout;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.HotWordRecycleViewAdapter;
 import com.android.loushi.loushi.adapter.SearchRecordAdapter;
+import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.jsonbean.HotWordJson;
+import com.android.loushi.loushi.jsonbean.RecommendJson;
+import com.android.loushi.loushi.jsonbean.SearchJson;
+import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.SearchActivity;
 import com.android.loushi.loushi.util.SearchWords;
+import com.lzy.okhttputils.OkHttpUtils;
 
 import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
@@ -26,6 +32,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by dopin on 2016/7/21.
@@ -57,6 +66,8 @@ public class SearchFragment extends Fragment {
                 linearLayout.setVisibility(View.GONE);
             }
         });
+
+
     }
     private void setSearchRecode(View view){
         allNews = DataSupport.findAll(SearchWords.class);
@@ -85,18 +96,32 @@ public class SearchFragment extends Fragment {
             }
         });
     }
-    private void setHotWord(View view)
+    private void setHotWord(final View view)
     {
-        List<String> data=new ArrayList<>();
-        data.add("热搜词1");
-        data.add("热搜词2");
-        data.add("热搜词3");
-        data.add("热搜词4");
-        hRecycleAdapter= new HotWordRecycleViewAdapter(view.getContext(),data);
-        hRecyclerView = (RecyclerView)view.findViewById(R.id.hotWordRecycleView);
-        hRecyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
-        hRecyclerView.setAdapter(hRecycleAdapter);
+        OkHttpUtils.post(BaseActivity.url + "base/hotword")
+                .execute(new JsonCallback<HotWordJson>(HotWordJson.class) {
+                    @Override
+                    public void onResponse(boolean b,final HotWordJson hotWordJson, Request request, Response response) {
+                        if (hotWordJson.getState()) {
 
+                            hRecycleAdapter= new HotWordRecycleViewAdapter(view.getContext(),hotWordJson.getBody());
+                            hRecycleAdapter.setOnItemClickListener(new HotWordRecycleViewAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    String keyword=hotWordJson.getBody().get(position);
+                                    SearchActivity.editText_search.setText(keyword);
+                                    SearchActivity.editText_search.setSelection(keyword.length());
+                                }
+                            });
+                            hRecyclerView = (RecyclerView)view.findViewById(R.id.hotWordRecycleView);
+                            hRecyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
+                            hRecyclerView.setAdapter(hRecycleAdapter);
+
+                        } else {
+                            Log.d("error", hotWordJson.getReturn_info());
+                        }
+                    }
+                });
     }
 
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.jsonbean.RecommendJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.squareup.picasso.Picasso;
 
@@ -23,8 +24,8 @@ public class GuideRecyclerViewAdapter extends RecyclerView.Adapter<GuideRecycler
 
     private OnItemClickListener itemClickListener;
     private Context context;
-    private List<SceneJson.BodyBean> bodyBeanList;
-    public GuideRecyclerViewAdapter(Context context, List<SceneJson.BodyBean> bodyBeanList) {
+    private List<RecommendJson.BodyBean.SceneBean> bodyBeanList;
+    public GuideRecyclerViewAdapter(Context context, List<RecommendJson.BodyBean.SceneBean> bodyBeanList) {
         this.context = context;
         this.bodyBeanList = bodyBeanList;
     }
@@ -51,7 +52,7 @@ public class GuideRecyclerViewAdapter extends RecyclerView.Adapter<GuideRecycler
     }
     private void setSceneView(SceneViewHolder holder, int position) {
 
-        SceneJson.BodyBean body = bodyBeanList.get(position);
+        RecommendJson.BodyBean.SceneBean body = bodyBeanList.get(position);
 
         Picasso.with(context).load(body.getImgUrl()).fit().
                 into(holder.image);

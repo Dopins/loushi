@@ -1,11 +1,14 @@
 package com.android.loushi.loushi.ui.activity;
 
 
-import android.app.FragmentTransaction;
-
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 
@@ -26,8 +29,11 @@ import com.android.loushi.loushi.util.SearchWords;
  */
 public class SearchActivity extends BaseActivity {
 
+    public static String keyword;
     public static EditText editText_search;
-    static FragmentManager fragmentManager;
+    private static FragmentManager fragmentManager;
+    private static SearchResultFragment searchResultFragment;
+    private static LocalBroadcastManager localBroadcastManager;
 
     @Override
     protected int getLayoutId() {
@@ -40,6 +46,7 @@ public class SearchActivity extends BaseActivity {
         setContentView(R.layout.activity_search);
         init();
     }
+
     private void init(){
         fragmentManager = getSupportFragmentManager();
         SearchFragment searchFragment=new SearchFragment();
@@ -51,25 +58,22 @@ public class SearchActivity extends BaseActivity {
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str=btn_search.getText().toString();
-                if(str.equals("搜索")){
-                    String keyword = editText_search.getText().toString();
-                    search(keyword);
-                }
-               else{
+                String str = btn_search.getText().toString();
+                if (str.equals("取消")) {
                     finish();
                 }
             }
         });
 
         editText_search.addTextChangedListener(new TextWatcher() {
-            boolean flag=false;
+            boolean flag = false;
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(count>0){
-                    flag=true;//添加搜索关键词
-                }else{
-                    flag=false;
+                if (count > 0) {
+                    flag = true;//添加搜索关键词
+                } else {
+                    flag = false;
                 }
             }
 
@@ -79,17 +83,19 @@ public class SearchActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String keyword = editText_search.getText().toString();
-                if(keyword.length()!=0) btn_search.setText("取消");
+                keyword = editText_search.getText().toString();
+                if (keyword.length() != 0) btn_search.setText("取消");
                 else btn_search.setText("搜索");
-                if(flag) {
-                    search(keyword);
+                if (flag) {
+                    search();
                 }
             }
         });
 
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        searchResultFragment = new SearchResultFragment();
     }
-    public static void search(String keyword){
+    public static void search(){
         if(!keyword.equals("")){
             if(keyword.length()>10){
                 keyword=keyword.substring(0,9);
@@ -100,15 +106,15 @@ public class SearchActivity extends BaseActivity {
             time.setToNow();
             String date=(time.month+1)+"/"+time.monthDay;
             searchWords.setDate(date);
-
             searchWords.save();
 
-            SearchResultFragment searchResultFragment = new SearchResultFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("keyword",keyword);
-            searchResultFragment.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.search_frame, searchResultFragment).commit();
+
+            Intent intent = new Intent();
+            intent.setAction("search");
+            localBroadcastManager.sendBroadcast(intent);
 
         }
     }
+
 }

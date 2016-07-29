@@ -37,9 +37,9 @@ public class SceneFragment extends BaseFragment {
     private List<String> list_title;                                     //tab名称列表
 
     private RecommendFragment recommendFragment;
-    private InterestFragment interestFragment;
-    private StyleFragment styleFragment;
-    private HabitFragment habitFragment;
+    private SceneListInterestFragment sceneListInterestFragment;
+    private SceneListStyleFragment sceneListStyleFragment;
+    private SceneListHabitFragment sceneListHabitFragment;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -86,16 +86,16 @@ public class SceneFragment extends BaseFragment {
 
         //初始化各fragment
         recommendFragment = new RecommendFragment();
-        interestFragment = new InterestFragment();
-        styleFragment = new StyleFragment();
-        habitFragment = new HabitFragment();
+        sceneListInterestFragment = new SceneListInterestFragment();
+        sceneListStyleFragment = new SceneListStyleFragment();
+        sceneListHabitFragment = new SceneListHabitFragment();
 
         //将fragment装进列表中
         list_fragment = new ArrayList<>();
         list_fragment.add(recommendFragment);
-        list_fragment.add(interestFragment);
-        list_fragment.add(styleFragment);
-        list_fragment.add(habitFragment);
+        list_fragment.add(sceneListInterestFragment);
+        list_fragment.add(sceneListStyleFragment);
+        list_fragment.add(sceneListHabitFragment);
 
         //将名称加载tab名字列表，正常情况下，我们应该在values/arrays.xml中进行定义然后调用
         list_title = new ArrayList<>();

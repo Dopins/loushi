@@ -36,11 +36,11 @@ public class RecommendFragment extends LazyFragment {
     private RecommendRecycleViewAdapter recommendRecycleViewAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
 
-    public static String str_date;
-    private int get_total=0;
+    private String rDate;
     private final int oneTakeNum = 3 ;
-    private final int timeCycle=oneTakeNum * 24 * 60 * 60 * 1000;
 
+    private boolean has_data=true;
+    SimpleDateFormat simpleDateFormat;
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
@@ -56,6 +56,11 @@ public class RecommendFragment extends LazyFragment {
         mRecyclerView.addItemDecoration(new SpacesItemDecoration(0,0,0,10));//设置recycleview间距
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(recommendRecycleViewAdapter);
+
+        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Date date=new Date();
+        rDate=simpleDateFormat.format(date.getTime()).substring(0,10);
 
         setClickListener();
         setRefreshingListener();
@@ -86,6 +91,7 @@ public class RecommendFragment extends LazyFragment {
             @Override
             public void onBottom() {
                 super.onBottom();
+                if(has_data)
                 addSomething2Scene();
             }
         });
@@ -97,7 +103,9 @@ public class RecommendFragment extends LazyFragment {
             @Override
             public void onRefresh() {
 
-                get_total = 0;
+                Date date=new Date();
+                rDate=simpleDateFormat.format(date.getTime()).substring(0,10);
+
                 bodyBeanList.clear();
                 addSomething2Scene();
                 swipeRefreshLayout.setRefreshing(false);
@@ -113,21 +121,21 @@ public class RecommendFragment extends LazyFragment {
 
     }
     private void GetSomeScene(int take) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date=new Date();
-        str_date=simpleDateFormat.format(date.getTime()-timeCycle*get_total).substring(0,10);
-        //Log.d("tag",str_date);
-        OkHttpUtils.post(BaseActivity.url+"/base/recommendation")
+
+        OkHttpUtils.post(BaseActivity.url+"base/recommendation")
                 // 请求方式和请求url
-                .tag(this)
-                .params("rdate",str_date)
+                .params("user_id",BaseActivity.user_id)
+                .params("rdate", rDate)
                 .params("take", take + "")
                 .execute(new JsonCallback<RecommendJson>(RecommendJson.class) {
                     @Override
                     public void onResponse(boolean b, RecommendJson recommendJson, Request request, Response response) {
                         if (recommendJson.getState()) {
                             bodyBeanList.addAll(recommendJson.getBody());
-                            get_total += oneTakeNum;
+
+                            rDate =bodyBeanList.get(bodyBeanList.size()-1).getRDate().substring(0,10);
+
+                            if(bodyBeanList.size()<10)  if(bodyBeanList.size()<oneTakeNum) has_data=false;
                             recommendRecycleViewAdapter.notifyDataSetChanged();
 
                         } else {

@@ -53,6 +53,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     public static final int ITEM_TYPE_HEADER = 3;
     private Context context;
     private List<RecommendJson.BodyBean> bodyBeanList = new ArrayList<>();
+    private boolean first_get_ad=true;
 
     public RecommendRecycleViewAdapter(Context context, List<RecommendJson.BodyBean> bodyBeanList) {
         this.context = context;
@@ -60,11 +61,9 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
         adList= new ArrayList<>();
     }
 
-    //内容长度
-    public int getContentItemCount() {
-        return bodyBeanList.size();
+    private int getBodyBeanListPosition(int position){
+        return (position-1)/3;
     }
-
     //判断当前item类型
     @Override
     public int getItemViewType(int position) {
@@ -73,14 +72,14 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private int getViewType(int position){
         if (position == 0) {
             return ITEM_TYPE_HEADER;
-        }if (position % 3 == 1) {
+        }else if (position % 3 == 1 && bodyBeanList.get(getBodyBeanListPosition(position)).getScene()!=null ) {
             return ITEM_TYPE_SCENE;
-        } else if (position % 3 == 2) {
+        } else if (position % 3 == 2 && bodyBeanList.get(getBodyBeanListPosition(position)).getStrategy()!=null ) {
             return ITEM_TYPE_TIP;
-        } else if (position % 3 == 0 && position != 0) {
+        } else if (position % 3 == 0 && position != 0 && bodyBeanList.get(getBodyBeanListPosition(position)).getTopic()!=null ) {
             return ITEM_TYPE_TOPIC;
         }
-        return 0;
+        return -1;
     }
     public void setOnItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
@@ -92,42 +91,45 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        if (viewType == ITEM_TYPE_HEADER) {
-            return new HeaderViewHolder(LayoutInflater.from(
-                    context).inflate(R.layout.ad_header, parent,
-                    false));
-        } else if (viewType == ITEM_TYPE_SCENE) {
-            return new SceneViewHolder(LayoutInflater.from(
-                    context).inflate(R.layout.cardview_scene, parent,
-                    false));
-        } else if (viewType == ITEM_TYPE_TIP) {
-            return new TipViewHolder(LayoutInflater.from(
-                    context).inflate(R.layout.cardview_tip, parent,
-                    false));
-        } else {
-            return new TopicViewHolder(LayoutInflater.from(
-                    context).inflate(R.layout.cardview_topic, parent,
-                    false));
-        }
+            if (viewType == ITEM_TYPE_HEADER) {
+                return new HeaderViewHolder(LayoutInflater.from(
+                        context).inflate(R.layout.ad_header, parent,
+                        false));
+            } else if (viewType == ITEM_TYPE_SCENE) {
+                return new SceneViewHolder(LayoutInflater.from(
+                        context).inflate(R.layout.cardview_scene, parent,
+                        false));
+            } else if (viewType == ITEM_TYPE_TIP) {
+                return new TipViewHolder(LayoutInflater.from(
+                        context).inflate(R.layout.cardview_tip, parent,
+                        false));
+            } else if (viewType == ITEM_TYPE_TOPIC){
+                return new TopicViewHolder(LayoutInflater.from(
+                        context).inflate(R.layout.cardview_topic, parent,
+                        false));
+            }else { //返回一个不做任何处理的ViewHolder
+                return new EmptyViewHolder(LayoutInflater.from(
+                        context).inflate(R.layout.cardview_topic, parent,
+                        false));
+            }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof HeaderViewHolder) {
-            setImageView(((HeaderViewHolder) holder).mCarouselView);
-        }else if (holder instanceof SceneViewHolder) {
-            setSceneView(((SceneViewHolder) holder), (position/3));
-        } else if (holder instanceof TipViewHolder) {
-            setTipView(((TipViewHolder) holder), (position/3));
-        } else {
-            setTopicView(((TopicViewHolder) holder), (position/3));
-        }
+            if (holder instanceof HeaderViewHolder) {
+                setImageView(((HeaderViewHolder) holder).mCarouselView);
+            } else if (holder instanceof SceneViewHolder) {
+                setSceneView(((SceneViewHolder) holder), getBodyBeanListPosition(position));
+            } else if (holder instanceof TipViewHolder) {
+                setTipView(((TipViewHolder) holder), getBodyBeanListPosition(position));
+            } else if (holder instanceof TopicViewHolder) {
+                setTopicView(((TopicViewHolder) holder), getBodyBeanListPosition(position));
+            }
     }
 
     @Override
     public int getItemCount() {
-        return mHeaderCount + getContentItemCount();
+        return mHeaderCount + bodyBeanList.size()*3;
     }
 
     private void setTipView(TipViewHolder holder, int position) {
@@ -154,7 +156,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
         holder.detail.setText(body.getTopic().getDigest());
         holder.numPrefer.setText(body.getTopic().getCollectionNum() + "");
         holder.checkBox_prefer.setChecked(body.getTopic().getCollected());
-        holder.numWatch.setText(body.getTopic().getBrowseNum()+"");
+        holder.numWatch.setText(body.getTopic().getBrowseNum() + "");
     }
 
     private void setSceneView(SceneViewHolder holder, int position) {
@@ -175,12 +177,13 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }else if(position==1){
             holder.dateText.setText("昨天");
         }else{
-            holder.dateText.setText(RecommendFragment.str_date);
+            String str_date=bodyBeanList.get(position).getRDate().substring(0,10);
+            holder.dateText.setText(str_date);
         }
 
     }
 
-    private void setImageView(CarouselViewPager viewPager) {
+    private void initAdViewPager(CarouselViewPager viewPager){
         ImageView view1 = (ImageView) LayoutInflater.from(
                 context).inflate(R.layout.ad_image, null);
         ImageView view2 = (ImageView) LayoutInflater.from(
@@ -199,12 +202,20 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
         adViewpagerAdapter.setOnItemClickListener(new AdViewpagerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(view.getContext(), "点击adItem"+position, Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), "点击adItem" + position, Toast.LENGTH_SHORT).show();
             }
         });
         viewPager.setAdapter(adViewpagerAdapter);
 
         getAdList();
+    }
+    private void setImageView(CarouselViewPager viewPager) {
+
+        if(first_get_ad)  {
+            initAdViewPager(viewPager);
+        }else{
+            loadAdImage();
+        }
     }
 
     private void loadAdImage(){
@@ -216,15 +227,15 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
     private void getAdList() {
 
-        OkHttpUtils.post(BaseActivity.url + "/base/carousel")
+        OkHttpUtils.post(BaseActivity.url + "base/carousel")
                 // 请求方式和请求url
-                .tag(this).params("user_id", BaseActivity.user_id)
                 .execute(new JsonCallback<CarouselJson>(CarouselJson.class) {
                     @Override
                     public void onResponse(boolean b, CarouselJson carouselJson, Request request, Response response) {
                         if (carouselJson.getState()) {
                             adList.addAll(carouselJson.getBody());
                             loadAdImage();
+                            first_get_ad=false;
                         } else {
                             Log.d("error", carouselJson.getReturn_info());
                         }
@@ -258,16 +269,18 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 public void onClick(View v) {
                     int type=getViewType(getPosition());
                     int pid;
-                    int position=(getPosition()/3)+1;
+                    int position=getBodyBeanListPosition(getPosition());
                     RecommendJson.BodyBean body = bodyBeanList.get(position);
                     if(type==ITEM_TYPE_SCENE){
                         pid=body.getScene().getId();
-                    }else if(type==ITEM_TYPE_TIP){
+                        setPrefer(type+"",pid+"",holder ,position);
+                    }else if(type==ITEM_TYPE_TOPIC){
                         pid=body.getTopic().getId();
-                    }else{
+                        setPrefer(type+"",pid+"",holder ,position);
+                    }else if(type==ITEM_TYPE_TIP){
                         pid=body.getStrategy().getId();
+                        setPrefer(type+"",pid+"",holder ,position);
                     }
-                    setPrefer(type+"",pid+"",holder ,position);
                 }
             });
             view.setOnClickListener(this);
@@ -311,6 +324,13 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
             mCarouselView = (CarouselViewPager) itemView.findViewById(R.id.ad_viewPager);
         }
     }
+    //空viewHolder,用于处理推荐数据其中一项为空的情况，防止发生闪退
+    class EmptyViewHolder extends RecyclerView.ViewHolder {
+        public EmptyViewHolder(View view) {
+            super(view);
+        }
+    }
+
     private void changeBodyList(int type,int position,int num,boolean is_collected){
         if(type==ITEM_TYPE_SCENE){
             bodyBeanList.get(position).getScene().setCollected(is_collected);
@@ -326,7 +346,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private void changeSelectedState(String str_type,mViewHolder holder,int position){
         int type =Integer.parseInt(str_type);
 
-        if (holder.checkBox_prefer.isSelected()) {
+        if (holder.checkBox_prefer.isChecked()) {
             int num = Integer.parseInt(holder.numPrefer.getText().toString()) - 1;
             holder.numPrefer.setText(Integer.toString(num));
             holder.checkBox_prefer.setChecked(false);
@@ -342,7 +362,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
     private void setPrefer(final String type, String pid,final mViewHolder holder,final int position) {
 
-        OkHttpUtils.post(BaseActivity.url + "/user/userCollect")
+        OkHttpUtils.post(BaseActivity.url + "user/userCollect")
                 // 请求方式和请求url
                 .tag(this)
                 .params("user_id", BaseActivity.user_id)
