@@ -1,6 +1,7 @@
 package com.android.loushi.loushi.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -43,11 +44,13 @@ public class SceneDetailGoodFragment extends  LazyFragment {
         bodyBeanList=new ArrayList<SceneGoodJson.BodyBean>();
         sceneDetailGoodAdapter = new SceneDetailGoodAdapter(getContext(),bodyBeanList);
         getSceneGood();
-        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        final GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+        SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(getContext(),20);
+
         recyclerView.setLayoutManager(layoutManager);
-        SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(getContext(),5);
-        recyclerView.addItemDecoration(spaceItemDecoration);
+
         recyclerView.setAdapter(sceneDetailGoodAdapter);
+        recyclerView.addItemDecoration(spaceItemDecoration);
 
     }
     private void getSceneGood(){

@@ -4,6 +4,7 @@ package com.android.loushi.loushi.adapter;
  * Created by Administrator on 2016/7/24.
  */
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.android.loushi.loushi.R;
 
 import com.android.loushi.loushi.jsonbean.SceneGoodJson;
+import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -50,7 +52,10 @@ public class SceneDetailGoodAdapter extends RecyclerView.Adapter<SceneDetailGood
          holder.img_good.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                  showBigImage(bodyBean.getImages().get(0).getUrl());
+                  //showBigImage(bodyBean.getImages().get(0).getUrl());
+                 Intent intent = new Intent(context, GoodDetailActivity.class);
+                 intent.putExtra("GOOD_ID",bodyBean.getId()+"");
+                 context.startActivity(intent);
              }
          });
     }
@@ -70,19 +75,6 @@ public class SceneDetailGoodAdapter extends RecyclerView.Adapter<SceneDetailGood
 
 
     }
-    private void showBigImage(String url){
-        ImageView img_big =new ImageView(context);
-        Picasso.with(context).load(url).into(img_big);
-        final AlertDialog dialog = new AlertDialog.Builder(context).create();
-        dialog.setView(img_big);
-        dialog.show();
-        img_big.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-             dialog.dismiss();
-            }
-        });
 
-    }
 
 }

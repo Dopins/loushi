@@ -71,6 +71,6 @@ public class CategoryDetailActivity extends BaseActivity {
         webView.loadUrl("http://172.16.1.218:8020/111/topicDetail.html");
     }
     private void initCollectBar(){
-        
+
     }
 }

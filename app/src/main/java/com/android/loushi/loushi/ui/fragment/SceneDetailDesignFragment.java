@@ -49,7 +49,7 @@ public class SceneDetailDesignFragment extends BaseFragment {
                 // Activities and WebViews measure progress with different scales.
                 // The progress meter will automatically disappear when we reach 100%
 //                activity.setProgress(progress * 1000);
-                getActivity().setProgress(progress * 100);
+                //getActivity().setProgress(progress * 100);
             }
         });
 

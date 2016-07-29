@@ -84,7 +84,8 @@ public class GoodDetailActivity extends  BaseActivity {
         setContentView(R.layout.activity_good_detail);
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
+        if(getIntent().getStringExtra("GOOD_ID")!=null)
+            good_id=getIntent().getStringExtra("GOOD_ID");
         //透明导航栏
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         bindView();
@@ -119,7 +120,7 @@ public class GoodDetailActivity extends  BaseActivity {
     private void init() {
         recyclerView = (RecyclerView)findViewById(R.id.recycleView);
         list = new ArrayList<GoodsJson.BodyBean.ImagesBean>();
-        goodDetailAdapter = new GoodDetailAdapter(getApplicationContext(),list);
+        goodDetailAdapter = new GoodDetailAdapter(this,list);
         getGood();
         //SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(this,5);
 

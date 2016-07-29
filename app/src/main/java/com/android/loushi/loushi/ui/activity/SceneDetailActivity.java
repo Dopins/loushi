@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.android.loushi.loushi.R;
@@ -32,6 +35,7 @@ public class SceneDetailActivity extends  BaseActivity {
     private List<String> list_title;
     private TabLayout tabLayout;
     private Toolbar mToolbar;
+    private ImageButton back;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     public static  String SCENE_ID="SCENE_ID";
@@ -52,6 +56,7 @@ public class SceneDetailActivity extends  BaseActivity {
         Log.e("scene_id",scene_id);
         initView();
         initTablayout();
+        initToobar();
     }
 
     private void initView() {
@@ -108,5 +113,16 @@ public class SceneDetailActivity extends  BaseActivity {
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), list_fragment, list_title);
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+    }
+    private void initToobar(){
+        mToolbar=(Toolbar)findViewById(R.id.program_toolbar);
+        setSupportActionBar(mToolbar);
+        back=(ImageButton)mToolbar.findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }
