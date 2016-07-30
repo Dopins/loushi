@@ -199,7 +199,7 @@ public class PersonFragment extends BaseFragment {
             }
         });
 
-        btn_my_message= (ImageButton) findViewById(R.id.my_message);
+        btn_my_message= (ImageButton) mToolbar.findViewById(R.id.my_message);
         btn_my_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

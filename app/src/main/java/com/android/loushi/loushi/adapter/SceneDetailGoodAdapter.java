@@ -4,7 +4,10 @@ package com.android.loushi.loushi.adapter;
  * Created by Administrator on 2016/7/24.
  */
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 import com.android.loushi.loushi.R;
 
 import com.android.loushi.loushi.jsonbean.SceneGoodJson;
+import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -38,9 +42,22 @@ public class SceneDetailGoodAdapter extends RecyclerView.Adapter<SceneDetailGood
 
     @Override
     public void onBindViewHolder(SceneDetailGoodAdapter.SceneDetailGoodViewHolder holder, int position) {
-         SceneGoodJson.BodyBean bodyBean = bodyBeanList.get(position);
+        Log.e("pos",position+"");
+        Log.e("size",bodyBeanList.size()+"");
+        final SceneGoodJson.BodyBean bodyBean = bodyBeanList.get(position);
+
+         //Log.e("scenedetail", bodyBean.getImages().get(0).getUrl());
          Picasso.with(context).load(bodyBean.getImages().get(0).getUrl()).fit().into(holder.img_good);
          holder.tv_name.setText(bodyBean.getName());
+         holder.img_good.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                  //showBigImage(bodyBean.getImages().get(0).getUrl());
+                 Intent intent = new Intent(context, GoodDetailActivity.class);
+                 intent.putExtra("GOOD_ID",bodyBean.getId()+"");
+                 context.startActivity(intent);
+             }
+         });
     }
 
     @Override
@@ -58,5 +75,6 @@ public class SceneDetailGoodAdapter extends RecyclerView.Adapter<SceneDetailGood
 
 
     }
+
 
 }

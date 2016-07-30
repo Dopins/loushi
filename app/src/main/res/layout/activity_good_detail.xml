@@ -10,12 +10,12 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:layout_height="250dp"
         >
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="280dp"
+            android:layout_height="250dp"
             android:id="@+id/img_good"
             android:src="@drawable/loading_big"
             android:scaleType="centerCrop"
@@ -39,13 +39,13 @@
         android:id="@+id/recycleView"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="10dp"
         android:scrollbars="none"
         />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="37dp"
         android:layout_marginRight="37dp"
         android:orientation="vertical"
