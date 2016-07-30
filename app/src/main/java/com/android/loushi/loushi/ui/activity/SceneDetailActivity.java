@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.AdViewpagerAdapter;
@@ -40,6 +42,15 @@ public class SceneDetailActivity extends  BaseActivity {
     private ViewPagerAdapter viewPagerAdapter;
     public static  String SCENE_ID="SCENE_ID";
 
+    private LinearLayout collect_bar;
+    private LinearLayout collect;
+    private LinearLayout comment;
+    private LinearLayout share;
+    private ImageButton btn_collect;
+    private ImageButton btn_comment;
+    private TextView tv_collect_count;
+    private TextView tv_comment_count;
+    private TextView tv_share_count;
 
     public  String scene_id="1";
 
@@ -124,5 +135,19 @@ public class SceneDetailActivity extends  BaseActivity {
                 finish();
             }
         });
+    }
+    private void bindCollectBarView(){
+
+            collect_bar=(LinearLayout)findViewById(R.id.collect_bar);
+            //collect_bar.setVisibility(View.GONE);
+            collect = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_like);
+            comment = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_comment);
+            share = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_share);
+            btn_collect=(ImageButton)collect.findViewById(R.id.collect_bar_btn_like);
+            tv_collect_count=(TextView)collect.findViewById(R.id.collect_bar_tv_like);
+            tv_comment_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_comment);
+            tv_share_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_share);
+
+
     }
 }

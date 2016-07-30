@@ -124,7 +124,7 @@ public class GoodDetailActivity extends  BaseActivity {
         getGood();
         //SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(this,5);
 
-        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(5, StaggeredGridLayoutManager.VERTICAL);
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(goodDetailAdapter);
         //recyclerView.addItemDecoration(spaceItemDecoration);
