@@ -120,10 +120,20 @@ public class PersonFragment extends BaseFragment {
         mViewPager = (ViewPager)getView().findViewById(R.id.main_vp_container);
         list_fragment = new ArrayList<>();
         collectGoodFragment=new CollectGoodFragment();
+        Bundle bundle;
+        bundle = new Bundle();
+        bundle.putString(CollectGoodFragment.TYPE,"0");
+        collectGoodFragment.setArguments(bundle);
         list_fragment.add(collectGoodFragment);
         collectGoodFragment=new CollectGoodFragment();
+        bundle = new Bundle();
+        bundle.putString(CollectGoodFragment.TYPE,"1");
+        collectGoodFragment.setArguments(bundle);
         list_fragment.add(collectGoodFragment);
         collectGoodFragment=new CollectGoodFragment();
+        bundle = new Bundle();
+        collectGoodFragment.setArguments(bundle);
+        bundle.putString(CollectGoodFragment.TYPE, "3");
         list_fragment.add(collectGoodFragment);
         list_cate = new ArrayList<>();
         list_count = new ArrayList<>();
@@ -132,10 +142,13 @@ public class PersonFragment extends BaseFragment {
         list_cate.add("单品");
         list_count.add("32");
 
-        list_count.add("32");
-        list_count.add("32");
+        list_count.add("44");
+        list_count.add("11");
 
         personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(),list_fragment,list_cate,list_count,getContext());
+        personCollectTabAdapter.instantiateItem(0);
+        personCollectTabAdapter.instantiateItem(1);
+        personCollectTabAdapter.instantiateItem(2);
         mViewPager.setAdapter(personCollectTabAdapter);
 
 
@@ -149,8 +162,10 @@ public class PersonFragment extends BaseFragment {
                 return Color.rgb(105,184,187);
             }
         });
+
         mtoorbar_tab.setDistributeEvenly(true);
         mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, R.id.tv_tab_view_count);
+
 
         //mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, 0);
         mtoorbar_tab.setViewPager(mViewPager);

@@ -1,6 +1,8 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -17,16 +19,23 @@ import android.widget.TextView;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.AdViewpagerAdapter;
 import com.android.loushi.loushi.adapter.ViewPagerAdapter;
+import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.ui.fragment.CollectGoodFragment;
 import com.android.loushi.loushi.ui.fragment.SceneDetailDesignFragment;
 import com.android.loushi.loushi.ui.fragment.SceneDetailGoodFragment;
+import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.viewpager.CarouselViewPager;
 import com.google.gson.Gson;
+import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Administrator on 2016/7/24.
@@ -35,6 +44,7 @@ public class SceneDetailActivity extends  BaseActivity {
     private CarouselViewPager carouselViewPager;
     private SceneDetailGoodFragment sceneDetailGoodFragment;
     private SceneDetailDesignFragment sceneDetailDesignFragment;
+    private CollapsingToolbarLayout collapsing_toolbar_layout;
     private List<Fragment> list_fragment;                                //定义要装fragment的列表
     private List<String> list_title;
     private TabLayout tabLayout;
@@ -108,6 +118,8 @@ public class SceneDetailActivity extends  BaseActivity {
         Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view4);
     }
     private void initTablayout(){
+        collapsing_toolbar_layout = (CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar_layout);
+        collapsing_toolbar_layout.setTitle("");
         tabLayout=(TabLayout)findViewById(R.id.toolbar_tab);
         viewPager = (ViewPager)findViewById(R.id.main_vp_container);
         sceneDetailGoodFragment = new SceneDetailGoodFragment();
