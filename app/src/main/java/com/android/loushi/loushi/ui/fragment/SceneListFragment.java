@@ -10,8 +10,6 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.SceneRecyclerViewAdapter;
-import com.android.loushi.loushi.callback.JsonCallback;
-import com.android.loushi.loushi.jsonbean.RecommendJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
@@ -20,10 +18,6 @@ import com.lzy.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.Request;
-import okhttp3.Response;
-
 
 /**
  * Created by dopin on 2016/7/17.

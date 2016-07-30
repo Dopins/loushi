@@ -58,7 +58,6 @@ public class SearchResultSceneFragment extends SceneListFragment {
     @Override
     protected void GetSomeScene(int take, int skip) {
 
-        Log.d("tag", bodyBeanList.size() + "");
         OkHttpUtils.post(BaseActivity.url + "base/search")
                 // 请求方式和请求url
                 .tag(this).params("user_id", BaseActivity.user_id)
@@ -71,7 +70,7 @@ public class SearchResultSceneFragment extends SceneListFragment {
                     public void onResponse(boolean b, SearchJson searchJson, Request request, Response response) {
                         if (searchJson.getState()) {
 
-                            changeBodyBeanList(searchJson.getBody());
+                            getSceneBodyBeanList(searchJson.getBody());
 
                             get_total += bodyBeanList.size();
 
@@ -85,7 +84,7 @@ public class SearchResultSceneFragment extends SceneListFragment {
                     }
                 });
     }
-    private void changeBodyBeanList(List<SearchJson.BodyBean> searchResultList){
+    private void getSceneBodyBeanList(List<SearchJson.BodyBean> searchResultList){
         for(int i=0;i<searchResultList.size(); i++) {
             bodyBeanList.add(searchResultList.get(i).getScene());
         }
