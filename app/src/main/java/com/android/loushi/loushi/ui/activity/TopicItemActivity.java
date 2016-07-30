@@ -1,11 +1,13 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +19,7 @@ import com.android.loushi.loushi.callback.TopicCallback;
 import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
+import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -92,6 +95,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
         mAdapter = new TopicItemAdapter(this, mTopicList, TopicItemAdapter.AdapterType.TOPIC);
         recyclerView.addItemDecoration(new SpaceItemDecoration(this, 10));
         recyclerView.setAdapter(mAdapter);
+        addItemClickListener();
         loadSomeData(MainActivity.user_id, mTopic_id, mSkip, mTake);
     }
 
@@ -130,6 +134,20 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
                         mAdapter.notifyDataSetChanged();
                     }
                 });
+    }
+    private void addItemClickListener() {
+        mAdapter.setmOnItemClickListener(new TopicItemAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+                Intent intent= new Intent(TopicItemActivity.this, CategoryDetailActivity.class);
+                String jsonString=new Gson().toJson(mTopicList.get(position));
+                Log.e("jsonstring", jsonString);
+                intent.putExtra(CategoryDetailActivity.TYPE,"0");
+                intent.putExtra(CategoryDetailActivity.JSONSTRING,jsonString);
+                startActivity(intent);
+            }
+        });
     }
 
 

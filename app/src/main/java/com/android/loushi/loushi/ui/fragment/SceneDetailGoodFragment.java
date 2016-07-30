@@ -45,12 +45,12 @@ public class SceneDetailGoodFragment extends  LazyFragment {
         sceneDetailGoodAdapter = new SceneDetailGoodAdapter(getContext(),bodyBeanList);
         getSceneGood();
         final GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
-        SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(getContext(),20);
+        //SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(getContext(),20);
 
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setAdapter(sceneDetailGoodAdapter);
-        recyclerView.addItemDecoration(spaceItemDecoration);
+        //recyclerView.addItemDecoration(spaceItemDecoration);
 
     }
     private void getSceneGood(){
