@@ -7,11 +7,19 @@
     android:layout_marginTop="10dp"
     tools:showIn="@layout/activity_topic_item">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycleView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="21dp"/>
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="21dp"/>
+
+    </RelativeLayout>
+
+
 
 </android.support.v4.widget.SwipeRefreshLayout>

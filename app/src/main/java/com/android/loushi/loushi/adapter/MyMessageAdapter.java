@@ -30,6 +30,9 @@ public class MyMessageAdapter extends RecyclerView.Adapter<MyMessageAdapter.View
     private Context mContext;
     private List<UserMessageJson.BodyBean> myMessageList;
 
+    private List<UserMessageJson.BodyBean> mNewMessgeList;
+    private List<UserMessageJson.BodyBean> mOldMessageList;
+
     public MyMessageAdapter(Context mContext,List<UserMessageJson.BodyBean> myMessageList){
         this.mContext=mContext;
         this.myMessageList=myMessageList;
@@ -67,6 +70,9 @@ public class MyMessageAdapter extends RecyclerView.Adapter<MyMessageAdapter.View
     public int getItemCount() {
         return myMessageList.size();
     }
+
+
+
 
     /*
     * 获取输入时间   如   22:37
