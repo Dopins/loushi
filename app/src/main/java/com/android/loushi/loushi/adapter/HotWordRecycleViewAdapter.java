@@ -1,6 +1,7 @@
 package com.android.loushi.loushi.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +17,20 @@ import java.util.List;
  */
 public class HotWordRecycleViewAdapter extends RecyclerView.Adapter<HotWordRecycleViewAdapter.HotwordViewHolder>{
 
+    private OnItemClickListener itemClickListener;
     private Context context;
     private List<String> data;
     public HotWordRecycleViewAdapter(Context context, List<String> data){
         this.context=context;
         this.data=data;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
     }
     @Override
         public HotwordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -40,11 +50,19 @@ public class HotWordRecycleViewAdapter extends RecyclerView.Adapter<HotWordRecyc
     {
         return data.size();
     }
-    public static class HotwordViewHolder extends RecyclerView.ViewHolder {
+    public class HotwordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView hotWord;
         public HotwordViewHolder(View itemView) {
             super(itemView);
             hotWord=(TextView)itemView.findViewById(R.id.hot_word);
+
+            itemView.setOnClickListener(this);
+        }
+        @Override
+        public void onClick(View v){
+            if(itemClickListener!=null){
+                itemClickListener.onItemClick(v,getPosition());
+            }
         }
     }
 }
