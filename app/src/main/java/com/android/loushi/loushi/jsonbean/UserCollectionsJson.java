@@ -78,31 +78,31 @@ public class UserCollectionsJson  implements Serializable {
          * imgUrl : asd
          */
 
-//        private SceneBean scene;
-//        /**
-//         * id : 22
-//         * name : 名称
-//         * collectionNum : 333
-//         * collected : 0
-//         * forwordNum : 12
-//         * commentNum : 6
-//         * imgUrl : asd
-//         */
-//
-//        private StrategyBean strategy;
-//        /**
-//         * id : 21
-//         * name : 好枕头
-//         * groupID : 22
-//         * topicGroup : {"id":22,"name":"枕头"}
-//         * collectionNum : 333
-//         * collected : 0
-//         * forwordNum : 12
-//         * commentNum : 6
-//         * imgUrl : asd
-//         */
-//
-//        private TopicBean topic;
+        private SceneBean scene;
+        /**
+         * id : 22
+         * name : 名称
+         * collectionNum : 333
+         * collected : 0
+         * forwordNum : 12
+         * commentNum : 6
+         * imgUrl : asd
+         */
+
+        private StrategyBean strategy;
+        /**
+         * id : 21
+         * name : 好枕头
+         * groupID : 22
+         * topicGroup : {"id":22,"name":"枕头"}
+         * collectionNum : 333
+         * collected : 0
+         * forwordNum : 12
+         * commentNum : 6
+         * imgUrl : asd
+         */
+
+        private TopicBean topic;
         /**
          * id : 21
          * name : 无脸人台灯
@@ -142,29 +142,29 @@ public class UserCollectionsJson  implements Serializable {
             this.pid = pid;
         }
 
-//        public SceneBean getScene() {
-//            return scene;
-//        }
-//
-//        public void setScene(SceneBean scene) {
-//            this.scene = scene;
-//        }
-//
-//        public StrategyBean getStrategy() {
-//            return strategy;
-//        }
-//
-//        public void setStrategy(StrategyBean strategy) {
-//            this.strategy = strategy;
-//        }
-//
-//        public TopicBean getTopic() {
-//            return topic;
-//        }
-//
-//        public void setTopic(TopicBean topic) {
-//            this.topic = topic;
-//        }
+        public SceneBean getScene() {
+            return scene;
+        }
+
+        public void setScene(SceneBean scene) {
+            this.scene = scene;
+        }
+
+        public StrategyBean getStrategy() {
+            return strategy;
+        }
+
+        public void setStrategy(StrategyBean strategy) {
+            this.strategy = strategy;
+        }
+
+        public TopicBean getTopic() {
+            return topic;
+        }
+
+        public void setTopic(TopicBean topic) {
+            this.topic = topic;
+        }
 
         public GoodsBean getGoods() {
             return goods;
@@ -174,300 +174,300 @@ public class UserCollectionsJson  implements Serializable {
             this.goods = goods;
         }
 
-//        public static class SceneBean  implements Serializable {
-//            private int id;
-//            private String name;
-//            private String label;
-//            private int groupID;
-//            /**
-//             * id : 22
-//             * name : 动漫风
-//             */
-//
-//            private SceneGroupBean sceneGroup;
-//            private int collectionNum;
-//            private boolean collected;
-//            private int forwordNum;
-//            private int commentNum;
-//            private String imgUrl;
-//
-//            public int getId() {
-//                return id;
-//            }
-//
-//            public void setId(int id) {
-//                this.id = id;
-//            }
-//
-//            public String getName() {
-//                return name;
-//            }
-//
-//            public void setName(String name) {
-//                this.name = name;
-//            }
-//
-//            public String getLabel() {
-//                return label;
-//            }
-//
-//            public void setLabel(String label) {
-//                this.label = label;
-//            }
-//
-//            public int getGroupID() {
-//                return groupID;
-//            }
-//
-//            public void setGroupID(int groupID) {
-//                this.groupID = groupID;
-//            }
-//
-//            public SceneGroupBean getSceneGroup() {
-//                return sceneGroup;
-//            }
-//
-//            public void setSceneGroup(SceneGroupBean sceneGroup) {
-//                this.sceneGroup = sceneGroup;
-//            }
-//
-//            public int getCollectionNum() {
-//                return collectionNum;
-//            }
-//
-//            public void setCollectionNum(int collectionNum) {
-//                this.collectionNum = collectionNum;
-//            }
-//
-//            public boolean getCollected() {
-//                return collected;
-//            }
-//
-//            public void setCollected(boolean collected) {
-//                this.collected = collected;
-//            }
-//
-//            public int getForwordNum() {
-//                return forwordNum;
-//            }
-//
-//            public void setForwordNum(int forwordNum) {
-//                this.forwordNum = forwordNum;
-//            }
-//
-//            public int getCommentNum() {
-//                return commentNum;
-//            }
-//
-//            public void setCommentNum(int commentNum) {
-//                this.commentNum = commentNum;
-//            }
-//
-//            public String getImgUrl() {
-//                return imgUrl;
-//            }
-//
-//            public void setImgUrl(String imgUrl) {
-//                this.imgUrl = imgUrl;
-//            }
-//
-//            public static class SceneGroupBean  implements Serializable {
-//                private int id;
-//                private String name;
-//
-//                public int getId() {
-//                    return id;
-//                }
-//
-//                public void setId(int id) {
-//                    this.id = id;
-//                }
-//
-//                public String getName() {
-//                    return name;
-//                }
-//
-//                public void setName(String name) {
-//                    this.name = name;
-//                }
-//            }
-//        }
-//
-//        public static class StrategyBean implements Serializable  {
-//            private int id;
-//            private String name;
-//            private int collectionNum;
-//            private boolean collected;
-//            private int forwordNum;
-//            private int commentNum;
-//            private String imgUrl;
-//
-//            public int getId() {
-//                return id;
-//            }
-//
-//            public void setId(int id) {
-//                this.id = id;
-//            }
-//
-//            public String getName() {
-//                return name;
-//            }
-//
-//            public void setName(String name) {
-//                this.name = name;
-//            }
-//
-//            public int getCollectionNum() {
-//                return collectionNum;
-//            }
-//
-//            public void setCollectionNum(int collectionNum) {
-//                this.collectionNum = collectionNum;
-//            }
-//
-//            public boolean getCollected() {
-//                return collected;
-//            }
-//
-//            public void setCollected(boolean collected) {
-//                this.collected = collected;
-//            }
-//
-//            public int getForwordNum() {
-//                return forwordNum;
-//            }
-//
-//            public void setForwordNum(int forwordNum) {
-//                this.forwordNum = forwordNum;
-//            }
-//
-//            public int getCommentNum() {
-//                return commentNum;
-//            }
-//
-//            public void setCommentNum(int commentNum) {
-//                this.commentNum = commentNum;
-//            }
-//
-//            public String getImgUrl() {
-//                return imgUrl;
-//            }
-//
-//            public void setImgUrl(String imgUrl) {
-//                this.imgUrl = imgUrl;
-//            }
-//        }
-//
-//        public static class TopicBean implements Serializable  {
-//            private int id;
-//            private String name;
-//            private int groupID;
-//            /**
-//             * id : 22
-//             * name : 枕头
-//             */
-//
-//            private TopicGroupBean topicGroup;
-//            private int collectionNum;
-//            private boolean collected;
-//            private int forwordNum;
-//            private int commentNum;
-//            private String imgUrl;
-//
-//            public int getId() {
-//                return id;
-//            }
-//
-//            public void setId(int id) {
-//                this.id = id;
-//            }
-//
-//            public String getName() {
-//                return name;
-//            }
-//
-//            public void setName(String name) {
-//                this.name = name;
-//            }
-//
-//            public int getGroupID() {
-//                return groupID;
-//            }
-//
-//            public void setGroupID(int groupID) {
-//                this.groupID = groupID;
-//            }
-//
-//            public TopicGroupBean getTopicGroup() {
-//                return topicGroup;
-//            }
-//
-//            public void setTopicGroup(TopicGroupBean topicGroup) {
-//                this.topicGroup = topicGroup;
-//            }
-//
-//            public int getCollectionNum() {
-//                return collectionNum;
-//            }
-//
-//            public void setCollectionNum(int collectionNum) {
-//                this.collectionNum = collectionNum;
-//            }
-//
-//            public boolean getCollected() {
-//                return collected;
-//            }
-//
-//            public void setCollected(boolean collected) {
-//                this.collected = collected;
-//            }
-//
-//            public int getForwordNum() {
-//                return forwordNum;
-//            }
-//
-//            public void setForwordNum(int forwordNum) {
-//                this.forwordNum = forwordNum;
-//            }
-//
-//            public int getCommentNum() {
-//                return commentNum;
-//            }
-//
-//            public void setCommentNum(int commentNum) {
-//                this.commentNum = commentNum;
-//            }
-//
-//            public String getImgUrl() {
-//                return imgUrl;
-//            }
-//
-//            public void setImgUrl(String imgUrl) {
-//                this.imgUrl = imgUrl;
-//            }
-//
-//            public static class TopicGroupBean  implements Serializable {
-//                private int id;
-//                private String name;
-//
-//                public int getId() {
-//                    return id;
-//                }
-//
-//                public void setId(int id) {
-//                    this.id = id;
-//                }
-//
-//                public String getName() {
-//                    return name;
-//                }
-//
-//                public void setName(String name) {
-//                    this.name = name;
-//                }
-//            }
-//        }
+       public static class SceneBean  implements Serializable {
+            private int id;
+            private String name;
+            private String label;
+            private int groupID;
+            /**
+             * id : 22
+             * name : 动漫风
+             */
+
+            private SceneGroupBean sceneGroup;
+            private int collectionNum;
+            private boolean collected;
+            private int forwordNum;
+            private int commentNum;
+            private String imgUrl;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getLabel() {
+                return label;
+            }
+
+            public void setLabel(String label) {
+                this.label = label;
+            }
+
+            public int getGroupID() {
+                return groupID;
+            }
+
+            public void setGroupID(int groupID) {
+                this.groupID = groupID;
+            }
+
+            public SceneGroupBean getSceneGroup() {
+                return sceneGroup;
+            }
+
+            public void setSceneGroup(SceneGroupBean sceneGroup) {
+                this.sceneGroup = sceneGroup;
+            }
+
+            public int getCollectionNum() {
+                return collectionNum;
+            }
+
+            public void setCollectionNum(int collectionNum) {
+                this.collectionNum = collectionNum;
+            }
+
+            public boolean getCollected() {
+                return collected;
+            }
+
+            public void setCollected(boolean collected) {
+                this.collected = collected;
+            }
+
+            public int getForwordNum() {
+                return forwordNum;
+            }
+
+            public void setForwordNum(int forwordNum) {
+                this.forwordNum = forwordNum;
+            }
+
+            public int getCommentNum() {
+                return commentNum;
+            }
+
+            public void setCommentNum(int commentNum) {
+                this.commentNum = commentNum;
+            }
+
+            public String getImgUrl() {
+                return imgUrl;
+            }
+
+            public void setImgUrl(String imgUrl) {
+                this.imgUrl = imgUrl;
+            }
+
+            public static class SceneGroupBean  implements Serializable {
+                private int id;
+                private String name;
+
+                public int getId() {
+                    return id;
+                }
+
+                public void setId(int id) {
+                    this.id = id;
+                }
+
+                public String getName() {
+                    return name;
+                }
+
+                public void setName(String name) {
+                    this.name = name;
+                }
+            }
+        }
+
+        public static class StrategyBean implements Serializable  {
+            private int id;
+            private String name;
+            private int collectionNum;
+            private boolean collected;
+            private int forwordNum;
+            private int commentNum;
+            private String imgUrl;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public int getCollectionNum() {
+                return collectionNum;
+            }
+
+            public void setCollectionNum(int collectionNum) {
+                this.collectionNum = collectionNum;
+            }
+
+            public boolean getCollected() {
+                return collected;
+            }
+
+            public void setCollected(boolean collected) {
+                this.collected = collected;
+            }
+
+            public int getForwordNum() {
+                return forwordNum;
+            }
+
+            public void setForwordNum(int forwordNum) {
+                this.forwordNum = forwordNum;
+            }
+
+            public int getCommentNum() {
+                return commentNum;
+            }
+
+            public void setCommentNum(int commentNum) {
+                this.commentNum = commentNum;
+            }
+
+            public String getImgUrl() {
+                return imgUrl;
+            }
+
+            public void setImgUrl(String imgUrl) {
+                this.imgUrl = imgUrl;
+            }
+        }
+
+        public static class TopicBean implements Serializable  {
+            private int id;
+            private String name;
+            private int groupID;
+            /**
+             * id : 22
+             * name : 枕头
+             */
+
+            private TopicGroupBean topicGroup;
+            private int collectionNum;
+            private boolean collected;
+            private int forwordNum;
+            private int commentNum;
+            private String imgUrl;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public int getGroupID() {
+                return groupID;
+            }
+
+            public void setGroupID(int groupID) {
+                this.groupID = groupID;
+            }
+
+            public TopicGroupBean getTopicGroup() {
+                return topicGroup;
+            }
+
+            public void setTopicGroup(TopicGroupBean topicGroup) {
+                this.topicGroup = topicGroup;
+            }
+
+            public int getCollectionNum() {
+                return collectionNum;
+            }
+
+            public void setCollectionNum(int collectionNum) {
+                this.collectionNum = collectionNum;
+            }
+
+            public boolean getCollected() {
+                return collected;
+            }
+
+            public void setCollected(boolean collected) {
+                this.collected = collected;
+            }
+
+            public int getForwordNum() {
+                return forwordNum;
+            }
+
+            public void setForwordNum(int forwordNum) {
+                this.forwordNum = forwordNum;
+            }
+
+            public int getCommentNum() {
+                return commentNum;
+            }
+
+            public void setCommentNum(int commentNum) {
+                this.commentNum = commentNum;
+            }
+
+            public String getImgUrl() {
+                return imgUrl;
+            }
+
+            public void setImgUrl(String imgUrl) {
+                this.imgUrl = imgUrl;
+            }
+
+            public static class TopicGroupBean  implements Serializable {
+                private int id;
+                private String name;
+
+                public int getId() {
+                    return id;
+                }
+
+                public void setId(int id) {
+                    this.id = id;
+                }
+
+                public String getName() {
+                    return name;
+                }
+
+                public void setName(String name) {
+                    this.name = name;
+                }
+            }
+        }
 
         public static class GoodsBean  implements Serializable {
             private int id;
@@ -476,7 +476,7 @@ public class UserCollectionsJson  implements Serializable {
             private String introduction;
             private String url;
             private int collectionNum;
-            private int collected;
+            private boolean collected;
             private int forwordNum;
             private int commentNum;
             /**
@@ -537,11 +537,11 @@ public class UserCollectionsJson  implements Serializable {
                 this.collectionNum = collectionNum;
             }
 
-            public int getCollected() {
+            public boolean getCollected() {
                 return collected;
             }
 
-            public void setCollected(int collected) {
+            public void setCollected(boolean collected) {
                 this.collected = collected;
             }
 

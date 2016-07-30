@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.util.UnderLineEditText;
 
 /**
  * Created by Administrator on 2016/7/19.
@@ -17,9 +19,17 @@ import com.android.loushi.loushi.R;
 public class RegistFragment extends Fragment {
     public static final String BUNDLE_TITLE = "title";
 
-    private EditText edit_phone;
-    private EditText edit_password;
-    private EditText edit_checkword;
+    
+
+    // Content View Elements
+
+    private View view;
+    private TextView text_phone;
+    private UnderLineEditText regist_edit_phone;
+    private TextView text_keyword;
+    private UnderLineEditText regist_edit_password;
+    private TextView text_cheakword;
+    private UnderLineEditText regist_edit_checkword;
     private Button btn_getcheckword;
     private Button btn_finish;
 
@@ -30,42 +40,54 @@ public class RegistFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_regist, container, false);
-
-        btn_getcheckword = (Button) view.findViewById(R.id.btn_getcheckword);
-        btn_finish = (Button) view.findViewById(R.id.btn_finish);
-
-        edit_phone = (EditText) view.findViewById(R.id.regist_edit_phone);
-        edit_phone.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                MyFragment.Gone();
-                return false;
-            }
-
-        });
-
-        edit_password = (EditText) view.findViewById(R.id.regist_edit_password);
-        edit_password.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                MyFragment.Gone();
-                return false;
-            }
-
-        });
-
-        edit_checkword = (EditText) view.findViewById(R.id.regist_edit_checkword);
-        edit_checkword.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                MyFragment.Gone();
-                return false;
-            }
-
-        });
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_regist, container, false);
+            bindViews();
+            initView();
+            initEvent();
+        }
         return view;
     }
+
+    private void initEvent() {
+        regist_edit_phone.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                MyFragment.Gone();
+                return false;
+            }
+        });
+        regist_edit_password.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                MyFragment.Gone();
+                return false;
+            }
+        });
+        regist_edit_checkword.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                MyFragment.Gone();
+                return false;
+            }
+        });
+    }
+
+    private void initView() {
+    }
+
+    private void bindViews() {
+
+        text_phone = (TextView) view.findViewById(R.id.text_phone);
+        regist_edit_phone = (UnderLineEditText) view.findViewById(R.id.regist_edit_phone);
+        text_keyword = (TextView) view.findViewById(R.id.text_keyword);
+        regist_edit_password = (UnderLineEditText) view.findViewById(R.id.regist_edit_password);
+        text_cheakword = (TextView) view.findViewById(R.id.text_cheakword);
+        regist_edit_checkword = (UnderLineEditText) view.findViewById(R.id.regist_edit_checkword);
+        btn_getcheckword = (Button) view.findViewById(R.id.btn_getcheckword);
+        btn_finish = (Button) view.findViewById(R.id.btn_finish);
+    }
+
 
     public static RegistFragment newInstance(String title) {
 

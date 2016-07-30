@@ -2,6 +2,7 @@ package com.android.loushi.loushi.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -33,19 +34,27 @@ public class MyMessageAdapter extends RecyclerView.Adapter<MyMessageAdapter.View
         this.mContext=mContext;
         this.myMessageList=myMessageList;
         this.mTransformation=new CircleImageTransformation();
+
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view=View.inflate(mContext, R.layout.item_recyclerview_newmessage,null);
-        return new ViewHolder(view);
+        View view=View.inflate(mContext, R.layout.item_newmessage,null);
+        ViewHolder holder=new ViewHolder(view);
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final UserMessageJson.BodyBean myMessage = myMessageList.get(position);
+
+
+        UserMessageJson.BodyBean myMessage = myMessageList.get(position);
+
+        //TODO 圆形复用问题
         Picasso.with(mContext).load(myMessage.getComment().getUserInfo().getHeadImgUrl())
-                .transform(mTransformation)
+//                .resize(Type)
+//                .transform(mTransformation)
+                .fit()
                 .into(holder.imageView_User);
         holder.textView_UserName.setText(myMessage.getComment().getUserInfo().getNickname());
         holder.textView_userContont.setText(myMessage.getComment().getContent());
@@ -103,9 +112,6 @@ public class MyMessageAdapter extends RecyclerView.Adapter<MyMessageAdapter.View
         return dfs.format(begin);
 
     }
-
-
-
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

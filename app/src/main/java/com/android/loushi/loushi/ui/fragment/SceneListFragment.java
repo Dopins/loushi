@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,8 +13,10 @@ import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.SceneRecyclerViewAdapter;
 import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
+import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
+import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -61,7 +64,11 @@ public class SceneListFragment extends LazyFragment {
         sceneRecyclerViewAdapter.setOnItemClickListener(new SceneRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
+                Intent intent= new Intent(getActivity(), SceneDetailActivity.class);
+                String sceneJsonString=new Gson().toJson(bodyBeanList.get(position));
+                intent.putExtra(SceneDetailActivity.SCENE_STRING,sceneJsonString);
+                startActivity(intent);
 //                Intent intent = new Intent(getActivity(), WebViewActivity.class);
 //                //intent.putExtra
 //                //传入参数 给webview Post
@@ -84,7 +91,7 @@ public class SceneListFragment extends LazyFragment {
             public void onBottom() {
                 super.onBottom();
                 if(has_data)
-                addSomething2Scene();
+                    addSomething2Scene();
             }
         });
     }

@@ -1,6 +1,8 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -23,8 +25,11 @@ import com.alibaba.sdk.android.trade.page.ItemDetailPage;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.GoodDetailAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.callback.UserCollectCallback;
 import com.android.loushi.loushi.jsonbean.GoodsJson;
+import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.SceneGoodJson;
+import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
@@ -43,6 +48,18 @@ import okhttp3.Response;
  */
 public class GoodDetailActivity extends  BaseActivity {
     private LinearLayout show_taobao;
+    //下方bar
+    private  LinearLayout collect_bar;
+    private LinearLayout collect;
+    private LinearLayout comment;
+    private LinearLayout share;
+    private ImageButton btn_collect;
+    private ImageButton btn_comment;
+
+    private TextView tv_collect_count;
+    private TextView tv_comment_count;
+    private TextView tv_share_count;
+
     private RecyclerView recyclerView;
     private ImageView img_good;
     private TextView tv_good_name;
@@ -53,8 +70,11 @@ public class GoodDetailActivity extends  BaseActivity {
     private ImageButton back;
     private Button btn_buy;
 
+
     private GoodDetailAdapter goodDetailAdapter;
     private List<GoodsJson.BodyBean.ImagesBean> list;
+    private  String good_id="1";
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_good_detail;
@@ -66,7 +86,8 @@ public class GoodDetailActivity extends  BaseActivity {
         setContentView(R.layout.activity_good_detail);
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
+        if(getIntent().getStringExtra("GOOD_ID")!=null)
+            good_id=getIntent().getStringExtra("GOOD_ID");
         //透明导航栏
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         bindView();
@@ -82,15 +103,37 @@ public class GoodDetailActivity extends  BaseActivity {
         price_symbol = (TextView) findViewById(R.id.price_symbol);
         tv_good_price = (TextView) findViewById(R.id.tv_good_price);
         btn_buy = (Button) findViewById(R.id.btn_buy);
+        back=(ImageButton)program_toolbar.findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        bindCollectBarView();
+
+
+    }
+    private void bindCollectBarView(){
+        collect_bar=(LinearLayout)findViewById(R.id.collect_bar);
+        //collect_bar.setVisibility(View.GONE);
+        collect = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_like);
+        comment = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_comment);
+        share = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_share);
+        btn_collect=(ImageButton)collect.findViewById(R.id.collect_bar_btn_like);
+        tv_collect_count=(TextView)collect.findViewById(R.id.collect_bar_tv_like);
+        tv_comment_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_comment);
+        tv_share_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_share);
+
     }
     private void init() {
         recyclerView = (RecyclerView)findViewById(R.id.recycleView);
         list = new ArrayList<GoodsJson.BodyBean.ImagesBean>();
-        goodDetailAdapter = new GoodDetailAdapter(getApplicationContext(),list);
+        goodDetailAdapter = new GoodDetailAdapter(this,list);
         getGood();
         //SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(this,5);
 
-        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(5, StaggeredGridLayoutManager.VERTICAL);
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(goodDetailAdapter);
         //recyclerView.addItemDecoration(spaceItemDecoration);
@@ -98,12 +141,13 @@ public class GoodDetailActivity extends  BaseActivity {
     private void getGood(){
         OkHttpUtils.post("http://www.loushi666.com/LouShi/base/goods.action")
 
-                .tag(getApplicationContext()).params("user_id", "0").params("good_id", "1")
+                .tag(getApplicationContext()).params("user_id", BaseActivity.user_id).params("good_id", good_id)
                 .execute(new JsonCallback<GoodsJson>(GoodsJson.class) {
                     @Override
-                    public void onResponse(boolean b, GoodsJson goodsJson, Request request, Response response) {
+                    public void onResponse(boolean b, final GoodsJson goodsJson, Request request, Response response) {
                         Log.e("atg", new Gson().toJson(goodsJson));
                         if (goodsJson.getState()) {
+                            final GoodsJson.BodyBean good = goodsJson.getBody();
                             //bodyBeanList.addAll(sceneGoodJson.getBody());
                             list.addAll(goodsJson.getBody().getImages());
                             Picasso.with(GoodDetailActivity.this).load(goodsJson.getBody().getImages().get(0).getUrl()).into(img_good);
@@ -111,6 +155,25 @@ public class GoodDetailActivity extends  BaseActivity {
                             tv_good_price.setText(goodsJson.getBody().getPrice() + "");
                             tv_introduce.setText(goodsJson.getBody().getIntroduction());
                             goodDetailAdapter.notifyDataSetChanged();
+
+                            tv_collect_count.setText(good.getCollectionNum() + "");
+                            tv_share_count.setText(good.getForwordNum() + "");
+                            tv_comment_count.setText(good.getForwordNum() + "");
+                            comment.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(GoodDetailActivity.this,CommentActivity.class);
+                                    intent.putExtra(KeyConstant.TYPE,"3");
+                                    intent.putExtra(KeyConstant.PID, good.getId() + "");
+                                    startActivity(intent);
+                                }
+                            });
+                            Log.e("collect1", btn_collect.isSelected() + "");
+                            initCollect(good.getCollected());
+
+
+//                            tv_comment_count.setText(good.getCommentNum());
+//                            tv_share_count.setText(good.getForwordNum());
                         }
                         Log.e("atg", list.size() + "");
                         //sceneDetailGoodAdapter.notifyDataSetChanged();
@@ -125,7 +188,7 @@ public class GoodDetailActivity extends  BaseActivity {
         btn_buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showItemDetailPage(show_taobao,"520835764780");
+                showItemDetailPage(show_taobao, "520273718234");
             }
         });
     }
@@ -156,5 +219,42 @@ public class GoodDetailActivity extends  BaseActivity {
 
             }
         });
+    }
+    private void initCollect(final boolean Collected){
+        if(Collected)
+            btn_collect.setSelected(true);
+        collect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollect")
+                        .params("user_id", user_id).params("type", "3").params("pid", good_id)
+                        .tag(this).execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
+
+                    @Override
+                    public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
+                        if (responseJson.getState()) {
+                            if (btn_collect.isSelected()) {
+                                int num = Integer.parseInt(tv_collect_count.getText().toString()) - 1;
+
+                                tv_collect_count.setText(num + "");
+                                btn_collect.setSelected(false);
+                            } else {
+                                int num = Integer.parseInt(tv_collect_count.getText().toString()) + 1;
+                                tv_collect_count.setText(num + "");
+                                btn_collect.setSelected(true);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()){
+
+
+        }
     }
 }

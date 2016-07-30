@@ -24,6 +24,7 @@ public class CategoryFragment extends BaseFragment {
 
     private static final String TAG="CategoryFragment";
 
+    private View rootView;
     private Toolbar toolbar;
     private TabLayout tablayout_category;
     private ViewPager viewPager_category;
@@ -37,21 +38,25 @@ public class CategoryFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-//        Log.e(TAG,"onActivityCreated");
+        initView();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        view=inflater.inflate(R.layout.fragment_category, container, false);
-        View view=inflater.inflate(R.layout.fragment_category,null);
-        Log.e(TAG,"onCreateView");
-        initView(view);
-        return view;
+        if (rootView == null)
+            rootView = inflater.inflate(R.layout.fragment_category, null);
+
+        // 缓存的rootView需要判断是否已经被加过parent，如果有parent需要从parent删除，
+        // 要不然会发生这个rootview已经有parent的错误。
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+        return rootView;
     }
 
-
-    private void initView(View view){
+    private void initView(){
 
         mTitleList=new ArrayList<String>();
         mTitleList.add("专题");
@@ -59,12 +64,13 @@ public class CategoryFragment extends BaseFragment {
         mFragmentList=new ArrayList<Fragment>();
         mFragmentList.add(new TopicFragment());
         mFragmentList.add(new TipsFragment());
+//        mFragmentList.add(new StyleFragment());
 
 
-        toolbar= (Toolbar) view.findViewById(R.id.toolbar);
-        tablayout_category= (TabLayout) view.findViewById(R.id.tablayout_category);
+        toolbar= (Toolbar) rootView.findViewById(R.id.toolbar);
+        tablayout_category= (TabLayout) rootView.findViewById(R.id.tablayout_category);
         tablayout_category.setTabMode(TabLayout.MODE_FIXED);
-        viewPager_category= (ViewPager) view.findViewById(R.id.viewPager_category);
+        viewPager_category= (ViewPager) rootView.findViewById(R.id.viewPager_category);
 
         for(String title:mTitleList){
             tablayout_category.addTab(tablayout_category.newTab().setText(title));
@@ -75,5 +81,9 @@ public class CategoryFragment extends BaseFragment {
 //                getActivity().getSupportFragmentManager(),mTitleList,mFragmentList);
         viewPager_category.setAdapter(mAdapter);
         tablayout_category.setupWithViewPager(viewPager_category);
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }

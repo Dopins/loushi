@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.PersonCollectTabAdapter;
 import com.android.loushi.loushi.adapter.ViewPagerAdapter;
 import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
+import com.android.loushi.loushi.ui.activity.MyMessageActivity;
 import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
 
 import com.android.loushi.loushi.util.RoundImageView;
@@ -32,6 +34,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.security.auth.login.LoginException;
 
 /**
  * Created by Administrator on 2016/7/18.
@@ -50,6 +54,7 @@ public class PersonFragment extends BaseFragment {
     private TextView tv_feed;
     private TextView tv_name_small;
     private RoundImageView img_head_small;
+    private View rootView;
                             //定义viewPager
     private PersonCollectTabAdapter personCollectTabAdapter;                               //定义adapter
     private List<Fragment> list_fragment;                                //定义要装fragment的列表
@@ -60,6 +65,7 @@ public class PersonFragment extends BaseFragment {
     private ViewPager mViewPager;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Button btn_profile;
+    private ImageButton btn_my_message;
     private CollapsingToolbarLayoutState state;
 
     private enum CollapsingToolbarLayoutState {
@@ -71,6 +77,7 @@ public class PersonFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
+        Log.e("Test: "+"PersonFragment", "onActivityCreated");
 //        mToolbar=(Toolbar)getView().findViewById(R.id.program_toolbar);
 //        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
 //        mToolbar.setTitle("");
@@ -83,10 +90,21 @@ public class PersonFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_personal, null);
+//        View view = inflater.inflate(R.layout.fragment_personal, null);
+//
+//
+//        return inflater.inflate(R.layout.fragment_personal, container, false);
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_personal, null);
+        }
+        // 缓存的rootView需要判断是否已经被加过parent，如果有parent需要从parent删除，要不然会发生这个rootview已经有parent的错误。
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
 
 
-        return inflater.inflate(R.layout.fragment_personal, container, false);
+        return rootView;
     }
 
     public void initView(){
@@ -180,6 +198,16 @@ public class PersonFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+
+        btn_my_message= (ImageButton) mToolbar.findViewById(R.id.my_message);
+        btn_my_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(), MyMessageActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
     private void initAppBar(){
         appBarLayout = (AppBarLayout)getView().findViewById(R.id.app_bar_layout);
@@ -189,7 +217,7 @@ public class PersonFragment extends BaseFragment {
 
                 if (verticalOffset == 0) {
                     if (state != CollapsingToolbarLayoutState.EXPANDED) {
-                        Log.e("coll","展开");
+                        Log.e("coll", "展开");
                         state = CollapsingToolbarLayoutState.EXPANDED;//修改状态标记为展开
 
                         //collapsingToolbarLayout.setTitle("EXPANDED");//设置title为EXPANDED
@@ -206,8 +234,8 @@ public class PersonFragment extends BaseFragment {
                     }
                 } else {
                     if (state != CollapsingToolbarLayoutState.INTERNEDIATE) {
-                        Log.e("coll","中间");
-                        if(state == CollapsingToolbarLayoutState.COLLAPSED){
+                        Log.e("coll", "中间");
+                        if (state == CollapsingToolbarLayoutState.COLLAPSED) {
                             img_head_small.setVisibility(View.GONE);
                             tv_name_small.setVisibility(View.GONE);
                             tv_feed.setVisibility(View.VISIBLE);
@@ -220,5 +248,6 @@ public class PersonFragment extends BaseFragment {
             }
         });
     }
+
 
 }

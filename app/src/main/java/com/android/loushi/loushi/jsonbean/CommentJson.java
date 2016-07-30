@@ -14,7 +14,7 @@ public class CommentJson  implements Serializable {
      * body : [{"id":31,"cDate":"2008-08-09 23:22:24","userID":0,"userInfo":{"nickname":"阿瑟斯","headImgUrl":"http://23.jpg"},"replyedID":22,"replyedInfo":{"nickname":"小刀","headImgUrl":"http://23.jpg"},"type":4,"pid":0,"pidImgUrl":"http://loushi.com/jsadj.png","content":"是的"},{"id":222,"cDate":"2008-08-09 23:22:24","userID":0,"userInfo":{"nickname":"艾奥瓦","headImgUrl":"http://23.jpg"},"replyedID":22,"replyedInfo":{"nickname":"小刀","headImgUrl":"http://23.jpg"},"type":4,"pid":0,"pidImgUrl":"http://loushi.com/jsadj.png","content":"呵呵"}]
      */
 
-    private int state;
+    private boolean state;
     private String code;
     private String return_info;
     /**
@@ -32,11 +32,11 @@ public class CommentJson  implements Serializable {
 
     private List<BodyBean> body;
 
-    public int getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 
@@ -73,7 +73,7 @@ public class CommentJson  implements Serializable {
          * headImgUrl : http://23.jpg
          */
 
-        private UserInfoBean userInfo;
+        private UserInfoBean userinfo;
         private int replyedID;
         /**
          * nickname : 小刀
@@ -111,11 +111,11 @@ public class CommentJson  implements Serializable {
         }
 
         public UserInfoBean getUserInfo() {
-            return userInfo;
+            return userinfo;
         }
 
         public void setUserInfo(UserInfoBean userInfo) {
-            this.userInfo = userInfo;
+            this.userinfo = userInfo;
         }
 
         public int getReplyedID() {

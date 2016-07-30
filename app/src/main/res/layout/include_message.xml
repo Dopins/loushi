@@ -55,11 +55,14 @@
             android:scrollbars="none" />
 
         <LinearLayout
-            android:gravity="center"
+            android:id="@+id/btn_cleanComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:layout_marginBottom="20dp"
+            android:layout_marginTop="15dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:gravity="center"
             android:orientation="horizontal">
 
 
@@ -67,13 +70,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/my_delete_hdpi"/>
+                android:src="@drawable/my_delete_hdpi" />
 
             <Button
-                android:id="@+id/btn_cleanComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:clickable="false"
                 android:gravity="center"
                 android:text="清除所有评论"
                 android:textColor="#50000000"

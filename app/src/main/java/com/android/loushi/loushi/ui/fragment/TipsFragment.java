@@ -1,108 +1,98 @@
 package com.android.loushi.loushi.ui.fragment;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.graphics.ColorUtils;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.adapter.TipsRecycleViewAdapter;
+import com.android.loushi.loushi.adapter.TopicItemAdapter;
+import com.android.loushi.loushi.ui.activity.CategoryDetailActivity;
+import com.android.loushi.loushi.ui.activity.MainActivity;
+import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.jsonbean.StrategyJson;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
+import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.callback.AbsCallback;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by binpeiluo on 2016/7/21 0021.
  */
-public class TipsFragment extends BaseFragment {
+public class TipsFragment extends LazyFragment {
 
     private static final String TAG = "TipsFragment";
 
     private RecyclerView recycleView_tips;
     private SwipeRefreshLayout swipeRefreshLayout_tips;
 
-    private String tempUserID = "32";
-    private String tempPsw = "mtf071330";
-
     private Integer mSkip = 0;
-    private Integer mTake = 0;
-    private List<StrategyJson.BodyBean> mTipsList;
-    private TipsRecycleViewAdapter mAdapter;
+    private Integer mTake = 20;
+    private List mTipsList= new ArrayList<>();
+    private TopicItemAdapter mAdapter;
+
+    private boolean isFirstShow=true;  //判断是否是第一次加载
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-//        Log.e(TAG,"onActivityCreated");
+    protected void onCreateViewLazy(Bundle savedInstanceState) {
+        super.onCreateViewLazy(savedInstanceState);
+        setContentView(R.layout.fragment_tips);
+        initView();
+        if(isFirstShow){
+            loadData(MainActivity.user_id, mSkip, mTake);
+            isFirstShow=false;
+        }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-//        Log.e(TAG,"onCreateView");
-//        return super.onCreateView(inflater, container, savedInstanceState);  recycleView_tips
-        View view = inflater.inflate(R.layout.fragment_tips, container, false);
-        initView(view);
-//        loadData(tempUserID,mSkip,mTake);
-        return view;
-    }
-
-    private void loadData(String userId,Integer skip,Integer take){
-//
-//        OkHttpUtils.post(UrlConstant.TIPSCURL)
-//                .params()
-
-
-//        OkHttpUtils.post()
-//                .url(tipsUrl)
-//                .addParams("user_id", tempUserID)
-//                .addParams("skip", skip.toString())
-//                .addParams("take", take.toString())
-//                .build()
-//                .execute(new StrategyCallBack() {
-//                    @Override
-//                    public void onError(Call call, Exception e) {
-//                        Log.e(TAG,"error");
-//                    }
-//
-//                    @Override
-//                    public void onResponse(Strategyjson response) {
-//                        Log.e(TAG,"success"+response.toString());
-//                        for (int i = 0; i < response.getBody().size(); i++) {
-//                            Strategyjson.BodyBean temp = response.getBody().get(i);
-//                            mTipsList.add(temp);
-//                        }
-//                        mAdapter.notifyDataSetChanged();
-//                    }
-//                });
-//        mSkip+=mTake;
+    private void loadData(String userId, Integer skip, final Integer take){
+        Log.i("test","GetSomeScene--skip,take=="+skip+","+take+",,,isFirstShow=="+isFirstShow);
+        OkHttpUtils.post(UrlConstant.TIPSCURL)
+                .tag(this)
+                .params(KeyConstant.USER_ID, userId)
+                .params(KeyConstant.SKIP,skip.toString())
+                .params(KeyConstant.TAKE,take.toString())
+                .execute(new AbsCallback<StrategyJson>() {
+                    @Override
+                    public StrategyJson parseNetworkResponse(Response response) throws Exception {
+                        return new Gson().fromJson(response.body().string(),StrategyJson.class);
+                    }
+                    @Override
+                    public void onResponse(boolean isFromCache, StrategyJson bodyBean, Request request, @Nullable Response response) {
+                        Log.i(TAG,"onResponse-- "+new Gson().toJson(bodyBean));
+                        if(bodyBean.getState()){
+                            mSkip+=mTake;
+                            mTipsList.addAll(bodyBean.getBody());
+                            mAdapter.notifyDataSetChanged();
+                        }else
+                            Toast.makeText(getContext(),""+bodyBean.getReturn_info(),Toast.LENGTH_SHORT).show();
+//                        Log.e(TAG,bodyBean.getBody().size()+"");
+                    }
+                });
 
     }
 
-    private void initView(View view) {
-        mTipsList = new ArrayList<StrategyJson.BodyBean>();
-        swipeRefreshLayout_tips = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout_tips);
+    private void initView() {
+        swipeRefreshLayout_tips = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout_tips.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         swipeRefreshLayout_tips.setSize(SwipeRefreshLayout.DEFAULT);
-//        swipeRefreshLayout_tips.setOnRefreshListener();
-        recycleView_tips = (RecyclerView) view.findViewById(R.id.recycleView_tips);
-        mAdapter = new TipsRecycleViewAdapter(getContext(), mTipsList);
+        recycleView_tips = (RecyclerView) findViewById(R.id.recycleView);
+        mAdapter = new TopicItemAdapter(getContext(),
+                mTipsList,
+                TopicItemAdapter.AdapterType.TIPS);
         recycleView_tips.setLayoutManager(new LinearLayoutManager(getContext()));
         recycleView_tips.addItemDecoration(new SpaceItemDecoration(getContext(), 10));
         recycleView_tips.setAdapter(mAdapter);
@@ -125,10 +115,16 @@ public class TipsFragment extends BaseFragment {
     }
 
     private void addItemClickListener() {
-        mAdapter.setmOnItemClickListener(new TipsRecycleViewAdapter.OnItemClickListener() {
+        mAdapter.setmOnItemClickListener(new TopicItemAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+                Intent intent= new Intent(getActivity(), CategoryDetailActivity.class);
+                String jsonString=new Gson().toJson(mTipsList.get(position));
+                Log.e("jsonstring",jsonString);
+                intent.putExtra(CategoryDetailActivity.TYPE,"2");
+                intent.putExtra(CategoryDetailActivity.JSONSTRING,jsonString);
+                startActivity(intent);
             }
         });
     }
@@ -139,12 +135,13 @@ public class TipsFragment extends BaseFragment {
             public void onRefresh() {
                 mSkip = 0;
                 mTipsList.clear();
-//                loadData(tempUserID, mSkip, mTake);
-                mAdapter.notifyDataSetChanged();
+                loadData(MainActivity.user_id, mSkip, mTake);
                 swipeRefreshLayout_tips.setRefreshing(false);
                 Toast.makeText(getContext(), "刷新成功", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
 
 }

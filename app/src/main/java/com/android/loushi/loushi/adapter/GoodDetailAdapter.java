@@ -1,6 +1,7 @@
 package com.android.loushi.loushi.adapter;
 
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,9 +37,15 @@ public class GoodDetailAdapter extends RecyclerView.Adapter<GoodDetailAdapter.Go
 
 
     @Override
-    public void onBindViewHolder(GoodDetailViewHolder holder, int position) {
+    public void onBindViewHolder(GoodDetailViewHolder holder, final int position) {
 
         Picasso.with(context).load(list.get(position).getUrl()).into(holder.img_good);
+        holder.img_good.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                  showBigImage(list.get(position).getUrl());
+            }
+        });
     }
 
     @Override
@@ -52,8 +59,23 @@ public class GoodDetailAdapter extends RecyclerView.Adapter<GoodDetailAdapter.Go
         public GoodDetailViewHolder(View view) {
             super(view);
             img_good = (ImageView)view.findViewById(R.id.img_good);
+
         }
 
+
+    }
+    private void showBigImage(String url){
+        ImageView img_big =new ImageView(context);
+        Picasso.with(context).load(url).into(img_big);
+        final AlertDialog dialog = new AlertDialog.Builder(context).create();
+        dialog.setView(img_big);
+        dialog.show();
+        img_big.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
     }
 }

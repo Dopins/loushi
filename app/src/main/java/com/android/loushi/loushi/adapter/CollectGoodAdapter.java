@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 
+import com.android.loushi.loushi.jsonbean.UserCollectionsGood;
 import com.android.loushi.loushi.jsonbean.UserCollectionsJson;
 import com.squareup.picasso.Picasso;
 
@@ -29,10 +30,12 @@ import okhttp3.Call;
 public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter.CollectGoodViewHolder> {
 
     private Context context;
-    private List<UserCollectionsJson.BodyBean.GoodsBean> goodsBeanList;
-    public CollectGoodAdapter(Context context,List<UserCollectionsJson.BodyBean.GoodsBean> goodsBeanList){
+    private String type;
+    private List<UserCollectionsJson.BodyBean> beanList;
+    public CollectGoodAdapter(Context context,List<UserCollectionsJson.BodyBean> beanList,String type){
         this.context = context;
-        this.goodsBeanList=goodsBeanList;
+        this.beanList=beanList;
+        this.type = type;
     }
     @Override
     public CollectGoodViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -43,12 +46,13 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
 
     @Override
     public void onBindViewHolder(final CollectGoodViewHolder holder, final int position) {
-        final UserCollectionsJson.BodyBean.GoodsBean goodsBean =goodsBeanList.get(position);
-        holder.tv_name.setText(goodsBean.getName());
-        Picasso.with(context).load(goodsBean.getImages().get(0).getUrl()).fit().into(holder.img_good);
+        if(type.equals("3")) {
+            final UserCollectionsJson.BodyBean.GoodsBean goodsBean = beanList.get(position).getGoods();
+            holder.tv_name.setText(goodsBean.getName());
+            Picasso.with(context).load(goodsBean.getImages().get(0).getUrl()).fit().into(holder.img_good);
 
-        holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
-        holder.btn_like.setChecked(true);
+            holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
+            holder.btn_like.setChecked(true);
 //        holder.btn_like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
@@ -84,12 +88,13 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
 //                });
 //            }
 //        });
+        }
 
     }
 
     @Override
     public int getItemCount() {
-        return goodsBeanList.size();
+        return beanList.size();
     }
     public static class CollectGoodViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name;

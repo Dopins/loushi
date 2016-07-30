@@ -4,18 +4,25 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.AdViewpagerAdapter;
 import com.android.loushi.loushi.adapter.ViewPagerAdapter;
+import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.ui.fragment.CollectGoodFragment;
 import com.android.loushi.loushi.ui.fragment.SceneDetailDesignFragment;
 import com.android.loushi.loushi.ui.fragment.SceneDetailGoodFragment;
 import com.android.loushi.loushi.viewpager.CarouselViewPager;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -32,9 +39,24 @@ public class SceneDetailActivity extends  BaseActivity {
     private List<String> list_title;
     private TabLayout tabLayout;
     private Toolbar mToolbar;
+    private ImageButton back;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
-    public static String scene_id="SCENE_ID";
+    public static  String SCENE_STRING="SCENE_STRING";
+    public static  String SCENE_ID="SCENE_ID";
+    private SceneJson.BodyBean scenebean;
+
+    private LinearLayout collect_bar;
+    private LinearLayout collect;
+    private LinearLayout comment;
+    private LinearLayout share;
+    private ImageButton btn_collect;
+    private ImageButton btn_comment;
+    private TextView tv_collect_count;
+    private TextView tv_comment_count;
+    private TextView tv_share_count;
+    private String sceneJsonString="";
+    public  String scene_id="1";
 
     @Override
     protected int getLayoutId() {
@@ -44,9 +66,17 @@ public class SceneDetailActivity extends  BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scene_detail);
-
+        if(getIntent().getStringExtra(SCENE_STRING)!=null)
+        sceneJsonString = getIntent().getStringExtra(SCENE_STRING);
+        Log.e("sceneJson",sceneJsonString);
+        scenebean=new SceneJson.BodyBean();
+        scenebean=new Gson().fromJson(sceneJsonString,SceneJson.BodyBean.class);
+        scene_id = scenebean.getId()+"";
+        Log.e("scene_id", scene_id);
         initView();
         initTablayout();
+        initToobar();
+        //bindCollectBarView();
     }
 
     private void initView() {
@@ -72,16 +102,20 @@ public class SceneDetailActivity extends  BaseActivity {
         AdViewpagerAdapter adViewpagerAdapter = new AdViewpagerAdapter(views);
 
         carouselViewPager.setAdapter(adViewpagerAdapter);
-        Picasso.with(getApplicationContext()).load("http://119.29.187.58:8080/loushi/image/scene/guangwai001.jpeg").into(view1);
-        Picasso.with(getApplicationContext()).load("http://119.29.187.58:8080/loushi/image/scene/guangwai001.jpeg").into(view2);
-        Picasso.with(getApplicationContext()).load("http://119.29.187.58:8080/loushi/image/scene/guangwai001.jpeg").into(view3);
-        Picasso.with(getApplicationContext()).load("http://119.29.187.58:8080/loushi/image/scene/guangwai001.jpeg").into(view4);
+        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view1);
+        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view2);
+        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view3);
+        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view4);
     }
     private void initTablayout(){
         tabLayout=(TabLayout)findViewById(R.id.toolbar_tab);
         viewPager = (ViewPager)findViewById(R.id.main_vp_container);
         sceneDetailGoodFragment = new SceneDetailGoodFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("SCENE_ID",scene_id);
+        sceneDetailGoodFragment.setArguments(bundle);
         sceneDetailDesignFragment = new SceneDetailDesignFragment();
+        sceneDetailDesignFragment.setArguments(bundle);
         list_fragment = new ArrayList<>();
         list_title = new ArrayList<>();
         list_fragment.add(sceneDetailDesignFragment);
@@ -99,5 +133,31 @@ public class SceneDetailActivity extends  BaseActivity {
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), list_fragment, list_title);
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+    }
+    private void initToobar(){
+        mToolbar=(Toolbar)findViewById(R.id.program_toolbar);
+        setSupportActionBar(mToolbar);
+        back=(ImageButton)mToolbar.findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+    private void bindCollectBarView(){
+
+            collect_bar=(LinearLayout)findViewById(R.id.collect_bar);
+            //collect_bar.setVisibility(View.GONE);
+            collect = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_like);
+            comment = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_comment);
+            share = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_share);
+            btn_collect=(ImageButton)collect.findViewById(R.id.collect_bar_btn_like);
+            tv_collect_count=(TextView)collect.findViewById(R.id.collect_bar_tv_like);
+            tv_comment_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_comment);
+            tv_share_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_share);
+            tv_collect_count.setText(scenebean.getCollectionNum()+"");
+
+
     }
 }

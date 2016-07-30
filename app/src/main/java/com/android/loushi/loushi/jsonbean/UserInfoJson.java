@@ -1,138 +1,317 @@
 package com.android.loushi.loushi.jsonbean;
-
 import java.io.Serializable;
 
 /**
- * Created by Administrator on 2016/7/24.
+ * @author  江镇雄
+ * @date 创建时间：2016年7月22日 下午4:08:35 
+ * @version 1.0.1
+ * 改schoolName为school 
  */
-public class UserInfoJson  implements Serializable {
-    /**
-     * state : 1
-     * code : 10000
-     * return_info : 错误信息
-     * body : {"nickname":"昵称","mobilePhone":"110","email":"111@111.com","headImgUrl":"头像链接","schoolName":"","sex":0,"messageCount":7,"userID":22}
-     */
+public class UserInfoJson implements Serializable {
 
-    private int state;
-    private String code;
-    private String return_info;
-    /**
-     * nickname : 昵称
-     * mobilePhone : 110
-     * email : 111@111.com
-     * headImgUrl : 头像链接
-     * schoolName :
-     * sex : 0
-     * messageCount : 7
-     * userID : 22
-     */
+	private int id;
+    private	String nickname;
+	private String mobilePhone;
+	private String email;
+	private String headImgUrl;
+	private School school;
+	private boolean sex;
+	private int messageCount;
+	private int userID;
+	/**
+	 * email :
+	 * headImgUrl : http://119.29.187.58:8080/loushi/headImg/default.jpg
+	 * id : 47
+	 * messageCount : 0
+	 * mobilePhone : 13750065622
+	 * nickname :
+	 * school : {"area":{"city":"11","district":"11","id":1,"province":"广东省","valid":false},"id":1,"name":"华南理工大学","valid":true}
+	 * sex : false
+	 * userID : 48
+	 */
 
-    private BodyBean body;
+	private BodyBean body;
+	/**
+	 * body : {"email":"","headImgUrl":"http://119.29.187.58:8080/loushi/headImg/default.jpg","id":47,"messageCount":0,"mobilePhone":"13750065622","nickname":"","school":{"area":{"city":"11","district":"11","id":1,"province":"广东省","valid":false},"id":1,"name":"华南理工大学","valid":true},"sex":false,"userID":48}
+	 * code :
+	 * return_info :
+	 * state : true
+	 */
 
-    public int getState() {
-        return state;
-    }
+	private String code;
+	private String return_info;
+	private boolean state;
 
-    public void setState(int state) {
-        this.state = state;
-    }
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	public String getMobilePhone() {
+		return mobilePhone;
+	}
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getHeadImgUrl() {
+		return headImgUrl;
+	}
+	public void setHeadImgUrl(String headImgUrl) {
+		this.headImgUrl = headImgUrl;
+	}
+	public School getSchool() {
+		return school;
+	}
+	public void setSchool(School school) {
+		this.school = school;
+	}
+	public boolean isSex() {
+		return sex;
+	}
+	public void setSex(boolean sex) {
+		this.sex = sex;
+	}
+	public int getMessageCount() {
+		return messageCount;
+	}
+	public void setMessageCount(int messageCount) {
+		this.messageCount = messageCount;
+	}
+	public int getUserID() {
+		return userID;
+	}
+	public void setUserID(int userID) {
+		this.userID = userID;
+	}
 
-    public String getCode() {
-        return code;
-    }
+	public BodyBean getBody() {
+		return body;
+	}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+	public void setBody(BodyBean body) {
+		this.body = body;
+	}
 
-    public String getReturn_info() {
-        return return_info;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public void setReturn_info(String return_info) {
-        this.return_info = return_info;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-    public BodyBean getBody() {
-        return body;
-    }
+	public String getReturn_info() {
+		return return_info;
+	}
 
-    public void setBody(BodyBean body) {
-        this.body = body;
-    }
+	public void setReturn_info(String return_info) {
+		this.return_info = return_info;
+	}
 
-    public static class BodyBean implements Serializable  {
-        private String nickname;
-        private String mobilePhone;
-        private String email;
-        private String headImgUrl;
-        private String schoolName;
-        private int sex;
-        private int messageCount;
-        private int userID;
+	public boolean isState() {
+		return state;
+	}
 
-        public String getNickname() {
-            return nickname;
-        }
+	public void setState(boolean state) {
+		this.state = state;
+	}
 
-        public void setNickname(String nickname) {
-            this.nickname = nickname;
-        }
+	public static class BodyBean implements  Serializable{
+		private String email;
+		private String headImgUrl;
+		private int id;
+		private int messageCount;
+		private String mobilePhone;
+		private String nickname;
+		/**
+		 * area : {"city":"11","district":"11","id":1,"province":"广东省","valid":false}
+		 * id : 1
+		 * name : 华南理工大学
+		 * valid : true
+		 */
 
-        public String getMobilePhone() {
-            return mobilePhone;
-        }
+		private SchoolBean school;
+		private boolean sex;
+		private int userID;
 
-        public void setMobilePhone(String mobilePhone) {
-            this.mobilePhone = mobilePhone;
-        }
+		public String getEmail() {
+			return email;
+		}
 
-        public String getEmail() {
-            return email;
-        }
+		public void setEmail(String email) {
+			this.email = email;
+		}
 
-        public void setEmail(String email) {
-            this.email = email;
-        }
+		public String getHeadImgUrl() {
+			return headImgUrl;
+		}
 
-        public String getHeadImgUrl() {
-            return headImgUrl;
-        }
+		public void setHeadImgUrl(String headImgUrl) {
+			this.headImgUrl = headImgUrl;
+		}
 
-        public void setHeadImgUrl(String headImgUrl) {
-            this.headImgUrl = headImgUrl;
-        }
+		public int getId() {
+			return id;
+		}
 
-        public String getSchoolName() {
-            return schoolName;
-        }
+		public void setId(int id) {
+			this.id = id;
+		}
 
-        public void setSchoolName(String schoolName) {
-            this.schoolName = schoolName;
-        }
+		public int getMessageCount() {
+			return messageCount;
+		}
 
-        public int getSex() {
-            return sex;
-        }
+		public void setMessageCount(int messageCount) {
+			this.messageCount = messageCount;
+		}
 
-        public void setSex(int sex) {
-            this.sex = sex;
-        }
+		public String getMobilePhone() {
+			return mobilePhone;
+		}
 
-        public int getMessageCount() {
-            return messageCount;
-        }
+		public void setMobilePhone(String mobilePhone) {
+			this.mobilePhone = mobilePhone;
+		}
 
-        public void setMessageCount(int messageCount) {
-            this.messageCount = messageCount;
-        }
+		public String getNickname() {
+			return nickname;
+		}
 
-        public int getUserID() {
-            return userID;
-        }
+		public void setNickname(String nickname) {
+			this.nickname = nickname;
+		}
 
-        public void setUserID(int userID) {
-            this.userID = userID;
-        }
-    }
+		public SchoolBean getSchool() {
+			return school;
+		}
+
+		public void setSchool(SchoolBean school) {
+			this.school = school;
+		}
+
+		public boolean isSex() {
+			return sex;
+		}
+
+		public void setSex(boolean sex) {
+			this.sex = sex;
+		}
+
+		public int getUserID() {
+			return userID;
+		}
+
+		public void setUserID(int userID) {
+			this.userID = userID;
+		}
+
+		public static class SchoolBean implements  Serializable{
+			/**
+			 * city : 11
+			 * district : 11
+			 * id : 1
+			 * province : 广东省
+			 * valid : false
+			 */
+
+			private AreaBean area;
+			private int id;
+			private String name;
+			private boolean valid;
+
+			public AreaBean getArea() {
+				return area;
+			}
+
+			public void setArea(AreaBean area) {
+				this.area = area;
+			}
+
+			public int getId() {
+				return id;
+			}
+
+			public void setId(int id) {
+				this.id = id;
+			}
+
+			public String getName() {
+				return name;
+			}
+
+			public void setName(String name) {
+				this.name = name;
+			}
+
+			public boolean isValid() {
+				return valid;
+			}
+
+			public void setValid(boolean valid) {
+				this.valid = valid;
+			}
+
+			public static class AreaBean implements  Serializable{
+				private String city;
+				private String district;
+				private int id;
+				private String province;
+				private boolean valid;
+
+				public String getCity() {
+					return city;
+				}
+
+				public void setCity(String city) {
+					this.city = city;
+				}
+
+				public String getDistrict() {
+					return district;
+				}
+
+				public void setDistrict(String district) {
+					this.district = district;
+				}
+
+				public int getId() {
+					return id;
+				}
+
+				public void setId(int id) {
+					this.id = id;
+				}
+
+				public String getProvince() {
+					return province;
+				}
+
+				public void setProvince(String province) {
+					this.province = province;
+				}
+
+				public boolean isValid() {
+					return valid;
+				}
+
+				public void setValid(boolean valid) {
+					this.valid = valid;
+				}
+			}
+		}
+	}
 }
