@@ -70,7 +70,7 @@ public class SceneListFragment extends LazyFragment {
         sceneRecyclerViewAdapter.setOnItemClickListener(new SceneRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
                 Intent intent= new Intent(getActivity(), SceneDetailActivity.class);
                 String sceneJsonString=new Gson().toJson(bodyBeanList.get(position));
                 intent.putExtra(SceneDetailActivity.SCENE_STRING,sceneJsonString);

@@ -3,6 +3,7 @@ package com.android.loushi.loushi.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -13,11 +14,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.StrategyJson;
 import com.android.loushi.loushi.jsonbean.TopicJson;
+import com.android.loushi.loushi.util.KeyConstant;
 import com.google.gson.Gson;
+import com.lzy.okhttputils.OkHttpUtils;
 
 import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Administrator on 2016/7/29.
@@ -105,10 +112,47 @@ public class CategoryDetailActivity extends BaseActivity {
         tv_comment_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_comment);
         tv_share_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_share);
         btn_collect.setSelected(topicBean.getCollected());
-        tv_collect_count.setText(topicBean.getCollectionNum()+"");
-        tv_comment_count.setText(topicBean.getCommentNum()+"");
-        tv_share_count.setText(topicBean.getForwordNum()+"");
+        tv_collect_count.setText(topicBean.getCollectionNum() + "");
+        tv_comment_count.setText(topicBean.getCommentNum() + "");
+        tv_share_count.setText(topicBean.getForwordNum() + "");
 
 
     }
+
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.collect_bar_linear_comment:
+                Intent intent = new Intent(CategoryDetailActivity.this,CommentActivity.class);
+                intent.putExtra(KeyConstant.TYPE,type);
+                intent.putExtra(KeyConstant.PID, topicBean.getId()+"");
+                startActivity(intent);
+                break;
+            case R.id.collect_bar_linear_like:
+                OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollect")
+                        .params("user_id", user_id).params("type", type).params("pid", topicBean.getId()+"")
+                        .tag(this).execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
+
+                    @Override
+                    public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
+                        if (responseJson.getState()) {
+                            if (btn_collect.isSelected()) {
+                                int num = Integer.parseInt(tv_collect_count.getText().toString()) - 1;
+
+                                tv_collect_count.setText(num + "");
+                                btn_collect.setSelected(false);
+                            } else {
+                                int num = Integer.parseInt(tv_collect_count.getText().toString()) + 1;
+                                tv_collect_count.setText(num + "");
+                                btn_collect.setSelected(true);
+                            }
+                        }
+                    }
+                });
+                break;
+
+
+        }
+    }
+
+
 }

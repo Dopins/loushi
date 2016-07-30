@@ -122,7 +122,7 @@ public class TipsFragment extends LazyFragment {
                 Intent intent= new Intent(getActivity(), CategoryDetailActivity.class);
                 String jsonString=new Gson().toJson(mTipsList.get(position));
                 Log.e("jsonstring",jsonString);
-                intent.putExtra(CategoryDetailActivity.TYPE,"1");
+                intent.putExtra(CategoryDetailActivity.TYPE,"2");
                 intent.putExtra(CategoryDetailActivity.JSONSTRING,jsonString);
                 startActivity(intent);
             }

@@ -143,7 +143,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
                 Intent intent= new Intent(TopicItemActivity.this, CategoryDetailActivity.class);
                 String jsonString=new Gson().toJson(mTopicList.get(position));
                 Log.e("jsonstring", jsonString);
-                intent.putExtra(CategoryDetailActivity.TYPE,"0");
+                intent.putExtra(CategoryDetailActivity.TYPE,"1");
                 intent.putExtra(CategoryDetailActivity.JSONSTRING,jsonString);
                 startActivity(intent);
             }

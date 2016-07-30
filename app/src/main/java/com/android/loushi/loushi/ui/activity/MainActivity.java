@@ -3,6 +3,7 @@ package com.android.loushi.loushi.ui.activity;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentTabHost;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -11,11 +12,14 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 
+import com.alibaba.sdk.android.AlibabaSDK;
+import com.alibaba.sdk.android.trade.TradeConfigs;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.ui.fragment.CategoryFragment;
 import com.android.loushi.loushi.ui.fragment.MyFragment;
 import com.android.loushi.loushi.ui.fragment.PersonFragment;
 import com.android.loushi.loushi.ui.fragment.SceneFragment;
+import com.taobao.tae.sdk.callback.InitResultCallback;
 
 public class MainActivity extends BaseActivity {
     public FragmentTabHost mTabHost;
@@ -36,6 +40,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         initView();
+        InitTaobao();
     }
     private void initView(){
         layoutInflater = LayoutInflater.from(this);
@@ -101,4 +106,25 @@ protected void onSaveInstanceState(Bundle outState) {
 
 
 }
+    private void InitTaobao() {
+        TradeConfigs.defaultTaokePid = "mm_114880276_0_0";
+        AlibabaSDK.asyncInit(this, new InitResultCallback() {
+
+            @Override
+            public void onSuccess() {
+//                Toast.makeText(getApplicationContext(), "初始化成功", Toast.LENGTH_SHORT)
+//                        .show();
+                Log.e("splash", "success");
+                //showItemDetailPage(ll);
+            }
+
+            @Override
+            public void onFailure(int code, String message) {
+//                Toast.makeText(getApplicationContext(), "初始化异常", Toast.LENGTH_SHORT)
+//                        .show();
+                Log.e("splash", "nosuccess" + message);
+            }
+
+        });
+    }
 }

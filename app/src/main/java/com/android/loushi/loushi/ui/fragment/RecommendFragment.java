@@ -74,7 +74,7 @@ public class RecommendFragment extends LazyFragment {
         recommendRecycleViewAdapter.setOnItemClickListener(new RecommendRecycleViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
                 Log.e("pos",position+"");
                 if(recommendRecycleViewAdapter.getItemViewType(position)==0){
                     Intent intent= new Intent(getActivity(), SceneDetailActivity.class);
@@ -86,7 +86,7 @@ public class RecommendFragment extends LazyFragment {
                     Intent intent= new Intent(getActivity(), CategoryDetailActivity.class);
                     String jsonString=new Gson().toJson(bodyBeanList.get(position/4).getTopic());
                     Log.e("jsonstring",jsonString);
-                    intent.putExtra(CategoryDetailActivity.TYPE,"0");
+                    intent.putExtra(CategoryDetailActivity.TYPE,"1");
                     intent.putExtra(CategoryDetailActivity.JSONSTRING,jsonString);
                     startActivity(intent);
                 }
@@ -94,7 +94,7 @@ public class RecommendFragment extends LazyFragment {
                     Intent intent= new Intent(getActivity(), CategoryDetailActivity.class);
                     String jsonString=new Gson().toJson(bodyBeanList.get(position/4).getStrategy());
                     Log.e("jsonstring",jsonString);
-                    intent.putExtra(CategoryDetailActivity.TYPE,"1");
+                    intent.putExtra(CategoryDetailActivity.TYPE,"2");
                     intent.putExtra(CategoryDetailActivity.JSONSTRING,jsonString);
                     startActivity(intent);
                 }
