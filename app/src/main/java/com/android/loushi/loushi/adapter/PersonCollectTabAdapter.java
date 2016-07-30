@@ -1,6 +1,7 @@
 package com.android.loushi.loushi.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.ui.fragment.CollectGoodFragment;
 
 import java.util.List;
 
@@ -34,6 +36,12 @@ public class PersonCollectTabAdapter extends FragmentPagerAdapter {
     }
     @Override
     public Fragment getItem(int position) {
+//        CollectGoodFragment collectGoodFragment = new CollectGoodFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putString(CollectGoodFragment.TYPE,position+"");
+//        collectGoodFragment.setArguments(bundle);
+//        return collectGoodFragment;
+
         return list_fragment.get(position);
     }
 
@@ -41,7 +49,8 @@ public class PersonCollectTabAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return list_fragment.size();
     }
-    public View getTabView(int position) {
+
+    public Object instantiateItem(int position) {
         View v = LayoutInflater.from(context).inflate(R.layout.tab_item_view_collect, null);
         TextView tv_collect_count = (TextView) v.findViewById(R.id.tv_tab_view_count);
         TextView tv_collect_cate=(TextView) v.findViewById(R.id.tv_tab_view_cate);

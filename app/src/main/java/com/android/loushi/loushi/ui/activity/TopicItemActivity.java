@@ -159,8 +159,13 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.imageView_search:
+                entryToSearch();
                 break;
         }
-        Toast.makeText(this, "on click", Toast.LENGTH_SHORT).show();
+    }
+
+    private void entryToSearch(){
+        Intent intent=new Intent(this,SearchActivity.class);
+        startActivity(intent);
     }
 }

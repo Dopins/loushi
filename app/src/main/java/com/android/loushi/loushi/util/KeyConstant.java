@@ -11,5 +11,7 @@ public class KeyConstant {
     public static final String SKIP="skip";
     public static final String TAKE="take";
 
+    public static final String REPLYED_ID="replyed_id";
+    public static final String CONTENT="content";
 
 }

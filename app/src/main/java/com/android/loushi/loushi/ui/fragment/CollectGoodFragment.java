@@ -40,7 +40,7 @@ public class CollectGoodFragment extends LazyFragment {
     private List<UserCollectionsJson.BodyBean> beanList=new ArrayList<UserCollectionsJson.BodyBean>();
     private UserCollectionsJson.BodyBean.GoodsBean goodsBean;
     private CollectGoodAdapter collectGoodAdapter;
-    private static String TYPE="TYPE";
+    public static String TYPE="TYPE";
     private String type="3";
     private int get_total=0;
     private int skip=0;
@@ -48,6 +48,7 @@ public class CollectGoodFragment extends LazyFragment {
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
         setContentView(R.layout.fragment_collect_good);
+        type=getArguments().getString(TYPE);
         //type = getArguments().getString(TYPE);
         //recyclerView = (RecyclerView)findViewById(R.id.recycleView);
 //        for(int i =0;i<=9;i++){
@@ -98,7 +99,7 @@ public class CollectGoodFragment extends LazyFragment {
 
                 OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollections")
                 // 请求方式和请求url
-                .tag(this).params("type", "3").params("user_id", BaseActivity.user_id)
+                .tag(this).params("type", type).params("user_id", BaseActivity.user_id)
                 .params("skip", get_total + "").params("take", "6")
 
                         // 请求的 tag, 主要用于取消对应的请求

@@ -1,30 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_title"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:contentInsetStart="0dp"
+        tools:showIn="@layout/activity_topic_item">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView_back"
+                android:layout_width="?android:attr/actionBarSize"
+                android:layout_height="?android:attr/actionBarSize"
+                android:background="?@android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:scaleType="center"
+                android:src="@drawable/arrow_back" />
 
 
-    <LinearLayout
+            <TextView
+                android:id="@+id/textView_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/imageView_back"
+                android:text="文艺"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/imageView_search"
+                android:layout_width="?android:attr/actionBarSize"
+                android:layout_height="?android:attr/actionBarSize"
+                android:layout_alignParentRight="true"
+                android:background="?@android:attr/selectableItemBackground"
+                android:scaleType="center"
+                android:src="@drawable/search" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="?android:attr/actionBarSize"
+                android:layout_height="?android:attr/actionBarSize"
+                android:layout_alignParentRight="true"
+                android:background="?@android:attr/selectableItemBackground"
+                android:text="注销"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <!--<include -->
+    <!--layout="@layout/layout_recyclerview" />-->
+
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorLine"
-        android:orientation="vertical">
+        android:layout_above="@+id/layout_bottom"
+        android:layout_below="@id/toolbar_title"
+        android:layout_marginTop="15dp">
 
-        <include
-            android:id="@+id/layout_toolbar"
-            layout="@layout/layout_toolbar" />
-
-        <View
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="wrap_content">
 
-        <include layout="@layout/layout_recyclerview" />
-    </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycleView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="21dp" />
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
     <RelativeLayout
+        android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
@@ -54,7 +120,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_toLeftOf="@+id/imageView_sure"
-            android:layout_toRightOf="@id/imageView_comment" />
+            android:layout_toRightOf="@id/imageView_comment"
+            android:hint="新评论"
+            android:textSize="16sp" />
 
 
         <ImageView

@@ -35,6 +35,8 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.loushi.loushi.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -243,7 +245,11 @@ public class SlidingTabLayout extends HorizontalScrollView {
             if (desc != null) {
                 tabView.setContentDescription(desc);
             }
-
+            TextView tv_collect_cate =(TextView)tabView.findViewById(R.id.tv_tab_view_cate);
+            if(i==0)
+                tv_collect_cate.setText("场景");
+            if(i==1)
+                tv_collect_cate.setText("指南");
             mTabStrip.addView(tabView);
             if (i == mViewPager.getCurrentItem()) {
                 tabView.setSelected(true);
