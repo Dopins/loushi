@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,8 @@ import com.android.loushi.loushi.adapter.RecommendRecycleViewAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.RecommendJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
+import com.android.loushi.loushi.ui.activity.CategoryDetailActivity;
+import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
 import com.google.gson.Gson;
@@ -72,17 +75,30 @@ public class RecommendFragment extends LazyFragment {
             @Override
             public void onItemClick(View view, int position) {
                 Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(getActivity(), WebViewActivity.class);
-//                //intent.putExtra
-//                //传入参数 给webview Post
-//                int pos = position;
-//                if (tabIndex == 0)
-//                    pos = position - 1;
-//                //pos -=1;
-//                intent.putExtra(WebViewActivity.TYPE, "0");
-//                //将scene以json格式传入
-//                intent.putExtra(WebViewActivity.SCENE, new Gson().toJson(bodyBeanList.get(pos)));
-//                startActivityForResult(intent, 2);
+                Log.e("pos",position+"");
+                if(recommendRecycleViewAdapter.getItemViewType(position)==0){
+                    Intent intent= new Intent(getActivity(), SceneDetailActivity.class);
+                    String sceneJsonString=new Gson().toJson(bodyBeanList.get(position/4).getScene());
+                    intent.putExtra(SceneDetailActivity.SCENE_STRING,sceneJsonString);
+                    startActivity(intent);
+                }
+                if(recommendRecycleViewAdapter.getItemViewType(position)==1){
+                    Intent intent= new Intent(getActivity(), CategoryDetailActivity.class);
+                    String jsonString=new Gson().toJson(bodyBeanList.get(position/4).getTopic());
+                    Log.e("jsonstring",jsonString);
+                    intent.putExtra(CategoryDetailActivity.TYPE,"0");
+                    intent.putExtra(CategoryDetailActivity.JSONSTRING,jsonString);
+                    startActivity(intent);
+                }
+                if(recommendRecycleViewAdapter.getItemViewType(position)==2){
+                    Intent intent= new Intent(getActivity(), CategoryDetailActivity.class);
+                    String jsonString=new Gson().toJson(bodyBeanList.get(position/4).getStrategy());
+                    Log.e("jsonstring",jsonString);
+                    intent.putExtra(CategoryDetailActivity.TYPE,"1");
+                    intent.putExtra(CategoryDetailActivity.JSONSTRING,jsonString);
+                    startActivity(intent);
+                }
+
             }
         });
     }

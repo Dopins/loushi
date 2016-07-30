@@ -57,8 +57,9 @@
         <activity android:name=".ui.activity.PersonalInformationActivity"></activity>
         <activity android:name=".ui.activity.CommentActivity">
 
-        </activity>
 
+        </activity>
+<activity android:name=".ui.activity.CategoryDetailActivity"></activity>
 
         <activity
             android:name="com.mob.tools.MobUIShell"

@@ -8,9 +8,13 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.jsonbean.StrategyJson;
+import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.google.gson.Gson;
 
 import okhttp3.Call;
@@ -21,6 +25,20 @@ import okhttp3.Call;
 public class CategoryDetailActivity extends BaseActivity {
     private WebView webView;
     private LinearLayout collect_bar;
+    private LinearLayout collect;
+    private LinearLayout comment;
+    private LinearLayout share;
+    private ImageButton btn_collect;
+    private ImageButton btn_comment;
+    private TextView tv_collect_count;
+    private TextView tv_comment_count;
+    private TextView tv_share_count;
+    public static String TYPE="TYPE";
+    public static String JSONSTRING="JSONSTRING";
+    private String jsonstring="";
+    private String type="0";
+    private TopicJson.BodyBean topicBean;
+    //private StrategyJson.BodyBean strategyBean;
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_scene_detail_design;
@@ -29,13 +47,17 @@ public class CategoryDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_scene_detail_design);
-
+        jsonstring=getIntent().getStringExtra(JSONSTRING);
+        Log.e("stra1",jsonstring);
+        topicBean=new Gson().fromJson(jsonstring, TopicJson.BodyBean.class);
+        Log.e("stra",topicBean.getName());
         initView();
     }
 
     private void initView() {
         initWebView();
-        collect_bar = (LinearLayout)findViewById(R.id.collect_bar);
+
+        bindCollectBarView();
 
     }
 
@@ -70,7 +92,23 @@ public class CategoryDetailActivity extends BaseActivity {
 
         webView.loadUrl("http://172.16.1.218:8020/111/topicDetail.html");
     }
-    private void initCollectBar(){
+
+    private void bindCollectBarView(){
+
+        collect_bar=(LinearLayout)findViewById(R.id.collect_bar);
+        //collect_bar.setVisibility(View.GONE);
+        collect = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_like);
+        comment = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_comment);
+        share = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_share);
+        btn_collect=(ImageButton)collect.findViewById(R.id.collect_bar_btn_like);
+        tv_collect_count=(TextView)collect.findViewById(R.id.collect_bar_tv_like);
+        tv_comment_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_comment);
+        tv_share_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_share);
+        btn_collect.setSelected(topicBean.getCollected());
+        tv_collect_count.setText(topicBean.getCollectionNum()+"");
+        tv_comment_count.setText(topicBean.getCommentNum()+"");
+        tv_share_count.setText(topicBean.getForwordNum()+"");
+
 
     }
 }
