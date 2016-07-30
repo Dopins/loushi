@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,7 @@ import com.android.loushi.loushi.callback.UserCollectCallback;
 import com.android.loushi.loushi.jsonbean.GoodsJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.SceneGoodJson;
+import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
@@ -101,6 +103,13 @@ public class GoodDetailActivity extends  BaseActivity {
         price_symbol = (TextView) findViewById(R.id.price_symbol);
         tv_good_price = (TextView) findViewById(R.id.tv_good_price);
         btn_buy = (Button) findViewById(R.id.btn_buy);
+        back=(ImageButton)program_toolbar.findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         bindCollectBarView();
 
 
@@ -124,7 +133,7 @@ public class GoodDetailActivity extends  BaseActivity {
         getGood();
         //SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(this,5);
 
-        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(5, StaggeredGridLayoutManager.VERTICAL);
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(goodDetailAdapter);
         //recyclerView.addItemDecoration(spaceItemDecoration);
@@ -135,10 +144,10 @@ public class GoodDetailActivity extends  BaseActivity {
                 .tag(getApplicationContext()).params("user_id", BaseActivity.user_id).params("good_id", good_id)
                 .execute(new JsonCallback<GoodsJson>(GoodsJson.class) {
                     @Override
-                    public void onResponse(boolean b, GoodsJson goodsJson, Request request, Response response) {
+                    public void onResponse(boolean b, final GoodsJson goodsJson, Request request, Response response) {
                         Log.e("atg", new Gson().toJson(goodsJson));
                         if (goodsJson.getState()) {
-                            GoodsJson.BodyBean good= goodsJson.getBody();
+                            final GoodsJson.BodyBean good = goodsJson.getBody();
                             //bodyBeanList.addAll(sceneGoodJson.getBody());
                             list.addAll(goodsJson.getBody().getImages());
                             Picasso.with(GoodDetailActivity.this).load(goodsJson.getBody().getImages().get(0).getUrl()).into(img_good);
@@ -150,6 +159,15 @@ public class GoodDetailActivity extends  BaseActivity {
                             tv_collect_count.setText(good.getCollectionNum() + "");
                             tv_share_count.setText(good.getForwordNum() + "");
                             tv_comment_count.setText(good.getForwordNum() + "");
+                            comment.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(GoodDetailActivity.this,CommentActivity.class);
+                                    intent.putExtra(KeyConstant.TYPE,"3");
+                                    intent.putExtra(KeyConstant.PID, good.getId() + "");
+                                    startActivity(intent);
+                                }
+                            });
                             Log.e("collect1", btn_collect.isSelected() + "");
                             initCollect(good.getCollected());
 
@@ -170,7 +188,7 @@ public class GoodDetailActivity extends  BaseActivity {
         btn_buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showItemDetailPage(show_taobao,"520273718234");
+                showItemDetailPage(show_taobao, "520273718234");
             }
         });
     }
@@ -210,22 +228,20 @@ public class GoodDetailActivity extends  BaseActivity {
             public void onClick(View v) {
 
                 OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollect")
-                        .params("user_id",user_id).params("type","3").params("pid",good_id)
+                        .params("user_id", user_id).params("type", "3").params("pid", good_id)
                         .tag(this).execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
 
                     @Override
                     public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
-                        if(responseJson.getState()){
-                            if(btn_collect.isSelected()){
+                        if (responseJson.getState()) {
+                            if (btn_collect.isSelected()) {
                                 int num = Integer.parseInt(tv_collect_count.getText().toString()) - 1;
 
-                                tv_collect_count.setText(num+"");
+                                tv_collect_count.setText(num + "");
                                 btn_collect.setSelected(false);
-                            }
-                            else
-                            {
-                                int num = Integer.parseInt(tv_collect_count.getText().toString()) +1;
-                                tv_collect_count.setText(num+"");
+                            } else {
+                                int num = Integer.parseInt(tv_collect_count.getText().toString()) + 1;
+                                tv_collect_count.setText(num + "");
                                 btn_collect.setSelected(true);
                             }
                         }
@@ -233,5 +249,12 @@ public class GoodDetailActivity extends  BaseActivity {
                 });
             }
         });
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()){
+
+
+        }
     }
 }

@@ -73,8 +73,8 @@ public class LoginFragment extends Fragment {
 
     private void setLoginInfoFromCache() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
-        String phone = sharedPreferences.getString("phone", "10086");
-        String password = sharedPreferences.getString("password", "10086");
+        String phone = sharedPreferences.getString("phone","");
+        String password = sharedPreferences.getString("password","");
         login_edit_phone.setText(phone);
         login_edit_password.setText(password);
     }
@@ -193,8 +193,8 @@ public class LoginFragment extends Fragment {
                         editor.putString("mobilePhone", body.getMobilePhone());
                         editor.putString("email", body.getEmail());
                         editor.putString("headImgUrl", body.getHeadImgUrl());
-                        editor.putString("schoolName", body.getSchoolName());
-                        editor.putInt("sex", body.getSex());
+                        editor.putString("schoolName", body.getSchool().getName());
+//                        editor.putInt("sex", body.getSex());
                         editor.putInt("messageCount", body.getMessageCount());
                         editor.putInt("userID", body.getUserID());
                         editor.commit();

@@ -17,6 +17,7 @@ import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
+import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -66,9 +67,10 @@ public class InterestFragment extends LazyFragment {
         sceneRecyclerViewAdapter.setOnItemClickListener(new SceneRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
                 Intent intent= new Intent(getActivity(), SceneDetailActivity.class);
-                intent.putExtra(SceneDetailActivity.SCENE_ID,Integer.toString(bodyBeanList.get(position).getId()));
+                String sceneJsonString=new Gson().toJson(bodyBeanList.get(position));
+                intent.putExtra(SceneDetailActivity.SCENE_STRING,sceneJsonString);
                 startActivity(intent);
 //                Intent intent = new Intent(getActivity(), WebViewActivity.class);
 //                //intent.putExtra

@@ -28,7 +28,7 @@ import okhttp3.Response;
 public class SceneDetailGoodFragment extends  LazyFragment {
     private RecyclerView recyclerView;
     private SceneDetailGoodAdapter sceneDetailGoodAdapter;
-    private List<SceneGoodJson.BodyBean> bodyBeanList;
+    private List<SceneGoodJson.BodyBean> bodyBeanList=new ArrayList<SceneGoodJson.BodyBean>();
     private String scene_id="1";
 
     @Override
@@ -41,16 +41,16 @@ public class SceneDetailGoodFragment extends  LazyFragment {
 
     private void init() {
         recyclerView = (RecyclerView)getView().findViewById(R.id.recycleView);
-        bodyBeanList=new ArrayList<SceneGoodJson.BodyBean>();
+
         sceneDetailGoodAdapter = new SceneDetailGoodAdapter(getContext(),bodyBeanList);
         getSceneGood();
         final GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
-        SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(getContext(),20);
+        //SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(getContext(),20);
 
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setAdapter(sceneDetailGoodAdapter);
-        recyclerView.addItemDecoration(spaceItemDecoration);
+        //recyclerView.addItemDecoration(spaceItemDecoration);
 
     }
     private void getSceneGood(){
