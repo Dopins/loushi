@@ -73,8 +73,8 @@ public class LoginFragment extends Fragment {
 
     private void setLoginInfoFromCache() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
-        String phone = sharedPreferences.getString("phone", "10086");
-        String password = sharedPreferences.getString("password", "10086");
+        String phone = sharedPreferences.getString("phone","");
+        String password = sharedPreferences.getString("password","");
         login_edit_phone.setText(phone);
         login_edit_password.setText(password);
     }

@@ -79,6 +79,7 @@
 
             <com.android.loushi.loushi.util.UnderLineEditText
                 android:id="@+id/edit_nickname"
+                android:singleLine="true"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@null"
