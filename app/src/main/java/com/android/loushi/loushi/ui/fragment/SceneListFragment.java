@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.SceneRecyclerViewAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.jsonbean.RecommendJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
@@ -29,17 +30,16 @@ import okhttp3.Response;
 /**
  * Created by dopin on 2016/7/17.
  */
-public class StyleFragment extends LazyFragment {
+public class SceneListFragment extends LazyFragment {
 
-    private RecyclerView mRecyclerView;
-    private List<SceneJson.BodyBean> bodyBeanList = new ArrayList<SceneJson.BodyBean>();
-    private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
-    private SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
+    protected RecyclerView mRecyclerView;
+    protected List<SceneJson.BodyBean> bodyBeanList = new ArrayList<SceneJson.BodyBean>();
+    protected SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
+    protected SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
 
-
-    private int get_total=0;
-    private final int oneTakeNum=10;
-
+    protected final int oneTakeNum=10;
+    protected int get_total=0;
+    protected boolean has_data=true;
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
@@ -48,13 +48,15 @@ public class StyleFragment extends LazyFragment {
     }
 
 
-    private void init() {
+    protected void init() {
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_widget);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setProgressViewOffset(false, 0, 24);
+
 
         sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(getContext(), bodyBeanList);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycleView);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0,0,0,10));//设置recycleview间距
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, 0, 0, 10));//设置recycleView间距
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(sceneRecyclerViewAdapter);
 
@@ -63,7 +65,7 @@ public class StyleFragment extends LazyFragment {
         setLoadMoreListener();
         addSomething2Scene();
     }
-    private void setClickListener(){
+    protected void setClickListener(){
         sceneRecyclerViewAdapter.setOnItemClickListener(new SceneRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -87,58 +89,35 @@ public class StyleFragment extends LazyFragment {
             }
         });
     }
-    private void setLoadMoreListener() {
+    protected void setLoadMoreListener() {
         mRecyclerView.addOnScrollListener(new MyRecyclerOnScrollListener() {
             @Override
             public void onBottom() {
                 super.onBottom();
-                addSomething2Scene();
+                if(has_data)
+                    addSomething2Scene();
             }
         });
     }
 
-    private void setRefreshingListener(){
+    protected void setRefreshingListener(){
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //Handler handler = new Handler();
-                //handler.sendEmptyMessageAtTime(0, 1000);
-                /* do some thing here*/
                 get_total = 0;
                 bodyBeanList.clear();
                 addSomething2Scene();
-                swipeRefreshLayout.setRefreshing(false);
-                sceneRecyclerViewAdapter.notifyDataSetChanged();
-                Toast.makeText(getContext(), "下拉更新完成", Toast.LENGTH_SHORT).show();
 
             }
         });
     }
 
-    private void addSomething2Scene() {
+    public void addSomething2Scene() {
+        swipeRefreshLayout.setRefreshing(true);
         GetSomeScene(oneTakeNum, get_total);
-
     }
-    private void GetSomeScene(int take, int skip) {
+    protected void GetSomeScene(int take, int skip) {
 
-        OkHttpUtils.post(BaseActivity.url + "/base/scene")
-                // 请求方式和请求url
-                .tag(this).params("user_id", BaseActivity.user_id)
-                .params("scene_group_id",2+"")
-                .params("skip", skip+"")
-                .params("take",take+"")
-                .execute(new JsonCallback<SceneJson>(SceneJson.class) {
-                    @Override
-                    public void onResponse(boolean b, SceneJson sceneJson, Request request, Response response) {
-                        if (sceneJson.getState()) {
-                            bodyBeanList.addAll(sceneJson.getBody());
-                            get_total+=oneTakeNum;
-                            sceneRecyclerViewAdapter.notifyDataSetChanged();
-                        } else {
-                            Log.d("error", sceneJson.getReturn_info());
-                        }
-                    }
-                });
     }
 }

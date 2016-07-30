@@ -9,9 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
-
+import com.android.loushi.loushi.jsonbean.CommentJson;
 import com.android.loushi.loushi.jsonbean.UserMessageJson;
-import com.android.loushi.loushi.util.CircleImageTransformation;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -22,24 +21,21 @@ import java.util.List;
 /**
  * Created by binpeiluo on 2016/7/21 0021.
  */
-public class MyMessageAdapter extends RecyclerView.Adapter<MyMessageAdapter.ViewHolder>{
+public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder>{
 
     private OnItemClickListener mOnItemClickListener;
-    private CircleImageTransformation mTransformation;
 
     private Context mContext;
-    private List<UserMessageJson.BodyBean> myMessageList;
+    private List<CommentJson.BodyBean> mCommentList;
 
-    public MyMessageAdapter(Context mContext,List<UserMessageJson.BodyBean> myMessageList){
+    public CommentAdapter(Context mContext, List<CommentJson.BodyBean> mCommentList){
         this.mContext=mContext;
-        this.myMessageList=myMessageList;
-        this.mTransformation=new CircleImageTransformation();
-
+        this.mCommentList = mCommentList;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view=View.inflate(mContext, R.layout.item_newmessage,null);
+        View view=View.inflate(mContext, R.layout.item_comment,null);
         ViewHolder holder=new ViewHolder(view);
         return holder;
     }
@@ -47,25 +43,25 @@ public class MyMessageAdapter extends RecyclerView.Adapter<MyMessageAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-
-        UserMessageJson.BodyBean myMessage = myMessageList.get(position);
-
-        //TODO 圆形复用问题
-        Picasso.with(mContext).load(myMessage.getComment().getUserInfo().getHeadImgUrl())
+        CommentJson.BodyBean mComment = mCommentList.get(position);
+        Picasso.with(mContext).load(mComment.getUserInfo().getHeadImgUrl())
 //                .resize(Type)
 //                .transform(mTransformation)
                 .fit()
                 .into(holder.imageView_User);
-        holder.textView_UserName.setText(myMessage.getComment().getUserInfo().getNickname());
-        holder.textView_userContont.setText(myMessage.getComment().getContent());
-        String  time_cha = myMessage.getComment().getCDate().replace('T',' ');
-        holder.textView_MessageDate.setText(CalulateDate(time_cha));
-        holder.textView_MessageTime.setText(CalulateTime(time_cha));
+        holder.textView_UserName.setText(mComment.getUserInfo().getNickname());
+        holder.textView_userContont.setText(mComment.getContent());
+        String[] t=mComment.getCDate().split(" ");
+
+        //TODO
+        holder.textView_MessageDate.setText(CalulateDate(t[0]));
+//        holder.textView_MessageTime.setText(CalulateTime(t[1]));
+//        holder.textView_MessageTime.setText("time--"+CalulateTime(t[1]));
     }
 
     @Override
     public int getItemCount() {
-        return myMessageList.size();
+        return mCommentList.size();
     }
 
     /*
@@ -139,7 +135,7 @@ public class MyMessageAdapter extends RecyclerView.Adapter<MyMessageAdapter.View
     }
 
     public interface OnItemClickListener{
-        void onItemClick(View v,int postion);
+        void onItemClick(View v, int postion);
     }
 
     public void setmOnItemClickListener(OnItemClickListener mOnItemClickListener) {
