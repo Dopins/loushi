@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.jsonbean.RecommendJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.util.RecycleViewPreferSetter;
 import com.squareup.picasso.Picasso;

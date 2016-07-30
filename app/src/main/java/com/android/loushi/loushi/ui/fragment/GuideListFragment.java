@@ -10,15 +10,15 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.GuideRecyclerViewAdapter;
-import com.android.loushi.loushi.adapter.SceneRecyclerViewAdapter;
+import com.android.loushi.loushi.jsonbean.RecommendJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
+import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
 
 /**
  * Created by dopin on 2016/7/24.
@@ -26,14 +26,11 @@ import okhttp3.Call;
 public class GuideListFragment extends LazyFragment {
 
     private RecyclerView mRecyclerView;
-    private List<SceneJson.BodyBean> bodyBeanList = new ArrayList<SceneJson.BodyBean>();
+    private List<RecommendJson.BodyBean.SceneBean> bodyBeanList = new ArrayList<RecommendJson.BodyBean.SceneBean>();
     private GuideRecyclerViewAdapter guideRecyclerViewAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
 
-    public SceneJson sceneJsons;
-    private int tabIndex=1;
     private int get_total=0;
-    private String user_id="32";
 
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
@@ -109,7 +106,7 @@ public class GuideListFragment extends LazyFragment {
     }
 
     private void addSomething2Scene() {
-        GetSomeScene(6, user_id, get_total);
+        GetSomeScene(6, BaseActivity.user_id, get_total);
 
     }
     private void GetSomeScene(int take, String user_id, int skip) {

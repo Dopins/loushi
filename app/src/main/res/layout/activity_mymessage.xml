@@ -5,13 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/program_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/colorPrimary"
-        android:minHeight="?actionBarSize"
-        app:layout_scrollFlags="scroll|enterAlways"/>
+    <include
+        layout="@layout/layout_toolbar"/>
 
 
     <android.support.v4.widget.SwipeRefreshLayout

@@ -24,7 +24,7 @@ import com.alibaba.sdk.android.trade.page.ItemDetailPage;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.GoodDetailAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
-import com.android.loushi.loushi.callback.UserCollecCallback;
+import com.android.loushi.loushi.callback.UserCollectCallback;
 import com.android.loushi.loushi.jsonbean.GoodsJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.SceneGoodJson;
@@ -84,7 +84,8 @@ public class GoodDetailActivity extends  BaseActivity {
         setContentView(R.layout.activity_good_detail);
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
+        if(getIntent().getStringExtra("GOOD_ID")!=null)
+            good_id=getIntent().getStringExtra("GOOD_ID");
         //透明导航栏
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         bindView();
@@ -119,11 +120,11 @@ public class GoodDetailActivity extends  BaseActivity {
     private void init() {
         recyclerView = (RecyclerView)findViewById(R.id.recycleView);
         list = new ArrayList<GoodsJson.BodyBean.ImagesBean>();
-        goodDetailAdapter = new GoodDetailAdapter(getApplicationContext(),list);
+        goodDetailAdapter = new GoodDetailAdapter(this,list);
         getGood();
         //SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(this,5);
 
-        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(5, StaggeredGridLayoutManager.VERTICAL);
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(goodDetailAdapter);
         //recyclerView.addItemDecoration(spaceItemDecoration);
@@ -169,7 +170,7 @@ public class GoodDetailActivity extends  BaseActivity {
         btn_buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showItemDetailPage(show_taobao,"520835764780");
+                showItemDetailPage(show_taobao,"520273718234");
             }
         });
     }

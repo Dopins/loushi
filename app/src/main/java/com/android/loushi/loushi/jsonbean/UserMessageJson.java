@@ -12,7 +12,7 @@ public class UserMessageJson  implements Serializable {
      * body : [{"id":3,"cDate":"2008-08-09 23:22:24","commentID":34,"comment":{"id":3,"cDate":"2008-08-09 23:22:24","userID":123,"userInfo":{"nickname":"菜刀","headImgUrl":"http://23.jpg"},"replyed_id":22,"replyedInfo":{"nickname":"小刀","headImgUrl":"http://23.jpg"},"type":2,"pid":12,"pidImgUrl":"http://loushi.com/jsadj.png","content":"剁死你"}},{"id":3,"cDate":"2008-08-0923: 22: 24","commentID":34,"comment":{"id":31,"cDate":"2008-08-0923: 22: 24","userID":0,"userInfo":{"nickname":"陋室小秘书","headImgUrl":"http: //23.jpg"},"replyed_id":22,"replyedInfo":{"nickname":"小刀","headImgUrl":"http: //23.jpg"},"type":4,"pid":0,"pidImgUrl":"http: //loushi.com/jsadj.png","content":"感谢您的建议"}}]
      */
 
-    private int state;
+    private boolean state;
     /**
      * id : 3
      * cDate : 2008-08-09 23:22:24
@@ -22,11 +22,11 @@ public class UserMessageJson  implements Serializable {
 
     private List<BodyBean> body;
 
-    public int getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 
@@ -98,7 +98,7 @@ public class UserMessageJson  implements Serializable {
              * headImgUrl : http://23.jpg
              */
 
-            private UserInfoBean userInfo;
+            private UserInfoBean userinfo;
             private int replyed_id;
             /**
              * nickname : 小刀
@@ -136,11 +136,11 @@ public class UserMessageJson  implements Serializable {
             }
 
             public UserInfoBean getUserInfo() {
-                return userInfo;
+                return userinfo;
             }
 
             public void setUserInfo(UserInfoBean userInfo) {
-                this.userInfo = userInfo;
+                this.userinfo = userInfo;
             }
 
             public int getReplyed_id() {
@@ -210,6 +210,14 @@ public class UserMessageJson  implements Serializable {
                 public void setHeadImgUrl(String headImgUrl) {
                     this.headImgUrl = headImgUrl;
                 }
+
+                @Override
+                public String toString() {
+                    return "UserInfoBean{" +
+                            "nickname='" + nickname + '\'' +
+                            ", headImgUrl='" + headImgUrl + '\'' +
+                            '}';
+                }
             }
 
             public static class ReplyedInfoBean  implements Serializable {
@@ -231,7 +239,41 @@ public class UserMessageJson  implements Serializable {
                 public void setHeadImgUrl(String headImgUrl) {
                     this.headImgUrl = headImgUrl;
                 }
+
+                @Override
+                public String toString() {
+                    return "ReplyedInfoBean{" +
+                            "nickname='" + nickname + '\'' +
+                            ", headImgUrl='" + headImgUrl + '\'' +
+                            '}';
+                }
             }
+
+            @Override
+            public String toString() {
+                return "CommentBean{" +
+                        "id=" + id +
+                        ", cDate='" + cDate + '\'' +
+                        ", userID=" + userID +
+                        ", userInfo=" + userinfo +
+                        ", replyed_id=" + replyed_id +
+                        ", replyedInfo=" + replyedInfo +
+                        ", type=" + type +
+                        ", pid=" + pid +
+                        ", pidImgUrl='" + pidImgUrl + '\'' +
+                        ", content='" + content + '\'' +
+                        '}';
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "BodyBean{" +
+                    "id=" + id +
+                    ", cDate='" + cDate + '\'' +
+                    ", commentID=" + commentID +
+                    ", comment=" + comment.toString() +
+                    '}';
         }
     }
 }

@@ -14,7 +14,7 @@ public class SearchJson  implements Serializable {
      * body : [{"id":21,"name":"好枕头","groupID":22,"topicGroup":{"id":22,"name":"枕头"},"collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6,"imgUrl":"asd"},{"id":221,"name":"坏枕头","groupID":22,"topicGroup":{"id":22,"name":"枕头"},"collectionNum":333,"collected":0,"forwordNum":12,"commentNum":6,"imgUrl":"asd"}]
      */
 
-    private int state;
+    private boolean state;
     private String code;
     private String return_info;
     /**
@@ -31,11 +31,12 @@ public class SearchJson  implements Serializable {
 
     private List<BodyBean> body;
 
-    public int getState() {
+
+    public boolean getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 
@@ -65,19 +66,60 @@ public class SearchJson  implements Serializable {
 
     public static class BodyBean  implements Serializable {
         private int id;
-        private String name;
-        private int groupID;
+        private int type;
+        private int pid;
         /**
-         * id : 22
-         * name : 枕头
+         * id : 21
+         * name : 海贼宿舍
+         * label : 海贼王
+         * groupID : 22
+         * sceneGroup : {"id":22,"name":"动漫风"}
+         * collectionNum : 333
+         * collected : 0
+         * forwordNum : 12
+         * commentNum : 6
+         * imgUrl : asd
          */
 
-        private TopicGroupBean topicGroup;
-        private int collectionNum;
-        private int collected;
-        private int forwordNum;
-        private int commentNum;
-        private String imgUrl;
+        private SceneJson.BodyBean scene;
+        /**
+         * id : 22
+         * name : 名称
+         * collectionNum : 333
+         * collected : 0
+         * forwordNum : 12
+         * commentNum : 6
+         * imgUrl : asd
+         */
+
+        private StrategyJson.BodyBean strategy;
+        /**
+         * id : 21
+         * name : 好枕头
+         * groupID : 22
+         * topicGroup : {"id":22,"name":"枕头"}
+         * collectionNum : 333
+         * collected : 0
+         * forwordNum : 12
+         * commentNum : 6
+         * imgUrl : asd
+         */
+
+        private TopicJson.BodyBean topic;
+        /**
+         * id : 21
+         * name : 无脸人台灯
+         * price : 33.21
+         * introduction : 介绍
+         * url : 导流链接
+         * images : [{"id":21,"sort":0,"url":"图片链接","type":1,"pid":2},{"id":23,"sort":1,"url":"图片链接","type":1,"pid":2}]
+         * collectionNum : 333
+         * collected : 0
+         * forwordNum : 12
+         * commentNum : 6
+         */
+
+        private GoodsJson.BodyBean goods;
 
         public int getId() {
             return id;
@@ -87,89 +129,56 @@ public class SearchJson  implements Serializable {
             this.id = id;
         }
 
-        public String getName() {
-            return name;
+        public int getType() {
+            return type;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setType(int type) {
+            this.type = type;
         }
 
-        public int getGroupID() {
-            return groupID;
+        public int getPid() {
+            return pid;
         }
 
-        public void setGroupID(int groupID) {
-            this.groupID = groupID;
+        public void setPid(int pid) {
+            this.pid = pid;
         }
 
-        public TopicGroupBean getTopicGroup() {
-            return topicGroup;
+        public SceneJson.BodyBean getScene() {
+            return scene;
         }
 
-        public void setTopicGroup(TopicGroupBean topicGroup) {
-            this.topicGroup = topicGroup;
+        public void setScene(SceneJson.BodyBean scene) {
+            this.scene = scene;
         }
 
-        public int getCollectionNum() {
-            return collectionNum;
+        public StrategyJson.BodyBean getStrategy() {
+            return strategy;
         }
 
-        public void setCollectionNum(int collectionNum) {
-            this.collectionNum = collectionNum;
+        public void setStrategy(StrategyJson.BodyBean strategy) {
+            this.strategy = strategy;
         }
 
-        public int getCollected() {
-            return collected;
+        public TopicJson.BodyBean getTopic() {
+            return topic;
         }
 
-        public void setCollected(int collected) {
-            this.collected = collected;
+        public void setTopic(TopicJson.BodyBean topic) {
+            this.topic = topic;
         }
 
-        public int getForwordNum() {
-            return forwordNum;
+        public GoodsJson.BodyBean getGoods() {
+            return goods;
         }
 
-        public void setForwordNum(int forwordNum) {
-            this.forwordNum = forwordNum;
+        public void setGoods(GoodsJson.BodyBean goods) {
+            this.goods = goods;
         }
 
-        public int getCommentNum() {
-            return commentNum;
-        }
 
-        public void setCommentNum(int commentNum) {
-            this.commentNum = commentNum;
-        }
 
-        public String getImgUrl() {
-            return imgUrl;
-        }
 
-        public void setImgUrl(String imgUrl) {
-            this.imgUrl = imgUrl;
-        }
-
-        public static class TopicGroupBean  implements Serializable {
-            private int id;
-            private String name;
-
-            public int getId() {
-                return id;
-            }
-
-            public void setId(int id) {
-                this.id = id;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-        }
     }
 }

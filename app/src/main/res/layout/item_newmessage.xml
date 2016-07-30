@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground"
+    android:clickable="true"
+    android:gravity="center_vertical">
+    <!--TODO 图片大小设置-->
+    <com.android.loushi.loushi.util.RoundImageView
+        android:id="@+id/item_imageView_message"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/project_cartoon" />
+
+    <LinearLayout
+        android:id="@+id/layout_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/item_imageView_message"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/item_textView_messageUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:text="提利昂"
+            android:textColor="@color/colorCommentName"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/item_textView_messageContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxEms="15"
+            android:maxLength="10"
+            android:singleLine="true"
+            android:text="提利昂提利昂提利昂提利昂提利昂提利昂提利昂提利昂提利昂提利昂提利昂"
+            android:textColor="@color/colorCommentContent"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_textView_messageTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10:09"
+            android:textColor="@color/colorCommentContent"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/item_textView_messageDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="刚刚"
+            android:textColor="@color/colorCommentContent"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

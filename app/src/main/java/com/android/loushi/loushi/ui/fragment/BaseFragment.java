@@ -26,13 +26,13 @@ public  class  BaseFragment extends Fragment {
     private Context context;
     private ViewGroup container;
 
+
     public BaseFragment() {
     }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.context = this.getActivity().getApplicationContext();
-
     }
 
     public  View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

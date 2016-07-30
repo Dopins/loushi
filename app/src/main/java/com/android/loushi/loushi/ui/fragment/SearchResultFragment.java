@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,37 +20,24 @@ import java.util.List;
  */
 public class SearchResultFragment extends Fragment {
     private View rootView;
-
     private ViewPagerAdapter viewPagerAdapter;
     private TabLayout tabLayout;                            //定义TabLayout
     private ViewPager viewPager;                             //定义viewPager
     private List<android.support.v4.app.Fragment> list_fragment;    //定义要装fragment的列表
     private List<String> list_title;                                     //tab名称列表
 
-    private HabitFragment sceneFragment;
+    private SearchResultSceneFragment sceneFragment;
     private GuideListFragment guideFragment;
     private CollectGoodFragment goodsFragment;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        initViewPager();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        if (rootView == null) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_search_result, null);
-        }
-        // 缓存的rootView需要判断是否已经被加过parent，如果有parent需要从parent删除，要不然会发生这个rootview已经有parent的错误。
-        ViewGroup parent = (ViewGroup) rootView.getParent();
-        if (parent != null) {
-            parent.removeView(rootView);
-        }
-
-
+        initViewPager();
         return rootView;
     }
 
@@ -59,7 +47,7 @@ public class SearchResultFragment extends Fragment {
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
 
         //初始化各fragment
-        sceneFragment = new HabitFragment();
+        sceneFragment = new SearchResultSceneFragment();
         guideFragment = new GuideListFragment();
         goodsFragment = new CollectGoodFragment();
 

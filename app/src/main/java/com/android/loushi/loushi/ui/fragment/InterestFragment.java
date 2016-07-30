@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,8 +14,10 @@ import com.android.loushi.loushi.adapter.SceneRecyclerViewAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
+import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
+import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -64,7 +67,11 @@ public class InterestFragment extends LazyFragment {
         sceneRecyclerViewAdapter.setOnItemClickListener(new SceneRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
+                Intent intent= new Intent(getActivity(), SceneDetailActivity.class);
+                String sceneJsonString=new Gson().toJson(bodyBeanList.get(position));
+                intent.putExtra(SceneDetailActivity.SCENE_STRING,sceneJsonString);
+                startActivity(intent);
 //                Intent intent = new Intent(getActivity(), WebViewActivity.class);
 //                //intent.putExtra
 //                //传入参数 给webview Post
@@ -119,7 +126,7 @@ public class InterestFragment extends LazyFragment {
         OkHttpUtils.post(BaseActivity.url + "/base/scene")
                 // 请求方式和请求url
                 .tag(this).params("user_id", BaseActivity.user_id)
-                .params("scene_group_id",0+"")
+                .params("scene_group_id",1+"")
                 .params("skip", skip+"")
                 .params("take",take+"")
                 .execute(new JsonCallback<SceneJson>(SceneJson.class) {

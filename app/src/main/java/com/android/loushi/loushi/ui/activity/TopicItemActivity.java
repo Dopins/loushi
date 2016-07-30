@@ -1,7 +1,9 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.adapter.TopicItemRecycleViewAdapter;
+import com.android.loushi.loushi.adapter.TopicItemAdapter;
 import com.android.loushi.loushi.callback.TopicCallback;
 import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
@@ -42,15 +44,16 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
 
     private Integer mSkip = 0; //数据从哪里开始取
     private Integer mTake = 20;   //一次加载多少item
-    private List<TopicJson.BodyBean> mTopicList;
+    private List mTopicList;
     private Integer mTopic_id = 0;     //专题分类的item id
 
     private RecyclerView recyclerView;
     private ImageView imageViewSearch;
     private TextView textViewTitle;
     private ImageView imageViewBack;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
-    private TopicItemRecycleViewAdapter mAdapter;
+    private TopicItemAdapter mAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -78,6 +81,10 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
         //init title
         textViewTitle = (TextView) findViewById(R.id.textView_title);
         textViewTitle.setText(titlesName[mTopic_id]);
+        //init swipe
+        swipeRefreshLayout= (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        swipeRefreshLayout.setColorSchemeColors(this.getResources().getColor(R.color.colorPrimary));
         //init imageview
         imageViewSearch = (ImageView) findViewById(R.id.imageView_search);
         imageViewBack = (ImageView) findViewById(R.id.imageView_back);
@@ -85,9 +92,10 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
         imageViewBack.setOnClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new TopicItemRecycleViewAdapter(this, mTopicList);
+        mAdapter = new TopicItemAdapter(this, mTopicList, TopicItemAdapter.AdapterType.TOPIC);
         recyclerView.addItemDecoration(new SpaceItemDecoration(this, 10));
         recyclerView.setAdapter(mAdapter);
+        addItemClickListener();
         loadSomeData(MainActivity.user_id, mTopic_id, mSkip, mTake);
     }
 
@@ -122,11 +130,24 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
                     public void onResponse(boolean isFromCache, TopicJson topicJson, Request request, @Nullable Response response) {
                         if (topicJson == null || topicJson.getBody() == null)
                             return;
-                        Log.e("test", new Gson().toJson(topicJson));
                         mTopicList.addAll(topicJson.getBody());
                         mAdapter.notifyDataSetChanged();
                     }
                 });
+    }
+    private void addItemClickListener() {
+        mAdapter.setmOnItemClickListener(new TopicItemAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+                Intent intent= new Intent(TopicItemActivity.this, CategoryDetailActivity.class);
+                String jsonString=new Gson().toJson(mTopicList.get(position));
+                Log.e("jsonstring", jsonString);
+                intent.putExtra(CategoryDetailActivity.TYPE,"0");
+                intent.putExtra(CategoryDetailActivity.JSONSTRING,jsonString);
+                startActivity(intent);
+            }
+        });
     }
 
 
