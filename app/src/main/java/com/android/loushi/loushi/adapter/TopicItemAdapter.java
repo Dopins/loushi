@@ -3,12 +3,12 @@ package com.android.loushi.loushi.adapter;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +20,6 @@ import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.UrlConstant;
-import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
 
@@ -32,7 +31,7 @@ import okhttp3.Response;
 /**
  * Created by binpeiluo on 2016/7/24 0024.
  */
-public class TopicItemRecycleViewAdapter extends RecyclerView.Adapter<TopicItemRecycleViewAdapter.ViewHolder> {
+public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.ViewHolder> {
 
     private static final String TAG = "TopicItemRVAdapter";
 
@@ -48,7 +47,7 @@ public class TopicItemRecycleViewAdapter extends RecyclerView.Adapter<TopicItemR
     private List<TopicJson.BodyBean> mTopicList;
     private List<StrategyJson.BodyBean> mTipsList;
 
-    public TopicItemRecycleViewAdapter(Context context, List dataList,AdapterType type) {
+    public TopicItemAdapter(Context context, List dataList, AdapterType type) {
         this.mContext = context;
         this.mAdapterType=type;
         if(AdapterType.TOPIC==type)
@@ -154,11 +153,10 @@ public class TopicItemRecycleViewAdapter extends RecyclerView.Adapter<TopicItemR
         holder.card_title.setText(topic.getTopicGroup().getName());
         holder.card_detail.setText(topic.getName());
         // 设置点赞响应
-        holder.checkbox_prefer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.btn_prefer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-                //TODO 获取用户id
-                //TODO 网络不好时  点击checkkbox设置无效问题
+            public void onClick(View v) {
+                final boolean isChecked=!holder.checkbox_prefer.isChecked();
                 OkHttpUtils.post(UrlConstant.USERCOLLECTURL)
                         .tag(this)
                         .params(KeyConstant.USER_ID, MainActivity.user_id)
@@ -177,6 +175,7 @@ public class TopicItemRecycleViewAdapter extends RecyclerView.Adapter<TopicItemR
 //                                        holder.num_prefer.setText(topic.getCollectionNum()+"");
                                         holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText()+"")-1+"");
                                     }
+                                    holder.checkbox_prefer.setChecked(isChecked);
                                 } else {
                                     Toast.makeText(mContext, "出了点小问题，请重试" + responseJson.getReturn_info(), Toast.LENGTH_SHORT).show();
 //                                    holder.checkbox_prefer.setChecked(!isChecked);
@@ -186,6 +185,42 @@ public class TopicItemRecycleViewAdapter extends RecyclerView.Adapter<TopicItemR
                         });
             }
         });
+
+
+//        holder.checkbox_prefer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+//                //TODO 获取用户id
+//                //TODO 网络不好时  点击checkkbox设置无效问题
+//                OkHttpUtils.post(UrlConstant.USERCOLLECTURL)
+//                        .tag(this)
+//                        .params(KeyConstant.USER_ID, MainActivity.user_id)
+//                        .params(KeyConstant.TYPE, "1")
+//                        .params(KeyConstant.PID, topic.getId() + "")
+//                        .execute(new UserCollectCallback() {
+//                            @Override
+//                            public void onResponse(boolean isFromCache, ResponseJson responseJson, Request request, @Nullable Response response) {
+//                                if (responseJson.getState()) {
+//                                    if(isChecked){
+//                                        Toast.makeText(mContext, "收藏成功啦", Toast.LENGTH_SHORT).show();
+////                                        holder.num_prefer.setText(topic.getCollectionNum()+1+"");
+//                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText()+"")+1+"");
+//                                    }else{
+//                                        Toast.makeText(mContext, "取消收藏成功啦", Toast.LENGTH_SHORT).show();
+////                                        holder.num_prefer.setText(topic.getCollectionNum()+"");
+//                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText()+"")-1+"");
+//                                    }
+//                                } else {
+//                                    Toast.makeText(mContext, "出了点小问题，请重试" + responseJson.getReturn_info(), Toast.LENGTH_SHORT).show();
+////                                    holder.checkbox_prefer.setChecked(!isChecked);
+//
+//                                }
+//                            }
+//                        });
+//            }
+//        });
+
+
 
 //        holder.mCheckBox_zan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
@@ -244,6 +279,7 @@ public class TopicItemRecycleViewAdapter extends RecyclerView.Adapter<TopicItemR
         private TextView num_prefer;
         private ImageView image_watch;
         private TextView num_watch;
+        private LinearLayout btn_prefer;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -255,6 +291,7 @@ public class TopicItemRecycleViewAdapter extends RecyclerView.Adapter<TopicItemR
             num_prefer = (TextView) itemView.findViewById(R.id.num_prefer);
             image_watch = (ImageView) itemView.findViewById(R.id.image_watch);
             num_watch = (TextView) itemView.findViewById(R.id.num_watch);
+            btn_prefer= (LinearLayout) itemView.findViewById(R.id.btn_prefer);
             itemView.setOnClickListener(this);
         }
 

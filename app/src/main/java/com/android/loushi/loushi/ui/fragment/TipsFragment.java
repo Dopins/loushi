@@ -1,25 +1,16 @@
 package com.android.loushi.loushi.ui.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.graphics.ColorUtils;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.adapter.TipsRecycleViewAdapter;
-import com.android.loushi.loushi.adapter.TopicItemRecycleViewAdapter;
-import com.android.loushi.loushi.callback.EncryptCallback;
-import com.android.loushi.loushi.ui.activity.BaseActivity;
+import com.android.loushi.loushi.adapter.TopicItemAdapter;
 import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
@@ -34,7 +25,6 @@ import com.lzy.okhttputils.callback.AbsCallback;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -51,7 +41,7 @@ public class TipsFragment extends LazyFragment {
     private Integer mSkip = 0;
     private Integer mTake = 20;
     private List mTipsList= new ArrayList();;
-    private TopicItemRecycleViewAdapter mAdapter;
+    private TopicItemAdapter mAdapter;
 
     private boolean isFirstShow=true;  //判断是否是第一次加载
 
@@ -98,9 +88,9 @@ public class TipsFragment extends LazyFragment {
         swipeRefreshLayout_tips.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         swipeRefreshLayout_tips.setSize(SwipeRefreshLayout.DEFAULT);
         recycleView_tips = (RecyclerView) findViewById(R.id.recycleView);
-        mAdapter = new TopicItemRecycleViewAdapter(getContext(),
+        mAdapter = new TopicItemAdapter(getContext(),
                 mTipsList,
-                TopicItemRecycleViewAdapter.AdapterType.TIPS);
+                TopicItemAdapter.AdapterType.TIPS);
         recycleView_tips.setLayoutManager(new LinearLayoutManager(getContext()));
         recycleView_tips.addItemDecoration(new SpaceItemDecoration(getContext(), 10));
         recycleView_tips.setAdapter(mAdapter);
@@ -123,7 +113,7 @@ public class TipsFragment extends LazyFragment {
     }
 
     private void addItemClickListener() {
-        mAdapter.setmOnItemClickListener(new TopicItemRecycleViewAdapter.OnItemClickListener() {
+        mAdapter.setmOnItemClickListener(new TopicItemAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();

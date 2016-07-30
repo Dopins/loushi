@@ -70,10 +70,10 @@
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:ellipsize="end"
-                    android:maxLines="2"
-                    tools:text="关爱学生党，这些好物让宿舍更舒适关爱学生党，这些好物让宿舍更舒适"
                     android:lineSpacingMultiplier="1.8"
-                    android:textColor="@color/colorDetail" />
+                    android:maxLines="2"
+                    android:textColor="@color/colorDetail"
+                    tools:text="关爱学生党，这些好物让宿舍更舒适关爱学生党，这些好物让宿舍更舒适" />
 
                 <View
                     android:layout_width="match_parent"
@@ -82,34 +82,40 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="40dp"
+                    android:paddingLeft="20dp">
+
                     <LinearLayout
                         android:id="@+id/btn_prefer"
+                        android:clickable="true"
+                        android:background="?android:attr/selectableItemBackground"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent">
 
                         <CheckBox
                             android:id="@+id/checkbox_prefer"
-                            android:clickable="false"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginRight="15dp"
                             android:button="@drawable/selector_checkbox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:clickable="false" />
+
                         <TextView
                             android:id="@+id/num_prefer"
-                            android:text="0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:textColor="@color/colorWatch"
                             android:layout_marginRight="5dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:text="0"
+                            android:textColor="@color/colorWatch" />
+
                         <TextView
-                            android:text="点赞"
-                            android:layout_gravity="center"
-                            android:textColor="@color/colorWatch"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="点赞"
+                            android:textColor="@color/colorWatch" />
                     </LinearLayout>
 
                     <ImageView
