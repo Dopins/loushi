@@ -193,8 +193,8 @@ public class LoginFragment extends Fragment {
                         editor.putString("mobilePhone", body.getMobilePhone());
                         editor.putString("email", body.getEmail());
                         editor.putString("headImgUrl", body.getHeadImgUrl());
-                        editor.putString("schoolName", body.getSchoolName());
-                        editor.putInt("sex", body.getSex());
+                        editor.putString("schoolName", body.getSchool().getName());
+//                        editor.putInt("sex", body.getSex());
                         editor.putInt("messageCount", body.getMessageCount());
                         editor.putInt("userID", body.getUserID());
                         editor.commit();

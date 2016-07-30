@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     android:orientation="vertical"
-    tools:context="com.android.loushi.loushi.ui.activity.PersonalInformationActivity">
+    android:id="@+id/personalInFoContainer">
 
 
     <android.support.v7.widget.Toolbar
@@ -57,11 +57,12 @@
         android:paddingRight="31dp"
         android:paddingTop="33dp">
 
-        <com.android.loushi.loushi.util.CircularImageView
+        <com.android.loushi.loushi.util.RoundImageView
             android:id="@+id/image_circular"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:background="@drawable/tab_my" />
+            android:background="@drawable/tab_my"
+            android:onClick="onClickimage_circular"/>
 
         <LinearLayout
             android:id="@+id/layout_nickname"
@@ -79,7 +80,6 @@
 
             <com.android.loushi.loushi.util.UnderLineEditText
                 android:id="@+id/edit_nickname"
-                android:singleLine="true"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@null"
@@ -219,7 +219,8 @@
             android:background="@drawable/shape_btn_finish"
             android:text="保持修改"
             android:textColor="@color/colorWhite"
-            android:textSize="15dp" />
+            android:textSize="15dp"
+            android:onClick="onClick_btn_save"/>
 
     </RelativeLayout>
 
