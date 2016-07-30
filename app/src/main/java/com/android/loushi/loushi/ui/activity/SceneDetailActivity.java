@@ -102,10 +102,10 @@ public class SceneDetailActivity extends  BaseActivity {
         AdViewpagerAdapter adViewpagerAdapter = new AdViewpagerAdapter(views);
 
         carouselViewPager.setAdapter(adViewpagerAdapter);
-        Picasso.with(getApplicationContext()).load("http://119.29.187.58:8080/loushi/image/scene/guangwai001.jpeg").into(view1);
-        Picasso.with(getApplicationContext()).load("http://119.29.187.58:8080/loushi/image/scene/guangwai001.jpeg").into(view2);
-        Picasso.with(getApplicationContext()).load("http://119.29.187.58:8080/loushi/image/scene/guangwai001.jpeg").into(view3);
-        Picasso.with(getApplicationContext()).load("http://119.29.187.58:8080/loushi/image/scene/guangwai001.jpeg").into(view4);
+        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view1);
+        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view2);
+        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view3);
+        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view4);
     }
     private void initTablayout(){
         tabLayout=(TabLayout)findViewById(R.id.toolbar_tab);
