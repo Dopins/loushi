@@ -6,19 +6,17 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.adapter.TopicItemRecycleViewAdapter;
+import com.android.loushi.loushi.adapter.TopicItemAdapter;
 import com.android.loushi.loushi.callback.TopicCallback;
 import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
-import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -52,7 +50,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
     private ImageView imageViewBack;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private TopicItemRecycleViewAdapter mAdapter;
+    private TopicItemAdapter mAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -91,7 +89,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
         imageViewBack.setOnClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new TopicItemRecycleViewAdapter(this, mTopicList, TopicItemRecycleViewAdapter.AdapterType.TOPIC);
+        mAdapter = new TopicItemAdapter(this, mTopicList, TopicItemAdapter.AdapterType.TOPIC);
         recyclerView.addItemDecoration(new SpaceItemDecoration(this, 10));
         recyclerView.setAdapter(mAdapter);
         loadSomeData(MainActivity.user_id, mTopic_id, mSkip, mTake);
