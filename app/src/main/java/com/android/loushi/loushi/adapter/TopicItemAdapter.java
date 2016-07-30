@@ -153,6 +153,7 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
         holder.card_title.setText(topic.getTopicGroup().getName());
         holder.card_detail.setText(topic.getName());
         // 设置点赞响应
+        //TODO   抽取方法
         holder.btn_prefer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,78 +187,6 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
             }
         });
 
-
-//        holder.checkbox_prefer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-//                //TODO 获取用户id
-//                //TODO 网络不好时  点击checkkbox设置无效问题
-//                OkHttpUtils.post(UrlConstant.USERCOLLECTURL)
-//                        .tag(this)
-//                        .params(KeyConstant.USER_ID, MainActivity.user_id)
-//                        .params(KeyConstant.TYPE, "1")
-//                        .params(KeyConstant.PID, topic.getId() + "")
-//                        .execute(new UserCollectCallback() {
-//                            @Override
-//                            public void onResponse(boolean isFromCache, ResponseJson responseJson, Request request, @Nullable Response response) {
-//                                if (responseJson.getState()) {
-//                                    if(isChecked){
-//                                        Toast.makeText(mContext, "收藏成功啦", Toast.LENGTH_SHORT).show();
-////                                        holder.num_prefer.setText(topic.getCollectionNum()+1+"");
-//                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText()+"")+1+"");
-//                                    }else{
-//                                        Toast.makeText(mContext, "取消收藏成功啦", Toast.LENGTH_SHORT).show();
-////                                        holder.num_prefer.setText(topic.getCollectionNum()+"");
-//                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText()+"")-1+"");
-//                                    }
-//                                } else {
-//                                    Toast.makeText(mContext, "出了点小问题，请重试" + responseJson.getReturn_info(), Toast.LENGTH_SHORT).show();
-////                                    holder.checkbox_prefer.setChecked(!isChecked);
-//
-//                                }
-//                            }
-//                        });
-//            }
-//        });
-
-
-
-//        holder.mCheckBox_zan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-//                OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/user/userCollect.action"
-//                ).addParams("user_id", user_id).addParams("type","1")
-//                        .addParams("pid",Integer.toString(topic.getId())).build().execute(new NormalCallBack() {
-//                    @Override
-//                    public void onError(Call call, Exception e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onResponse(ResponseJson responseJson) {
-//                        if(responseJson.getState()){
-//
-//                            if (isChecked){
-//                                Topicjson.BodyBean temp = topics.get(position);
-//                                topics.get(position).setCollected(true);
-//                                topics.get(position).setCollectionNum(temp.getCollectionNum() + 1);
-//                                //temp.setCollectionNum(temp.getCollectionNum()+1);
-//                                holder.mText_zan.setText(Integer.toString(temp.getCollectionNum()));
-//                            } else{
-//                                Topicjson.BodyBean temp = topics.get(position);
-//                                topics.get(position).setCollected(false);
-//                                topics.get(position).setCollectionNum(temp.getCollectionNum()-1);
-//                                //temp.setCollectionNum(temp.getCollectionNum()-1);
-//                                holder.mText_zan.setText(Integer.toString(temp.getCollectionNum()));
-//                            }
-//                            notifyDataSetChanged();
-//                        }
-//
-//                    }
-//                });
-//
-//            }
-//        });
     }
 
     @Override

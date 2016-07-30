@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -141,8 +142,13 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.imageView_search:
+                entryToSearch();
                 break;
         }
-        Toast.makeText(this, "on click", Toast.LENGTH_SHORT).show();
+    }
+
+    private void entryToSearch(){
+        Intent intent=new Intent(this,SearchActivity.class);
+        startActivity(intent);
     }
 }
