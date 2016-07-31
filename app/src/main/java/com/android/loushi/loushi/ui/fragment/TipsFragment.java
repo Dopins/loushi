@@ -130,6 +130,7 @@ public class TipsFragment extends LazyFragment {
     }
 
     private void addRefreshListener() {
+
         swipeRefreshLayout_tips.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
