@@ -179,6 +179,7 @@ public class UserCollectionsJson  implements Serializable {
             private String name;
             private String label;
             private int groupID;
+           private int browseNum;
             /**
              * id : 22
              * name : 动漫风
@@ -191,6 +192,13 @@ public class UserCollectionsJson  implements Serializable {
             private int commentNum;
             private String imgUrl;
 
+           public int getBrowseNum() {
+               return browseNum;
+           }
+
+           public void setBrowseNum(int browseNum) {
+               this.browseNum = browseNum;
+           }
             public int getId() {
                 return id;
             }

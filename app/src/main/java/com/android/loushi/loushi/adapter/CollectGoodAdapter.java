@@ -50,7 +50,7 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
             final UserCollectionsJson.BodyBean.GoodsBean goodsBean = beanList.get(position).getGoods();
             holder.tv_name.setText(goodsBean.getName());
             Picasso.with(context).load(goodsBean.getImages().get(0).getUrl()).fit().into(holder.img_good);
-
+            holder.tv_price.setText(goodsBean.getPrice()+"");
             holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
             holder.btn_like.setChecked(true);
 //        holder.btn_like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -89,6 +89,16 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
 //            }
 //        });
         }
+        if(type.equals("0")){
+            final UserCollectionsJson.BodyBean.SceneBean goodsBean = beanList.get(position).getScene();
+            holder.tv_name.setText(goodsBean.getName());
+            holder.tv_price.setVisibility(View.INVISIBLE);
+            holder.price_symbol.setVisibility(View.INVISIBLE);
+            Picasso.with(context).load(goodsBean.getImgUrl()).fit().into(holder.img_good);
+
+            holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum())+"人浏览");
+            holder.btn_like.setVisibility(View.GONE);
+        }
 
     }
 
@@ -101,12 +111,16 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
         ImageView img_good;
         TextView tv_like_count;
         CheckBox btn_like;
+        TextView price_symbol;
+        TextView tv_price;
         public CollectGoodViewHolder(View view) {
             super(view);
             tv_name = (TextView)view.findViewById(R.id.collect_good_item_tv_name);
             img_good=(ImageView)view.findViewById(R.id.collect_good_item_img_good);
             btn_like = (CheckBox)view.findViewById(R.id.collect_good_item_btn_like);
             tv_like_count=(TextView)view.findViewById(R.id.collect_good_item_tv_like_count);
+            price_symbol=(TextView)view.findViewById(R.id.price_symbol);
+            tv_price=(TextView)view.findViewById(R.id.tv_price);
         }
 
 

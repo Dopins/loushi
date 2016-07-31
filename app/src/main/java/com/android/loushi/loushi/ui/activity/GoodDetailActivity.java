@@ -92,7 +92,7 @@ public class GoodDetailActivity extends  BaseActivity {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         bindView();
         init();
-        initButton();
+
     }
     private void bindView(){
         img_good = (ImageView) findViewById(R.id.img_good);
@@ -162,15 +162,16 @@ public class GoodDetailActivity extends  BaseActivity {
                             comment.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent intent = new Intent(GoodDetailActivity.this,CommentActivity.class);
-                                    intent.putExtra(KeyConstant.TYPE,"3");
+                                    Intent intent = new Intent(GoodDetailActivity.this, CommentActivity.class);
+                                    intent.putExtra(KeyConstant.TYPE, "3");
                                     intent.putExtra(KeyConstant.PID, good.getId() + "");
                                     startActivity(intent);
                                 }
                             });
                             Log.e("collect1", btn_collect.isSelected() + "");
                             initCollect(good.getCollected());
-
+                            Log.e("good",goodsJson.getBody().getUrl());
+                            initButton(goodsJson.getBody().getUrl());
 
 //                            tv_comment_count.setText(good.getCommentNum());
 //                            tv_share_count.setText(good.getForwordNum());
@@ -183,12 +184,12 @@ public class GoodDetailActivity extends  BaseActivity {
 
                 });
     }
-    private void initButton(){
+    private void initButton(final String url){
         btn_buy=(Button)findViewById(R.id.btn_buy);
         btn_buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showItemDetailPage(show_taobao, "520273718234");
+                showItemDetailPage(show_taobao, url);
             }
         });
     }
