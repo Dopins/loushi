@@ -5,9 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,25 +15,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.PersonCollectTabAdapter;
-import com.android.loushi.loushi.adapter.ViewPagerAdapter;
 import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
-import com.android.loushi.loushi.ui.activity.MyMessageActivity;
-import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
 
+import com.android.loushi.loushi.ui.activity.MyMessageActivity;
 import com.android.loushi.loushi.util.RoundImageView;
 import com.android.loushi.loushi.util.SlidingTabLayout;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.security.auth.login.LoginException;
 
 /**
  * Created by Administrator on 2016/7/18.

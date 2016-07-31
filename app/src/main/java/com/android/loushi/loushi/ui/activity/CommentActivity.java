@@ -89,8 +89,8 @@ public class CommentActivity extends BaseActivity implements
         mPid = intent.getStringExtra(KeyConstant.PID);
 
         //TODO
-        mType = 1 + "";
-        mPid = 233 + "";
+//        mType = 1 + "";
+//        mPid = 233 + "";
 
         inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
@@ -202,7 +202,7 @@ public class CommentActivity extends BaseActivity implements
     }
 
     private void newComment() {
-        mReplyId = "";
+        mReplyId = "0";
         editTextComment.setHint("新评论");
     }
 

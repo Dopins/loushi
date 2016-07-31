@@ -40,9 +40,6 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".ui.activity.MyMessageActivity">
-
-        </activity>
         <activity
             android:name=".ui.activity.SearchActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
@@ -57,8 +54,11 @@
         <activity android:name=".ui.activity.PersonalInformationActivity"></activity>
         <activity android:name=".ui.activity.CommentActivity">
 
+        </activity>
+        <activity android:name=".ui.activity.MyMessageActivity">
 
         </activity>
+
 <activity android:name=".ui.activity.CategoryDetailActivity"></activity>
 
         <activity
