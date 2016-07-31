@@ -52,8 +52,7 @@ public class SceneDetailActivity extends  BaseActivity {
     private ImageButton back;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
-    public static  String SCENE_STRING="SCENE_STRING";
-    public static  String SCENE_ID="SCENE_ID";
+
     private SceneJson.BodyBean scenebean;
 
     private LinearLayout collect_bar;
@@ -76,8 +75,8 @@ public class SceneDetailActivity extends  BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scene_detail);
-        if(getIntent().getStringExtra(SCENE_STRING)!=null)
-        sceneJsonString = getIntent().getStringExtra(SCENE_STRING);
+        if(getIntent().getStringExtra("SCENE_STRING")!=null)
+        sceneJsonString = getIntent().getStringExtra("SCENE_STRING");
         Log.e("sceneJson",sceneJsonString);
         scenebean=new SceneJson.BodyBean();
         scenebean=new Gson().fromJson(sceneJsonString,SceneJson.BodyBean.class);

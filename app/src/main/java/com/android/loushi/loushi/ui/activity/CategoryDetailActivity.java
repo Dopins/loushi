@@ -2,6 +2,7 @@ package com.android.loushi.loushi.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -45,6 +46,7 @@ public class CategoryDetailActivity extends BaseActivity {
     private String jsonstring="";
     private String type="0";
     private TopicJson.BodyBean topicBean;
+    private String url="";
     //private StrategyJson.BodyBean strategyBean;
     @Override
     protected int getLayoutId() {
@@ -58,6 +60,17 @@ public class CategoryDetailActivity extends BaseActivity {
         Log.e("stra1",jsonstring);
         topicBean=new Gson().fromJson(jsonstring, TopicJson.BodyBean.class);
         Log.e("stra",topicBean.getName());
+        type=getIntent().getStringExtra(TYPE);
+        if(type.equals("2")) {
+            url=topicBean.getImgUrl();
+            if (url.indexOf("|||") >= 0)
+                url = url.substring(url.indexOf("|||")+3);
+            Log.e("url",url);
+            if(TextUtils.isEmpty(url))
+                url="";
+
+        }
+
         initView();
     }
 
@@ -97,7 +110,7 @@ public class CategoryDetailActivity extends BaseActivity {
 
         webView.getSettings().setBlockNetworkImage(false);
 
-        webView.loadUrl("http://172.16.1.218:8020/111/topicDetail.html");
+        webView.loadUrl(url);
     }
 
     private void bindCollectBarView(){

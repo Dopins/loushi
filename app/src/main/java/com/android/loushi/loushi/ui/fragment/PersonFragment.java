@@ -206,13 +206,13 @@ public class PersonFragment extends BaseFragment {
     }
     private void initButton(){
         btn_profile = (Button)getView().findViewById(R.id.btn_profile);
-        btn_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), GoodDetailActivity.class);
-                startActivity(intent);
-            }
-        });
+//        btn_profile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(), GoodDetailActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         btn_my_message= (ImageButton) mToolbar.findViewById(R.id.my_message);
         btn_my_message.setOnClickListener(new View.OnClickListener() {
