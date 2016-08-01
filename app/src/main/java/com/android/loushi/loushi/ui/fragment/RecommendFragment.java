@@ -79,7 +79,7 @@ public class RecommendFragment extends LazyFragment {
                 if(recommendRecycleViewAdapter.getItemViewType(position)==0){
                     Intent intent= new Intent(getActivity(), SceneDetailActivity.class);
                     String sceneJsonString=new Gson().toJson(bodyBeanList.get(position/4).getScene());
-                    intent.putExtra(SceneDetailActivity.SCENE_STRING,sceneJsonString);
+                    intent.putExtra("SCENE_STRING",sceneJsonString);
                     startActivity(intent);
                 }
                 if(recommendRecycleViewAdapter.getItemViewType(position)==1){

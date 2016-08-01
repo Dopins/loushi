@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_good_price"
-                android:text="66"
+                android:text="price"
                 android:textSize="30sp"
                 android:layout_toRightOf="@+id/price_symbol"
                 android:layout_marginLeft="8dp"/>

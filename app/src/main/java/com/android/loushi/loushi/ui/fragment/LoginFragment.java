@@ -1,7 +1,10 @@
 package com.android.loushi.loushi.ui.fragment;
 
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -25,20 +28,34 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
+import org.litepal.crud.DataSupport;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.callback.UserCollectCallback;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
+import com.android.loushi.loushi.thirdlogin.LoginApi;
+import com.android.loushi.loushi.thirdlogin.OnLoginListener;
+import com.android.loushi.loushi.thirdlogin.Tool;
+import com.android.loushi.loushi.thirdlogin.UserInfo;
 import com.android.loushi.loushi.ui.activity.ForgetPasswordActivity;
 import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.UnderLineEditText;
+import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import cn.sharesdk.framework.CustomPlatform;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -61,7 +78,7 @@ public class LoginFragment extends Fragment {
     private ImageButton btn_weixin;
     private ImageButton btn_qq;
     private Button btn_forgetpassword;
-
+    private ArrayList<ImageButton> imgbtn;
     // End Of Content View Elements
 
 
@@ -69,6 +86,7 @@ public class LoginFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setLoginInfoFromCache();
+        initPlatformList();
     }
 
     private void setLoginInfoFromCache() {
@@ -198,7 +216,7 @@ public class LoginFragment extends Fragment {
                         editor.putInt("messageCount", body.getMessageCount());
                         editor.putInt("userID", body.getUserID());
                         editor.commit();
-                        Log.e(TAG, "onResponse: "+ body.getMobilePhone());
+                        Log.e(TAG, "onResponse: " + body.getMobilePhone());
 
                     }
                 });
@@ -240,5 +258,119 @@ public class LoginFragment extends Fragment {
         return fragment;
     }
 
+
+    private void initPlatformList() {
+
+        ShareSDK.initSDK(getContext());
+        Platform[] Platformlist = ShareSDK.getPlatformList();
+        if (Platformlist != null) {
+            imgbtn = new ArrayList<ImageButton>(3);
+            Log.e("TAG", "创建了img数组");
+            btn_xinlang=(ImageButton)getView().findViewById(R.id.btn_xinlang);
+            btn_qq =(ImageButton)getView().findViewById(R.id.btn_qq);
+            btn_weixin =(ImageButton)getView().findViewById(R.id.btn_weixin);
+            Log.e("TAG", "获取到1");
+            imgbtn.add(btn_xinlang);
+            imgbtn.add(btn_weixin);
+            imgbtn.add(btn_qq);
+
+
+            int i=0;
+            for (Platform platform : Platformlist) {
+                if (!Tool.canGetUserInfo(platform)) {
+                    i++;
+                    continue;
+
+                }
+
+                if (platform instanceof CustomPlatform) {
+                    i++;
+                    continue;
+                }
+
+
+
+                imgbtn.get(i).setTag(platform);
+                imgbtn.get(i).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Object tag = v.getTag();
+                        if (tag != null) {
+                            Platform platform = (Platform) tag;
+                            String name = platform.getName();
+                            Thirdlogin(name);
+                        }
+                    }
+                });
+                i++;
+                Log.e("TAG",Integer.toString(i));
+            }
+        }
+
+
+    }
+    private void Thirdlogin(String platformName) {
+
+        LoginApi api = new LoginApi(this.getActivity());
+        //设置登陆的平台后执行登陆的方法
+        api.setPlatform(platformName);
+        //dialog.dismiss();
+        api.setOnLoginListener(new OnLoginListener() {
+            public boolean onLogin(String plate, HashMap<String, Object> res) {
+                // 在这个方法填写尝试的代码，返回true表示还不能登录，需要注册
+                // 此处全部给回需要注册
+                //dialog.show();
+                String plat = plate;
+                final Platform platform = ShareSDK.getPlatform(plat);
+                Log.e("LoginAPP", platform.getDb().getUserId());
+                Log.e("LoginAPP", platform.getDb().getUserIcon());
+                Log.e("LoginAPP", platform.getDb().getUserGender());
+                Log.e("LoginAPP", platform.getDb().getUserName());
+
+                String account = platform.getDb().getUserId();
+                String token = generateToken(account);
+                String type;
+
+                if (plat.equals("SinaWeibo")) {
+                    type = "0";
+                    Log.e("LoginAPPId", res.get("id").toString());
+                    Log.e("LoginAPPname", res.get("name").toString());
+                    Log.e("LoginAPPurl", res.get("profile_image_url").toString());
+                } else if (plat.equals("Wechat")) {
+                    type = "1";
+                } else {
+                    type = "2";
+                }
+
+
+
+                return false;
+            }
+
+            @Override
+            public boolean onRegister(UserInfo info) {
+                return true;
+            }
+
+
+        });
+        api.login(getContext());
+        //dialog.dismiss();
+
+        //Log.e("TAG",Boolean.toString(api.getCanLogin()));
+
+    }
+    private String generateToken(String account) {
+        char[] charTmp = account.toCharArray();
+        int[] intTmp = new int[account.length()];
+        for (int i = 0; i < intTmp.length; i++) {
+            intTmp[i] = charTmp[i] - i % 10;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < intTmp.length; i++) {
+            stringBuilder.append(Integer.toHexString(intTmp[i]));
+        }
+        return stringBuilder.toString().toUpperCase();
+    }
 
 }

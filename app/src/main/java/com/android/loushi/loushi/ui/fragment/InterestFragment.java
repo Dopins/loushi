@@ -70,7 +70,7 @@ public class InterestFragment extends LazyFragment {
                 //Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
                 Intent intent= new Intent(getActivity(), SceneDetailActivity.class);
                 String sceneJsonString=new Gson().toJson(bodyBeanList.get(position));
-                intent.putExtra(SceneDetailActivity.SCENE_STRING,sceneJsonString);
+                intent.putExtra("SCENE_STRING",sceneJsonString);
                 startActivity(intent);
 //                Intent intent = new Intent(getActivity(), WebViewActivity.class);
 //                //intent.putExtra

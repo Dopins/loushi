@@ -99,6 +99,33 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
             holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum())+"人浏览");
             holder.btn_like.setVisibility(View.GONE);
         }
+        if(type.equals("1")){
+            if(beanList.get(position).getTopic()!=null) {
+                final UserCollectionsJson.BodyBean.TopicBean goodsBean = beanList.get(position).getTopic();
+                holder.tv_name.setText(goodsBean.getName());
+                holder.tv_price.setVisibility(View.INVISIBLE);
+                holder.price_symbol.setVisibility(View.INVISIBLE);
+                Picasso.with(context).load(goodsBean.getImgUrl()).fit().into(holder.img_good);
+
+                holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum())+"人浏览");
+                holder.btn_like.setVisibility(View.GONE);
+            }
+        }
+        if(type.equals("2")){
+            if(beanList.get(position).getStrategy()!=null) {
+                final UserCollectionsJson.BodyBean.StrategyBean goodsBean = beanList.get(position).getStrategy();
+                String url = goodsBean.getImgUrl();
+                if(url.indexOf("|||")>=0)
+                    url = url.substring(0, url.indexOf("|||"));
+                holder.tv_name.setText(goodsBean.getName());
+                holder.tv_price.setVisibility(View.INVISIBLE);
+                holder.price_symbol.setVisibility(View.INVISIBLE);
+                Picasso.with(context).load(url).fit().into(holder.img_good);
+
+                holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum())+"人浏览");
+                holder.btn_like.setVisibility(View.GONE);
+            }
+        }
 
     }
 

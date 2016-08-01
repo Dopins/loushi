@@ -30,6 +30,7 @@ import com.android.loushi.loushi.jsonbean.GoodsJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.SceneGoodJson;
 import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.ShareSomeThing;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
@@ -69,7 +70,8 @@ public class GoodDetailActivity extends  BaseActivity {
     private Toolbar program_toolbar;
     private ImageButton back;
     private Button btn_buy;
-
+    private String goodjsonString="";
+    private GoodsJson.BodyBean goodBean;
 
     private GoodDetailAdapter goodDetailAdapter;
     private List<GoodsJson.BodyBean.ImagesBean> list;
@@ -88,6 +90,8 @@ public class GoodDetailActivity extends  BaseActivity {
         //getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         if(getIntent().getStringExtra("GOOD_ID")!=null)
             good_id=getIntent().getStringExtra("GOOD_ID");
+        goodjsonString=getIntent().getStringExtra(BaseActivity.GOOD_STRING);
+        goodBean=new Gson().fromJson(goodjsonString,GoodsJson.BodyBean.class);
         //透明导航栏
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         bindView();
@@ -139,51 +143,62 @@ public class GoodDetailActivity extends  BaseActivity {
         //recyclerView.addItemDecoration(spaceItemDecoration);
     }
     private void getGood(){
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/base/goods.action")
+//        OkHttpUtils.post("http://www.loushi666.com/LouShi/base/goods.action")
+//
+//                .tag(getApplicationContext()).params("user_id", BaseActivity.user_id).params("good_id", good_id)
+//                .execute(new JsonCallback<GoodsJson>(GoodsJson.class) {
+//                    @Override
+//                    public void onResponse(boolean b, final GoodsJson goodsJson, Request request, Response response) {
+//                        Log.e("atg", new Gson().toJson(goodsJson));
+//                        if (goodsJson.getState()) {
 
-                .tag(getApplicationContext()).params("user_id", BaseActivity.user_id).params("good_id", good_id)
-                .execute(new JsonCallback<GoodsJson>(GoodsJson.class) {
-                    @Override
-                    public void onResponse(boolean b, final GoodsJson goodsJson, Request request, Response response) {
-                        Log.e("atg", new Gson().toJson(goodsJson));
-                        if (goodsJson.getState()) {
-                            final GoodsJson.BodyBean good = goodsJson.getBody();
                             //bodyBeanList.addAll(sceneGoodJson.getBody());
-                            list.addAll(goodsJson.getBody().getImages());
-                            Picasso.with(GoodDetailActivity.this).load(goodsJson.getBody().getImages().get(0).getUrl()).into(img_good);
-                            tv_good_name.setText(goodsJson.getBody().getName());
-                            tv_good_price.setText(goodsJson.getBody().getPrice() + "");
-                            tv_introduce.setText(goodsJson.getBody().getIntroduction());
+                            list.addAll(goodBean.getImages());
+                            Picasso.with(GoodDetailActivity.this).load(goodBean.getImages().get(0).getUrl()).into(img_good);
+                            tv_good_name.setText(goodBean.getName());
+                            tv_good_price.setText(goodBean.getPrice() + "");
+                            tv_introduce.setText(goodBean.getIntroduction());
                             goodDetailAdapter.notifyDataSetChanged();
 
-                            tv_collect_count.setText(good.getCollectionNum() + "");
-                            tv_share_count.setText(good.getForwordNum() + "");
-                            tv_comment_count.setText(good.getForwordNum() + "");
+                            tv_collect_count.setText(goodBean.getCollectionNum() + "");
+                            tv_share_count.setText(goodBean.getForwordNum() + "");
+                            tv_comment_count.setText(goodBean.getForwordNum() + "");
                             comment.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     Intent intent = new Intent(GoodDetailActivity.this, CommentActivity.class);
                                     intent.putExtra(KeyConstant.TYPE, "3");
-                                    intent.putExtra(KeyConstant.PID, good.getId() + "");
+                                    intent.putExtra(KeyConstant.PID, goodBean.getId() + "");
                                     startActivity(intent);
                                 }
                             });
                             Log.e("collect1", btn_collect.isSelected() + "");
-                            initCollect(good.getCollected());
-                            Log.e("good",goodsJson.getBody().getUrl());
-                            initButton(goodsJson.getBody().getUrl());
-
+                            initCollect(goodBean.getCollected());
+                            Log.e("good", goodBean.getUrl());
+                            initButton(goodBean.getUrl());
+                            share.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String imgurl = goodBean.getImages().get(0).getUrl();
+                                    String title = goodBean.getName();
+                                    String text = goodBean.getIntroduction();
+                                    String url ="http://www.baidu.com";
+                                            //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
+                                    ShareSomeThing shareSomeThing = new ShareSomeThing(getApplicationContext(), imgurl, url, text, title,user_id,"3",goodBean.getId()+"");
+                                    shareSomeThing.DoShare();
+                                }
+                            });
 //                            tv_comment_count.setText(good.getCommentNum());
 //                            tv_share_count.setText(good.getForwordNum());
                         }
-                        Log.e("atg", list.size() + "");
+                        //Log.e("atg", list.size() + "");
                         //sceneDetailGoodAdapter.notifyDataSetChanged();
 
-                    }
+                    //}
 
 
-                });
-    }
+//                });
+
     private void initButton(final String url){
         btn_buy=(Button)findViewById(R.id.btn_buy);
         btn_buy.setOnClickListener(new View.OnClickListener() {
@@ -252,10 +267,7 @@ public class GoodDetailActivity extends  BaseActivity {
         });
     }
 
-    public void onClick(View v) {
-        switch (v.getId()){
 
 
-        }
-    }
+
 }
