@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.TopicItemAdapter;
+import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.ui.activity.CategoryDetailActivity;
 import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.util.KeyConstant;
@@ -21,7 +22,6 @@ import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
-import com.lzy.okhttputils.callback.AbsCallback;
 
 
 import java.util.ArrayList;
@@ -37,65 +37,59 @@ public class TipsFragment extends LazyFragment {
 
     private static final String TAG = "TipsFragment";
 
-    private RecyclerView recycleView_tips;
-    private SwipeRefreshLayout swipeRefreshLayout_tips;
+    private RecyclerView recycleViewTips;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private Integer mSkip = 0;
     private Integer mTake = 20;
-    private List mTipsList= new ArrayList<>();
+    private List mTipsList = new ArrayList<>();
     private TopicItemAdapter mAdapter;
 
-    private boolean isFirstShow=true;  //判断是否是第一次加载
+    private boolean isFirstShow = true;  //判断是否是第一次加载
 
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
         setContentView(R.layout.fragment_tips);
         initView();
-        if(isFirstShow){
-            loadData(MainActivity.user_id, mSkip, mTake);
-            isFirstShow=false;
+        if (isFirstShow) {
+            loadData();
+            isFirstShow = false;
         }
     }
 
-    private void loadData(String userId, Integer skip, final Integer take){
-        Log.i("test","GetSomeScene--skip,take=="+skip+","+take+",,,isFirstShow=="+isFirstShow);
+    private void loadData() {
+        loadData(MainActivity.user_id, mSkip, mTake);
+    }
+
+
+    private void loadData(String userId, Integer skip, final Integer take) {
+
+        Log.i("test", "tips load --skip,take==" + skip + "," + take + ",,,isFirstShow==" + isFirstShow);
         OkHttpUtils.post(UrlConstant.TIPSCURL)
                 .tag(this)
                 .params(KeyConstant.USER_ID, userId)
-                .params(KeyConstant.SKIP,skip.toString())
-                .params(KeyConstant.TAKE,take.toString())
-                .execute(new AbsCallback<StrategyJson>() {
+                .params(KeyConstant.SKIP, skip.toString())
+                .params(KeyConstant.TAKE, take.toString())
+                .execute(new JsonCallback<StrategyJson>(StrategyJson.class) {
                     @Override
-                    public StrategyJson parseNetworkResponse(Response response) throws Exception {
-                        return new Gson().fromJson(response.body().string(),StrategyJson.class);
-                    }
-                    @Override
-                    public void onResponse(boolean isFromCache, StrategyJson bodyBean, Request request, @Nullable Response response) {
-                        Log.i(TAG,"onResponse-- "+new Gson().toJson(bodyBean));
-                        if(bodyBean.getState()){
-                            mSkip+=mTake;
-                            mTipsList.addAll(bodyBean.getBody());
+                    public void onResponse(boolean isFromCache, StrategyJson strategyJson, Request request, @Nullable Response response) {
+
+                        Log.i(TAG, "onResponse-- " + new Gson().toJson(strategyJson));
+                        if (strategyJson.getState()) {
+                            mSkip += mTake;
+                            mTipsList.addAll(strategyJson.getBody());
                             mAdapter.notifyDataSetChanged();
-                        }else
-                            Toast.makeText(getContext(),""+bodyBean.getReturn_info(),Toast.LENGTH_SHORT).show();
+                        } else
+                            Toast.makeText(getContext(), "" + strategyJson.getReturn_info(), Toast.LENGTH_SHORT).show();
 //                        Log.e(TAG,bodyBean.getBody().size()+"");
                     }
                 });
-
     }
 
     private void initView() {
-        swipeRefreshLayout_tips = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout_tips.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
-        swipeRefreshLayout_tips.setSize(SwipeRefreshLayout.DEFAULT);
-        recycleView_tips = (RecyclerView) findViewById(R.id.recycleView);
-        mAdapter = new TopicItemAdapter(getContext(),
-                mTipsList,
-                TopicItemAdapter.AdapterType.TIPS);
-        recycleView_tips.setLayoutManager(new LinearLayoutManager(getContext()));
-        recycleView_tips.addItemDecoration(new SpaceItemDecoration(getContext(), 10));
-        recycleView_tips.setAdapter(mAdapter);
+
+        initRecycleView();
 
         addRefreshListener();
         addOnBottomListener();
@@ -103,8 +97,22 @@ public class TipsFragment extends LazyFragment {
 
     }
 
+    private void initRecycleView() {
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        recycleViewTips = (RecyclerView) findViewById(R.id.recycleView);
+        mAdapter = new TopicItemAdapter(getContext(),
+                mTipsList,
+                TopicItemAdapter.AdapterType.TIPS);
+        recycleViewTips.setLayoutManager(new LinearLayoutManager(getContext()));
+        recycleViewTips.addItemDecoration(new SpaceItemDecoration(getContext(), 10));
+        recycleViewTips.setAdapter(mAdapter);
+    }
+
     private void addOnBottomListener() {
-        recycleView_tips.addOnScrollListener(new MyRecyclerOnScrollListener() {
+        recycleViewTips.addOnScrollListener(new MyRecyclerOnScrollListener() {
             @Override
             public void onBottom() {
 //                loadData(tempUserID,mSkip,mTake);
@@ -119,11 +127,11 @@ public class TipsFragment extends LazyFragment {
             @Override
             public void onItemClick(View v, int position) {
                 //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
-                Intent intent= new Intent(getActivity(), CategoryDetailActivity.class);
-                String jsonString=new Gson().toJson(mTipsList.get(position));
-                Log.e("jsonstring",jsonString);
-                intent.putExtra(CategoryDetailActivity.TYPE,"2");
-                intent.putExtra(CategoryDetailActivity.JSONSTRING,jsonString);
+                Intent intent = new Intent(getActivity(), CategoryDetailActivity.class);
+                String jsonString = new Gson().toJson(mTipsList.get(position));
+                Log.e("jsonstring", jsonString);
+                intent.putExtra(CategoryDetailActivity.TYPE, "2");
+                intent.putExtra(CategoryDetailActivity.JSONSTRING, jsonString);
                 startActivity(intent);
             }
         });
@@ -131,18 +139,17 @@ public class TipsFragment extends LazyFragment {
 
     private void addRefreshListener() {
 
-        swipeRefreshLayout_tips.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mSkip = 0;
                 mTipsList.clear();
-                loadData(MainActivity.user_id, mSkip, mTake);
-                swipeRefreshLayout_tips.setRefreshing(false);
+                loadData();
+                swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(getContext(), "刷新成功", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
 
 
 }

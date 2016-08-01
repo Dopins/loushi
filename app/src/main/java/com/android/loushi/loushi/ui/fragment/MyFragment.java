@@ -1,7 +1,6 @@
 package com.android.loushi.loushi.ui.fragment;
 
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -45,6 +44,7 @@ public class MyFragment extends BaseFragment {
     private ViewPagerIndicator mIndicator;
     public static View view;
 
+    public PersonFragment mPersonFragment;
 
 
     @Override
@@ -53,10 +53,10 @@ public class MyFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         Log.e(TAG, "onActivityCreated");
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
-        Boolean LoginOrNot = sharedPreferences.getBoolean("LoginOrNot",false);
-        if(LoginOrNot) {
+        Boolean LoginOrNot = sharedPreferences.getBoolean("LoginOrNot", false);
+        if (LoginOrNot) {
             transferToPersonalFragment();
-        }else {
+        } else {
             Log.e(TAG, " Have not login !");
         }
 
@@ -73,9 +73,9 @@ public class MyFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (view == null) {
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserLogin",Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("LoginOrNot",false);
+            editor.putBoolean("LoginOrNot", false);
             editor.commit();
 
             view = inflater.inflate(R.layout.fragment_my, null);
@@ -100,8 +100,11 @@ public class MyFragment extends BaseFragment {
     }
 
     public void transferToPersonalFragment() {
+        if (mPersonFragment == null)
+            mPersonFragment = new PersonFragment();
+
         getFragmentManager().beginTransaction()
-                .replace(R.id.content,new PersonFragment())
+                .replace(R.id.content, mPersonFragment)
                 .commit();
     }
 
@@ -146,8 +149,8 @@ public class MyFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onEventMainThread(MyfragmentEvent event){
-        Log.e(TAG,event.getmMsg());
+    public void onEventMainThread(MyfragmentEvent event) {
+        Log.e(TAG, event.getmMsg());
         transferToPersonalFragment();
     }
 

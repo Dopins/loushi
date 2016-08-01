@@ -7,18 +7,22 @@
     android:gravity="center">
 
 
-        <RelativeLayout
-            android:layout_width="150dp"
-            android:layout_height="97dp">
+    <android.support.v7.widget.CardView
+        android:layout_width="150dp"
+        android:layout_height="97dp"
+        app:cardCornerRadius="4dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true">
 
-            <ImageView
-                android:id="@+id/item_imageView_guide"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"/>
 
-        </RelativeLayout>
+        <ImageView
+            android:id="@+id/item_imageView_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:src="@drawable/project_cartoon" />
 
+    </android.support.v7.widget.CardView>
 
 
 </RelativeLayout>
