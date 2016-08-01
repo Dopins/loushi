@@ -68,7 +68,7 @@ public class GoodDetailActivity extends  BaseActivity {
     private TextView price_symbol;
     private TextView tv_good_price;
     private Toolbar program_toolbar;
-    private ImageButton back;
+    private ImageView back;
     private Button btn_buy;
     private String goodjsonString="";
     private GoodsJson.BodyBean goodBean;
@@ -101,13 +101,13 @@ public class GoodDetailActivity extends  BaseActivity {
     private void bindView(){
         img_good = (ImageView) findViewById(R.id.img_good);
         program_toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.program_toolbar);
-        back = (ImageButton) program_toolbar.findViewById(R.id.back);
+
         tv_good_name = (TextView) findViewById(R.id.tv_good_name);
         tv_introduce = (TextView) findViewById(R.id.tv_introduce);
         price_symbol = (TextView) findViewById(R.id.price_symbol);
         tv_good_price = (TextView) findViewById(R.id.tv_good_price);
         btn_buy = (Button) findViewById(R.id.btn_buy);
-        back=(ImageButton)program_toolbar.findViewById(R.id.back);
+        back=(ImageView)program_toolbar.findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

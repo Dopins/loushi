@@ -51,7 +51,7 @@ public class SceneDetailActivity extends  BaseActivity {
     private List<String> list_title;
     private TabLayout tabLayout;
     private Toolbar mToolbar;
-    private ImageButton back;
+    private ImageView back;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
 
@@ -142,7 +142,7 @@ public class SceneDetailActivity extends  BaseActivity {
     private void initToobar(){
         mToolbar=(Toolbar)findViewById(R.id.program_toolbar);
         setSupportActionBar(mToolbar);
-        back=(ImageButton)mToolbar.findViewById(R.id.back);
+        back=(ImageView)mToolbar.findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

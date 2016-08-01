@@ -19,14 +19,21 @@ import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.PersonCollectTabAdapter;
+import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.jsonbean.UserCollectsNum;
+import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
 
 import com.android.loushi.loushi.ui.activity.MyMessageActivity;
 import com.android.loushi.loushi.util.RoundImageView;
 import com.android.loushi.loushi.util.SlidingTabLayout;
+import com.lzy.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Administrator on 2016/7/18.
@@ -48,7 +55,7 @@ public class PersonFragment extends BaseFragment {
     private View rootView;
                             //定义viewPager
     private PersonCollectTabAdapter personCollectTabAdapter;                               //定义adapter
-    private List<Fragment> list_fragment;                                //定义要装fragment的列表
+    private List<Fragment> list_fragment= new ArrayList<>();                                //定义要装fragment的列表
 
 
     private List<String> list_count= new ArrayList<>();
@@ -109,53 +116,98 @@ public class PersonFragment extends BaseFragment {
     }
 
     private void initTablayout() {
-        mViewPager = (ViewPager)getView().findViewById(R.id.main_vp_container);
-        list_fragment= new ArrayList<>();
-        collectGoodFragment=new CollectGoodFragment();
-        Bundle bundle;
-        bundle = new Bundle();
-        bundle.putString(CollectGoodFragment.TYPE, "0");
-        collectGoodFragment.setArguments(bundle);
-        list_fragment.add(collectGoodFragment);
-        collectGoodFragment=new CollectGoodFragment();
-        bundle = new Bundle();
-        bundle.putString(CollectGoodFragment.TYPE, "1");
-        collectGoodFragment.setArguments(bundle);
-        list_fragment.add(collectGoodFragment);
-        collectGoodFragment=new CollectGoodFragment();
-        bundle = new Bundle();
-        collectGoodFragment.setArguments(bundle);
-        bundle.putString(CollectGoodFragment.TYPE, "3");
-        list_fragment.add(collectGoodFragment);
+      if(list_count.size()==0) {
+          OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
+                  .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
+              @Override
+              public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
+
+                  list_count.add(userCollectsNum.getBody().getSceneNum() + "");
+                  list_count.add(userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
+                  list_count.add(userCollectsNum.getBody().getGoodsNum() + "");
+                  mViewPager = (ViewPager) getView().findViewById(R.id.main_vp_container);
+
+                  collectGoodFragment = new CollectGoodFragment();
+                  Bundle bundle;
+                  bundle = new Bundle();
+                  bundle.putString(CollectGoodFragment.TYPE, "0");
+                  collectGoodFragment.setArguments(bundle);
+                  list_fragment.add(collectGoodFragment);
+                  collectGoodFragment = new CollectGoodFragment();
+                  bundle = new Bundle();
+                  bundle.putString(CollectGoodFragment.TYPE, "1");
+                  collectGoodFragment.setArguments(bundle);
+                  list_fragment.add(collectGoodFragment);
+                  collectGoodFragment = new CollectGoodFragment();
+                  bundle = new Bundle();
+                  collectGoodFragment.setArguments(bundle);
+                  bundle.putString(CollectGoodFragment.TYPE, "3");
+                  list_fragment.add(collectGoodFragment);
 
 
-        list_count.add("32");
+//                list_count.add("32");
+//
+//                list_count.add("44");
+//                list_count.add("11");
 
-        list_count.add("44");
-        list_count.add("11");
-
-        personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(),list_fragment,list_count,getContext());
-        mViewPager.setAdapter(personCollectTabAdapter);
-
-
-        mtoorbar_tab.setTabStripWidth(120);
+                  personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(), list_fragment, list_count, getContext());
+                  mViewPager.setAdapter(personCollectTabAdapter);
 
 
-        //mtoorbar_tab.setSelectedIndicatorColors(R.color.colorPrimary);
-        mtoorbar_tab.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return Color.rgb(105,184,187);
-            }
-        });
-
-        mtoorbar_tab.setDistributeEvenly(true);
-        mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, R.id.tv_tab_view_count);
+                  mtoorbar_tab.setTabStripWidth(120);
 
 
-        //mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, 0);
-        mtoorbar_tab.setViewPager(mViewPager);
+                  //mtoorbar_tab.setSelectedIndicatorColors(R.color.colorPrimary);
+                  mtoorbar_tab.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+                      @Override
+                      public int getIndicatorColor(int position) {
+                          return Color.rgb(105, 184, 187);
+                      }
+                  });
 
+                  mtoorbar_tab.setDistributeEvenly(true);
+                  mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, R.id.tv_tab_view_count);
+
+
+                  //mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, 0);
+                  mtoorbar_tab.setViewPager(mViewPager);
+              }
+          });
+      }
+        else
+      {
+          mViewPager = (ViewPager) getView().findViewById(R.id.main_vp_container);
+
+
+
+
+//                list_count.add("32");
+//
+//                list_count.add("44");
+//                list_count.add("11");
+
+          personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(), list_fragment, list_count, getContext());
+          mViewPager.setAdapter(personCollectTabAdapter);
+
+
+          mtoorbar_tab.setTabStripWidth(120);
+
+
+          //mtoorbar_tab.setSelectedIndicatorColors(R.color.colorPrimary);
+          mtoorbar_tab.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+              @Override
+              public int getIndicatorColor(int position) {
+                  return Color.rgb(105, 184, 187);
+              }
+          });
+
+          mtoorbar_tab.setDistributeEvenly(true);
+          mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, R.id.tv_tab_view_count);
+
+
+          //mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, 0);
+          mtoorbar_tab.setViewPager(mViewPager);
+      }
        // AppBarLayout app_bar_layout = (AppBarLayout)getView(). findViewById(R.id.app_bar_layout);
 //        app_bar_layout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
 //            @Override

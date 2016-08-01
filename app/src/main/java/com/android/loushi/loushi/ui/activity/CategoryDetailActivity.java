@@ -2,6 +2,7 @@ package com.android.loushi.loushi.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -47,15 +49,18 @@ public class CategoryDetailActivity extends BaseActivity {
     private String type="0";
     private TopicJson.BodyBean topicBean;
     private String url="";
+    private Toolbar toolbar;
+    private ImageView back;
+    private TextView tv_title;
     //private StrategyJson.BodyBean strategyBean;
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_scene_detail_design;
+        return R.layout.activity_category_detail;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_scene_detail_design);
+        setContentView(R.layout.activity_category_detail);
         jsonstring=getIntent().getStringExtra(JSONSTRING);
         Log.e("stra1",jsonstring);
         topicBean=new Gson().fromJson(jsonstring, TopicJson.BodyBean.class);
@@ -82,8 +87,21 @@ public class CategoryDetailActivity extends BaseActivity {
 
     private void initView() {
         initWebView();
-
+        initToolBar();
         bindCollectBarView();
+
+    }
+    private void initToolBar(){
+        toolbar = (Toolbar)findViewById(R.id.program_toolbar);
+        back = (ImageView)toolbar.findViewById(R.id.back);
+        tv_title=(TextView)toolbar.findViewById(R.id.tv_title);
+        tv_title.setText(topicBean.getName());
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 
