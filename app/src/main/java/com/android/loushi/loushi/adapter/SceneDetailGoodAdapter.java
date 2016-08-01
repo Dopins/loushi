@@ -47,7 +47,9 @@ public class SceneDetailGoodAdapter extends RecyclerView.Adapter<SceneDetailGood
         final SceneGoodJson.BodyBean bodyBean = bodyBeanList.get(position);
 
          //Log.e("scenedetail", bodyBean.getImages().get(0).getUrl());
-         Picasso.with(context).load(bodyBean.getImages().get(0).getUrl()).fit().into(holder.img_good);
+         //TO DO
+
+        Picasso.with(context).load(bodyBean.getImages().get(0).getUrl()).fit().into(holder.img_good);
          holder.tv_name.setText(bodyBean.getName());
          holder.img_good.setOnClickListener(new View.OnClickListener() {
              @Override

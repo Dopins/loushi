@@ -252,10 +252,17 @@ public class GoodDetailActivity extends  BaseActivity {
         });
     }
 
-    public void onClick(View v) {
-        switch (v.getId()){
-
-
-        }
-    }
+//    public void onClick(View v) {
+//        switch (v.getId()){
+//            case R.id.collect_bar_linear_share:
+//                String imgurl = scenebean.getImgUrl();
+//                String title = scenebean.getName();
+//                String text = scenebean.getDigest();
+//                String url =
+//                        //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
+//                        ShareSomeThing
+//                break;
+//
+//        }
+//    }
 }
