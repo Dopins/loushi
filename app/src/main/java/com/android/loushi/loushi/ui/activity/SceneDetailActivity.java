@@ -117,6 +117,7 @@ public class SceneDetailActivity extends  BaseActivity {
         sceneDetailGoodFragment = new SceneDetailGoodFragment();
         Bundle bundle = new Bundle();
         bundle.putString("SCENE_ID",scene_id);
+        bundle.putString("SCENE_STRING",sceneJsonString);
         sceneDetailGoodFragment.setArguments(bundle);
         sceneDetailDesignFragment = new SceneDetailDesignFragment();
         sceneDetailDesignFragment.setArguments(bundle);

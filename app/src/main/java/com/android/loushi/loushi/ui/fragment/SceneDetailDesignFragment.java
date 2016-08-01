@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
+import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.CommentActivity;
 import com.android.loushi.loushi.util.KeyConstant;
@@ -43,6 +44,8 @@ public class SceneDetailDesignFragment extends BaseFragment {
     private ImageButton btn_collect;
     private ImageButton btn_comment;
     private TextView tv_collect_count;
+    private String sceneJsonString="";
+    private SceneJson.BodyBean sceneJson;
     private TextView tv_comment_count;
     private TextView tv_share_count;
     @Override
@@ -51,6 +54,8 @@ public class SceneDetailDesignFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         if(!TextUtils.isEmpty(getArguments().getString("SCENE_ID")))
         scene_id = getArguments().getString("SCENE_ID");
+        sceneJsonString=getArguments().getString("SCENE_STRING");
+        sceneJson=new Gson().fromJson(sceneJsonString,SceneJson.BodyBean.class);
         initWebview();
         initCollectBar();
 
@@ -149,5 +154,8 @@ public class SceneDetailDesignFragment extends BaseFragment {
                 getActivity().startActivity(intent);
             }
         });
+        tv_comment_count.setText(sceneJson.getCommentNum()+"");
+        tv_collect_count.setText(sceneJson.getCollectionNum()+"");
+        tv_share_count.setText(sceneJson.getForwordNum()+"");
     }
 }

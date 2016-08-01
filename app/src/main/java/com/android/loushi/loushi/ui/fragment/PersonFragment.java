@@ -49,8 +49,9 @@ public class PersonFragment extends BaseFragment {
                             //定义viewPager
     private PersonCollectTabAdapter personCollectTabAdapter;                               //定义adapter
     private List<Fragment> list_fragment;                                //定义要装fragment的列表
-    private List<String> list_cate;
-    private List<String> list_count;
+
+
+    private List<String> list_count= new ArrayList<>();
     //private CategoryFragment categoryFragment;
     private CollectGoodFragment collectGoodFragment;
     private ViewPager mViewPager;
@@ -109,16 +110,16 @@ public class PersonFragment extends BaseFragment {
 
     private void initTablayout() {
         mViewPager = (ViewPager)getView().findViewById(R.id.main_vp_container);
-        list_fragment = new ArrayList<>();
+        list_fragment= new ArrayList<>();
         collectGoodFragment=new CollectGoodFragment();
         Bundle bundle;
         bundle = new Bundle();
-        bundle.putString(CollectGoodFragment.TYPE,"0");
+        bundle.putString(CollectGoodFragment.TYPE, "0");
         collectGoodFragment.setArguments(bundle);
         list_fragment.add(collectGoodFragment);
         collectGoodFragment=new CollectGoodFragment();
         bundle = new Bundle();
-        bundle.putString(CollectGoodFragment.TYPE,"1");
+        bundle.putString(CollectGoodFragment.TYPE, "1");
         collectGoodFragment.setArguments(bundle);
         list_fragment.add(collectGoodFragment);
         collectGoodFragment=new CollectGoodFragment();
@@ -126,20 +127,14 @@ public class PersonFragment extends BaseFragment {
         collectGoodFragment.setArguments(bundle);
         bundle.putString(CollectGoodFragment.TYPE, "3");
         list_fragment.add(collectGoodFragment);
-        list_cate = new ArrayList<>();
-        list_count = new ArrayList<>();
-        list_cate.add("场景");
-        list_cate.add("指南");
-        list_cate.add("单品");
+
+
         list_count.add("32");
 
         list_count.add("44");
         list_count.add("11");
 
-        personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(),list_fragment,list_cate,list_count,getContext());
-        personCollectTabAdapter.instantiateItem(0);
-        personCollectTabAdapter.instantiateItem(1);
-        personCollectTabAdapter.instantiateItem(2);
+        personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(),list_fragment,list_count,getContext());
         mViewPager.setAdapter(personCollectTabAdapter);
 
 

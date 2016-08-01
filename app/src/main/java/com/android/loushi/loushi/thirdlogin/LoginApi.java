@@ -122,7 +122,7 @@ public class LoginApi implements Callback {
 				String text = "caught error: " + t.getMessage();
 				Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
 				t.printStackTrace();
-				setCanLogin(2);
+
 			} break;
 			case MSG_AUTH_COMPLETE: {
 				// 成功

@@ -18,7 +18,9 @@ import android.widget.TextView;
 import com.android.loushi.loushi.R;
 
 import com.android.loushi.loushi.jsonbean.SceneGoodJson;
+import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -57,6 +59,7 @@ public class SceneDetailGoodAdapter extends RecyclerView.Adapter<SceneDetailGood
                   //showBigImage(bodyBean.getImages().get(0).getUrl());
                  Intent intent = new Intent(context, GoodDetailActivity.class);
                  intent.putExtra("GOOD_ID",bodyBean.getId()+"");
+                 intent.putExtra(BaseActivity.GOOD_STRING,new Gson().toJson(bodyBean));
                  context.startActivity(intent);
              }
          });

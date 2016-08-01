@@ -287,7 +287,7 @@ public class LoginFragment extends Fragment {
                     i++;
                     continue;
                 }
-                String name = platform.getName();
+
 
 
                 imgbtn.get(i).setTag(platform);

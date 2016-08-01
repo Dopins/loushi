@@ -70,6 +70,12 @@ public class CategoryDetailActivity extends BaseActivity {
                 url="";
 
         }
+        if(type.equals("1")){
+            url="http://www.loushi666.com:8080/loushi/topic.html?&user_id="+BaseActivity.user_id
+                    +"&topic_id="+
+            topicBean.getId();
+        }
+        Log.e("cate",url);
 
         initView();
     }
