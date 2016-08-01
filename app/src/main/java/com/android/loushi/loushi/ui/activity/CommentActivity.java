@@ -59,7 +59,7 @@ public class CommentActivity extends BaseActivity implements
     private String mType;
     private String mPid;
 
-    private String mReplyId;
+    private String mReplyId="0";
 
     private CommentAdapter mAdapter;
     private List<CommentJson.BodyBean> mCommentList = new ArrayList<CommentJson.BodyBean>();
@@ -88,9 +88,11 @@ public class CommentActivity extends BaseActivity implements
         mType = intent.getStringExtra(KeyConstant.TYPE);
         mPid = intent.getStringExtra(KeyConstant.PID);
 
+
         //TODO
-        mType = 1 + "";
-        mPid = 233 + "";
+//        mType = 1 + "";
+//        mPid = 233 + "";
+        Log.i("test","mType,mPid"+mType+","+mPid);
 
         inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
@@ -202,7 +204,7 @@ public class CommentActivity extends BaseActivity implements
     }
 
     private void newComment() {
-        mReplyId = "";
+        mReplyId = "0";
         editTextComment.setHint("新评论");
     }
 

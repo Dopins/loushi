@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.jsonbean.CommentJson;
 import com.android.loushi.loushi.jsonbean.UserMessageJson;
+import com.android.loushi.loushi.util.DateUtils;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -65,14 +66,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }else
             holder.textView_userContont.setText(mComment.getContent());
 
-        String[] temp = mComment.getCDate().replace("-","/").split("T");
-        holder.textView_MessageDate.setText(CalulateDate(temp[0]));
-        holder.textView_MessageTime.setText(CalulateTime(temp[1]));
+        holder.textView_MessageDate.setText(DateUtils.calulateDate(mComment.getCDate()));
+        holder.textView_MessageTime.setText(DateUtils.calulateTime(mComment.getCDate()));
 
-//        Log.i("test","date,time=="+CalulateDate(time_cha)+","+CalulateTime(time_cha));
-
-
-        //TODO
     }
 
     @Override
@@ -80,49 +76,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         return mCommentList.size();
     }
 
-    /*
-    * 获取输入时间   如   22:37
-    * */
-    private String CalulateTime(String date) {
-//        SimpleDateFormat dfs = new SimpleDateFormat("HH:mm");
-//        Date d = new Date(date);
-//        return dfs.format(d);
-        String[] strs=date.split(":");
-        return strs[0]+":"+strs[1];
-    }
-
-    /*
-    * 通过输入当前时间判断距离时间
-    * */
-    private String CalulateDate(String date) {
-        String result=date;
-        SimpleDateFormat dfs = new SimpleDateFormat("yyyy/MM/dd");
-        Date begin = new Date(date);
-        Date end=new Date(System.currentTimeMillis());
-        Calendar cBegin=Calendar.getInstance();
-        Calendar cEnd=Calendar.getInstance();
-        cBegin.setTime(begin);
-        cEnd.setTime(end);
-        int beginDay=cBegin.get(Calendar.DAY_OF_YEAR);
-        int beginMonth=cBegin.get(Calendar.MONTH);
-        int beginYear=cBegin.get(Calendar.YEAR);
-        int endDay=cEnd.get(Calendar.DAY_OF_YEAR);
-        int endMonth=cEnd.get(Calendar.MONTH);
-        int endYear=cEnd.get(Calendar.YEAR);
-
-        if(endDay-beginDay==0)
-            result="今天";
-        else if(endDay-beginDay==1)
-            result="昨天";
-        else if(endDay-beginDay==2)
-            result="前天";
-        else if((endYear-beginYear==1)
-                &&(endMonth-beginMonth==-11)
-                &&(cEnd.get(Calendar.DAY_OF_MONTH)-cBegin.get(Calendar.DAY_OF_MONTH)==-30))
-            result="昨天";
-        return result;
-
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

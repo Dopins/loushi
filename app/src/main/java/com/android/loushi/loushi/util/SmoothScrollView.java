@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.widget.ScrollView;
@@ -41,19 +42,20 @@ public class SmoothScrollView extends ScrollView{
         mTouchSlop= ViewConfiguration.get(context).getScaledTouchSlop();
     }
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-
-        switch(ev.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                mDownY= (int) ev.getRawY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                int moveY= (int) ev.getRawY();
-                if((Math.abs(moveY-mDownY))>mTouchSlop)
-                    return true;
-                break;
-        }
-        return super.onInterceptTouchEvent(ev);
-    }
+//    @Override
+//    public boolean onInterceptTouchEvent(MotionEvent ev) {
+//
+//        Log.i("test","scrollview onInterceptTouchEvent");
+//        switch(ev.getAction()){
+//            case MotionEvent.ACTION_DOWN:
+//                mDownY= (int) ev.getRawY();
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                int moveY= (int) ev.getRawY();
+//                if((Math.abs(moveY-mDownY))>mTouchSlop)
+//                    return true;
+//                break;
+//        }
+//        return super.onInterceptTouchEvent(ev);
+//    }
 }
