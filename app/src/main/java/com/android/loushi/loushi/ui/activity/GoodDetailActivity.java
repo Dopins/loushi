@@ -188,16 +188,9 @@ public class GoodDetailActivity extends  BaseActivity {
                                     shareSomeThing.DoShare();
                                 }
                             });
-//                            tv_comment_count.setText(good.getCommentNum());
-//                            tv_share_count.setText(good.getForwordNum());
+
                         }
-                        //Log.e("atg", list.size() + "");
-                        //sceneDetailGoodAdapter.notifyDataSetChanged();
 
-                    //}
-
-
-//                });
 
     private void initButton(final String url){
         btn_buy=(Button)findViewById(R.id.btn_buy);

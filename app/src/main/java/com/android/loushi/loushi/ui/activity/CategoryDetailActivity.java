@@ -24,6 +24,7 @@ import com.android.loushi.loushi.jsonbean.StrategyJson;
 import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.MyWebView;
+import com.android.loushi.loushi.util.ShareSomeThing;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
@@ -197,9 +198,22 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
                     }
                 });
                 break;
+            case R.id.collect_bar_linear_share:
+                String imgurl = topicBean.getImgUrl();
+                if(type.equals("2")){
+                    imgurl=imgurl.substring(0,imgurl.indexOf("|||"));
+                }
+                String title = topicBean.getName();
+                String text = topicBean.getDigest();
+
+                //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
+                ShareSomeThing shareSomeThing = new ShareSomeThing(getApplicationContext(), imgurl, url, text, title,user_id,type,topicBean.getId()+"");
+                shareSomeThing.DoShare();
+                break;
 
 
         }
+
     }
 
 

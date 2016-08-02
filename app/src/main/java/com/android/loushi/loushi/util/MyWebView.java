@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.ui.activity.BaseActivity;
 
 /**
  * Created by Administrator on 2016/8/1.
@@ -32,7 +34,11 @@ public class MyWebView extends LinearLayout {
     public MyWebView(Context context, AttributeSet attrs) {
         super(context,attrs);
         this.context = context;
-        LayoutInflater.from(context).inflate(R.layout.ll_mywebview, this, true);
+
+        //LayoutInflater layoutInflater = LayoutInflater.from(context);
+        LayoutInflater.from((BaseActivity)context).inflate(R.layout.ll_mywebview, this, true);
+
+        //View view=layoutInflater.inflate(R.layout.ll_mywebview,null);
         webView= (WebView)findViewById(R.id.webview);
         progressBar = (ProgressBar)findViewById(R.id.progressbar);
         //setWebView("http://www.baidu.com");

@@ -23,6 +23,8 @@ import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.CommentActivity;
 import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.MyWebView;
+import com.android.loushi.loushi.util.ShareSomeThing;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
@@ -35,19 +37,21 @@ import okhttp3.Response;
  * Created by Administrator on 2016/7/24.
  */
 public class SceneDetailDesignFragment extends BaseFragment {
-    private WebView webView;
+    private MyWebView mywebView;
     private LinearLayout collect_bar;
-    private String scene_id="1";
+
     private LinearLayout collect;
     private LinearLayout comment;
     private LinearLayout share;
     private ImageButton btn_collect;
     private ImageButton btn_comment;
     private TextView tv_collect_count;
-    private String sceneJsonString="";
-    private SceneJson.BodyBean sceneJson;
+    private String url="";
     private TextView tv_comment_count;
     private TextView tv_share_count;
+    private String sceneJsonString="";
+    private SceneJson.BodyBean sceneJson;
+    private String scene_id="1";
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -71,45 +75,10 @@ public class SceneDetailDesignFragment extends BaseFragment {
         return view;
     }
     private void initWebview(){
-        webView=(WebView)getView().findViewById(R.id.webview);
-        webView.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
+        mywebView=(MyWebView)getView().findViewById(R.id.mywebview);
+        url="http://www.loushi666.com:8080/loushi/scene.html?user_id="+ BaseActivity.user_id+"&scene_id="+scene_id;
+      mywebView.setWebView(url);
 
-            }
-        });
-
-        webView.setWebViewClient(new WebViewClient() {
-            // 获取cookie
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                CookieManager cookieManager = CookieManager.getInstance();
-                String CookieStr = cookieManager.getCookie(url);
-                Log.e("HEHE", "Cookies = " + CookieStr);
-                super.onPageFinished(view, url);
-            }
-
-            public boolean shouldOverrideUrlLoading(WebView view, final String url) {
-                //获取web跳转的url 根据 url的后缀来确定商品id
-
-
-                    return false;
-
-            }
-        });
-        webView.getSettings().setJavaScriptEnabled(true);
-        // 设置渲染优先级，加速渲染
-        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-//        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-        // 先加载页面在加载图片
-        // webView.getSettings().setLoadsImagesAutomatically(true);
-        webView.getSettings().setBlockNetworkImage(false);
-//        // 设置cookie，但是cookie不知道从哪来的，暂时注释
-//        CookieSyncManager.createInstance(WebView.this);
-//        CookieManager cookieManager = CookieManager.getInstance();
-//        cookieManager.setAcceptCookie(true);
-//        cookieManager.setCookie(url, cookies);  //cookies是要设置的cookie字符串
-//        CookieSyncManager.getInstance().sync();
-        webView.loadUrl("http://www.loushi666.com:8080/loushi/scene.html?user_id="+ BaseActivity.user_id+"&scene_id="+scene_id);
     }
     private void initCollectBar(){
         collect_bar=(LinearLayout)getView().findViewById(R.id.collect_bar);
@@ -152,6 +121,19 @@ public class SceneDetailDesignFragment extends BaseFragment {
                 intent.putExtra(KeyConstant.TYPE,"0");
                 intent.putExtra(KeyConstant.PID, scene_id+"");
                 getActivity().startActivity(intent);
+            }
+        });
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String imgurl = sceneJson.getImgUrl();
+
+                String title = sceneJson.getName();
+                String text = sceneJson.getDigest();
+
+                //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
+                ShareSomeThing shareSomeThing = new ShareSomeThing(getApplicationContext(), imgurl, url, text, title,BaseActivity.user_id,"1",sceneJson.getId()+"");
+                shareSomeThing.DoShare();
             }
         });
         tv_comment_count.setText(sceneJson.getCommentNum()+"");
