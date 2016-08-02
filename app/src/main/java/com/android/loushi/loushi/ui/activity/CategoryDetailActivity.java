@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +23,7 @@ import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.StrategyJson;
 import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.MyWebView;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
@@ -32,7 +34,7 @@ import okhttp3.Response;
 /**
  * Created by Administrator on 2016/7/29.
  */
-public class CategoryDetailActivity extends BaseActivity {
+public class CategoryDetailActivity extends BaseActivity implements View.OnClickListener {
     private WebView webView;
     private LinearLayout collect_bar;
     private LinearLayout collect;
@@ -52,6 +54,7 @@ public class CategoryDetailActivity extends BaseActivity {
     private Toolbar toolbar;
     private ImageView back;
     private TextView tv_title;
+    private MyWebView myWebView;
     //private StrategyJson.BodyBean strategyBean;
     @Override
     protected int getLayoutId() {
@@ -91,6 +94,13 @@ public class CategoryDetailActivity extends BaseActivity {
         bindCollectBarView();
 
     }
+
+    private void initWebView() {
+        myWebView=new MyWebView(CategoryDetailActivity.this);
+        myWebView = (MyWebView)findViewById(R.id.mywebview);
+        myWebView.setWebView(url);
+    }
+
     private void initToolBar(){
         toolbar = (Toolbar)findViewById(R.id.program_toolbar);
         back = (ImageView)toolbar.findViewById(R.id.back);
@@ -105,37 +115,37 @@ public class CategoryDetailActivity extends BaseActivity {
 
     }
 
-    private void initWebView() {
-        webView =(WebView) findViewById(R.id.webview);
-        webView.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
-                setProgress(progress * 100);
-            }
-        });
-
-        webView.setWebViewClient(new WebViewClient() {
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-            }
-
-            public boolean shouldOverrideUrlLoading(WebView view, final String url) {
-                //获取web跳转的url 根据 url的后缀来确定商品id
-
-
-                    return false;
-
-            }
-        });
-        webView.getSettings().setJavaScriptEnabled(true);
-
-        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-
-        webView.getSettings().setBlockNetworkImage(false);
-
-        webView.loadUrl(url);
-    }
+//    private void initWebView() {
+//        webView =(WebView) findViewById(R.id.webview);
+//        webView.setWebChromeClient(new WebChromeClient() {
+//            public void onProgressChanged(WebView view, int progress) {
+//                setProgress(progress * 100);
+//            }
+//        });
+//
+//        webView.setWebViewClient(new WebViewClient() {
+//
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                super.onPageFinished(view, url);
+//            }
+//
+//            public boolean shouldOverrideUrlLoading(WebView view, final String url) {
+//                //获取web跳转的url 根据 url的后缀来确定商品id
+//
+//
+//                return false;
+//
+//            }
+//        });
+//        webView.getSettings().setJavaScriptEnabled(true);
+//
+//        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+//
+//        webView.getSettings().setBlockNetworkImage(false);
+//
+//        webView.loadUrl(url);
+//    }
 
     private void bindCollectBarView(){
 
@@ -152,7 +162,8 @@ public class CategoryDetailActivity extends BaseActivity {
         tv_collect_count.setText(topicBean.getCollectionNum() + "");
         tv_comment_count.setText(topicBean.getCommentNum() + "");
         tv_share_count.setText(topicBean.getForwordNum() + "");
-
+        collect.setOnClickListener(this);
+        comment.setOnClickListener(this);
 
     }
 

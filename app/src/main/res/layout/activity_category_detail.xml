@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
     <android.support.v7.widget.Toolbar
         android:id="@+id/program_toolbar"
         android:layout_width="match_parent"
@@ -27,9 +28,20 @@
             android:textColor="#fff"
             android:textSize="20sp"/>
     </android.support.v7.widget.Toolbar>
-    <WebView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/webview"
-        />
-</LinearLayout>
+  <com.android.loushi.loushi.util.MyWebView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/mywebview"
+      android:layout_below="@+id/program_toolbar"
+      android:layout_above="@+id/collect_bar"
+
+      ></com.android.loushi.loushi.util.MyWebView>
+    <include layout="@layout/collect_bar"
+
+        android:layout_height="44dp"
+
+        android:id="@+id/collect_bar"
+        android:layout_alignParentBottom="true"
+
+        android:layout_width="match_parent"/>
+</RelativeLayout>
