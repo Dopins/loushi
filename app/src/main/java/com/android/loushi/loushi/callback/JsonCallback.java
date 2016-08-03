@@ -3,7 +3,9 @@ package com.android.loushi.loushi.callback;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.google.gson.Gson;
+import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.callback.AbsCallback;
 
 import java.lang.reflect.Type;
@@ -38,10 +40,20 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
         /**
          在这里实现code10000的登陆
          */
-        Log.e("te",responseData);
-        if (clazz == String.class) return (T) responseData;
-                if (clazz != null) return new Gson().fromJson(responseData, clazz);
-                if (type != null) return new Gson().fromJson(responseData, type);
+        //Log.e("te",responseData);
+        if (clazz == String.class) {
+            Log.e("clazz","0");
+            return (T) responseData;
+        }
+                if (clazz != null) {
+                    Log.e("clazz","1");
+                    //ResponseJson responseJson = new Gson().fromJson(responseData,ResponseJson.class);
+                        return new Gson().fromJson(responseData, clazz);
+                }
+                if (type != null) {
+                    Log.e("clazz","2");
+                    return new Gson().fromJson(responseData, type);
+                }
 
 //        OkHttpUtils.getInstance().getDelivery().post(new Runnable() {
 //            @Override

@@ -14,6 +14,7 @@
         android:layout_height="50dp"
         android:background="@null"
         android:ems="13"
+        android:text="13750065622"
         android:textColorHint="@color/hint"
         android:inputType="phone"
         android:lineSpacingMultiplier="2"
@@ -27,7 +28,7 @@
         android:layout_below="@id/login_edit_phone"
         android:background="@null"
         android:ems="10"
-
+        android:text="mtf071330"
         android:textColorHint="@color/hint"
         android:inputType="textPassword"
         android:lineSpacingMultiplier="2"

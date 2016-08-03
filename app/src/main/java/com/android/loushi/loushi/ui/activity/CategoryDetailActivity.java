@@ -1,7 +1,10 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -10,6 +13,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +23,8 @@ import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.StrategyJson;
 import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.MyWebView;
+import com.android.loushi.loushi.util.ShareSomeThing;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
@@ -29,7 +35,7 @@ import okhttp3.Response;
 /**
  * Created by Administrator on 2016/7/29.
  */
-public class CategoryDetailActivity extends BaseActivity {
+public class CategoryDetailActivity extends BaseActivity implements View.OnClickListener {
     private WebView webView;
     private LinearLayout collect_bar;
     private LinearLayout collect;
@@ -45,60 +51,102 @@ public class CategoryDetailActivity extends BaseActivity {
     private String jsonstring="";
     private String type="0";
     private TopicJson.BodyBean topicBean;
+    private String url="";
+    private Toolbar toolbar;
+    private ImageView back;
+    private TextView tv_title;
+    private MyWebView myWebView;
     //private StrategyJson.BodyBean strategyBean;
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_scene_detail_design;
+        return R.layout.activity_category_detail;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_scene_detail_design);
+        setContentView(R.layout.activity_category_detail);
         jsonstring=getIntent().getStringExtra(JSONSTRING);
         Log.e("stra1",jsonstring);
         topicBean=new Gson().fromJson(jsonstring, TopicJson.BodyBean.class);
         Log.e("stra",topicBean.getName());
+        type=getIntent().getStringExtra(TYPE);
+        if(type.equals("2")) {
+            url=topicBean.getImgUrl();
+            if (url.indexOf("|||") >= 0)
+                url = url.substring(url.indexOf("|||")+3);
+            Log.e("url",url);
+            if(TextUtils.isEmpty(url))
+                url="";
+
+        }
+        if(type.equals("1")){
+            url="http://www.loushi666.com:8080/loushi/topic.html?&user_id="+BaseActivity.user_id
+                    +"&topic_id="+
+            topicBean.getId();
+        }
+        Log.e("cate",url);
+
         initView();
     }
 
     private void initView() {
         initWebView();
-
+        initToolBar();
         bindCollectBarView();
 
     }
 
     private void initWebView() {
-        webView =(WebView) findViewById(R.id.webview);
-        webView.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
-                setProgress(progress * 100);
-            }
-        });
-
-        webView.setWebViewClient(new WebViewClient() {
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-            }
-
-            public boolean shouldOverrideUrlLoading(WebView view, final String url) {
-                //获取web跳转的url 根据 url的后缀来确定商品id
-
-
-                    return false;
-
-            }
-        });
-        webView.getSettings().setJavaScriptEnabled(true);
-
-        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-
-        webView.getSettings().setBlockNetworkImage(false);
-
-        webView.loadUrl("http://172.16.1.218:8020/111/topicDetail.html");
+        myWebView=new MyWebView(CategoryDetailActivity.this);
+        myWebView = (MyWebView)findViewById(R.id.mywebview);
+        myWebView.setWebView(url);
     }
+
+    private void initToolBar(){
+        toolbar = (Toolbar)findViewById(R.id.program_toolbar);
+        back = (ImageView)toolbar.findViewById(R.id.back);
+        tv_title=(TextView)toolbar.findViewById(R.id.tv_title);
+        tv_title.setText(topicBean.getName());
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+    }
+
+//    private void initWebView() {
+//        webView =(WebView) findViewById(R.id.webview);
+//        webView.setWebChromeClient(new WebChromeClient() {
+//            public void onProgressChanged(WebView view, int progress) {
+//                setProgress(progress * 100);
+//            }
+//        });
+//
+//        webView.setWebViewClient(new WebViewClient() {
+//
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                super.onPageFinished(view, url);
+//            }
+//
+//            public boolean shouldOverrideUrlLoading(WebView view, final String url) {
+//                //获取web跳转的url 根据 url的后缀来确定商品id
+//
+//
+//                return false;
+//
+//            }
+//        });
+//        webView.getSettings().setJavaScriptEnabled(true);
+//
+//        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+//
+//        webView.getSettings().setBlockNetworkImage(false);
+//
+//        webView.loadUrl(url);
+//    }
 
     private void bindCollectBarView(){
 
@@ -115,7 +163,8 @@ public class CategoryDetailActivity extends BaseActivity {
         tv_collect_count.setText(topicBean.getCollectionNum() + "");
         tv_comment_count.setText(topicBean.getCommentNum() + "");
         tv_share_count.setText(topicBean.getForwordNum() + "");
-
+        collect.setOnClickListener(this);
+        comment.setOnClickListener(this);
 
     }
 
@@ -149,9 +198,22 @@ public class CategoryDetailActivity extends BaseActivity {
                     }
                 });
                 break;
+            case R.id.collect_bar_linear_share:
+                String imgurl = topicBean.getImgUrl();
+                if(type.equals("2")){
+                    imgurl=imgurl.substring(0,imgurl.indexOf("|||"));
+                }
+                String title = topicBean.getName();
+                String text = topicBean.getDigest();
+
+                //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
+                ShareSomeThing shareSomeThing = new ShareSomeThing(getApplicationContext(), imgurl, url, text, title,user_id,type,topicBean.getId()+"");
+                shareSomeThing.DoShare();
+                break;
 
 
         }
+
     }
 
 

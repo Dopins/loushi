@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.AdViewpagerAdapter;
@@ -26,6 +27,7 @@ import com.android.loushi.loushi.ui.fragment.CollectGoodFragment;
 import com.android.loushi.loushi.ui.fragment.SceneDetailDesignFragment;
 import com.android.loushi.loushi.ui.fragment.SceneDetailGoodFragment;
 import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.ShareSomeThing;
 import com.android.loushi.loushi.viewpager.CarouselViewPager;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
@@ -49,22 +51,12 @@ public class SceneDetailActivity extends  BaseActivity {
     private List<String> list_title;
     private TabLayout tabLayout;
     private Toolbar mToolbar;
-    private ImageButton back;
+    private ImageView back;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
-    public static  String SCENE_STRING="SCENE_STRING";
-    public static  String SCENE_ID="SCENE_ID";
+
     private SceneJson.BodyBean scenebean;
 
-    private LinearLayout collect_bar;
-    private LinearLayout collect;
-    private LinearLayout comment;
-    private LinearLayout share;
-    private ImageButton btn_collect;
-    private ImageButton btn_comment;
-    private TextView tv_collect_count;
-    private TextView tv_comment_count;
-    private TextView tv_share_count;
     private String sceneJsonString="";
     public  String scene_id="1";
 
@@ -76,8 +68,8 @@ public class SceneDetailActivity extends  BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scene_detail);
-        if(getIntent().getStringExtra(SCENE_STRING)!=null)
-        sceneJsonString = getIntent().getStringExtra(SCENE_STRING);
+        if(getIntent().getStringExtra("SCENE_STRING")!=null)
+        sceneJsonString = getIntent().getStringExtra("SCENE_STRING");
         Log.e("sceneJson",sceneJsonString);
         scenebean=new SceneJson.BodyBean();
         scenebean=new Gson().fromJson(sceneJsonString,SceneJson.BodyBean.class);
@@ -125,6 +117,7 @@ public class SceneDetailActivity extends  BaseActivity {
         sceneDetailGoodFragment = new SceneDetailGoodFragment();
         Bundle bundle = new Bundle();
         bundle.putString("SCENE_ID",scene_id);
+        bundle.putString("SCENE_STRING",sceneJsonString);
         sceneDetailGoodFragment.setArguments(bundle);
         sceneDetailDesignFragment = new SceneDetailDesignFragment();
         sceneDetailDesignFragment.setArguments(bundle);
@@ -149,7 +142,7 @@ public class SceneDetailActivity extends  BaseActivity {
     private void initToobar(){
         mToolbar=(Toolbar)findViewById(R.id.program_toolbar);
         setSupportActionBar(mToolbar);
-        back=(ImageButton)mToolbar.findViewById(R.id.back);
+        back=(ImageView)mToolbar.findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,19 +150,8 @@ public class SceneDetailActivity extends  BaseActivity {
             }
         });
     }
-    private void bindCollectBarView(){
-
-            collect_bar=(LinearLayout)findViewById(R.id.collect_bar);
-            //collect_bar.setVisibility(View.GONE);
-            collect = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_like);
-            comment = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_comment);
-            share = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_share);
-            btn_collect=(ImageButton)collect.findViewById(R.id.collect_bar_btn_like);
-            tv_collect_count=(TextView)collect.findViewById(R.id.collect_bar_tv_like);
-            tv_comment_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_comment);
-            tv_share_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_share);
-            tv_collect_count.setText(scenebean.getCollectionNum()+"");
 
 
-    }
+
+
 }
