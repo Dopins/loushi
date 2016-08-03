@@ -29,6 +29,8 @@ import java.util.List;
  */
 public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
+    private static final String PREFIXWORD="回复了你:";
+
     private OnItemClickListener mOnItemClickListener;
     private CircleImageTransformation mTransformation;
 
@@ -96,11 +98,11 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         if(holder instanceof ContentViewHolder){
             UserMessageJson.BodyBean myMessage;
-            if(position<=newCommentCount){
+            if(position<=newCommentCount)
                 myMessage=myMessageList.get(position-1);
-            }
             else
                 myMessage=myMessageList.get(position-2);
+
             //TODO 圆形复用问题
             Picasso.with(mContext).load(myMessage.getComment().getUserInfo().getHeadImgUrl())
                     .fit()
@@ -108,7 +110,7 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((ContentViewHolder) holder).textView_UserName.setText(
                     myMessage.getComment().getUserInfo().getNickname());
             ((ContentViewHolder) holder).textView_userContont.setText(
-                    myMessage.getComment().getContent());
+                    PREFIXWORD+myMessage.getComment().getContent());
             ((ContentViewHolder) holder).textView_MessageDate.setText(
                     DateUtils.calulateDate(myMessage.getComment().getCDate()));
             ((ContentViewHolder) holder).textView_MessageTime.setText(

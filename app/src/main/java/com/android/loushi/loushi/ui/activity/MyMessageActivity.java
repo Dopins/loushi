@@ -115,31 +115,6 @@ public class MyMessageActivity extends BaseActivity implements
                 (int)TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,24,getResources().getDisplayMetrics()));
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setEnabled(false);
-        recycleView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-                lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
-                        firstVisibleItemPosition == 0) {
-                    swipeRefreshLayout.setRefreshing(true);
-                    loadMessage();
-                } else if (newState == RecyclerView.SCROLL_STATE_IDLE &&
-                        lastVisibleItemPosition == mAdapter.getItemCount() - 1)
-                    Toast.makeText(MyMessageActivity.this, "憋拉啦,没数据惹", Toast.LENGTH_SHORT).show();
-                else {
-
-                }
-            }
-        });
     }
 
     private void initToolbar() {
