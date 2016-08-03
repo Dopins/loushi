@@ -60,7 +60,7 @@
         </activity>
 
 <activity android:name=".ui.activity.CategoryDetailActivity"></activity>
-
+<activity android:name=".ui.activity.FeedActivity"></activity>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"

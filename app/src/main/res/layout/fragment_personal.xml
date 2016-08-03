@@ -111,6 +111,8 @@
                         android:text="反馈"
                         android:id="@+id/tv_feed"
                         android:textSize="16sp"
+                        android:clickable="true"
+                        android:background="?android:selectableItemBackground"
                         android:textColor="#ffffff"
                         android:layout_marginTop="20dp"
                         android:layout_alignParentLeft="true"
