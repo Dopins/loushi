@@ -92,7 +92,7 @@ public class SearchJson  implements Serializable {
          * imgUrl : asd
          */
 
-        private StrategyJson.BodyBean strategy;
+        private GuideJson.BodyBean strategy;
         /**
          * id : 21
          * name : 好枕头
@@ -105,7 +105,7 @@ public class SearchJson  implements Serializable {
          * imgUrl : asd
          */
 
-        private TopicJson.BodyBean topic;
+        private GuideJson.BodyBean topic;
         /**
          * id : 21
          * name : 无脸人台灯
@@ -153,19 +153,19 @@ public class SearchJson  implements Serializable {
             this.scene = scene;
         }
 
-        public StrategyJson.BodyBean getStrategy() {
+        public GuideJson.BodyBean getStrategy() {
             return strategy;
         }
 
-        public void setStrategy(StrategyJson.BodyBean strategy) {
+        public void setStrategy(GuideJson.BodyBean strategy) {
             this.strategy = strategy;
         }
 
-        public TopicJson.BodyBean getTopic() {
+        public GuideJson.BodyBean getTopic() {
             return topic;
         }
 
-        public void setTopic(TopicJson.BodyBean topic) {
+        public void setTopic(GuideJson.BodyBean topic) {
             this.topic = topic;
         }
 

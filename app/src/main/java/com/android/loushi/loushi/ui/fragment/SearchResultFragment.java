@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +26,8 @@ public class SearchResultFragment extends Fragment {
     private List<String> list_title;                                     //tab名称列表
 
     private SearchResultSceneFragment sceneFragment;
-    private GuideListFragment guideFragment;
-    private CollectGoodFragment goodsFragment;
+    private SearchResultGuideFragment guideFragment;
+    private SearchResultGoodsFragment goodsFragment;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -48,8 +47,8 @@ public class SearchResultFragment extends Fragment {
 
         //初始化各fragment
         sceneFragment = new SearchResultSceneFragment();
-        guideFragment = new GuideListFragment();
-        goodsFragment = new CollectGoodFragment();
+        guideFragment = new SearchResultGuideFragment();
+        goodsFragment = new SearchResultGoodsFragment();
 
         //将fragment装进列表中
         list_fragment = new ArrayList<>();

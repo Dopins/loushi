@@ -1,6 +1,5 @@
 package com.android.loushi.loushi.ui.fragment;
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,25 +8,22 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
-import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.jsonbean.SearchJson;
+import com.android.loushi.loushi.jsonbean.UserCollectionsJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
-
 import com.android.loushi.loushi.ui.activity.SearchActivity;
-import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.lzy.okhttputils.OkHttpUtils;
+
 import java.util.List;
 
 import okhttp3.Request;
 import okhttp3.Response;
 
-
 /**
- * Created by dopin on 2016/7/17.
+ * Created by dopin on 2016/8/3.
  */
-public class SearchResultSceneFragment extends SceneListFragment {
+public class SearchResultGoodsFragment extends GoodsListFragment {
     private static LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver mBroadcastReceiver;
     @Override
@@ -59,33 +55,28 @@ public class SearchResultSceneFragment extends SceneListFragment {
         OkHttpUtils.post(BaseActivity.url + "base/search")
                 // 请求方式和请求url
                 .tag(this).params("user_id", BaseActivity.user_id)
-                .params("type", 0 + "")
+                .params("type", 3 + "")
                 .params("keyword", SearchActivity.keyword)
                 .params("skip", skip + "")
                 .params("take",take+"")
-                .execute(new JsonCallback<SearchJson>(SearchJson.class) {
+                .execute(new JsonCallback<UserCollectionsJson>(UserCollectionsJson.class) {
                     @Override
-                    public void onResponse(boolean b, SearchJson searchJson, Request request, Response response) {
-                        if (searchJson.getState()) {
+                    public void onResponse(boolean b, UserCollectionsJson userCollectionsJson, Request request, Response response) {
+                        if (userCollectionsJson.getState()) {
 
-                            getSceneBodyBeanList(searchJson.getBody());
+                            bodyBeanList.addAll(userCollectionsJson.getBody());
 
-                            get_total += searchJson.getBody().size();
+                            get_total += userCollectionsJson.getBody().size();
 
-                            if(searchJson.getBody().size()<oneTakeNum) has_data=false;
+                            if(userCollectionsJson.getBody().size()<oneTakeNum) has_data=false;
 
-                            sceneRecyclerViewAdapter.notifyDataSetChanged();
+                            collectGoodAdapter.notifyDataSetChanged();
                             swipeRefreshLayout.setRefreshing(false);
                         } else {
-                            Log.d("error", searchJson.getReturn_info());
+                            Log.d("error", userCollectionsJson.getReturn_info());
                         }
                     }
                 });
-    }
-    private void getSceneBodyBeanList(List<SearchJson.BodyBean> searchResultList){
-        for(int i=0;i<searchResultList.size(); i++) {
-            bodyBeanList.add(searchResultList.get(i).getScene());
-        }
     }
 
 }

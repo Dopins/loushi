@@ -10,43 +10,46 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.GuideRecyclerViewAdapter;
-import com.android.loushi.loushi.jsonbean.RecommendJson;
+import com.android.loushi.loushi.adapter.SceneRecyclerViewAdapter;
+import com.android.loushi.loushi.jsonbean.GuideJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
-import com.android.loushi.loushi.ui.activity.BaseActivity;
+import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * Created by dopin on 2016/7/24.
+ * Created by dopin on 2016/7/30.
  */
 public class GuideListFragment extends LazyFragment {
 
-    private RecyclerView mRecyclerView;
-    private List<RecommendJson.BodyBean.SceneBean> bodyBeanList = new ArrayList<RecommendJson.BodyBean.SceneBean>();
-    private GuideRecyclerViewAdapter guideRecyclerViewAdapter;
-    private SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
+    protected RecyclerView mRecyclerView;
+    protected List<GuideJson.BodyBean> bodyBeanList = new ArrayList<GuideJson.BodyBean>();
+    protected GuideRecyclerViewAdapter guideRecyclerViewAdapter;
+    protected SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
 
-    private int get_total=0;
-
+    protected final int oneTakeNum=10;
+    protected int get_total=0;
+    protected boolean has_data=true;
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
-        setContentView(R.layout.fragment_guide_list);
+        setContentView(R.layout.fragment_scene_list);
         init();
     }
 
 
-    private void init() {
+    protected void init() {
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_widget);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setProgressViewOffset(false, 0, 24);
+
 
         guideRecyclerViewAdapter = new GuideRecyclerViewAdapter(getContext(), bodyBeanList);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycleView);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0,0,0,10));//设置recycleView间距
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, 0, 0, 10));//设置recycleView间距
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(guideRecyclerViewAdapter);
 
@@ -55,7 +58,7 @@ public class GuideListFragment extends LazyFragment {
         setLoadMoreListener();
         addSomething2Scene();
     }
-    private void setClickListener(){
+    protected void setClickListener(){
         guideRecyclerViewAdapter.setOnItemClickListener(new GuideRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -76,65 +79,37 @@ public class GuideListFragment extends LazyFragment {
             }
         });
     }
-    private void setLoadMoreListener() {
+    protected void setLoadMoreListener() {
         mRecyclerView.addOnScrollListener(new MyRecyclerOnScrollListener() {
             @Override
             public void onBottom() {
                 super.onBottom();
+                if (has_data)
                 addSomething2Scene();
             }
         });
     }
 
-    private void setRefreshingListener(){
+    protected void setRefreshingListener(){
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //Handler handler = new Handler();
-                //handler.sendEmptyMessageAtTime(0, 1000);
-                /* do some thing here*/
-                get_total = 0;
-                bodyBeanList.clear();
-                addSomething2Scene();
-                swipeRefreshLayout.setRefreshing(false);
-                guideRecyclerViewAdapter.notifyDataSetChanged();
-                Toast.makeText(getContext(), "下拉更新完成", Toast.LENGTH_SHORT).show();
+                initSearchList();
 
             }
         });
     }
 
-    private void addSomething2Scene() {
-        GetSomeScene(6, BaseActivity.user_id, get_total);
-
+    protected void initSearchList(){
+        get_total = 0;
+        bodyBeanList.clear();
+        has_data=true;
+        addSomething2Scene();
     }
-    private void GetSomeScene(int take, String user_id, int skip) {
-
-//        OkHttpUtils.post().url("http://119.29.187.58:10000/LouShi/base/scene.action")
-//                .addParams("user_id", user_id).addParams("scene_group_id", Integer.toString(tabIndex))
-//                .addParams("skip", Integer.toString(skip))
-//                .addParams("take", Integer.toString(take)).build().execute(new SceneCallBack() {
-//            @Override
-//            public void onError(Call call, Exception e) {
-//                e.printStackTrace();
-//                Log.d("tag", Log.getStackTraceString(e));
-//            }
-//
-//            @Override
-//            public void onResponse(SceneJson sceneJson) {
-//                if (sceneJson.isState()) {
-//                    Log.e("tag", "加载一些");
-//                    sceneJsons = sceneJson;
-//                    //sceneAdapter=new SceneAdapter(getContext(),bodyBeanList,null,0);
-//                    bodyBeanList.addAll(sceneJson.getBody());
-//                    get_total += 5;
-//                    //Log.d("tag", Integer.toString(sceneJson.getBody().size()));
-//                    guideRecyclerViewAdapter.notifyDataSetChanged();
-//
-//                }
-//            }
-//        });
+    public void addSomething2Scene() {
+        GetSomeScene(oneTakeNum, get_total);
+    }
+    protected void GetSomeScene(int take, int skip) {
     }
 }
-
