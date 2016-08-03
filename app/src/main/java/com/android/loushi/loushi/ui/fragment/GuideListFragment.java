@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -83,8 +84,8 @@ public class GuideListFragment extends LazyFragment {
             @Override
             public void onBottom() {
                 super.onBottom();
-                if(has_data)
-                    addSomething2Scene();
+                if (has_data)
+                addSomething2Scene();
             }
         });
     }
@@ -94,19 +95,21 @@ public class GuideListFragment extends LazyFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                get_total = 0;
-                bodyBeanList.clear();
-                addSomething2Scene();
+                initSearchList();
 
             }
         });
     }
 
+    protected void initSearchList(){
+        get_total = 0;
+        bodyBeanList.clear();
+        has_data=true;
+        addSomething2Scene();
+    }
     public void addSomething2Scene() {
-        swipeRefreshLayout.setRefreshing(true);
         GetSomeScene(oneTakeNum, get_total);
     }
     protected void GetSomeScene(int take, int skip) {
-
     }
 }

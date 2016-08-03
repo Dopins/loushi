@@ -27,7 +27,7 @@ public class SearchResultFragment extends Fragment {
 
     private SearchResultSceneFragment sceneFragment;
     private SearchResultGuideFragment guideFragment;
-    private CollectGoodFragment goodsFragment;
+    private SearchResultGoodsFragment goodsFragment;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -48,7 +48,7 @@ public class SearchResultFragment extends Fragment {
         //初始化各fragment
         sceneFragment = new SearchResultSceneFragment();
         guideFragment = new SearchResultGuideFragment();
-        goodsFragment = new CollectGoodFragment();
+        goodsFragment = new SearchResultGoodsFragment();
 
         //将fragment装进列表中
         list_fragment = new ArrayList<>();

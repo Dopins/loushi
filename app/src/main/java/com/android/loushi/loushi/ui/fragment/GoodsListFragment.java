@@ -5,31 +5,31 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.adapter.CollectGoodAdapter;
 import com.android.loushi.loushi.adapter.SceneRecyclerViewAdapter;
 import com.android.loushi.loushi.jsonbean.SceneJson;
-import com.android.loushi.loushi.ui.activity.BaseActivity;
+import com.android.loushi.loushi.jsonbean.UserCollectionsJson;
 import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
+import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
 import com.google.gson.Gson;
-import com.lzy.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dopin on 2016/7/17.
+ * Created by dopin on 2016/8/3.
  */
-public class SceneListFragment extends LazyFragment {
+public class GoodsListFragment extends LazyFragment {
 
     protected RecyclerView mRecyclerView;
-    protected List<SceneJson.BodyBean> bodyBeanList = new ArrayList<SceneJson.BodyBean>();
-    protected SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
+    protected List<UserCollectionsJson.BodyBean> bodyBeanList = new ArrayList<>();
+    protected CollectGoodAdapter collectGoodAdapter;
     protected SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
 
     protected final int oneTakeNum=10;
@@ -49,11 +49,14 @@ public class SceneListFragment extends LazyFragment {
         swipeRefreshLayout.setProgressViewOffset(false, 0, 24);
 
 
-        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(getContext(), bodyBeanList);
+        collectGoodAdapter = new CollectGoodAdapter(getContext(), bodyBeanList,"3");
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycleView);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, 0, 0, 10));//设置recycleView间距
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(sceneRecyclerViewAdapter);
+
+        SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(getContext(),5);
+        mRecyclerView.addItemDecoration(spaceItemDecoration);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setAdapter(collectGoodAdapter);
 
         setClickListener();
         setRefreshingListener();
@@ -61,14 +64,14 @@ public class SceneListFragment extends LazyFragment {
         addSomething2Scene();
     }
     protected void setClickListener(){
-        sceneRecyclerViewAdapter.setOnItemClickListener(new SceneRecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                //Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
-                Intent intent= new Intent(getActivity(), SceneDetailActivity.class);
-                String sceneJsonString=new Gson().toJson(bodyBeanList.get(position));
-                intent.putExtra("SCENE_STRING",sceneJsonString);
-                startActivity(intent);
+//        collectGoodAdapter.setOnItemClickListener(new CollectGoodAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                //Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
+//                Intent intent= new Intent(getActivity(), SceneDetailActivity.class);
+//                String sceneJsonString=new Gson().toJson(bodyBeanList.get(position));
+//                intent.putExtra("SCENE_STRING",sceneJsonString);
+//                startActivity(intent);
 //                Intent intent = new Intent(getActivity(), WebViewActivity.class);
 //                //intent.putExtra
 //                //传入参数 给webview Post
@@ -82,15 +85,15 @@ public class SceneListFragment extends LazyFragment {
 //
 //
 //                startActivityForResult(intent, 2);
-            }
-        });
+//            }
+//        });
     }
     protected void setLoadMoreListener() {
         mRecyclerView.addOnScrollListener(new MyRecyclerOnScrollListener() {
             @Override
             public void onBottom() {
                 super.onBottom();
-                if (has_data)
+                if(has_data)
                     addSomething2Scene();
             }
         });
@@ -101,7 +104,7 @@ public class SceneListFragment extends LazyFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-              initSearchList();
+                initSearchList();
 
             }
         });

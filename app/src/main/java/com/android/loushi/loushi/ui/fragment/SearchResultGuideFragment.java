@@ -54,9 +54,7 @@ public class SearchResultGuideFragment extends GuideListFragment {
             public void onReceive(Context context, Intent intent) {
                 has_no_strategy=false;
                 has_no_topic=false;
-                bodyBeanList.clear();
-                get_total=0;
-                addSomething2Scene();
+                initSearchList();
             }
         };
         IntentFilter intentFilter = new IntentFilter("search");
@@ -67,17 +65,18 @@ public class SearchResultGuideFragment extends GuideListFragment {
 
     @Override
     public void onDestroy() {
+
         super.onDestroy();
-        localBroadcastManager.unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
     protected void GetSomeScene(int take, int skip) {
         if(has_no_topic&&has_no_strategy) {
-            has_data=true;
+            has_data=false;
             swipeRefreshLayout.setRefreshing(false);
             return;
         }
+        swipeRefreshLayout.setRefreshing(true);
 
         take=take/2;
 
@@ -95,9 +94,9 @@ public class SearchResultGuideFragment extends GuideListFragment {
 
                             getTopicBodyBeanList(searchJson.getBody());
 
-                            get_total += bodyBeanList.size();
+                            get_total += searchJson.getBody().size();
 
-                            if (bodyBeanList.size() < oneTakeNum/2) has_no_topic = true;
+                            if (searchJson.getBody().size() < oneTakeNum/2) has_no_topic = true;
 
                             guideRecyclerViewAdapter.notifyDataSetChanged();
                             swipeRefreshLayout.setRefreshing(false);
@@ -121,9 +120,10 @@ public class SearchResultGuideFragment extends GuideListFragment {
 
                             getStrategyBodyBeanList(searchJson.getBody());
 
-                            get_total += bodyBeanList.size();
+                            get_total += searchJson.getBody().size();
 
-                            if (bodyBeanList.size() < oneTakeNum/2) has_no_strategy = true;
+                            if (searchJson.getBody().size() < oneTakeNum / 2)
+                                has_no_strategy = true;
 
                             guideRecyclerViewAdapter.notifyDataSetChanged();
                             swipeRefreshLayout.setRefreshing(false);
@@ -132,6 +132,22 @@ public class SearchResultGuideFragment extends GuideListFragment {
                         }
                     }
                 });
+    }
+    @Override
+    protected void setRefreshingListener(){
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                get_total = 0;
+                bodyBeanList.clear();
+                has_data = true;
+                has_no_topic=false;
+                has_no_strategy=false;
+                addSomething2Scene();
+
+            }
+        });
     }
     private void getTopicBodyBeanList(List<SearchJson.BodyBean> searchResultList){
         for(int i=0;i<searchResultList.size(); i++) {
