@@ -1,7 +1,11 @@
 package com.android.loushi.loushi.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -9,9 +13,27 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.event.ReceiveSmsEvent;
+import com.android.loushi.loushi.jsonbean.ResponseJson;
+import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.util.UnderLineEditText;
+import com.lzy.okhttputils.OkHttpUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import static cn.smssdk.SMSSDK.getVerificationCode;
+import static cn.smssdk.SMSSDK.submitVerificationCode;
 
 /**
  * Created by Administrator on 2016/7/19.
@@ -34,8 +56,11 @@ public class RegistFragment extends Fragment {
     private Button btn_finish;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+        initEvent();
+        initSDK();
     }
 
     @Override
@@ -44,7 +69,9 @@ public class RegistFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_regist, container, false);
             bindViews();
             initView();
-            initEvent();
+
+
+
         }
         return view;
     }
@@ -86,6 +113,29 @@ public class RegistFragment extends Fragment {
         regist_edit_checkword = (UnderLineEditText) view.findViewById(R.id.regist_edit_checkword);
         btn_getcheckword = (Button) view.findViewById(R.id.btn_getcheckword);
         btn_finish = (Button) view.findViewById(R.id.btn_finish);
+        btn_finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //提交验证码
+
+                submitVerificationCode("86", regist_edit_phone.getText().toString(), regist_edit_checkword.getText().toString());
+                //在最下面的eventbus回调中执行注册登陆操作
+            }
+        });
+        btn_getcheckword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isMobileNO(regist_edit_phone.getText().toString()))
+                    Toast.makeText(getContext(), "请输入正确的手机号", Toast.LENGTH_SHORT).show();
+                else {
+                    if (regist_edit_password.getText().toString().length() < 6) {
+                        Toast.makeText(getContext(), "密码不能少于6位", Toast.LENGTH_SHORT).show();
+                    } else
+                        //获取验证码
+                        getVerificationCode("86", regist_edit_phone.getText().toString());
+                }
+            }
+        });
     }
 
 
@@ -97,4 +147,105 @@ public class RegistFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    private void initSDK() {
+        // 初始化短信SDK
+        SMSSDK.initSDK(getContext(), "1583968bdc792", "571cce9eec39a570f696fd03ed8ed475");
+        SMSSDK.registerEventHandler(eh); //注册短信回调
+    }
+    EventHandler eh=new EventHandler(){
+        @Override
+        public void afterEvent(int event, int result, Object data) {
+
+            if (result == SMSSDK.RESULT_COMPLETE) {
+                //回调完成
+                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+                    EventBus.getDefault().post(
+                            new ReceiveSmsEvent(1));
+                    //验证码验证成功
+                }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
+                    EventBus.getDefault().post(
+                            new ReceiveSmsEvent(2));
+
+                    //获取验证码成功
+                }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
+                    EventBus.getDefault().post(
+                            new ReceiveSmsEvent(3));
+                    //返回支持发送验证码的国家列表
+                }
+            }else{
+                EventBus.getDefault().post(
+                        new ReceiveSmsEvent(4));
+                //Toast.makeText(getActivity(), "失败", Toast.LENGTH_SHORT).show();
+                ((Throwable)data).printStackTrace();
+            }
+            //Looper.loop();
+        }
+    };
+    private String generateToken(String account) {
+        char[] charTmp = account.toCharArray();
+        int[] intTmp = new int[account.length()];
+        for (int i = 0; i < intTmp.length; i++) {
+            intTmp[i] = charTmp[i] - i % 10;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < intTmp.length; i++) {
+            stringBuilder.append(Integer.toHexString(intTmp[i]));
+        }
+        return stringBuilder.toString().toUpperCase();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        SMSSDK.unregisterEventHandler(eh);
+    }
+    //手机号码正则匹配
+    public boolean isMobileNO(String mobiles) {
+		/*
+		移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
+		联通：130、131、132、152、155、156、185、186
+		电信：133、153、180、189、（1349卫通）
+		总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
+		*/
+        String telRegex = "[1][358]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
+        if (TextUtils.isEmpty(mobiles)) return false;
+        else return mobiles.matches(telRegex);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(ReceiveSmsEvent event) {
+        if(event.getMsg()==1){
+            Log.e("event", "1");
+            Toast.makeText(getContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
+            //生成Token
+            String token = generateToken(regist_edit_phone.getText().toString()+regist_edit_checkword.getText().toString());
+            //发送注册请求
+            OkHttpUtils.post(BaseActivity.url+"user/userRegisterAndroid").
+                    params("mobile_phone",regist_edit_phone.getText().toString()).
+                    params("password",regist_edit_phone.getText().toString()).
+                    params("verify_code", regist_edit_checkword.getText().toString()).
+                    params("token", token).execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
+                @Override
+                public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
+                    if (responseJson.getState()) {
+                        //执行登陆操作，存下user_id
+                        //并跳到完善信息页面
+                        //完善信息后发送event通知转换界面
+
+
+                    }
+                }
+            });
+
+        }
+        if(event.getMsg()==2){
+            Toast.makeText(getContext(), "获取验证码成功", Toast.LENGTH_SHORT).show();
+        }
+        if(event.getMsg()==4){
+            Toast.makeText(getContext(), "失败", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 }

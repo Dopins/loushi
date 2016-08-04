@@ -41,20 +41,19 @@
 
 
             </LinearLayout>
-              <com.android.loushi.loushi.util.RoundImageView
+              <com.android.loushi.loushi.util.CircularImageView
                   android:layout_width="80dp"
                   android:layout_height="80dp"
                   android:layout_marginTop="130dp"
                   android:id="@+id/img_head"
-                  imagecontrol:border_thickness="2dp"
-                  imagecontrol:border_inside_color="#fff"
-                  imagecontrol:border_outside_color="#bc0978"
+
+
                   android:layout_centerHorizontal="true"
                   android:src="@drawable/test_collect_good"
                   >
 
 
-          </com.android.loushi.loushi.util.RoundImageView>
+          </com.android.loushi.loushi.util.CircularImageView>
               <TextView
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"

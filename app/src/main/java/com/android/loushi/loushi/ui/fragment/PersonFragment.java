@@ -27,6 +27,7 @@ import com.android.loushi.loushi.ui.activity.FeedActivity;
 import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
 
 import com.android.loushi.loushi.ui.activity.MyMessageActivity;
+import com.android.loushi.loushi.util.CircularImageView;
 import com.android.loushi.loushi.util.RoundImageView;
 import com.android.loushi.loushi.util.SlidingTabLayout;
 import com.lzy.okhttputils.OkHttpUtils;
@@ -50,7 +51,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private SlidingTabLayout mtoorbar_tab;
     private AppBarLayout appBarLayout;
     private TextView tv_name;
-    private RoundImageView img_head;
+    private CircularImageView img_head;
     private TextView tv_feed;
     private TextView tv_name_small;
     private RoundImageView img_head_small;
@@ -228,7 +229,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         mToolbar.setTitle("");
         mtoorbar_tab=(SlidingTabLayout)getView().findViewById(R.id.toolbar_tab);
         tv_name=(TextView)getView().findViewById(R.id.tv_nickname);
-        img_head=(RoundImageView)getView().findViewById(R.id.img_head);
+        img_head=(CircularImageView)getView().findViewById(R.id.img_head);
         img_head_small = (RoundImageView)mToolbar.findViewById(R.id.img_head_small);
         tv_feed=(TextView)mToolbar.findViewById(R.id.tv_feed);
         tv_name_small=(TextView)mToolbar.findViewById(R.id.tv_nickname_small);

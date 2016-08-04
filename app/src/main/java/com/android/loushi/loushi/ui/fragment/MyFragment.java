@@ -154,6 +154,7 @@ public class MyFragment extends BaseFragment {
         transferToPersonalFragment();
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();

@@ -42,22 +42,21 @@ public class CollectGoodFragment extends LazyFragment {
     private CollectGoodAdapter collectGoodAdapter;
     public static String TYPE="TYPE";
     private String type="3";
-    private int get_total=0;
+    private Boolean is_all=false;
+    private Boolean is_tip_all;
     private int skip=0;
+    private int skip_s;
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
         setContentView(R.layout.fragment_collect_good);
         type=getArguments().getString(TYPE);
-        //type = getArguments().getString(TYPE);
-        //recyclerView = (RecyclerView)findViewById(R.id.recycleView);
-//        for(int i =0;i<=9;i++){
-//            goodsBean=new CollectionsJson.BodyBean.GoodsBean();
-//            goodsBean.setName("木柜");
-//            goodsBean.setPrice(555);
-//            goodsBean.setCollectionNum(222);
-//            goodsBeanList.add(goodsBean);
-//        }
+        if(type.equals("1")) {
+            if(is_tip_all==null) {
+                is_tip_all = false;
+                skip_s = 0;
+            }
+        }
         initview();
     }
 //@Override
@@ -80,6 +79,8 @@ public class CollectGoodFragment extends LazyFragment {
         Log.e("tes1", beanList.size() + "");
         collectGoodAdapter =new CollectGoodAdapter(getContext(),beanList,type);
         addSomething2Good();
+        if(type.equals("1"))
+            addStrategy();
 
         SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(getContext(),5);
         recyclerView=(RecyclerView)findViewById(R.id.recycleView);
@@ -91,7 +92,16 @@ public class CollectGoodFragment extends LazyFragment {
             @Override
             public void onBottom() {
                 super.onBottom();
-                addSomething2Good();
+                if(!is_all) {
+
+                    addSomething2Good();
+                }
+                else {
+                    if (type.equals("1")){
+                        if(!is_tip_all)
+                            addStrategy();
+                    }
+                }
             }
         });
     }
@@ -100,49 +110,54 @@ public class CollectGoodFragment extends LazyFragment {
                 OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollections")
                 // 请求方式和请求url
                 .tag(this).params("type", type).params("user_id", BaseActivity.user_id)
-                .params("skip", get_total + "").params("take", "6")
+                .params("skip", skip + "").params("take", "6")
 
                         // 请求的 tag, 主要用于取消对应的请求
                    // 缓存模式，详细请看缓存介绍
                 .execute(new JsonCallback<UserCollectionsJson>(UserCollectionsJson.class) {
                              @Override
                              public void onResponse(boolean b, UserCollectionsJson userCollectionsJson, Request request, Response response) {
-                                 for (int i = 0; i < userCollectionsJson.getBody().size(); i++) {
-                                     beanList.add(userCollectionsJson.getBody().get(i));
-                                     get_total++;
-                                 }
+                                 if(userCollectionsJson.getState()) {
+                                     skip+=6;
+                                     if(skip>Integer.parseInt(userCollectionsJson.getReturn_info()))
+                                         is_all=true;
+                                     beanList.addAll(userCollectionsJson.getBody());
 
-                                 collectGoodAdapter.notifyDataSetChanged();
+                                     collectGoodAdapter.notifyDataSetChanged();
+                                 }
                              }
 
                          }
 
                 );
-        if(type.equals("1")){
-            OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollections")
-                    // 请求方式和请求url
-                    .tag(this).params("type", "2").params("user_id", BaseActivity.user_id)
-                    .params("skip", get_total + "").params("take", "6")
 
-                    // 请求的 tag, 主要用于取消对应的请求
-                    // 缓存模式，详细请看缓存介绍
-                    .execute(new JsonCallback<UserCollectionsJson>(UserCollectionsJson.class) {
-                                 @Override
-                                 public void onResponse(boolean b, UserCollectionsJson userCollectionsJson, Request request, Response response) {
-                                     for (int i = 0; i < userCollectionsJson.getBody().size(); i++) {
-                                         beanList.add(userCollectionsJson.getBody().get(i));
-                                         get_total++;
-                                     }
 
-                                     collectGoodAdapter.notifyDataSetChanged();
-                                 }
+    }
+    private void addStrategy(){
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollections")
+                // 请求方式和请求url
+                .tag(this).params("type", "2").params("user_id", BaseActivity.user_id)
+                .params("skip", skip+"").params("take", "6")
 
+                // 请求的 tag, 主要用于取消对应的请求
+                // 缓存模式，详细请看缓存介绍
+                .execute(new JsonCallback<UserCollectionsJson>(UserCollectionsJson.class) {
+                             @Override
+                             public void onResponse(boolean b, UserCollectionsJson userCollectionsJson, Request request, Response response) {
+                                 if(userCollectionsJson.getState()) {
+                                     skip_s+=6;
+                                     if(skip>Integer.parseInt(userCollectionsJson.getReturn_info()))
+                                         is_tip_all=true;
+                                     beanList.addAll(userCollectionsJson.getBody());
+
+
+
+                                 collectGoodAdapter.notifyDataSetChanged(); }
                              }
 
-                    );
-        }
+                         }
 
-
+                );
     }
 
 }

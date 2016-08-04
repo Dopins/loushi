@@ -24,7 +24,7 @@ import com.taobao.tae.sdk.callback.InitResultCallback;
 public class MainActivity extends BaseActivity {
     public FragmentTabHost mTabHost;
     private LayoutInflater layoutInflater;
-    private Class fragmentArray[] = {SceneFragment.class,CategoryFragment.class,PersonFragment.class};
+    private Class fragmentArray[] = {SceneFragment.class,CategoryFragment.class,MyFragment.class};
     private String mTextviewArray[] = {"场景", "指南", "我的"};
     //定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.tab_scene_button, R.drawable.tab_category_button,R.drawable.tab_my_button
