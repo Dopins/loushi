@@ -4,7 +4,7 @@
     xmlns:imagecontrol="http://schemas.Android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    
     >
 
     <android.support.design.widget.AppBarLayout
@@ -17,11 +17,13 @@
             android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
+
+
             app:collapsedTitleTextAppearance="@style/ToolBarTitleText"
             app:contentScrim="@color/colorPrimary"
             app:expandedTitleMarginEnd="80dp"
             app:expandedTitleMarginStart="100dp"
+
             app:expandedTitleTextAppearance="@style/transparentText"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -94,6 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
+
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:theme="@style/ThemeOverlay.AppCompat.Light"
                 >
@@ -103,8 +106,8 @@
 
                     >
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="?attr/actionBarSize"
 
 
                         android:text="反馈"
@@ -113,7 +116,7 @@
                         android:clickable="true"
                         android:background="?android:selectableItemBackground"
                         android:textColor="#ffffff"
-                        android:layout_marginTop="20dp"
+                        android:gravity="center"
                         android:layout_alignParentLeft="true"
 
                         />

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+                <!-- Customize your theme here. -->
+                <item name="colorPrimary">#69B8BB</item>
+                <item name="windowNoTitle">true</item>
+                <item name="windowActionBar">false</item>
+                <item name="colorControlNormal">#D9D8DE</item>
+                <!--<item name="android:windowTranslucentStatus">true</item>-->
+                <!-- AppCompatEditText选择的底线颜色 -->
+                <item name="colorControlActivated">#69B8BB</item>
+                <!--<item name="android:windowIsTranslucent">true</item>-->
+        </style>
+</resources>
