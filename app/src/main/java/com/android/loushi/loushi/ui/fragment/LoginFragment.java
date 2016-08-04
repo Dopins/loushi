@@ -262,7 +262,9 @@ public class LoginFragment extends Fragment {
     private void initPlatformList() {
 
         ShareSDK.initSDK(getContext());
+        //初始化
         Platform[] Platformlist = ShareSDK.getPlatformList();
+        //平台列表
         if (Platformlist != null) {
             imgbtn = new ArrayList<ImageButton>(3);
             Log.e("TAG", "创建了img数组");
@@ -273,6 +275,7 @@ public class LoginFragment extends Fragment {
             imgbtn.add(btn_xinlang);
             imgbtn.add(btn_weixin);
             imgbtn.add(btn_qq);
+            //总共三个
 
 
             int i=0;
@@ -315,13 +318,17 @@ public class LoginFragment extends Fragment {
         //设置登陆的平台后执行登陆的方法
         api.setPlatform(platformName);
         //dialog.dismiss();
+        //第三方登陆设置监听
         api.setOnLoginListener(new OnLoginListener() {
             public boolean onLogin(String plate, HashMap<String, Object> res) {
-                // 在这个方法填写尝试的代码，返回true表示还不能登录，需要注册
-                // 此处全部给回需要注册
-                //dialog.show();
+
                 String plat = plate;
                 final Platform platform = ShareSDK.getPlatform(plat);
+                //得到第三方登陆的信息
+                //userId是第三方登陆的id
+                //Icon是头像
+                //gender是性别 m代表男f代表女
+                //获取第三方的用户名
                 Log.e("LoginAPP", platform.getDb().getUserId());
                 Log.e("LoginAPP", platform.getDb().getUserIcon());
                 Log.e("LoginAPP", platform.getDb().getUserGender());
@@ -329,8 +336,12 @@ public class LoginFragment extends Fragment {
 
                 String account = platform.getDb().getUserId();
                 String token = generateToken(account);
+                //token是接口需要
                 String type;
-
+                //判断类型
+                //在这里执行登陆操作  并存储个人信息，判断是否是第一次用这个第三方登陆，
+                // 如果不是则不用存储，直接调用服务器原有信息
+                //存储个人信息可不用post学校参数
                 if (plat.equals("SinaWeibo")) {
                     type = "0";
                     Log.e("LoginAPPId", res.get("id").toString());
@@ -349,6 +360,7 @@ public class LoginFragment extends Fragment {
 
             @Override
             public boolean onRegister(UserInfo info) {
+                //这个是让用户第三方登陆完后注册我们的app
                 return true;
             }
 

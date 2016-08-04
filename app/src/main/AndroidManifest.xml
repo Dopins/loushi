@@ -60,7 +60,7 @@
         </activity>
 
 <activity android:name=".ui.activity.CategoryDetailActivity"></activity>
-
+<activity android:name=".ui.activity.FeedActivity"></activity>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -82,6 +82,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <!--<activity-->
         <!--android:name=".wxapi.WXEntryActivity"-->
         <!--android:theme="@android:style/Theme.Translucent.NoTitleBar"-->

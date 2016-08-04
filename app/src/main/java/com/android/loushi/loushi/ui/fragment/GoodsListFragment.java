@@ -1,33 +1,35 @@
 package com.android.loushi.loushi.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.adapter.GuideRecyclerViewAdapter;
+import com.android.loushi.loushi.adapter.CollectGoodAdapter;
 import com.android.loushi.loushi.adapter.SceneRecyclerViewAdapter;
-import com.android.loushi.loushi.jsonbean.GuideJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
-import com.android.loushi.loushi.jsonbean.TopicJson;
+import com.android.loushi.loushi.jsonbean.UserCollectionsJson;
+import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
+import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dopin on 2016/7/30.
+ * Created by dopin on 2016/8/3.
  */
-public class GuideListFragment extends LazyFragment {
+public class GoodsListFragment extends LazyFragment {
 
     protected RecyclerView mRecyclerView;
-    protected List<GuideJson.BodyBean> bodyBeanList;
-    protected GuideRecyclerViewAdapter guideRecyclerViewAdapter;
+    protected List<UserCollectionsJson.BodyBean> bodyBeanList;
+    protected CollectGoodAdapter collectGoodAdapter;
     protected SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
 
     protected final int oneTakeNum=10;
@@ -51,11 +53,14 @@ public class GuideListFragment extends LazyFragment {
         swipeRefreshLayout.setProgressViewOffset(false, 0, 24);
 
 
-        guideRecyclerViewAdapter = new GuideRecyclerViewAdapter(getContext(), bodyBeanList);
+        collectGoodAdapter = new CollectGoodAdapter(getContext(), bodyBeanList,"3");
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycleView);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, 0, 0, 10));//设置recycleView间距
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(guideRecyclerViewAdapter);
+
+        SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(getContext(),5);
+        mRecyclerView.addItemDecoration(spaceItemDecoration);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setAdapter(collectGoodAdapter);
 
         setClickListener();
         setRefreshingListener();
@@ -63,10 +68,14 @@ public class GuideListFragment extends LazyFragment {
         addSomething2Scene();
     }
     protected void setClickListener(){
-        guideRecyclerViewAdapter.setOnItemClickListener(new GuideRecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
+//        collectGoodAdapter.setOnItemClickListener(new CollectGoodAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                //Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
+//                Intent intent= new Intent(getActivity(), SceneDetailActivity.class);
+//                String sceneJsonString=new Gson().toJson(bodyBeanList.get(position));
+//                intent.putExtra("SCENE_STRING",sceneJsonString);
+//                startActivity(intent);
 //                Intent intent = new Intent(getActivity(), WebViewActivity.class);
 //                //intent.putExtra
 //                //传入参数 给webview Post
@@ -80,16 +89,16 @@ public class GuideListFragment extends LazyFragment {
 //
 //
 //                startActivityForResult(intent, 2);
-            }
-        });
+//            }
+//        });
     }
     protected void setLoadMoreListener() {
         mRecyclerView.addOnScrollListener(new MyRecyclerOnScrollListener() {
             @Override
             public void onBottom() {
                 super.onBottom();
-                if (has_data)
-                addSomething2Scene();
+                if(has_data)
+                    addSomething2Scene();
             }
         });
     }
@@ -104,7 +113,6 @@ public class GuideListFragment extends LazyFragment {
             }
         });
     }
-
     protected void initSearchList(){
         get_total = 0;
         bodyBeanList.clear();
@@ -112,8 +120,10 @@ public class GuideListFragment extends LazyFragment {
         addSomething2Scene();
     }
     public void addSomething2Scene() {
+        swipeRefreshLayout.setRefreshing(true);
         GetSomeScene(oneTakeNum, get_total);
     }
     protected void GetSomeScene(int take, int skip) {
+
     }
 }

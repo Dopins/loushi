@@ -11,8 +11,6 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.SceneRecyclerViewAdapter;
-import com.android.loushi.loushi.callback.JsonCallback;
-import com.android.loushi.loushi.jsonbean.RecommendJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
@@ -24,23 +22,19 @@ import com.lzy.okhttputils.OkHttpUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Request;
-import okhttp3.Response;
-
-
 /**
  * Created by dopin on 2016/7/17.
  */
 public class SceneListFragment extends LazyFragment {
 
     protected RecyclerView mRecyclerView;
-    protected List<SceneJson.BodyBean> bodyBeanList = new ArrayList<SceneJson.BodyBean>();
+    protected List<SceneJson.BodyBean> bodyBeanList;
     protected SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
     protected SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
 
     protected final int oneTakeNum=10;
-    protected int get_total=0;
-    protected boolean has_data=true;
+    protected int get_total;
+    protected boolean has_data;
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
@@ -50,6 +44,10 @@ public class SceneListFragment extends LazyFragment {
 
 
     protected void init() {
+        get_total=0;
+        has_data=true;
+        bodyBeanList = new ArrayList<>();
+
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_widget);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         swipeRefreshLayout.setProgressViewOffset(false, 0, 24);
@@ -96,7 +94,7 @@ public class SceneListFragment extends LazyFragment {
             @Override
             public void onBottom() {
                 super.onBottom();
-                if(has_data)
+                if (has_data)
                     addSomething2Scene();
             }
         });
@@ -107,14 +105,17 @@ public class SceneListFragment extends LazyFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                get_total = 0;
-                bodyBeanList.clear();
-                addSomething2Scene();
+              initSearchList();
 
             }
         });
     }
-
+    protected void initSearchList(){
+        get_total = 0;
+        bodyBeanList.clear();
+        has_data=true;
+        addSomething2Scene();
+    }
     public void addSomething2Scene() {
         swipeRefreshLayout.setRefreshing(true);
         GetSomeScene(oneTakeNum, get_total);

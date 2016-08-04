@@ -7,12 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.jsonbean.RecommendJson;
-import com.android.loushi.loushi.jsonbean.SceneJson;
+import com.android.loushi.loushi.jsonbean.GuideJson;
+import com.android.loushi.loushi.util.RecycleViewPreferSetter;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -20,12 +21,12 @@ import java.util.List;
 /**
  * Created by dopin on 2016/7/24.
  */
-public class GuideRecyclerViewAdapter extends RecyclerView.Adapter<GuideRecyclerViewAdapter.SceneViewHolder> {
+public class GuideRecyclerViewAdapter extends RecyclerView.Adapter<GuideRecyclerViewAdapter.GuideViewHolder> {
 
     private OnItemClickListener itemClickListener;
     private Context context;
-    private List<RecommendJson.BodyBean.SceneBean> bodyBeanList;
-    public GuideRecyclerViewAdapter(Context context, List<RecommendJson.BodyBean.SceneBean> bodyBeanList) {
+    private List<GuideJson.BodyBean> bodyBeanList;
+    public GuideRecyclerViewAdapter(Context context, List<GuideJson.BodyBean> bodyBeanList) {
         this.context = context;
         this.bodyBeanList = bodyBeanList;
     }
@@ -38,21 +39,21 @@ public class GuideRecyclerViewAdapter extends RecyclerView.Adapter<GuideRecycler
         void onItemClick(View view, int position);
     }
     @Override
-    public SceneViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GuideViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-            return new SceneViewHolder(LayoutInflater.from(
-                    context).inflate(R.layout.cardview_tip, parent,
+            return new GuideViewHolder(LayoutInflater.from(
+                    context).inflate(R.layout.cardview_topic, parent,
                     false));
     }
 
     @Override
-    public void onBindViewHolder(SceneViewHolder holder, int position) {
+    public void onBindViewHolder(GuideViewHolder holder, int position) {
 
-        setSceneView( holder, position);
+        setGuideView( holder, position);
     }
-    private void setSceneView(SceneViewHolder holder, int position) {
+    private void setGuideView(GuideViewHolder holder, int position) {
 
-        RecommendJson.BodyBean.SceneBean body = bodyBeanList.get(position);
+        GuideJson.BodyBean body = bodyBeanList.get(position);
 
         Picasso.with(context).load(body.getImgUrl()).fit().
                 into(holder.image);
@@ -60,9 +61,9 @@ public class GuideRecyclerViewAdapter extends RecyclerView.Adapter<GuideRecycler
         holder.title.setText(body.getName());
 
         holder.numPrefer.setText(body.getCollectionNum()+"");
-        holder.checkBox_prefer.setSelected(body.getCollected());
+        holder.checkBox_prefer.setChecked(body.getCollected());
     }
-    class SceneViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class GuideViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView image;
         TextView title;
         TextView detail;
@@ -70,8 +71,9 @@ public class GuideRecyclerViewAdapter extends RecyclerView.Adapter<GuideRecycler
         TextView numWatch;
         TextView publishTime;
         CheckBox checkBox_prefer;
+        LinearLayout btn_prefer;
 
-        public SceneViewHolder(View view) {
+        public GuideViewHolder(View view) {
             super(view);
             image = (ImageView) view.findViewById(R.id.card_image);
             title = (TextView) view.findViewById(R.id.card_title);
@@ -80,10 +82,22 @@ public class GuideRecyclerViewAdapter extends RecyclerView.Adapter<GuideRecycler
             numWatch = (TextView) view.findViewById(R.id.num_watch);
             publishTime = (TextView) view.findViewById(R.id.publish_time);
             checkBox_prefer= (CheckBox) view.findViewById(R.id.checkbox_prefer);
-            checkBox_prefer.setOnClickListener(new View.OnClickListener() {
+            btn_prefer=(LinearLayout)view.findViewById(R.id.btn_prefer);
+            btn_prefer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "item" + getPosition() + " 点赞", Toast.LENGTH_SHORT).show();
+
+                   String type=bodyBeanList.get(getPosition()).getType()+"";
+
+                    RecycleViewPreferSetter recycleViewPreferSetter=new RecycleViewPreferSetter();
+                    recycleViewPreferSetter.setSelectedStateSetter(new RecycleViewPreferSetter.SelectedStateSetter() {
+                        @Override
+                        public void SetSelectedState(String num, boolean is_collected) {
+                            numPrefer.setText(num);
+                            checkBox_prefer.setChecked(is_collected);
+                        }
+                    });
+                    recycleViewPreferSetter.setTopicPrefer(type, getPosition(), bodyBeanList);
                 }
             });
 

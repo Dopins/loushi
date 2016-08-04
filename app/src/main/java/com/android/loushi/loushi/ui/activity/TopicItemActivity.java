@@ -46,7 +46,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
     private Integer mTake = 20;   //一次加载多少item
     private List mTopicList;
     private Integer mTopic_id = 0;     //专题分类的item id
-
+    private Toolbar mToolbar;
     private RecyclerView recyclerView;
     private ImageView imageViewSearch;
     private TextView textViewTitle;

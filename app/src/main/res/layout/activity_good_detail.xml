@@ -35,12 +35,14 @@
         android:id="@+id/program_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        
+        app:contentInsetStart="0dp"
         >
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/arrow_back"
+        <ImageView
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:scaleType="center"
+            android:src="@drawable/arrow_back"
+            android:background="?@android:attr/selectableItemBackground"
             android:id="@+id/back"/>
 
     </android.support.v7.widget.Toolbar>

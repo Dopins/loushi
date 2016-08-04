@@ -24,7 +24,7 @@ import com.taobao.tae.sdk.callback.InitResultCallback;
 public class MainActivity extends BaseActivity {
     public FragmentTabHost mTabHost;
     private LayoutInflater layoutInflater;
-    private Class fragmentArray[] = {SceneFragment.class,CategoryFragment.class,PersonFragment.class};
+    private Class fragmentArray[] = {SceneFragment.class,CategoryFragment.class,MyFragment.class};
     private String mTextviewArray[] = {"场景", "指南", "我的"};
     //定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.tab_scene_button, R.drawable.tab_category_button,R.drawable.tab_my_button
@@ -81,27 +81,7 @@ public class MainActivity extends BaseActivity {
         return view;
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+
 protected void onSaveInstanceState(Bundle outState) {
      //super.onSaveInstanceState(outState);
 

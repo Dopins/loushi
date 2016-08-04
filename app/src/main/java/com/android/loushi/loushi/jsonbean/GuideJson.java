@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/7/24.
  */
-public class TopicJson  implements Serializable {
+public class GuideJson implements Serializable {
     /**
      * state : 1
      * code : 10000
@@ -32,6 +32,7 @@ public class TopicJson  implements Serializable {
      */
 
     private List<BodyBean> body;
+
 
     public boolean getState() {
         return state;
@@ -70,6 +71,8 @@ public class TopicJson  implements Serializable {
         private String wDate;
         private String name;
         private int groupID;
+
+        private int type;    //专题(1) 或者 攻略(2)
         /**
          * id : 22
          * name : 枕头
@@ -82,15 +85,6 @@ public class TopicJson  implements Serializable {
         private int commentNum;
         private int browseNum;
         private String imgUrl;
-        private String digest;
-
-        public String getDigest() {
-            return digest;
-        }
-
-        public void setDigest(String digest) {
-            this.digest = digest;
-        }
 
         public int getId() {
             return id;
@@ -98,6 +92,14 @@ public class TopicJson  implements Serializable {
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
         }
 
         public String getWDate() {

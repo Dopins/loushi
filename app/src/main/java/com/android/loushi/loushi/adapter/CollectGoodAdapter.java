@@ -17,6 +17,7 @@ import com.android.loushi.loushi.R;
 
 import com.android.loushi.loushi.jsonbean.UserCollectionsGood;
 import com.android.loushi.loushi.jsonbean.UserCollectionsJson;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 
@@ -46,10 +47,11 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
 
     @Override
     public void onBindViewHolder(final CollectGoodViewHolder holder, final int position) {
+        holder.img_good.setAlpha(200);
         if(type.equals("3")) {
             final UserCollectionsJson.BodyBean.GoodsBean goodsBean = beanList.get(position).getGoods();
             holder.tv_name.setText(goodsBean.getName());
-            Picasso.with(context).load(goodsBean.getImages().get(0).getUrl()).fit().into(holder.img_good);
+            Picasso.with(context).load(goodsBean.getImages().get(0).getUrl()).fit().error(R.drawable.loading_small).into(holder.img_good);
             holder.tv_price.setText(goodsBean.getPrice()+"");
             holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
             holder.btn_like.setChecked(true);
@@ -101,7 +103,9 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
         }
         if(type.equals("1")){
             if(beanList.get(position).getTopic()!=null) {
+
                 final UserCollectionsJson.BodyBean.TopicBean goodsBean = beanList.get(position).getTopic();
+                Log.e("nowcollect",new Gson().toJson(beanList.get(position)));
                 holder.tv_name.setText(goodsBean.getName());
                 holder.tv_price.setVisibility(View.INVISIBLE);
                 holder.price_symbol.setVisibility(View.INVISIBLE);
@@ -111,9 +115,10 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
                 holder.btn_like.setVisibility(View.GONE);
             }
         }
-        if(type.equals("2")){
+        if(type.equals("1")){
             if(beanList.get(position).getStrategy()!=null) {
                 final UserCollectionsJson.BodyBean.StrategyBean goodsBean = beanList.get(position).getStrategy();
+                Log.e("nowcollect",new Gson().toJson(beanList.get(position)));
                 String url = goodsBean.getImgUrl();
                 if(url.indexOf("|||")>=0)
                     url = url.substring(0, url.indexOf("|||"));

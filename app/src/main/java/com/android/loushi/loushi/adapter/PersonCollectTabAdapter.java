@@ -62,24 +62,10 @@ public class PersonCollectTabAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
 
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollections")
-                // 请求方式和请求url
-                .tag(this).params("type", position+"").params("user_id", BaseActivity.user_id)
-                .params("skip", "0").params("take", "1")
 
-                // 请求的 tag, 主要用于取消对应的请求
-                // 缓存模式，详细请看缓存介绍
-                .execute(new JsonCallback<UserCollectionsJson>(UserCollectionsJson.class) {
-                             @Override
-                             public void onResponse(boolean b, UserCollectionsJson userCollectionsJson, Request request, Response response) {
-                                 count=userCollectionsJson.getReturn_info();
-
-                             }
-
-                         }
-
-                );
-        return count;
+        return list_count.get(position);
         //return list_count.get(position);
     }
+
+
 }

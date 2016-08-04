@@ -3,6 +3,7 @@ package com.android.loushi.loushi.util;
 import android.util.Log;
 
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.jsonbean.GuideJson;
 import com.android.loushi.loushi.jsonbean.RecommendJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
@@ -65,7 +66,7 @@ public class RecycleViewPreferSetter {
                     }
                 });
     }
-    public void setTopicPrefer( String type,final int position ,final List<TopicJson.BodyBean> bodyBeanList) {
+    public void setTopicPrefer( String type,final int position ,final List<GuideJson.BodyBean> bodyBeanList) {
         //SceneJson.BodyBean body=bodyBeanList.get(position);
 
         String pid=bodyBeanList.get(position).getId()+"";
@@ -101,7 +102,7 @@ public class RecycleViewPreferSetter {
                     }
                 });
     }
-    public void setStrategyPrefer( String type,final int position ,final List<StrategyJson.BodyBean> bodyBeanList) {
+    public void setStrategyPrefer( String type,final int position ,final List<GuideJson.BodyBean> bodyBeanList) {
         //SceneJson.BodyBean body=bodyBeanList.get(position);
 
         String pid=bodyBeanList.get(position).getId()+"";

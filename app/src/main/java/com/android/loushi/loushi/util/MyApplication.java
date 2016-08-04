@@ -45,7 +45,9 @@ public class MyApplication extends LitePalApplication {
         //域名放在baseactivity的静态变量里
         OkHttpUtils.init(this);
         OkHttpUtils.getInstance()
-               .debug("OkHttpUtils").setCookieStore(new PersistentCookieStore());
+               .debug("OkHttpUtils")
+                .setCookieStore(new PersistentCookieStore())
+                ;
 
         OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
 
