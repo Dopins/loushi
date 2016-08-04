@@ -35,22 +35,26 @@ import okhttp3.Response;
 public class RecommendFragment extends LazyFragment {
 
     private RecyclerView mRecyclerView;
-    private List<RecommendJson.BodyBean> bodyBeanList = new ArrayList<>();
+    private List<RecommendJson.BodyBean> bodyBeanList;
     private RecommendRecycleViewAdapter recommendRecycleViewAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
 
     private String rDate;
     private final int oneTakeNum = 3 ;
 
-    private boolean has_data=true;
+    private boolean has_data;
     SimpleDateFormat simpleDateFormat;
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
         setContentView(R.layout.fragment_recommend);
         init();
+
     }
     private void init() {
+        has_data=true;
+        bodyBeanList = new ArrayList<>();
+
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_widget);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
 
@@ -124,9 +128,8 @@ public class RecommendFragment extends LazyFragment {
 
                 bodyBeanList.clear();
                 addSomething2Scene();
-                swipeRefreshLayout.setRefreshing(false);
                 recommendRecycleViewAdapter.notifyDataSetChanged();
-                Toast.makeText(getContext(), "下拉更新完成", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "下拉更新完成", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -138,6 +141,7 @@ public class RecommendFragment extends LazyFragment {
     }
     private void GetSomeScene(int take) {
 
+        swipeRefreshLayout.setRefreshing(true);
         OkHttpUtils.post(BaseActivity.url+"base/recommendation")
                 // 请求方式和请求url
                 .params("user_id",BaseActivity.user_id)
@@ -150,10 +154,12 @@ public class RecommendFragment extends LazyFragment {
                             bodyBeanList.addAll(recommendJson.getBody());
 
                             rDate =bodyBeanList.get(bodyBeanList.size()-1).getRDate().substring(0,10);
+                            //Log.d("tag",bodyBeanList.size()+"");
 
-                            if(bodyBeanList.size()<10)  if(bodyBeanList.size()<oneTakeNum) has_data=false;
+                            if(bodyBeanList.size()<oneTakeNum) has_data=false;
                             recommendRecycleViewAdapter.notifyDataSetChanged();
 
+                            swipeRefreshLayout.setRefreshing(false);
                         } else {
                             Log.d("error", recommendJson.getReturn_info());
                         }

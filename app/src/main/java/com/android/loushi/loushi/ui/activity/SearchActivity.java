@@ -23,6 +23,8 @@ import com.android.loushi.loushi.ui.fragment.SearchFragment;
 import com.android.loushi.loushi.ui.fragment.SearchResultFragment;
 import com.android.loushi.loushi.util.SearchWords;
 
+import org.greenrobot.eventbus.EventBus;
+
 
 /**
  * Created by dopin on 2016/7/18.
@@ -33,7 +35,6 @@ public class SearchActivity extends BaseActivity {
     public static EditText editText_search;
     private static FragmentManager fragmentManager;
     private static SearchResultFragment searchResultFragment;
-    private static LocalBroadcastManager localBroadcastManager;
 
     @Override
     protected int getLayoutId() {
@@ -92,7 +93,6 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
-        localBroadcastManager = LocalBroadcastManager.getInstance(this);
         searchResultFragment = new SearchResultFragment();
     }
     public static void search(){
@@ -110,9 +110,7 @@ public class SearchActivity extends BaseActivity {
 
             fragmentManager.beginTransaction().replace(R.id.search_frame, searchResultFragment).commit();
 
-            Intent intent = new Intent();
-            intent.setAction("search");
-            localBroadcastManager.sendBroadcast(intent);
+            EventBus.getDefault().post(new String("search"));
 
         }
     }

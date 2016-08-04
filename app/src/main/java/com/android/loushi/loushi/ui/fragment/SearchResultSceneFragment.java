@@ -18,6 +18,10 @@ import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.SearchActivity;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.lzy.okhttputils.OkHttpUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.List;
 
 import okhttp3.Request;
@@ -28,29 +32,37 @@ import okhttp3.Response;
  * Created by dopin on 2016/7/17.
  */
 public class SearchResultSceneFragment extends SceneListFragment {
-    private static LocalBroadcastManager localBroadcastManager;
-    private BroadcastReceiver mBroadcastReceiver;
+
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
+        if(!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
 
-        mBroadcastReceiver = new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                initSearchList();
-            }
-
-        };
-        IntentFilter intentFilter = new IntentFilter("search");
-
-        localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
-        localBroadcastManager.registerReceiver(mBroadcastReceiver, intentFilter);
+//        mBroadcastReceiver = new BroadcastReceiver(){
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                initSearchList();
+//            }
+//
+//        };
+//        IntentFilter intentFilter = new IntentFilter("search");
+//
+//        localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
+//        localBroadcastManager.registerReceiver(mBroadcastReceiver, intentFilter);
     }
 
+    @Subscribe
+    public void onEventMainThread(String event) {
+
+        initSearchList();
+    }
     @Override
     public void onDestroy() {
-
         super.onDestroy();
+        if(EventBus.getDefault().isRegistered(this))
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
