@@ -27,6 +27,9 @@ import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
 import com.lzy.okhttputils.OkHttpUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,32 +44,27 @@ public class SearchResultGuideFragment extends GuideListFragment {
 
     private boolean has_no_topic;
     private boolean has_no_strategy;
-    private static LocalBroadcastManager localBroadcastManager;
-    private BroadcastReceiver mBroadcastReceiver;
+
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
+        if(!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
         has_no_strategy=false;
         has_no_topic=false;
-
-        mBroadcastReceiver = new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                has_no_strategy=false;
-                has_no_topic=false;
-                initSearchList();
-            }
-        };
-        IntentFilter intentFilter = new IntentFilter("search");
-
-        localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
-        localBroadcastManager.registerReceiver(mBroadcastReceiver, intentFilter);
     }
-
+    @Subscribe
+    public void onEventMainThread(String event) {
+        has_no_strategy=false;
+        has_no_topic=false;
+        initSearchList();
+    }
     @Override
     public void onDestroy() {
-
         super.onDestroy();
+        if(EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this);
     }
 
     @Override

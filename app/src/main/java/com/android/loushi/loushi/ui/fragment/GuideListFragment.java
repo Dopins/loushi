@@ -26,13 +26,13 @@ import java.util.List;
 public class GuideListFragment extends LazyFragment {
 
     protected RecyclerView mRecyclerView;
-    protected List<GuideJson.BodyBean> bodyBeanList = new ArrayList<GuideJson.BodyBean>();
+    protected List<GuideJson.BodyBean> bodyBeanList;
     protected GuideRecyclerViewAdapter guideRecyclerViewAdapter;
     protected SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
 
     protected final int oneTakeNum=10;
-    protected int get_total=0;
-    protected boolean has_data=true;
+    protected int get_total;
+    protected boolean has_data;
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
@@ -42,6 +42,10 @@ public class GuideListFragment extends LazyFragment {
 
 
     protected void init() {
+        get_total=0;
+        has_data=true;
+        bodyBeanList = new ArrayList<>();
+
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_widget);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         swipeRefreshLayout.setProgressViewOffset(false, 0, 24);
