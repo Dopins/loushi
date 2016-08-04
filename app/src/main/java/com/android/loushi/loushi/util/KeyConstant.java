@@ -14,4 +14,7 @@ public class KeyConstant {
     public static final String REPLYED_ID="replyed_id";
     public static final String CONTENT="content";
 
+
+    public static final String COMMENT_ID ="comment_id";
+
 }

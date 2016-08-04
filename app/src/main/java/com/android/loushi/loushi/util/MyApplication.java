@@ -50,8 +50,8 @@ public class MyApplication extends LitePalApplication {
         OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
 
                 // 请求方式和请求url
-                .tag(this).params("mobile_phone", "123456").params("password", "mtf071330")
-//                .tag(this).params("mobile_phone", "13750065622").params("password", "mtf071330")
+//                .tag(this).params("mobile_phone", "123456").params("password", "mtf071330")
+                .tag(this).params("mobile_phone", "13750065622").params("password", "mtf071330")
                 .params("isThird", "false")
                         // 请求的 tag, 主要用于取消对应的请求
                         // 设置当前请求的缓存key,建议每个不同功能的请求设置一个

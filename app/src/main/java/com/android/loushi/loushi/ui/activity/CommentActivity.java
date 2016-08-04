@@ -2,9 +2,7 @@ package com.android.loushi.loushi.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.input.InputManager;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,18 +16,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.sdk.android.top.TopService;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.CommentAdapter;
-import com.android.loushi.loushi.callback.EncryptCallback;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.CommentJson;
-import com.android.loushi.loushi.jsonbean.RecommendJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
-import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -56,19 +50,18 @@ public class CommentActivity extends BaseActivity implements
     private EditText editTextComment;//editText_comment
     private ImageView imageViewSure;//imageView_sure
 
-    private String mType;
-    private String mPid;
-
-    private String mReplyId="0";
-
     private CommentAdapter mAdapter;
     private List<CommentJson.BodyBean> mCommentList = new ArrayList<CommentJson.BodyBean>();
 
-    private InputMethodManager inputManager;
-
+    private String mReplyId = "0";
+    private String mType;
+    private String mPid;
+    private int mMessageId; //要在屏幕ixanshi的item
     private int firstVisibleItemPosition = 0;
     private int lastVisibleItemPosition = 0;
     private boolean isInputOpen;
+
+    private InputMethodManager inputManager;
 
     @Override
     protected int getLayoutId() {
@@ -87,13 +80,9 @@ public class CommentActivity extends BaseActivity implements
 
         mType = intent.getStringExtra(KeyConstant.TYPE);
         mPid = intent.getStringExtra(KeyConstant.PID);
+        mMessageId=intent.getIntExtra(KeyConstant.COMMENT_ID,0);
 
-
-        //TODO
-//        mType = 1 + "";
-//        mPid = 233 + "";
-        Log.i("test","mType,mPid"+mType+","+mPid);
-
+        Log.i("test", "mType,mPid,mMessageId==  " + mType + "," + mPid+","+mMessageId);
         inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
@@ -102,10 +91,28 @@ public class CommentActivity extends BaseActivity implements
         initRecyclerView();
         initBottombar();
         loadComment();
+//        skipComment();
+    }
+
+    //显示那一条那一条comment就将那条comment显示在屏幕
+    private void skipComment() {
+        if(mMessageId!=0){
+            int position=findPositionMessageById();
+            recycleView.scrollToPosition(position);
+        }
+    }
+
+    private int findPositionMessageById(){
+        int len=mCommentList.size();
+        for(int i=0;i<len;i++){
+            if(mCommentList.get(i).getId()==mMessageId){
+                return i;
+            }
+        }
+        return 0;
     }
 
     private void loadComment() {
-        Log.i("test", "loadComment...");
         loadComment(MainActivity.user_id, mType, mPid);
     }
 
@@ -124,6 +131,7 @@ public class CommentActivity extends BaseActivity implements
                             mCommentList.addAll(commentJson.getBody());
                             mAdapter.notifyDataSetChanged();
                             swipeRefreshLayout.setRefreshing(false);
+                            skipComment();
                         } else
                             Toast.makeText(CommentActivity.this, "请重试", Toast.LENGTH_SHORT).show();
                     }
@@ -170,7 +178,7 @@ public class CommentActivity extends BaseActivity implements
                 } else if (newState == RecyclerView.SCROLL_STATE_IDLE &&
                         lastVisibleItemPosition == mAdapter.getItemCount() - 1)
                     Toast.makeText(CommentActivity.this, "憋拉啦,没数据惹", Toast.LENGTH_SHORT).show();
-                else if(newState==RecyclerView.SCROLL_STATE_DRAGGING)
+                else if (newState == RecyclerView.SCROLL_STATE_DRAGGING)
                     hideInputManager();
             }
         });
@@ -263,7 +271,7 @@ public class CommentActivity extends BaseActivity implements
             openInputManager();
             editTextComment.setHint("回复" + mCommentList.get(postion).getUserInfo().getNickname() + ":");
             mReplyId = mCommentList.get(postion).getId() + "";
-        }else{
+        } else {
             hideInputManager();
         }
 //
@@ -276,14 +284,14 @@ public class CommentActivity extends BaseActivity implements
 
     private void hideInputManager() {
 //        inputManager.toggleSoftInput(0, InputMethodManager.RESULT_HIDDEN);
-        inputManager.hideSoftInputFromWindow(editTextComment.getWindowToken(),0);
-        isInputOpen=false;
+        inputManager.hideSoftInputFromWindow(editTextComment.getWindowToken(), 0);
+        isInputOpen = false;
 //        Log.i("test","hideInputManager");
     }
 
-    private void openInputManager(){
+    private void openInputManager() {
         inputManager.showSoftInput(editTextComment, InputMethodManager.SHOW_FORCED);
-        isInputOpen=true;
+        isInputOpen = true;
 //        Log.i("test","openInputManager");
     }
 }

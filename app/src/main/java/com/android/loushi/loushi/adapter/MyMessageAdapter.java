@@ -126,6 +126,48 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
 
+
+    /**
+     * 由当前在recycleview的位置获取在信息列表中的位置
+     * @param position
+     * @return
+     */
+    private int getPostionInList(int position){
+        if(getItemViewType(position)==ViewType.CONTENT.ordinal()){
+            if(position-1<=newCommentCount)
+                return position-1;
+            else
+                return position-2;
+        }
+        return 0;
+    }
+
+    /**
+     * 获取位于在recyclerview上position位置的消息的类型
+     * @param position
+     * @return
+     */
+    public int getPositionType(int position){
+        return myMessageList.get(getPostionInList(position)).getComment().getType();
+    }
+    /**
+     * 获取位于在recyclerview上position位置的消息的类型
+     * @param position
+     * @return
+     */
+    public int getPositionPid(int position){
+        return myMessageList.get(getPostionInList(position)).getComment().getPid();
+    }
+    /**
+     * 获取位于在recyclerview上position位置的消息id
+     * @param position
+     * @return
+     */
+    public int getPositionCommentId(int position){
+        return myMessageList.get(getPostionInList(position)).getCommentID();
+    }
+
+
     public class ContentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView imageView_User;
