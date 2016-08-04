@@ -29,6 +29,8 @@ import java.util.List;
  */
 public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
+    private static final String PREFIXWORD="回复了你:";
+
     private OnItemClickListener mOnItemClickListener;
     private CircleImageTransformation mTransformation;
 
@@ -96,11 +98,11 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         if(holder instanceof ContentViewHolder){
             UserMessageJson.BodyBean myMessage;
-            if(position<=newCommentCount){
+            if(position<=newCommentCount)
                 myMessage=myMessageList.get(position-1);
-            }
             else
                 myMessage=myMessageList.get(position-2);
+
             //TODO 圆形复用问题
             Picasso.with(mContext).load(myMessage.getComment().getUserInfo().getHeadImgUrl())
                     .fit()
@@ -108,7 +110,7 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((ContentViewHolder) holder).textView_UserName.setText(
                     myMessage.getComment().getUserInfo().getNickname());
             ((ContentViewHolder) holder).textView_userContont.setText(
-                    myMessage.getComment().getContent());
+                    PREFIXWORD+myMessage.getComment().getContent());
             ((ContentViewHolder) holder).textView_MessageDate.setText(
                     DateUtils.calulateDate(myMessage.getComment().getCDate()));
             ((ContentViewHolder) holder).textView_MessageTime.setText(
@@ -121,6 +123,48 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemCount() {
         return myMessageList.size()+TITLECOUNT;
+    }
+
+
+
+    /**
+     * 由当前在recycleview的位置获取在信息列表中的位置
+     * @param position
+     * @return
+     */
+    private int getPostionInList(int position){
+        if(getItemViewType(position)==ViewType.CONTENT.ordinal()){
+            if(position-1<=newCommentCount)
+                return position-1;
+            else
+                return position-2;
+        }
+        return 0;
+    }
+
+    /**
+     * 获取位于在recyclerview上position位置的消息的类型
+     * @param position
+     * @return
+     */
+    public int getPositionType(int position){
+        return myMessageList.get(getPostionInList(position)).getComment().getType();
+    }
+    /**
+     * 获取位于在recyclerview上position位置的消息的类型
+     * @param position
+     * @return
+     */
+    public int getPositionPid(int position){
+        return myMessageList.get(getPostionInList(position)).getComment().getPid();
+    }
+    /**
+     * 获取位于在recyclerview上position位置的消息id
+     * @param position
+     * @return
+     */
+    public int getPositionCommentId(int position){
+        return myMessageList.get(getPostionInList(position)).getCommentID();
     }
 
 

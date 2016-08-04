@@ -1,10 +1,12 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -104,7 +106,16 @@ public class MyMessageActivity extends BaseActivity implements
         mAdapter.setmOnItemClickListener(new MyMessageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int postion) {
-                Toast.makeText(MyMessageActivity.this, ""+postion, Toast.LENGTH_SHORT).show();
+                String pid=mAdapter.getPositionPid(postion)+"";
+                String type=mAdapter.getPositionType(postion)+"";
+                int p=mAdapter.getPositionCommentId(postion);
+//                Toast.makeText(MyMessageActivity.this,
+//                        "pid,type,position"+pid+type+postion, Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(MyMessageActivity.this,CommentActivity.class);
+                intent.putExtra(KeyConstant.TYPE,type);
+                intent.putExtra(KeyConstant.PID,pid);
+                intent.putExtra(KeyConstant.COMMENT_ID,p);
+                startActivity(intent);
             }
         });
         recycleView.setAdapter(mAdapter);
@@ -115,31 +126,6 @@ public class MyMessageActivity extends BaseActivity implements
                 (int)TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,24,getResources().getDisplayMetrics()));
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setEnabled(false);
-        recycleView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-                lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
-                        firstVisibleItemPosition == 0) {
-                    swipeRefreshLayout.setRefreshing(true);
-                    loadMessage();
-                } else if (newState == RecyclerView.SCROLL_STATE_IDLE &&
-                        lastVisibleItemPosition == mAdapter.getItemCount() - 1)
-                    Toast.makeText(MyMessageActivity.this, "憋拉啦,没数据惹", Toast.LENGTH_SHORT).show();
-                else {
-
-                }
-            }
-        });
     }
 
     private void initToolbar() {
@@ -163,6 +149,7 @@ public class MyMessageActivity extends BaseActivity implements
 
     @Override
     public void onRefresh() {
-
+        loadMessage();
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

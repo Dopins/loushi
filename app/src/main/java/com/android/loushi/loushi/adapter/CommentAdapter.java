@@ -26,8 +26,8 @@ import java.util.List;
  */
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
 
-    private static final String DEFALUTNAME="路人甲";
-    private static final String REPLYSTR="回复";
+    public static final String DEFALUTNAME="路人甲";
+    public static final String REPLYSTR="回复";
 
     private OnItemClickListener mOnItemClickListener;
 

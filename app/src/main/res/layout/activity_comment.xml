@@ -102,17 +102,10 @@
             android:id="@+id/imageView_comment"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="15dp"
             android:scaleType="center"
             android:src="@drawable/reply" />
 
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:layout_toRightOf="@id/imageView_comment"
-            android:background="@color/hint" />
 
         <EditText
             android:id="@+id/editText_comment"
