@@ -13,6 +13,7 @@ import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.cookie.store.CookieStore;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
+import com.squareup.picasso.Picasso;
 import com.taobao.tae.sdk.callback.InitResultCallback;
 
 import org.litepal.LitePalApplication;
@@ -69,7 +70,8 @@ public class MyApplication extends LitePalApplication {
                         Log.e(TAG, Integer.toString(userLoginJson.getBody()));
                         //这里现在是48了
                         Log.e("test", response.toString());
-                        MainActivity.user_id=Integer.toString(userLoginJson.getBody());
+                        BaseActivity.user_id=Integer.toString(userLoginJson.getBody());
+
 
 
                     }

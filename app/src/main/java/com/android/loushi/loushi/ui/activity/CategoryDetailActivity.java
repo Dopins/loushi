@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -55,7 +56,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
     private Toolbar toolbar;
     private ImageView back;
     private TextView tv_title;
-    private MyWebView myWebView;
+    private WebView WebView;
     //private StrategyJson.BodyBean strategyBean;
     @Override
     protected int getLayoutId() {
@@ -80,7 +81,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
 
         }
         if(type.equals("1")){
-            url="http://www.loushi666.com:8080/loushi/topic.html?&user_id="+BaseActivity.user_id
+            url="http://www.loushi666.com:8080/loushi/topic.html?user_id="+BaseActivity.user_id
                     +"&topic_id="+
             topicBean.getId();
         }
@@ -97,9 +98,66 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
     }
 
     private void initWebView() {
-        myWebView=new MyWebView(CategoryDetailActivity.this);
-        myWebView = (MyWebView)findViewById(R.id.mywebview);
-        myWebView.setWebView(url);
+        webView=new WebView(CategoryDetailActivity.this);
+        webView = (WebView)findViewById(R.id.webview);
+        webView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                super.onProgressChanged(view, progress);
+            }
+        });
+
+
+        webView.getSettings().setJavaScriptEnabled(true);
+
+
+
+        webView.getSettings().setBuiltInZoomControls(true);
+
+        webView.getSettings().setSupportZoom(true);
+
+        webView.getSettings().setUseWideViewPort(true); //可任意比例缩放
+
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+        int screenDensity = getResources().getDisplayMetrics().densityDpi ;
+        Log.e("density", screenDensity +"");
+        WebSettings.ZoomDensity zoomDensity = WebSettings.ZoomDensity.MEDIUM ;
+        switch (screenDensity){
+            case DisplayMetrics.DENSITY_LOW :
+                zoomDensity = WebSettings.ZoomDensity.CLOSE;
+                break;
+            case DisplayMetrics.DENSITY_MEDIUM:
+                zoomDensity = WebSettings.ZoomDensity.MEDIUM;
+                break;
+            case DisplayMetrics.DENSITY_HIGH:
+                zoomDensity = WebSettings.ZoomDensity.FAR;
+                break ;
+            default:
+                zoomDensity = WebSettings.ZoomDensity.FAR;
+                break;
+        }
+        Log.e("density", zoomDensity +"");
+        webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setDisplayZoomControls(false);
+       // webView.getSettings().setDefaultZoom(zoomDensity);
+        webView.getSettings().setBlockNetworkImage(false);
+        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        webView.loadUrl(url);
+        webView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+            }
+
+            public boolean shouldOverrideUrlLoading(WebView view, final String url) {
+                //获取web跳转的url 根据 url的后缀来确定商品id
+
+
+                return false;
+
+            }
+        });
     }
 
     private void initToolBar(){
@@ -167,6 +225,8 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
         comment.setOnClickListener(this);
 
     }
+
+
 
     public void onClick(View v) {
         switch(v.getId()){

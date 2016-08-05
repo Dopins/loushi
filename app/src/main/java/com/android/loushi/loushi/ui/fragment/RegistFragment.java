@@ -150,7 +150,7 @@ public class RegistFragment extends Fragment {
 
     private void initSDK() {
         // 初始化短信SDK
-        SMSSDK.initSDK(getContext(), "1583968bdc792", "571cce9eec39a570f696fd03ed8ed475");
+        SMSSDK.initSDK(getContext(), "15bf245471948", "584e01d3ab9afb7bcb9e1d0120037cdf");
         SMSSDK.registerEventHandler(eh); //注册短信回调
     }
     EventHandler eh=new EventHandler(){
@@ -178,6 +178,7 @@ public class RegistFragment extends Fragment {
                         new ReceiveSmsEvent(4));
                 //Toast.makeText(getActivity(), "失败", Toast.LENGTH_SHORT).show();
                 ((Throwable)data).printStackTrace();
+                Log.e("regist",Log.getStackTraceString((Throwable)data));
             }
             //Looper.loop();
         }

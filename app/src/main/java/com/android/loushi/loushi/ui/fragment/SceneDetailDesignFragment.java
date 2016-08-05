@@ -3,6 +3,7 @@ package com.android.loushi.loushi.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +38,7 @@ import okhttp3.Response;
  * Created by Administrator on 2016/7/24.
  */
 public class SceneDetailDesignFragment extends BaseFragment {
-    private MyWebView mywebView;
+    private WebView webView;
     private LinearLayout collect_bar;
 
     private LinearLayout collect;
@@ -75,9 +76,53 @@ public class SceneDetailDesignFragment extends BaseFragment {
         return view;
     }
     private void initWebview(){
-        mywebView=(MyWebView)getView().findViewById(R.id.mywebview);
+        webView=(WebView)getView().findViewById(R.id.webview);
         url="http://www.loushi666.com:8080/loushi/scene.html?user_id="+ BaseActivity.user_id+"&scene_id="+scene_id;
-      mywebView.setWebView(url);
+        Log.e("url",url);
+        webView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                super.onProgressChanged(view, progress);
+            }
+        });
+
+
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+        int screenDensity = getResources().getDisplayMetrics().densityDpi ;
+        Log.e("density", screenDensity +"");
+        WebSettings.ZoomDensity zoomDensity = WebSettings.ZoomDensity.MEDIUM ;
+        switch (screenDensity){
+            case DisplayMetrics.DENSITY_LOW :
+                zoomDensity = WebSettings.ZoomDensity.CLOSE;
+                break;
+            case DisplayMetrics.DENSITY_MEDIUM:
+                zoomDensity = WebSettings.ZoomDensity.MEDIUM;
+                break;
+            case DisplayMetrics.DENSITY_HIGH:
+                zoomDensity = WebSettings.ZoomDensity.FAR;
+                break ;
+            default:
+                zoomDensity = WebSettings.ZoomDensity.FAR;
+        }
+        webView.getSettings().setDefaultZoom(zoomDensity);
+        webView.getSettings().setBlockNetworkImage(false);
+
+        webView.loadUrl(url);
+        webView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+            }
+
+            public boolean shouldOverrideUrlLoading(WebView view, final String url) {
+                //获取web跳转的url 根据 url的后缀来确定商品id
+
+
+                return false;
+
+            }
+        });
 
     }
     private void initCollectBar(){

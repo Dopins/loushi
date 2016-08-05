@@ -37,7 +37,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
                 android:background="@drawable/pic"
-                >
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
 
 
 
@@ -96,13 +98,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-
+                app:contentInsetStart="0dp"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:theme="@style/ThemeOverlay.AppCompat.Light"
                 >
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
+                    android:layout_height="match_parent"
 
                     >
                     <TextView
@@ -145,21 +147,22 @@
                         android:textSize="20sp"
 
                         />
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="20dp"
+                    <ImageView
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="?attr/actionBarSize"
 
-                        android:background="@drawable/settings"
+                        android:src="@drawable/settings"
+                        android:background="?android:selectableItemBackground"
+                        android:scaleType="center"
                         android:layout_alignParentRight="true"
+
                         android:id="@+id/my_settings"/>
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="30dp"
-                        android:background="@drawable/message"
+                    <ImageView
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="?attr/actionBarSize"
+                        android:src="@drawable/message"
+                        android:background="?android:selectableItemBackground"
+                        android:scaleType="center"
                         android:id="@+id/my_message"
                         android:layout_toLeftOf="@+id/my_settings"/>
                 </RelativeLayout>

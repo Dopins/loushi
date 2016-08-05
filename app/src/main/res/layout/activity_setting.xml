@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/program_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:contentInsetStart="0dp"
+        >
+        <ImageView
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:src="@drawable/arrow_back"
+
+            android:scaleType="center"
+            android:clickable="true"
+            android:background="?@android:attr/selectableItemBackground"
+            android:id="@+id/back"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置"
+            android:textColor="#fff"
+            android:textSize="20sp"/>
+
+    </android.support.v7.widget.Toolbar>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/program_toolbar"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:layout_marginTop="14dp"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="基本设置"
+           android:textSize="14sp"
+           android:textColor="@color/colorPrimary"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="8dp"
+            android:clickable="true"
+            android:id="@+id/ll_update"
+            android:background="?android:selectableItemBackground"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="检查更新"
+                android:textColor="#000000"
+
+                android:textSize="16sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/updateversion"
+                android:text="当前版本"
+                android:textSize="14sp"
+                android:textColor="#8a8a8a"/>
+            <!--<view-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1px"-->
+                <!--android:background="@color/PrimaryText"></view>-->
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+
+
+            android:background="#55000000" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="8dp"
+            android:clickable="true"
+            android:id="@+id/ll_clear_cache"
+            android:background="?android:selectableItemBackground"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清除缓存"
+                android:textColor="#000000"
+                android:textSize="16sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="删除已缓存的文章内容及图片"
+                android:textSize="14sp"
+                android:textColor="#8a8a8a"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="其他说明"
+            android:layout_marginTop="14dp"
+            android:textSize="14sp"
+            android:textColor="@color/colorPrimary"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="8dp"
+            android:clickable="true"
+            android:id="@+id/ll_feedback"
+            android:background="?android:selectableItemBackground"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="意见反馈"
+                android:textColor="#000000"
+
+                android:textSize="16sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="感谢您反馈遇到的Bug与问题"
+                android:textSize="14sp"
+                android:textColor="#8a8a8a"/>
+            <!--<view-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1px"-->
+                <!--android:background="@color/PrimaryText"></view>-->
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+
+
+            android:background="#55000000" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="8dp"
+            android:clickable="true"
+            android:id="@+id/ll_about_us"
+            android:background="?android:selectableItemBackground"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关于陋室"
+                android:textColor="#000000"
+                android:textSize="16sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="您想了解的关于陋室的全部"
+                android:textSize="14sp"
+                android:textColor="#8a8a8a"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>
