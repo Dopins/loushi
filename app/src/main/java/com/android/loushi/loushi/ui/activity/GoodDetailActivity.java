@@ -154,7 +154,8 @@ public class GoodDetailActivity extends  BaseActivity {
 
                             //bodyBeanList.addAll(sceneGoodJson.getBody());
                             list.addAll(goodBean.getImages());
-                            Picasso.with(GoodDetailActivity.this).load(goodBean.getImages().get(0).getUrl()).into(img_good);
+                            list.remove(0);
+                            Picasso.with(GoodDetailActivity.this).load(goodBean.getImages().get(1).getUrl()).into(img_good);
                             tv_good_name.setText(goodBean.getName());
                             tv_good_price.setText(goodBean.getPrice() + "");
                             tv_introduce.setText(goodBean.getIntroduction());

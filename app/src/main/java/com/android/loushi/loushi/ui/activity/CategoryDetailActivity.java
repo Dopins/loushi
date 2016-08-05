@@ -139,9 +139,9 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
         Log.e("density", zoomDensity +"");
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(false);
-       // webView.getSettings().setDefaultZoom(zoomDensity);
+       webView.getSettings().setDefaultZoom(zoomDensity);
         webView.getSettings().setBlockNetworkImage(false);
-        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        //webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient() {
 
