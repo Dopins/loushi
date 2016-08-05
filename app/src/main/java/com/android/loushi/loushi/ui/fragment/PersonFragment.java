@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -69,6 +70,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private Button btn_profile;
     private ImageButton btn_my_message;
     private CollapsingToolbarLayoutState state;
+    private ImageView iv_message_tips;
 
     @Override
     public void onClick(View v) {
@@ -248,6 +250,12 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         tv_feed.setOnClickListener(this);
         btn_my_message= (ImageButton) mToolbar.findViewById(R.id.my_message);
         btn_my_message.setOnClickListener(this);
+
+        iv_message_tips= (ImageView) findViewById(R.id.iv_messagetips);
+        if(MyMessageActivity.hasNewMessage())
+            iv_message_tips.setVisibility(View.VISIBLE);
+        else
+            iv_message_tips.setVisibility(View.GONE);
 
     }
     private void initAppBar(){

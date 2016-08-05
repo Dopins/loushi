@@ -17,6 +17,7 @@ import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.MyMessageAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.UserMessageJson;
+import com.android.loushi.loushi.util.DateUtils;
 import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
@@ -66,6 +67,33 @@ public class MyMessageActivity extends BaseActivity implements
         initRecycleView();
         loadMessage();
 
+    }
+
+    /**
+     * 判断是否有新消息
+     * @return
+     */
+    public static boolean hasNewMessage(){
+        boolean result=false;
+        final List tempList=new ArrayList<UserMessageJson.BodyBean>();
+        OkHttpUtils.post(UrlConstant.MYMESSAGE)
+                .params(KeyConstant.USER_ID, user_id)
+                .execute(new JsonCallback<UserMessageJson>(UserMessageJson.class) {
+                    @Override
+                    public void onResponse(boolean isFromCache, UserMessageJson userMessageJson,
+                                           Request request, @Nullable Response response) {
+                        if (userMessageJson.getState()) {
+                            tempList.clear();
+                            tempList.addAll(userMessageJson.getBody());
+                        }
+                    }
+                });
+        try {
+            result= DateUtils.parseMessage(tempList)>0;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     private void loadMessage(){
