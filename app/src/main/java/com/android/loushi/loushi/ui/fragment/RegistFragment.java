@@ -224,7 +224,7 @@ public class RegistFragment extends Fragment {
             //发送注册请求
             OkHttpUtils.post(BaseActivity.url+"user/userRegisterAndroid").
                     params("mobile_phone",regist_edit_phone.getText().toString()).
-                    params("password",regist_edit_phone.getText().toString()).
+                    params("password",regist_edit_password.getText().toString()).
                     params("verify_code", regist_edit_checkword.getText().toString()).
                     params("token", token).execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
                 @Override
