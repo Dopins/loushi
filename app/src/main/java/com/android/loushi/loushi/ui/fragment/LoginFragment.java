@@ -72,8 +72,8 @@ public class LoginFragment extends Fragment {
     // Content View Elements
 
     private View view;
-    private UnderLineEditText login_edit_phone;
-    private UnderLineEditText login_edit_password;
+    private EditText login_edit_phone;
+    private EditText login_edit_password;
     private Button btn_login;
     private ImageButton btn_xinlang;
     private ImageButton btn_weixin;
@@ -242,8 +242,8 @@ public class LoginFragment extends Fragment {
 
     private void bindViews() {
 
-        login_edit_phone = (UnderLineEditText) view.findViewById(R.id.login_edit_phone);
-        login_edit_password = (UnderLineEditText) view.findViewById(R.id.login_edit_password);
+        login_edit_phone = (EditText) view.findViewById(R.id.login_edit_phone);
+        login_edit_password = (EditText) view.findViewById(R.id.login_edit_password);
         btn_login = (Button) view.findViewById(R.id.btn_login);
         btn_xinlang = (ImageButton) view.findViewById(R.id.btn_xinlang);
         btn_weixin = (ImageButton) view.findViewById(R.id.btn_weixin);

@@ -47,11 +47,11 @@ public class RegistFragment extends Fragment {
 
     private View view;
     private TextView text_phone;
-    private UnderLineEditText regist_edit_phone;
+    private EditText regist_edit_phone;
     private TextView text_keyword;
-    private UnderLineEditText regist_edit_password;
+    private EditText regist_edit_password;
     private TextView text_cheakword;
-    private UnderLineEditText regist_edit_checkword;
+    private EditText regist_edit_checkword;
     private Button btn_getcheckword;
     private Button btn_finish;
 
@@ -106,11 +106,11 @@ public class RegistFragment extends Fragment {
     private void bindViews() {
 
         text_phone = (TextView) view.findViewById(R.id.text_phone);
-        regist_edit_phone = (UnderLineEditText) view.findViewById(R.id.regist_edit_phone);
+        regist_edit_phone = (EditText) view.findViewById(R.id.regist_edit_phone);
         text_keyword = (TextView) view.findViewById(R.id.text_keyword);
-        regist_edit_password = (UnderLineEditText) view.findViewById(R.id.regist_edit_password);
+        regist_edit_password = (EditText) view.findViewById(R.id.regist_edit_password);
         text_cheakword = (TextView) view.findViewById(R.id.text_cheakword);
-        regist_edit_checkword = (UnderLineEditText) view.findViewById(R.id.regist_edit_checkword);
+        regist_edit_checkword = (EditText) view.findViewById(R.id.regist_edit_checkword);
         btn_getcheckword = (Button) view.findViewById(R.id.btn_getcheckword);
         btn_finish = (Button) view.findViewById(R.id.btn_finish);
         btn_finish.setOnClickListener(new View.OnClickListener() {

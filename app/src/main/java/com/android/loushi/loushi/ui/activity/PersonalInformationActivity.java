@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.android.loushi.loushi.R;
@@ -66,11 +67,11 @@ public class PersonalInformationActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageButton btn_return;
     private RoundImageView image_circular;
-    private UnderLineEditText edit_nickname;
+    private EditText edit_nickname;
     private MaterialSpinner spinner_sex;
     private MaterialSpinner spinner_province;
     private MaterialSpinner spinner_university;
-    private UnderLineEditText edit_phone;
+    private EditText edit_phone;
     private Button btn_save;
 
 
@@ -235,7 +236,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
         user_id = sharedPreferences.getString("user_id","");
         nickname = edit_nickname.getText().toString();
         headImgUrl = sharedPreferences.getString("headImgUrl","");
-        schoolName = spinner_university.getText().toString();
+        schoolName = spinner_university.getSelectedIndex()+1+"";
         sex = spinner_sex.getSelectedIndex() +"";
 
         School school = new School();

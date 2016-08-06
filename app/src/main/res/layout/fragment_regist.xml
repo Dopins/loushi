@@ -13,18 +13,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="29dp"
         android:text="手机 "
-        android:textSize="12dp"
-        android:textColor="@color/dark_gray"/>
+        android:textColor="@color/dark_gray"
+        android:textSize="12dp" />
 
-    <com.android.loushi.loushi.util.UnderLineEditText
+    <EditText
         android:id="@+id/regist_edit_phone"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/text_phone"
-        android:background="@null"
         android:ems="13"
         android:inputType="phone"
-        android:lineSpacingMultiplier="2" />
+        android:singleLine="true"/>
 
 
     <TextView
@@ -32,62 +31,62 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="密码 "
-        android:textSize="12dp"
-        android:textColor="@color/dark_gray"/>
+        android:textColor="@color/dark_gray"
+        android:textSize="12dp" />
 
-    <com.android.loushi.loushi.util.UnderLineEditText
+    <EditText
         android:id="@+id/regist_edit_password"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/text_keyword"
-        android:background="@null"
         android:ems="10"
         android:inputType="textPassword"
-        android:lineSpacingMultiplier="2" />
+        android:singleLine="true"/>
 
     <TextView
         android:id="@+id/text_cheakword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="验证码 "
-        android:textSize="12dp"
-        android:textColor="@color/dark_gray"/>
+        android:textColor="@color/dark_gray"
+        android:textSize="12dp" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_cheakword"
         android:orientation="horizontal">
 
-        <com.android.loushi.loushi.util.UnderLineEditText
+        <EditText
             android:id="@+id/regist_edit_checkword"
-            android:layout_width="210dp"
-            android:layout_height="50dp"
-            android:background="@null"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="88888.8"
             android:ems="10"
-            android:inputType="textPassword"
-            android:lineSpacingMultiplier="2" />
-        
+            android:singleLine="true"/>
+
         <Button
             android:id="@+id/btn_getcheckword"
             android:layout_width="94dp"
             android:layout_height="32dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1.0"
             android:background="@drawable/shape_btn_checkword"
             android:text="获取验证码"
-            android:textSize="12dp"
-            android:textColor="@color/colorPrimary"/>
-    </RelativeLayout>
+            android:textColor="@color/colorPrimary"
+            android:textSize="12dp" />
+    </LinearLayout>
 
     <Button
+        android:id="@+id/btn_finish"
         android:layout_width="246dp"
         android:layout_height="46dp"
-        android:id="@+id/btn_finish"
-        android:text="完成"
-        android:textSize="15dp"
-        android:textColor="@color/colorWhite"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
         android:background="@drawable/shape_btn_finish"
-        android:layout_gravity="center_horizontal"/>
+        android:text="完成"
+        android:textColor="@color/colorWhite"
+        android:textSize="15dp" />
 
 </LinearLayout>
