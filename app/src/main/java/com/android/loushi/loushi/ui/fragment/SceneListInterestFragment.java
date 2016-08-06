@@ -44,7 +44,7 @@ public class SceneListInterestFragment extends SceneListFragment {
                         if (sceneJson.getState()) {
                             bodyBeanList.addAll(sceneJson.getBody());
                             get_total+=bodyBeanList.size();
-                            if(bodyBeanList.size()<oneTakeNum) has_data=false;
+                            if(sceneJson.getBody().size()<oneTakeNum) has_data=false;
                             sceneRecyclerViewAdapter.notifyDataSetChanged();
                             swipeRefreshLayout.setRefreshing(false);
                         } else {
