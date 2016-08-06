@@ -28,6 +28,7 @@ import com.android.loushi.loushi.ui.activity.FeedActivity;
 import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
 
 import com.android.loushi.loushi.ui.activity.MyMessageActivity;
+import com.android.loushi.loushi.ui.activity.SettingActivity;
 import com.android.loushi.loushi.util.CircularImageView;
 import com.android.loushi.loushi.util.RoundImageView;
 import com.android.loushi.loushi.util.SlidingTabLayout;
@@ -68,7 +69,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private ViewPager mViewPager;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Button btn_profile;
-    private ImageButton btn_my_message;
+    private ImageView btn_my_message;
+    private ImageView btn_my_setting;
     private CollapsingToolbarLayoutState state;
     private ImageView iv_message_tips;
 
@@ -85,6 +87,10 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.btn_profile:
                 //TODO
+                break;
+            case R.id.my_settings:
+                intent = new Intent(getActivity(), SettingActivity.class);
+                getActivity().startActivity(intent);
                 break;
 
         }
@@ -248,10 +254,12 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 //            }
 //        });
         tv_feed.setOnClickListener(this);
-        btn_my_message= (ImageButton) mToolbar.findViewById(R.id.my_message);
+        btn_my_message= (ImageView) mToolbar.findViewById(R.id.my_message);
         btn_my_message.setOnClickListener(this);
+        btn_my_setting=(ImageView)mToolbar.findViewById(R.id.my_settings);
+        btn_my_setting.setOnClickListener(this);
 
-        iv_message_tips= (ImageView) findViewById(R.id.iv_messagetips);
+        iv_message_tips= (ImageView) mToolbar.findViewById(R.id.iv_messagetips);
         if(MyMessageActivity.hasNewMessage())
             iv_message_tips.setVisibility(View.VISIBLE);
         else

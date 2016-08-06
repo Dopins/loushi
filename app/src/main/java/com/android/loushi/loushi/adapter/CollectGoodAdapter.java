@@ -2,6 +2,7 @@ package com.android.loushi.loushi.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,14 +93,21 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
 //        });
         }
         if(type.equals("0")){
-            final UserCollectionsJson.BodyBean.SceneBean goodsBean = beanList.get(position).getScene();
-            holder.tv_name.setText(goodsBean.getName());
-            holder.tv_price.setVisibility(View.INVISIBLE);
-            holder.price_symbol.setVisibility(View.INVISIBLE);
-            Picasso.with(context).load(goodsBean.getImgUrl()).fit().into(holder.img_good);
+            if(beanList.get(position).getScene()!=null) {
+                final UserCollectionsJson.BodyBean.SceneBean goodsBean = beanList.get(position).getScene();
+                if (!TextUtils.isEmpty(goodsBean.getName()))
+                    holder.tv_name.setText(goodsBean.getName());
 
-            holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum())+"人浏览");
-            holder.btn_like.setVisibility(View.GONE);
+                holder.tv_price.setVisibility(View.INVISIBLE);
+                holder.price_symbol.setVisibility(View.INVISIBLE);
+
+                if (!TextUtils.isEmpty(goodsBean.getImgUrl()))
+                    Picasso.with(context).load(goodsBean.getImgUrl()).fit().into(holder.img_good);
+
+                if (!TextUtils.isEmpty(goodsBean.getBrowseNum() + ""))
+                    holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum()) + "人浏览");
+                holder.btn_like.setVisibility(View.GONE);
+            }
         }
         if(type.equals("1")){
             if(beanList.get(position).getTopic()!=null) {

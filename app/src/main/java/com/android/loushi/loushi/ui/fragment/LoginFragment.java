@@ -42,6 +42,7 @@ import com.android.loushi.loushi.thirdlogin.LoginApi;
 import com.android.loushi.loushi.thirdlogin.OnLoginListener;
 import com.android.loushi.loushi.thirdlogin.Tool;
 import com.android.loushi.loushi.thirdlogin.UserInfo;
+import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.ForgetPasswordActivity;
 import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.util.MyfragmentEvent;
@@ -168,6 +169,7 @@ public class LoginFragment extends Fragment {
                                         editor.putString("phone", login_edit_phone.getText().toString());
                                         editor.putString("password", login_edit_password.getText().toString());
                                         editor.commit();
+                                        BaseActivity.user_id=userLoginJson.getBody()+"";
                                         getUserInfo(userLoginJson.getBody());
 
                                         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -13,6 +13,7 @@ import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.cookie.store.CookieStore;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
+import com.squareup.picasso.Picasso;
 import com.taobao.tae.sdk.callback.InitResultCallback;
 
 import org.litepal.LitePalApplication;
@@ -49,33 +50,30 @@ public class MyApplication extends LitePalApplication {
                 .setCookieStore(new PersistentCookieStore())
                 ;
 
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
-
-                // 请求方式和请求url
-//                .tag(this).params("mobile_phone", "123456").params("password", "mtf071330")
-                .tag(this).params("mobile_phone", "13750065622").params("password", "mtf071330")
-                .params("isThird", "false")
-                        // 请求的 tag, 主要用于取消对应的请求
-                        // 设置当前请求的缓存key,建议每个不同功能的请求设置一个
-                        // 缓存模式，详细请看缓存介绍
-
-                        //有的操作要设置缓存，有的不要 这个号供测试用
-
-                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
-                    @Override
-                    public void onResponse(boolean b, UserLoginJson userLoginJson, Request request, Response response) {
-
-                        //这里现在是48
-                        Log.e(TAG, Integer.toString(userLoginJson.getBody()));
-                        //这里现在是48了
-                        Log.e("test", response.toString());
-                        MainActivity.user_id=Integer.toString(userLoginJson.getBody());
-
-
-                    }
-
-
-                });
+//        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
+//
+//                // 请求方式和请求url
+//                .tag(this).params("mobile_phone", "18819475167").params("password", "mtf071330")
+////                .tag(this).params("mobile_phone", "13750065622").params("password", "mtf071330")
+//                .params("isThird", "false")
+//                        // 请求的 tag, 主要用于取消对应的请求
+//                        // 设置当前请求的缓存key,建议每个不同功能的请求设置一个
+//                        // 缓存模式，详细请看缓存介绍
+//
+//                        //有的操作要设置缓存，有的不要 这个号供测试用
+//
+//                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+//                    @Override
+//                    public void onResponse(boolean b, UserLoginJson userLoginJson, Request request, Response response) {
+//
+//                        //这里现在是48
+//                        Log.e(TAG, Integer.toString(userLoginJson.getBody()));
+//                        //这里现在是48了
+//                        Log.e("test", response.toString());
+//                        BaseActivity.user_id=Integer.toString(userLoginJson.getBody());
+//                    }
+//
+//                });
         InitTaobao();
 
 //这个是设置了缓存的示例

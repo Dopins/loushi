@@ -3,6 +3,8 @@ package com.android.loushi.loushi.util;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -63,7 +65,7 @@ public class MyWebView extends LinearLayout {
     public void setWebView(String url){
         webView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
-                if(progress==100)
+                if (progress == 100)
                     progressBar.setVisibility(View.INVISIBLE);
                 else {
                     if (View.INVISIBLE == progressBar.getVisibility()) {
@@ -78,8 +80,27 @@ public class MyWebView extends LinearLayout {
 
         webView.getSettings().setJavaScriptEnabled(true);
 
-        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
 
+
+
+        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+        int screenDensity = getResources().getDisplayMetrics().densityDpi ;
+        Log.e("density", screenDensity +"");
+        WebSettings.ZoomDensity zoomDensity = WebSettings.ZoomDensity.MEDIUM ;
+        switch (screenDensity){
+            case DisplayMetrics.DENSITY_LOW :
+                zoomDensity = WebSettings.ZoomDensity.CLOSE;
+                break;
+            case DisplayMetrics.DENSITY_MEDIUM:
+                zoomDensity = WebSettings.ZoomDensity.MEDIUM;
+                break;
+            case DisplayMetrics.DENSITY_HIGH:
+                zoomDensity = WebSettings.ZoomDensity.FAR;
+                break ;
+            default:
+                zoomDensity = WebSettings.ZoomDensity.FAR;
+        }
+        webView.getSettings().setDefaultZoom(zoomDensity);
         webView.getSettings().setBlockNetworkImage(false);
 
         webView.loadUrl(url);

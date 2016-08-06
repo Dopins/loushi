@@ -44,10 +44,7 @@ public class MyMessageActivity extends BaseActivity implements
     private RecyclerView recycleView;
 
     private MyMessageAdapter mAdapter;
-    private List<UserMessageJson.BodyBean> myMessageList = new ArrayList<UserMessageJson.BodyBean>();
-
-    private int firstVisibleItemPosition;
-    private int lastVisibleItemPosition;
+    private static List<UserMessageJson.BodyBean> myMessageList = new ArrayList<UserMessageJson.BodyBean>();
 
     @Override
     protected int getLayoutId() {
@@ -75,29 +72,43 @@ public class MyMessageActivity extends BaseActivity implements
      */
     public static boolean hasNewMessage(){
         boolean result=false;
-        final List tempList=new ArrayList<UserMessageJson.BodyBean>();
-        OkHttpUtils.post(UrlConstant.MYMESSAGE)
-                .params(KeyConstant.USER_ID, user_id)
-                .execute(new JsonCallback<UserMessageJson>(UserMessageJson.class) {
-                    @Override
-                    public void onResponse(boolean isFromCache, UserMessageJson userMessageJson,
-                                           Request request, @Nullable Response response) {
-                        if (userMessageJson.getState()) {
-                            tempList.clear();
-                            tempList.addAll(userMessageJson.getBody());
-                        }
-                    }
-                });
-        try {
-            result= DateUtils.parseMessage(tempList)>0;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        //TODO 等封装
+//        OkHttpUtils.post(UrlConstant.MYMESSAGE)
+//                .params(KeyConstant.USER_ID, user_id)
+//                .execute(new JsonCallback<UserMessageJson>(UserMessageJson.class) {
+//                    @Override
+//                    public void onResponse(boolean isFromCache, UserMessageJson userMessageJson,
+//                                           Request request, @Nullable Response response) {
+//                        if (userMessageJson.getState()) {
+//                            myMessageList.clear();
+//                            myMessageList.addAll(userMessageJson.getBody());
+//
+//                        }
+//                    }
+//                });
+//        try {
+//            int newMessage=DateUtils.parseMessage(myMessageList);
+//            Log.i("test","hasNewMessage  newMessage=="+newMessage);
+//            result=newMessage >0;
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         return result;
     }
 
     private void loadMessage(){
-        loadComment(MainActivity.user_id);
+        if(myMessageList==null||myMessageList.size()==0)
+            loadComment(MainActivity.user_id);
+        else{
+            if(mAdapter!=null){
+                try {
+                    mAdapter.parseMessage();
+                    mAdapter.notifyDataSetChanged();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private void loadComment(String user_id) {
@@ -117,7 +128,6 @@ public class MyMessageActivity extends BaseActivity implements
                                 e.printStackTrace();
                             }
                             mAdapter.notifyDataSetChanged();
-                            swipeRefreshLayout.setRefreshing(false);
                         } else
                             Toast.makeText(MyMessageActivity.this, "网络异常...", Toast.LENGTH_SHORT)
                                     .show();
@@ -177,6 +187,7 @@ public class MyMessageActivity extends BaseActivity implements
 
     @Override
     public void onRefresh() {
+        myMessageList.clear();
         loadMessage();
         swipeRefreshLayout.setRefreshing(false);
     }

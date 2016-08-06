@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.TopicRecycleViewAdapter;
 import com.android.loushi.loushi.ui.activity.TopicItemActivity;
+import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 
 /**
@@ -54,7 +55,6 @@ public class TopicFragment extends BaseFragment{
         mAdapter.setmOnItemClickListener(new TopicRecycleViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Toast.makeText(getContext(),""+position,Toast.LENGTH_SHORT).show();
                 clickTopicItem(position);
             }
         });
@@ -64,7 +64,7 @@ public class TopicFragment extends BaseFragment{
 
     private void clickTopicItem(int position){
         Intent intent=new Intent(getContext(), TopicItemActivity.class);
-        intent.putExtra(TopicItemActivity.TOPIC_ID,position);
+        intent.putExtra(KeyConstant.TOPIC_ID,position+1);
         startActivity(intent);
     }
 

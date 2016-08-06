@@ -3,9 +3,7 @@
     xmlns:imagecontrol="http://schemas.Android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
-    >
+    android:layout_height="wrap_content">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -17,7 +15,6 @@
             android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             app:collapsedTitleTextAppearance="@style/ToolBarTitleText"
             app:contentScrim="@color/colorPrimary"
             app:expandedTitleMarginEnd="80dp"
@@ -36,8 +33,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="170dp"
                     android:background="@drawable/pic">
-
-
                 </LinearLayout>
 
                 <com.android.loushi.loushi.util.CircularImageView
@@ -45,8 +40,6 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_centerHorizontal="true"
-
-
                     android:layout_marginTop="130dp"
                     android:src="@drawable/test_collect_good">
 
@@ -93,28 +86,26 @@
                 android:id="@+id/program_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:contentInsetStart="0dp"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:theme="@style/ThemeOverlay.AppCompat.Light">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    >
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/tv_feed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="?attr/actionBarSize"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginTop="20dp"
                         android:background="?android:selectableItemBackground"
                         android:clickable="true"
+                        android:gravity="center"
                         android:text="反馈"
                         android:textColor="#ffffff"
-                        android:textSize="16sp"
-
-                        />
+                        android:textSize="16sp" />
 
                     <com.android.loushi.loushi.util.RoundImageView
                         android:id="@+id/img_head_small"
@@ -152,12 +143,12 @@
                         android:background="@drawable/settings" />
 
                     <FrameLayout
-                        android:layout_centerVertical="true"
                         android:layout_width="?attr/actionBarSize"
+                        android:layout_height="?attr/actionBarSize"
+                        android:layout_centerVertical="true"
                         android:layout_marginRight="15dp"
                         android:layout_marginTop="25dp"
-                        android:layout_toLeftOf="@+id/my_settings"
-                        android:layout_height="?attr/actionBarSize">
+                        android:layout_toLeftOf="@+id/my_settings">
 
                         <ImageButton
                             android:id="@+id/my_message"
@@ -169,12 +160,12 @@
 
                         <ImageView
                             android:id="@+id/iv_messagetips"
-                            android:gravity="center"
-                            android:layout_gravity="right|top"
-                            android:src="@drawable/circle_red"
-                            android:layout_marginRight="15dp"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:layout_marginRight="15dp"
+                            android:gravity="center"
+                            android:src="@drawable/circle_red" />
 
                     </FrameLayout>
 
