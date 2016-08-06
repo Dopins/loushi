@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -24,6 +25,8 @@ import android.widget.Toast;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.UpdateVersionJson;
+import com.android.loushi.loushi.util.DataCleanManager;
+import com.android.loushi.loushi.util.ToastUtils;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -45,6 +48,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private LinearLayout ll_clear_cache;
     private LinearLayout ll_feedback;
     private LinearLayout ll_about_us;
+    private TextView tv_cache;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_setting;
@@ -62,10 +66,19 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         ll_update = (LinearLayout) findViewById(R.id.ll_update);
         updateversion = (TextView) findViewById(R.id.updateversion);
         ll_clear_cache = (LinearLayout) findViewById(R.id.ll_clear_cache);
+        ll_clear_cache.setOnClickListener(this);
         ll_feedback = (LinearLayout) findViewById(R.id.ll_feedback);
         ll_about_us = (LinearLayout) findViewById(R.id.ll_about_us);
         back.setOnClickListener(this);
         ll_update.setOnClickListener(this);
+        ll_feedback.setOnClickListener(this);
+        tv_cache=(TextView)findViewById(R.id.tv_cache);
+        try {
+            tv_cache.setText(DataCleanManager.getTotalCacheSize(getApplicationContext()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("caerror",Log.getStackTraceString(e));
+        }
     }
 
     @Override
@@ -77,7 +90,38 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
              case R.id.ll_update:
                  CheckUpdate();
                  break;
+             case R.id.ll_feedback:
+                 Intent intent = new Intent(SettingActivity.this,FeedActivity.class);
+                 startActivity(intent);
+                 break;
+             case R.id.ll_clear_cache:
+                 new AlertDialog.Builder(SettingActivity.this)
+                         .setTitle("清除缓存")
+                         .setMessage("确认清除吗")
+                         .setNegativeButton("取消",new DialogInterface.OnClickListener() {
+                             @Override
+                             public void onClick(DialogInterface dialog, int which) {
+                                 Log.e("splash", "选择取消");
+                                 //CheckPermission();
+                                 //Toast.makeText(SettingActivity.this,"已清除缓存",Toast.LENGTH_SHORT).show();
 
+                             }
+                         })
+                         .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                             @Override
+                             public void onClick(DialogInterface dialog, int which) {
+                                 Log.e("splash", "选择确定");
+                                 DataCleanManager.clearAllCache(SettingActivity.this);
+                                 tv_cache.setText("0k");
+                                 ToastUtils.show(SettingActivity.this,"已清除缓存",Toast.LENGTH_SHORT);
+                             }
+                         })
+                         .create()
+                         .show();
+
+                 break;
+             case R.id.ll_about_us:
+                 break;
 
          }
     }

@@ -85,7 +85,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
                     +"&topic_id="+
             topicBean.getId();
         }
-        Log.e("cate",url);
+        Log.e("cate", url);
 
         initView();
     }
@@ -105,47 +105,6 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
                 super.onProgressChanged(view, progress);
             }
         });
-
-
-        webView.getSettings().setJavaScriptEnabled(true);
-
-
-//
-//        webView.getSettings().setBuiltInZoomControls(true);
-//
-//        webView.getSettings().setSupportZoom(true);
-//
-//        webView.getSettings().setUseWideViewPort(false); //可任意比例缩放
-
-        //webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-//        int screenDensity = getResources().getDisplayMetrics().densityDpi ;
-//        Log.e("density", screenDensity +"");
-//        WebSettings.ZoomDensity zoomDensity = WebSettings.ZoomDensity.MEDIUM ;
-//        switch (screenDensity){
-//            case DisplayMetrics.DENSITY_LOW :
-//                zoomDensity = WebSettings.ZoomDensity.CLOSE;
-//                break;
-//            case DisplayMetrics.DENSITY_MEDIUM:
-//                zoomDensity = WebSettings.ZoomDensity.MEDIUM;
-//                break;
-//            case DisplayMetrics.DENSITY_HIGH:
-//                zoomDensity = WebSettings.ZoomDensity.FAR;
-//                break ;
-//            default:
-//                zoomDensity = WebSettings.ZoomDensity.FAR;
-//                break;
-//        }
-//        Log.e("density", zoomDensity +"");
-//        webView.getSettings().setBuiltInZoomControls(true);
-//        webView.getSettings().setDisplayZoomControls(false);
-//        webView.getSettings().setDefaultZoom(zoomDensity);
-        webView.getSettings().setBlockNetworkImage(false);
-        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webView.setInitialScale(50);
-        webView.loadUrl(url);
-
-
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -155,12 +114,58 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
 
             public boolean shouldOverrideUrlLoading(WebView view, final String url) {
                 //获取web跳转的url 根据 url的后缀来确定商品id
-
-
+                Log.e("categourl", url);
+                if (!url.equals(url)) {
+                    String good_id = "";
+                    Intent intent = new Intent(CategoryDetailActivity.this,FeedActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
                 return false;
 
             }
         });
+
+        webView.getSettings().setJavaScriptEnabled(true);
+
+
+
+        webView.getSettings().setBuiltInZoomControls(true);
+
+        webView.getSettings().setSupportZoom(true);
+
+        webView.getSettings().setUseWideViewPort(false); //可任意比例缩放
+
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+        int screenDensity = getResources().getDisplayMetrics().densityDpi ;
+        Log.e("density", screenDensity +"");
+        WebSettings.ZoomDensity zoomDensity = WebSettings.ZoomDensity.MEDIUM ;
+        switch (screenDensity){
+            case DisplayMetrics.DENSITY_LOW :
+                zoomDensity = WebSettings.ZoomDensity.CLOSE;
+                break;
+            case DisplayMetrics.DENSITY_MEDIUM:
+                zoomDensity = WebSettings.ZoomDensity.MEDIUM;
+                break;
+            case DisplayMetrics.DENSITY_HIGH:
+                zoomDensity = WebSettings.ZoomDensity.FAR;
+                break ;
+            default:
+                zoomDensity = WebSettings.ZoomDensity.FAR;
+                break;
+        }
+        Log.e("density", zoomDensity + "");
+        webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setDisplayZoomControls(false);
+        webView.getSettings().setDefaultZoom(zoomDensity);
+        webView.getSettings().setBlockNetworkImage(false);
+        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        //webView.setInitialScale(50);
+        webView.loadUrl(url);
+
+
+
     }
 
     private void initToolBar(){
@@ -263,12 +268,20 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
                 });
                 break;
             case R.id.collect_bar_linear_share:
-                String imgurl = topicBean.getImgUrl();
+                String imgurl="";
+                String title="";
+                String text="";
+                if (!TextUtils.isEmpty(topicBean.getImgUrl()))
+                imgurl = topicBean.getImgUrl();
                 if(type.equals("2")){
+                    if(!TextUtils.isEmpty(imgurl.substring(0,imgurl.indexOf("|||"))))
                     imgurl=imgurl.substring(0,imgurl.indexOf("|||"));
                 }
-                String title = topicBean.getName();
-                String text = topicBean.getDigest();
+                if(!TextUtils.isEmpty(topicBean.getName()))
+                title = topicBean.getName();
+
+                if(!TextUtils.isEmpty(topicBean.getDigest()))
+                text = topicBean.getDigest();
 
                 //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
                 ShareSomeThing shareSomeThing = new ShareSomeThing(CategoryDetailActivity.this, imgurl, url, text, title,user_id,type,topicBean.getId()+"");

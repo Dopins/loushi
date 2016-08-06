@@ -52,7 +52,7 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
         if(type.equals("3")) {
             final UserCollectionsJson.BodyBean.GoodsBean goodsBean = beanList.get(position).getGoods();
             holder.tv_name.setText(goodsBean.getName());
-            Picasso.with(context).load(goodsBean.getImages().get(0).getUrl()).fit().error(R.drawable.loading_small).into(holder.img_good);
+            Picasso.with(context).load(goodsBean.getImages().get(0).getUrl()).placeholder(R.drawable.loading_small).fit().error(R.drawable.loading_small).into(holder.img_good);
             holder.tv_price.setText(goodsBean.getPrice()+"");
             holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
             holder.btn_like.setChecked(true);
@@ -102,7 +102,7 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
                 holder.price_symbol.setVisibility(View.INVISIBLE);
 
                 if (!TextUtils.isEmpty(goodsBean.getImgUrl()))
-                    Picasso.with(context).load(goodsBean.getImgUrl()).fit().into(holder.img_good);
+                    Picasso.with(context).load(goodsBean.getImgUrl()).placeholder(R.drawable.loading_small).fit().into(holder.img_good);
 
                 if (!TextUtils.isEmpty(goodsBean.getBrowseNum() + ""))
                     holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum()) + "人浏览");
@@ -117,7 +117,7 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
                 holder.tv_name.setText(goodsBean.getName());
                 holder.tv_price.setVisibility(View.INVISIBLE);
                 holder.price_symbol.setVisibility(View.INVISIBLE);
-                Picasso.with(context).load(goodsBean.getImgUrl()).fit().into(holder.img_good);
+                Picasso.with(context).load(goodsBean.getImgUrl()).placeholder(R.drawable.loading_small).fit().into(holder.img_good);
 
                 holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum())+"人浏览");
                 holder.btn_like.setVisibility(View.GONE);
@@ -133,7 +133,7 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
                 holder.tv_name.setText(goodsBean.getName());
                 holder.tv_price.setVisibility(View.INVISIBLE);
                 holder.price_symbol.setVisibility(View.INVISIBLE);
-                Picasso.with(context).load(url).fit().into(holder.img_good);
+                Picasso.with(context).load(url).placeholder(R.drawable.loading_small).fit().into(holder.img_good);
 
                 holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum())+"人浏览");
                 holder.btn_like.setVisibility(View.GONE);

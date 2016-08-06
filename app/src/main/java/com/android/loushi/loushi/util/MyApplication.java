@@ -37,18 +37,18 @@ public class MyApplication extends LitePalApplication {
     public void onCreate() {
         super.onCreate();
 
-
+        OkHttpUtils.init(this);
+        OkHttpUtils.getInstance()
+                .debug("OkHttpUtils")
+                .setCookieStore(new PersistentCookieStore())
+        ;
 
 
 
         //kookie设置为持久化
         //debug是打印调试信息 可不要
         //域名放在baseactivity的静态变量里
-        OkHttpUtils.init(this);
-        OkHttpUtils.getInstance()
-               .debug("OkHttpUtils")
-                .setCookieStore(new PersistentCookieStore())
-                ;
+
 
         OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
 
@@ -70,15 +70,14 @@ public class MyApplication extends LitePalApplication {
                         Log.e(TAG, Integer.toString(userLoginJson.getBody()));
                         //这里现在是48了
                         Log.e("test", response.toString());
-                        BaseActivity.user_id=Integer.toString(userLoginJson.getBody());
-
+                        BaseActivity.user_id = Integer.toString(userLoginJson.getBody());
 
 
                     }
 
 
                 });
-        InitTaobao();
+
 
 //这个是设置了缓存的示例
         //        OkHttpUtils.post("http://119.29.187.58:10000/LouShi/base/scene.action")
@@ -97,27 +96,7 @@ public class MyApplication extends LitePalApplication {
 //
 //                });
     }
-    private void InitTaobao() {
-        TradeConfigs.defaultTaokePid = "mm_114880276_0_0";
-        AlibabaSDK.asyncInit(this, new InitResultCallback() {
 
-            @Override
-            public void onSuccess() {
-//                Toast.makeText(getApplicationContext(), "初始化成功", Toast.LENGTH_SHORT)
-//                        .show();
-                Log.e("splash", "success");
-                //showItemDetailPage(ll);
-            }
-
-            @Override
-            public void onFailure(int code, String message) {
-//                Toast.makeText(getApplicationContext(), "初始化异常", Toast.LENGTH_SHORT)
-//                        .show();
-                Log.e("splash", "nosuccess" + message);
-            }
-
-        });
-    }
 
 
 }
