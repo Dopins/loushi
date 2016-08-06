@@ -13,6 +13,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public static final String url="http://www.loushi666.com/LouShi/";
     public static final String url_update="http://www.loushi666.com/LouShi/base/updateVersion";
+    public static final String url_goods="http://www.loushi666.com/LouShi/base/goods";
     public static String user_id="48";
     public static String TYPE="TYPE";
     public static String GOOD_STRING="GOOD_STRING";
