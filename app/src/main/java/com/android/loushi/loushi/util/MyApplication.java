@@ -15,6 +15,7 @@ import com.lzy.okhttputils.cookie.store.CookieStore;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
 import com.squareup.picasso.Picasso;
 import com.taobao.tae.sdk.callback.InitResultCallback;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.litepal.LitePalApplication;
 
@@ -36,10 +37,6 @@ public class MyApplication extends LitePalApplication {
 
     public void onCreate() {
         super.onCreate();
-
-
-
-
 
         //kookie设置为持久化
         //debug是打印调试信息 可不要
@@ -76,23 +73,14 @@ public class MyApplication extends LitePalApplication {
 //                });
         InitTaobao();
 
-//这个是设置了缓存的示例
-        //        OkHttpUtils.post("http://119.29.187.58:10000/LouShi/base/scene.action")
-//                // 请求方式和请求url
-//                .tag(this).params("scene_group_id", "1").params("user_id", "0").params("recommended","false")
-//                .params("skip", "0").params("take", "3")
-//                        // 请求的 tag, 主要用于取消对应的请求
-//                .cacheKey("scene")            // 设置当前请求的缓存key,建议每个不同功能的请求设置一个
-//                .cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)    // 缓存模式，详细请看缓存介绍
-//                .execute(new JsonCallback<SceneJson>(SceneJson.class) {
-//                    @Override
-//                    public void onResponse(boolean b, SceneJson sceneJson, Request request, Response response) {
-//                        tv.setText(sceneJson.getBody().get(0).getName());
-//                    }
-//
-//
-//                });
+        initBugly();
+
     }
+
+    private void initBugly(){
+        CrashReport.initCrashReport(getApplicationContext(), "900045792", true);
+    }
+
     private void InitTaobao() {
         TradeConfigs.defaultTaokePid = "mm_114880276_0_0";
         AlibabaSDK.asyncInit(this, new InitResultCallback() {
