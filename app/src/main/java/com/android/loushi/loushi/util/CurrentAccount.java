@@ -42,7 +42,6 @@ public class CurrentAccount {
     public static Boolean sex;
     public static int messageCount;
 
-
     public static void init(Context context){
         CurrentAccount.context =context;
         sharedPreferences = context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
@@ -63,6 +62,7 @@ public class CurrentAccount {
         Log.e("BIG ", "initDatas");
 
         UserInfoJson.BodyBean body = userInfoJson.getBody();
+        Log.e(TAG, "current prase"+body.toString());
         editor.putString("nickname", body.getNickname());
         editor.putString("mobile_phone", body.getMobilePhone());
         editor.putString("headImgUrl", body.getHeadImgUrl());

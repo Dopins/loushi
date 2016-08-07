@@ -17,7 +17,9 @@ import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.MyMessageAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.UserMessageJson;
+import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
@@ -43,14 +45,11 @@ public class MyMessageActivity extends BaseActivity implements
     private RecyclerView recycleView;
 
     private MyMessageAdapter mAdapter;
-    private List<UserMessageJson.BodyBean> myMessageList = new ArrayList<UserMessageJson.BodyBean>();
-
-    private int firstVisibleItemPosition;
-    private int lastVisibleItemPosition;
+    private static List<UserMessageJson.BodyBean> myMessageList = new ArrayList<UserMessageJson.BodyBean>();
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_mymessage_test;
+        return R.layout.activity_mymessage;
     }
 
     @Override
@@ -68,8 +67,29 @@ public class MyMessageActivity extends BaseActivity implements
 
     }
 
+    /**
+     * 判断是否有新消息
+     * @return
+     */
+    public static boolean hasNewMessage(){
+        boolean result=false;
+        int messageCount= CurrentAccount.getMessageCount();
+        return messageCount>0;
+    }
+
     private void loadMessage(){
-        loadComment(MainActivity.user_id);
+        if(myMessageList==null||myMessageList.size()==0)
+            loadComment(MainActivity.user_id);
+        else{
+            if(mAdapter!=null){
+                try {
+                    mAdapter.parseMessage();
+                    mAdapter.notifyDataSetChanged();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private void loadComment(String user_id) {
@@ -89,7 +109,6 @@ public class MyMessageActivity extends BaseActivity implements
                                 e.printStackTrace();
                             }
                             mAdapter.notifyDataSetChanged();
-                            swipeRefreshLayout.setRefreshing(false);
                         } else
                             Toast.makeText(MyMessageActivity.this, "网络异常...", Toast.LENGTH_SHORT)
                                     .show();
@@ -149,7 +168,11 @@ public class MyMessageActivity extends BaseActivity implements
 
     @Override
     public void onRefresh() {
+        myMessageList.clear();
         loadMessage();
         swipeRefreshLayout.setRefreshing(false);
     }
+
+
+
 }

@@ -17,6 +17,7 @@ import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.TopicItemAdapter;
 import com.android.loushi.loushi.callback.TopicCallback;
 import com.android.loushi.loushi.jsonbean.TopicJson;
+import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.google.gson.Gson;
@@ -34,13 +35,9 @@ import okhttp3.Response;
 public class TopicItemActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "TopicItemActivity";
-    public static final String TOPIC_ID = "topic_id";
 
     private static final String[] titlesName = {"文艺清新仓", "科技数码仓", "美食味道仓", "怪咖另类仓"
             , "欧式复古仓", "追星必备仓", "收纳储物仓", "次元趣味仓"};
-
-    private String tempUserID = "32";
-    private String tempPsw = "mtf071330";
 
     private Integer mSkip = 0; //数据从哪里开始取
     private Integer mTake = 20;   //一次加载多少item
@@ -71,7 +68,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
     //初始化变量
     private void initVariables() {
         mTopicList = new ArrayList<TopicJson.BodyBean>();
-        mTopic_id = getIntent().getIntExtra(TOPIC_ID, 0);
+        mTopic_id = getIntent().getIntExtra(KeyConstant.TOPIC_ID, 0);
     }
 
     private void initView() {
@@ -80,7 +77,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
         setSupportActionBar(mToolbar);
         //init title
         textViewTitle = (TextView) findViewById(R.id.textView_title);
-        textViewTitle.setText(titlesName[mTopic_id]);
+        textViewTitle.setText(titlesName[mTopic_id-1]);
         //init swipe
         swipeRefreshLayout= (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);

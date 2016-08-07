@@ -72,6 +72,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private ImageView btn_my_message;
     private ImageView btn_my_setting;
     private CollapsingToolbarLayoutState state;
+    private ImageView iv_message_tips;
 
     @Override
     public void onClick(View v) {
@@ -127,6 +128,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
             parent.removeView(rootView);
         }
 
+        Log.i("test","person fragment onCreateView");
 
         return rootView;
     }
@@ -257,6 +259,12 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         btn_my_message.setOnClickListener(this);
         btn_my_setting=(ImageView)mToolbar.findViewById(R.id.my_settings);
         btn_my_setting.setOnClickListener(this);
+
+        iv_message_tips= (ImageView) mToolbar.findViewById(R.id.iv_messagetips);
+        if(MyMessageActivity.hasNewMessage())
+            iv_message_tips.setVisibility(View.VISIBLE);
+        else
+            iv_message_tips.setVisibility(View.GONE);
 
     }
     private void initAppBar(){

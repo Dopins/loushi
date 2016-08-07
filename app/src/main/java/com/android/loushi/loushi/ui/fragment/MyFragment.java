@@ -29,13 +29,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by Administrator on 2016/7/18.
- */
-public class MyFragment extends BaseFragment {
-    public static final String TAG = "MyFragment";
-    private Toolbar mToolbar;
-    private TextView mTv_index;
+    /**
+     * Created by Administrator on 2016/7/18.
+     */
+    public class MyFragment extends BaseFragment {
+        public static final String TAG = "MyFragment";
+        private Toolbar mToolbar;
+        private TextView mTv_index;
 
     private List<Fragment> mTabContents = new ArrayList<Fragment>();
     private FragmentPagerAdapter mAdapter;

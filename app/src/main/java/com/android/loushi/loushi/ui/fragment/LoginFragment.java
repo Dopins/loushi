@@ -181,8 +181,8 @@ public class LoginFragment extends Fragment {
 
                                         CurrentAccount.storeAccountInfo(login_edit_phone.getText().toString(),login_edit_password.getText().toString());
                                         getUserInfo(userLoginJson.getBody());
-
                                         transferMyFragmentToPersonalFragment();
+
 
                                     } else {
                                         Log.e(TAG, "登录失败！");
@@ -217,12 +217,16 @@ public class LoginFragment extends Fragment {
                             Log.e(TAG, "成功获取用户信息");
                             Log.e(TAG, request.toString());
                             Log.e(TAG, response.toString());
+
                             CurrentAccount.storeDatas(userInfoJson);
                             Log.e(TAG,CurrentAccount.getHeadImgUrl());
                             Log.e(TAG,CurrentAccount.getNickname());
                             Log.e(TAG,CurrentAccount.getPassword());
                             Log.e(TAG,CurrentAccount.getSchoolName());
                             Log.e(TAG,CurrentAccount.getEmail());
+
+                            CurrentAccount.storeDatas(userInfoJson);
+                            transferMyFragmentToPersonalFragment();
 
                         }
                     }

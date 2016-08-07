@@ -122,7 +122,7 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
-        return myMessageList.size()+TITLECOUNT;
+        return myMessageList.size()+TITLECOUNT+BOTTOMCOUNT;
     }
 
 

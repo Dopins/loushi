@@ -169,12 +169,12 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
                                 if (responseJson.getState()) {
                                     if(isChecked){
                                         Toast.makeText(mContext, "收藏成功啦", Toast.LENGTH_SHORT).show();
-//                                        holder.num_prefer.setText(topic.getCollectionNum()+1+"");
-                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText()+"")+1+"");
+                                        holder.num_prefer.setText(topic.getCollectionNum()+1+"");
+//                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText()+"")+1+"");
                                     }else{
                                         Toast.makeText(mContext, "取消收藏成功啦", Toast.LENGTH_SHORT).show();
-//                                        holder.num_prefer.setText(topic.getCollectionNum()+"");
-                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText()+"")-1+"");
+                                        holder.num_prefer.setText(topic.getCollectionNum()-1+"");
+//                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText()+"")-1+"");
                                     }
                                     holder.checkbox_prefer.setChecked(isChecked);
                                 } else {
