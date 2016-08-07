@@ -44,9 +44,13 @@ public class SceneListFragment extends LazyFragment {
 
 
     protected void init() {
-        get_total=0;
-        has_data=true;
-        bodyBeanList = new ArrayList<>();
+        boolean have_data=false;
+        if(bodyBeanList==null){
+            get_total=0;
+            has_data=true;
+            bodyBeanList = new ArrayList<>();
+        }else have_data=true;
+
 
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_widget);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
@@ -62,7 +66,11 @@ public class SceneListFragment extends LazyFragment {
         setClickListener();
         setRefreshingListener();
         setLoadMoreListener();
-        addSomething2Scene();
+        if(have_data){
+            sceneRecyclerViewAdapter.notifyDataSetChanged();
+        }else{
+            addSomething2Scene();
+        }
     }
     protected void setClickListener(){
         sceneRecyclerViewAdapter.setOnItemClickListener(new SceneRecyclerViewAdapter.OnItemClickListener() {

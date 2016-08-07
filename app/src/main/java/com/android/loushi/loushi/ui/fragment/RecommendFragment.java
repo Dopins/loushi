@@ -2,6 +2,7 @@ package com.android.loushi.loushi.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,57 +50,67 @@ public class RecommendFragment extends LazyFragment {
         super.onCreateViewLazy(savedInstanceState);
         setContentView(R.layout.fragment_recommend);
         init();
-
     }
+//    protected void onDestroyViewLazy() {
+//        Log.e("tag","onDestroyViewLazy");
+//    }
     private void init() {
-        has_data=true;
-        bodyBeanList = new ArrayList<>();
-
+        boolean have_data=false;
+        if(bodyBeanList==null){
+            has_data=true;
+            bodyBeanList = new ArrayList<>();
+            Date date=new Date();
+            simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            rDate=simpleDateFormat.format(date.getTime()).substring(0,10);
+        }else{
+            have_data=true;
+        }
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_widget);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
 
+        if(recommendRecycleViewAdapter==null)
         recommendRecycleViewAdapter = new RecommendRecycleViewAdapter(getContext(), bodyBeanList);
+
         mRecyclerView = (RecyclerView) findViewById(R.id.recycleView);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0,0,0,10));//设置recycleview间距
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, 0, 0, 10));//设置recycleview间距
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(recommendRecycleViewAdapter);
-
-        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        Date date=new Date();
-        rDate=simpleDateFormat.format(date.getTime()).substring(0,10);
 
         setClickListener();
         setRefreshingListener();
         setLoadMoreListener();
-        addSomething2Scene();
+        if(have_data){
+            recommendRecycleViewAdapter.notifyDataSetChanged();
+        }else{
+            addSomething2Scene();
+        }
     }
     private void setClickListener(){
         recommendRecycleViewAdapter.setOnItemClickListener(new RecommendRecycleViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 //Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
-                Log.e("pos",position+"");
-                if(recommendRecycleViewAdapter.getItemViewType(position)==0){
-                    Intent intent= new Intent(getActivity(), SceneDetailActivity.class);
-                    String sceneJsonString=new Gson().toJson(bodyBeanList.get(position/4).getScene());
-                    intent.putExtra("SCENE_STRING",sceneJsonString);
+                Log.e("pos", position + "");
+                if (recommendRecycleViewAdapter.getItemViewType(position) == 0) {
+                    Intent intent = new Intent(getActivity(), SceneDetailActivity.class);
+                    String sceneJsonString = new Gson().toJson(bodyBeanList.get(position / 4).getScene());
+                    intent.putExtra("SCENE_STRING", sceneJsonString);
                     startActivity(intent);
                 }
-                if(recommendRecycleViewAdapter.getItemViewType(position)==1){
-                    Intent intent= new Intent(getActivity(), CategoryDetailActivity.class);
-                    String jsonString=new Gson().toJson(bodyBeanList.get(position/4).getTopic());
-                    Log.e("jsonstring",jsonString);
-                    intent.putExtra(CategoryDetailActivity.TYPE,"1");
-                    intent.putExtra(CategoryDetailActivity.JSONSTRING,jsonString);
+                if (recommendRecycleViewAdapter.getItemViewType(position) == 1) {
+                    Intent intent = new Intent(getActivity(), CategoryDetailActivity.class);
+                    String jsonString = new Gson().toJson(bodyBeanList.get(position / 4).getTopic());
+                    Log.e("jsonstring", jsonString);
+                    intent.putExtra(CategoryDetailActivity.TYPE, "1");
+                    intent.putExtra(CategoryDetailActivity.JSONSTRING, jsonString);
                     startActivity(intent);
                 }
-                if(recommendRecycleViewAdapter.getItemViewType(position)==2){
-                    Intent intent= new Intent(getActivity(), CategoryDetailActivity.class);
-                    String jsonString=new Gson().toJson(bodyBeanList.get(position/4).getStrategy());
-                    Log.e("jsonstring",jsonString);
-                    intent.putExtra(CategoryDetailActivity.TYPE,"2");
-                    intent.putExtra(CategoryDetailActivity.JSONSTRING,jsonString);
+                if (recommendRecycleViewAdapter.getItemViewType(position) == 2) {
+                    Intent intent = new Intent(getActivity(), CategoryDetailActivity.class);
+                    String jsonString = new Gson().toJson(bodyBeanList.get(position / 4).getStrategy());
+                    Log.e("jsonstring", jsonString);
+                    intent.putExtra(CategoryDetailActivity.TYPE, "2");
+                    intent.putExtra(CategoryDetailActivity.JSONSTRING, jsonString);
                     startActivity(intent);
                 }
 
@@ -111,8 +122,8 @@ public class RecommendFragment extends LazyFragment {
             @Override
             public void onBottom() {
                 super.onBottom();
-                if(has_data)
-                addSomething2Scene();
+                if (has_data)
+                    addSomething2Scene();
             }
         });
     }
@@ -123,8 +134,8 @@ public class RecommendFragment extends LazyFragment {
             @Override
             public void onRefresh() {
 
-                Date date=new Date();
-                rDate=simpleDateFormat.format(date.getTime()).substring(0,10);
+                Date date = new Date();
+                rDate = simpleDateFormat.format(date.getTime()).substring(0, 10);
 
                 bodyBeanList.clear();
                 addSomething2Scene();
@@ -151,19 +162,29 @@ public class RecommendFragment extends LazyFragment {
                     @Override
                     public void onResponse(boolean b, RecommendJson recommendJson, Request request, Response response) {
                         if (recommendJson.getState()) {
-                            bodyBeanList.addAll(recommendJson.getBody());
 
-                            rDate =bodyBeanList.get(bodyBeanList.size()-1).getRDate().substring(0,10);
-                            //Log.d("tag",bodyBeanList.size()+"");
+                            if (recommendJson.getBody().size() < oneTakeNum) has_data = false;
 
-                            if(bodyBeanList.size()<oneTakeNum) has_data=false;
-                            recommendRecycleViewAdapter.notifyDataSetChanged();
-
+                            if (isEmpty(recommendJson)) {
+                                has_data=false;
+                            }else{
+                                bodyBeanList.addAll(recommendJson.getBody());
+                                rDate = bodyBeanList.get(bodyBeanList.size() - 1).getRDate().substring(0, 10);
+                                recommendRecycleViewAdapter.notifyDataSetChanged();
+                            }
                             swipeRefreshLayout.setRefreshing(false);
+
                         } else {
                             Log.d("error", recommendJson.getReturn_info());
                         }
                     }
                 });
+    }
+    private boolean isEmpty(RecommendJson recommendJson){
+        for(int i=0;i<recommendJson.getBody().size();i++){
+            RecommendJson.BodyBean body=recommendJson.getBody().get(i);
+            if(body.getScene()==null&&body.getStrategy()==null&&body.getTopic()==null) return true;
+        }
+        return false;
     }
 }
