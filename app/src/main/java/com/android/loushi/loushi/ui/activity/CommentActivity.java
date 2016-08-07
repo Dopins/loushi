@@ -22,6 +22,7 @@ import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.CommentJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
@@ -57,8 +58,6 @@ public class CommentActivity extends BaseActivity implements
     private String mType;
     private String mPid;
     private int mMessageId; //要在屏幕ixanshi的item
-    private int firstVisibleItemPosition = 0;
-    private int lastVisibleItemPosition = 0;
     private boolean isInputOpen;
 
     private InputMethodManager inputManager;
@@ -94,11 +93,12 @@ public class CommentActivity extends BaseActivity implements
 //        skipComment();
     }
 
-    //显示那一条那一条comment就将那条comment显示在屏幕
+    //显示那一条那一条comment就将那条comment显示在屏幕   并打开软键盘回复
     private void skipComment() {
         if(mMessageId!=0){
             int position=findPositionMessageById();
             recycleView.scrollToPosition(position);
+            onItemClick(null,position);
         }
     }
 
@@ -159,29 +159,46 @@ public class CommentActivity extends BaseActivity implements
         mAdapter = new CommentAdapter(this, mCommentList);
         mAdapter.setmOnItemClickListener(this);
         recycleView.setAdapter(mAdapter);
-        recycleView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-                lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
 
-            }
 
+        recycleView.setOnScrollListener(new MyRecyclerOnScrollListener(){
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
-                        firstVisibleItemPosition == 0) {
-                    swipeRefreshLayout.setRefreshing(true);
-                    loadComment();
-                } else if (newState == RecyclerView.SCROLL_STATE_IDLE &&
-                        lastVisibleItemPosition == mAdapter.getItemCount() - 1)
-                    Toast.makeText(CommentActivity.this, "憋拉啦,没数据惹", Toast.LENGTH_SHORT).show();
-                else if (newState == RecyclerView.SCROLL_STATE_DRAGGING)
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING)
                     hideInputManager();
             }
+
+            @Override
+            public void onBottom() {
+
+            }
         });
+
+
+//        recycleView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+//                lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+//
+//            }
+//
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+//                        firstVisibleItemPosition == 0) {
+//                    swipeRefreshLayout.setRefreshing(true);
+//                    loadComment();
+//                } else if (newState == RecyclerView.SCROLL_STATE_IDLE &&
+//                        lastVisibleItemPosition == mAdapter.getItemCount() - 1)
+//                    Toast.makeText(CommentActivity.this, "憋拉啦,没数据惹", Toast.LENGTH_SHORT).show();
+//                else if (newState == RecyclerView.SCROLL_STATE_DRAGGING)
+//                    hideInputManager();
+//            }
+//        });
 
     }
 
@@ -202,6 +219,7 @@ public class CommentActivity extends BaseActivity implements
                 newComment();
                 break;
             case R.id.imageView_back:
+                hideInputManager();
                 finish();
                 break;
             case R.id.imageView_sure:
@@ -265,8 +283,6 @@ public class CommentActivity extends BaseActivity implements
         if (!isInputOpen) {
             Log.i("test", "editTextComment==" + false);
             editTextComment.requestFocus();
-            editTextComment.requestFocus();
-            Toast.makeText(this, "" + postion, Toast.LENGTH_SHORT).show();
 //            hideInputManager();
             openInputManager();
             editTextComment.setHint("回复" + mCommentList.get(postion).getUserInfo().getNickname() + ":");
