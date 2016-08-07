@@ -45,6 +45,7 @@ import com.android.loushi.loushi.thirdlogin.UserInfo;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.ForgetPasswordActivity;
 import com.android.loushi.loushi.ui.activity.MainActivity;
+import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.google.gson.Gson;
@@ -72,8 +73,8 @@ public class LoginFragment extends Fragment {
     // Content View Elements
 
     private View view;
-    private UnderLineEditText login_edit_phone;
-    private UnderLineEditText login_edit_password;
+    private EditText login_edit_phone;
+    private EditText login_edit_password;
     private Button btn_login;
     private ImageButton btn_xinlang;
     private ImageButton btn_weixin;
@@ -96,6 +97,8 @@ public class LoginFragment extends Fragment {
         String password = sharedPreferences.getString("password","");
         login_edit_phone.setText(phone);
         login_edit_password.setText(password);
+        login_edit_phone.setText("13750065622");
+        login_edit_password.setText("mtf071330");
     }
 
     public void transferMyFragmentToPersonalFragment() {
@@ -163,14 +166,11 @@ public class LoginFragment extends Fragment {
                                     if (userLoginJson.getState()) {
                                         Log.e(TAG, "登录成功！");
 
-                                        sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
-                                        editor = sharedPreferences.edit();
-                                        editor.putBoolean("LoginOrNot", true);
-                                        editor.putString("phone", login_edit_phone.getText().toString());
-                                        editor.putString("password", login_edit_password.getText().toString());
-                                        editor.commit();
-                                        BaseActivity.user_id=userLoginJson.getBody()+"";
+                                        CurrentAccount.setPassword(login_edit_password.getText().toString());
+                                        BaseActivity.user_id = userLoginJson.getBody()+""; //冗余
                                         getUserInfo(userLoginJson.getBody());
+
+                                        Log.e("BIG ","userLogin");
 
                                         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                                         imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
@@ -197,29 +197,22 @@ public class LoginFragment extends Fragment {
 
     private void getUserInfo(int id) {
         Log.e(TAG, "getUserInfo");
-        final String user_id = id + "";
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfo")
+        String user_id = id + "";
+        Log.e("BIG ",user_id );
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfo.action")
                 .params("user_id", user_id)
-                .execute(new JsonCallback<UserInfoJson>(UserLoginJson.class) {
+                .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
-                        Log.e(TAG, "onResponse");
-                        Log.e(TAG, request.toString());
-                        Log.e(TAG, response.toString());
-                        UserInfoJson.BodyBean body = userInfoJson.getBody();
-                        sharedPreferences = getActivity().getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-                        editor = sharedPreferences.edit();
-                        editor.putString("nickname", body.getNickname());
-                        editor.putString("mobilePhone", body.getMobilePhone());
-                        editor.putString("email", body.getEmail());
-                        editor.putString("headImgUrl", body.getHeadImgUrl());
-                        editor.putString("schoolName", body.getSchool().getName());
-//                        editor.putInt("sex", body.getSex());
-                        editor.putInt("messageCount", body.getMessageCount());
-                        editor.putInt("userID", body.getUserID());
-                        editor.commit();
-                        Log.e(TAG, "onResponse: " + body.getMobilePhone());
+                        Log.e("BIG ", "userinfo");
+                        if(userInfoJson.isState()) {
+                            Log.e("BIG ", "成功获取用户信息");
+                            Log.e(TAG, request.toString());
+                            Log.e(TAG, response.toString());
+                            CurrentAccount.initDatas(userInfoJson, getActivity());
 
+
+                        }
                     }
                 });
     }
@@ -242,8 +235,8 @@ public class LoginFragment extends Fragment {
 
     private void bindViews() {
 
-        login_edit_phone = (UnderLineEditText) view.findViewById(R.id.login_edit_phone);
-        login_edit_password = (UnderLineEditText) view.findViewById(R.id.login_edit_password);
+        login_edit_phone = (EditText) view.findViewById(R.id.login_edit_phone);
+        login_edit_password = (EditText) view.findViewById(R.id.login_edit_password);
         btn_login = (Button) view.findViewById(R.id.btn_login);
         btn_xinlang = (ImageButton) view.findViewById(R.id.btn_xinlang);
         btn_weixin = (ImageButton) view.findViewById(R.id.btn_weixin);
@@ -354,6 +347,38 @@ public class LoginFragment extends Fragment {
                 } else {
                     type = "2";
                 }
+
+                OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
+                        .params("account", account)
+                        .params("type", type)
+                        .params("token",token)
+                        .params("isThird", "true")
+                        .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+                            @Override
+                            public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+                                Log.e(TAG, request.toString());
+                                Log.e(TAG, response.toString());
+                                if (userLoginJson.getState()) {
+
+                                    String code = userLoginJson.getCode();
+                                    if (code !=null && code =="3") Log.e(TAG, "第一次登陆");
+
+                                    Log.e(TAG, "第三方登录成功！");
+                                    BaseActivity.user_id = userLoginJson.getBody()+"";
+
+                                    sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
+                                    editor = sharedPreferences.edit();
+                                    editor.putBoolean("LoginOrNot", true);
+                                    editor.commit();
+
+                                    InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                                    transferMyFragmentToPersonalFragment();
+                                } else {
+                                    Log.e(TAG, "登录失败！");
+                                }
+                            }
+                        });
 
 
 

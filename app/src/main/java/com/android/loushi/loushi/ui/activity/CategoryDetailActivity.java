@@ -110,39 +110,42 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
         webView.getSettings().setJavaScriptEnabled(true);
 
 
+//
+//        webView.getSettings().setBuiltInZoomControls(true);
+//
+//        webView.getSettings().setSupportZoom(true);
+//
+//        webView.getSettings().setUseWideViewPort(false); //可任意比例缩放
 
-        webView.getSettings().setBuiltInZoomControls(true);
-
-        webView.getSettings().setSupportZoom(true);
-
-        webView.getSettings().setUseWideViewPort(true); //可任意比例缩放
-
-        webView.getSettings().setLoadWithOverviewMode(true);
+        //webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-        int screenDensity = getResources().getDisplayMetrics().densityDpi ;
-        Log.e("density", screenDensity +"");
-        WebSettings.ZoomDensity zoomDensity = WebSettings.ZoomDensity.MEDIUM ;
-        switch (screenDensity){
-            case DisplayMetrics.DENSITY_LOW :
-                zoomDensity = WebSettings.ZoomDensity.CLOSE;
-                break;
-            case DisplayMetrics.DENSITY_MEDIUM:
-                zoomDensity = WebSettings.ZoomDensity.MEDIUM;
-                break;
-            case DisplayMetrics.DENSITY_HIGH:
-                zoomDensity = WebSettings.ZoomDensity.FAR;
-                break ;
-            default:
-                zoomDensity = WebSettings.ZoomDensity.FAR;
-                break;
-        }
-        Log.e("density", zoomDensity +"");
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.getSettings().setDisplayZoomControls(false);
-       webView.getSettings().setDefaultZoom(zoomDensity);
+//        int screenDensity = getResources().getDisplayMetrics().densityDpi ;
+//        Log.e("density", screenDensity +"");
+//        WebSettings.ZoomDensity zoomDensity = WebSettings.ZoomDensity.MEDIUM ;
+//        switch (screenDensity){
+//            case DisplayMetrics.DENSITY_LOW :
+//                zoomDensity = WebSettings.ZoomDensity.CLOSE;
+//                break;
+//            case DisplayMetrics.DENSITY_MEDIUM:
+//                zoomDensity = WebSettings.ZoomDensity.MEDIUM;
+//                break;
+//            case DisplayMetrics.DENSITY_HIGH:
+//                zoomDensity = WebSettings.ZoomDensity.FAR;
+//                break ;
+//            default:
+//                zoomDensity = WebSettings.ZoomDensity.FAR;
+//                break;
+//        }
+//        Log.e("density", zoomDensity +"");
+//        webView.getSettings().setBuiltInZoomControls(true);
+//        webView.getSettings().setDisplayZoomControls(false);
+//        webView.getSettings().setDefaultZoom(zoomDensity);
         webView.getSettings().setBlockNetworkImage(false);
-        //webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        webView.setInitialScale(50);
         webView.loadUrl(url);
+
+
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -208,7 +211,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
 
     private void bindCollectBarView(){
 
-        collect_bar=(LinearLayout)findViewById(R.id.collect_bar);
+        collect_bar=(LinearLayout) findViewById(R.id.collect_bar);
         //collect_bar.setVisibility(View.GONE);
         collect = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_like);
         comment = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_comment);
@@ -223,6 +226,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
         tv_share_count.setText(topicBean.getForwordNum() + "");
         collect.setOnClickListener(this);
         comment.setOnClickListener(this);
+        share.setOnClickListener(this);
 
     }
 
@@ -267,7 +271,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
                 String text = topicBean.getDigest();
 
                 //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
-                ShareSomeThing shareSomeThing = new ShareSomeThing(getApplicationContext(), imgurl, url, text, title,user_id,type,topicBean.getId()+"");
+                ShareSomeThing shareSomeThing = new ShareSomeThing(CategoryDetailActivity.this, imgurl, url, text, title,user_id,type,topicBean.getId()+"");
                 shareSomeThing.DoShare();
                 break;
 

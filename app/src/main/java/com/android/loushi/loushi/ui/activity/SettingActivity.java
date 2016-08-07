@@ -1,16 +1,35 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.Manifest;
+import android.app.Dialog;
+import android.app.DownloadManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.DialogPreference;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.UpdateVersionJson;
 import com.lzy.okhttputils.OkHttpUtils;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.StringReader;
 
 import okhttp3.Request;
 import okhttp3.Response;
@@ -45,6 +64,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         ll_clear_cache = (LinearLayout) findViewById(R.id.ll_clear_cache);
         ll_feedback = (LinearLayout) findViewById(R.id.ll_feedback);
         ll_about_us = (LinearLayout) findViewById(R.id.ll_about_us);
+        back.setOnClickListener(this);
+        ll_update.setOnClickListener(this);
     }
 
     @Override
@@ -54,6 +75,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                  finish();
                  break;
              case R.id.ll_update:
+                 CheckUpdate();
                  break;
 
 
@@ -63,8 +85,154 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         OkHttpUtils.post(BaseActivity.url_update).execute(new JsonCallback<UpdateVersionJson>(UpdateVersionJson.class) {
             @Override
             public void onResponse(boolean b, UpdateVersionJson updateVersionJson, Request request, Response response) {
-
+                if(updateVersionJson.isState()){
+                    pareseXMLWithPull(updateVersionJson.getBody());
+                }
             }
         });
     }
+
+    private void pareseXMLWithPull(String xmlData){
+        try{
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser xmlPullParser =factory.newPullParser();
+            xmlPullParser.setInput(new StringReader(xmlData));
+            int eventType = xmlPullParser.getEventType();
+            String version="";
+            String url = "";
+            String description="";
+            while(eventType!= XmlPullParser.END_DOCUMENT){
+                String nodeName = xmlPullParser.getName();
+                switch (eventType){
+                    case XmlPullParser.START_TAG:{
+                        if("version".equals(nodeName)){
+                            version = xmlPullParser.nextText();
+                            Log.e("splash", version);
+                        }
+                        else if("url".equals(nodeName)){
+                            url = xmlPullParser.nextText();
+                            Log.e("splash",url);
+                        }
+                        else if ("description".equals(nodeName)){
+                            description = xmlPullParser.nextText();
+                            Log.e("splash",description);
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                eventType = xmlPullParser.next();
+
+            }
+            Log.e("splash",version+"|"+GetVersionCode());
+            if (!version.equals(GetVersionCode())){
+                new AlertDialog.Builder(SettingActivity.this)
+                        .setTitle("检测到新版本")
+                        .setMessage("message")
+                        .setNegativeButton("cancel",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.e("splash", "选择取消");
+                                //CheckPermission();
+                                Toast.makeText(SettingActivity.this,"取消更新",Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.e("splash","选择确定");
+                                CheckPermission();
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    private String GetVersionCode(){
+        PackageManager pm = this.getPackageManager();//context为当前Activity上下文
+        PackageInfo pi;
+        try {
+            pi = pm.getPackageInfo(this.getPackageName(), 0);
+            return pi.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "";
+
+    }
+    private void CheckPermission(){
+        if(Build.VERSION.SDK_INT>=23) {
+            if (getApplicationContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                //申请WRITE_EXTERNAL_STORAGE权限
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            } else {
+                downloadApp();
+            }
+        }
+        else{
+            downloadApp();
+        }
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1){
+            if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    &&grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                //用户同意使用write
+                downloadApp();
+            }else{
+                //用户不同意，自行处理即可
+                //InitTaobao();
+
+                Toast.makeText(SettingActivity.this,"取消更新",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void downloadApp(){
+        DownloadManager dManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri uri = Uri.parse("http://dingphone.ufile.ucloud.com.cn/apk/guanwang/time2plato.apk");
+        Log.e("splash","1");
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+        Log.e("splash", "2");
+        // 设置下载路径和文件名
+
+        request.setDestinationInExternalPublicDir("download", "time2plato.apk");
+        Log.e("splash", "3");
+        request.setDescription("柏拉图新版本下载");
+        Log.e("splash", "4");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        request.setMimeType("application/vnd.android.package-archive");
+
+        // 设置为可被媒体扫描器找到
+
+        request.allowScanningByMediaScanner();
+
+        // 设置为可见和可管理
+
+        request.setVisibleInDownloadsUi(true);
+        Log.e("splash", "5");
+
+        //dManager.enqueue(request);
+
+        final long refernece = dManager.enqueue(request);
+        Log.e("splash","6");
+        // 把当前下载的ID保存起来
+
+        SharedPreferences sPreferences = getSharedPreferences("downloadplato", 0);
+        Log.e("splash", "7");
+        sPreferences.edit().putLong("plato", refernece).commit();
+        Log.e("splash", "8");
+        //InitTaobao();
+        //继续执行
+    }
+
 }
