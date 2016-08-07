@@ -45,6 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             switch (msg.what) {
                 case FLAG_LOGIN:
                     autoLogin();
+                    startHandler();
                     break;
             }
             super.handleMessage(msg);
@@ -84,6 +85,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                         } else {
                             Log.e(TAG, "autoLogin 登录失败！");
                         }
+
                     }
                 });
 

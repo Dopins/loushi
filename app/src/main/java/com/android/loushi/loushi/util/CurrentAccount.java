@@ -68,9 +68,8 @@ public class CurrentAccount {
         Log.e(TAG, "getDatas");
         setLoginOrNot(sharedPreferences.getString("LoginOrNot","null"));
         setUser_id(sharedPreferences.getString("user_id","null"));
-        setPassword(sharedPreferences.getString("password","null"));
         setNickname(sharedPreferences.getString("nickname","null"));
-        setMobile_phone(sharedPreferences.getString("mobilePhone","null"));
+        setMobile_phone(sharedPreferences.getString("mobile_phone","null"));
         setEmail(sharedPreferences.getString("email","null"));
         setHeadImgUrl(sharedPreferences.getString("headImgUrl","null"));
         setSchoolName(sharedPreferences.getString("schoolName","null"));
