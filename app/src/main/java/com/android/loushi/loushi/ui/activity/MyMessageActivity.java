@@ -17,8 +17,9 @@ import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.MyMessageAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.UserMessageJson;
-import com.android.loushi.loushi.util.DateUtils;
+import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
@@ -48,7 +49,7 @@ public class MyMessageActivity extends BaseActivity implements
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_mymessage_test;
+        return R.layout.activity_mymessage;
     }
 
     @Override
@@ -72,28 +73,8 @@ public class MyMessageActivity extends BaseActivity implements
      */
     public static boolean hasNewMessage(){
         boolean result=false;
-        //TODO 等封装
-//        OkHttpUtils.post(UrlConstant.MYMESSAGE)
-//                .params(KeyConstant.USER_ID, user_id)
-//                .execute(new JsonCallback<UserMessageJson>(UserMessageJson.class) {
-//                    @Override
-//                    public void onResponse(boolean isFromCache, UserMessageJson userMessageJson,
-//                                           Request request, @Nullable Response response) {
-//                        if (userMessageJson.getState()) {
-//                            myMessageList.clear();
-//                            myMessageList.addAll(userMessageJson.getBody());
-//
-//                        }
-//                    }
-//                });
-//        try {
-//            int newMessage=DateUtils.parseMessage(myMessageList);
-//            Log.i("test","hasNewMessage  newMessage=="+newMessage);
-//            result=newMessage >0;
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-        return result;
+        int messageCount= CurrentAccount.getMessageCount();
+        return messageCount>0;
     }
 
     private void loadMessage(){
@@ -191,4 +172,7 @@ public class MyMessageActivity extends BaseActivity implements
         loadMessage();
         swipeRefreshLayout.setRefreshing(false);
     }
+
+
+
 }

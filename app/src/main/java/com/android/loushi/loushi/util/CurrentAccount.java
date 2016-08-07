@@ -40,8 +40,6 @@ public class CurrentAccount {
     public static Boolean sex;
     public static int messageCount;
 
-
-
     public static void initDatas(UserInfoJson userInfoJson, Context context) {
         if(userInfoJson == null) Log.e("BIG ", "null json" );
         if(context == null) Log.e("BIG ", "null context" );
@@ -50,6 +48,7 @@ public class CurrentAccount {
         editor = sharedPreferences.edit();
 
         UserInfoJson.BodyBean body = userInfoJson.getBody();
+        Log.e(TAG, "current prase"+body.toString());
         editor.putString("nickname", body.getNickname());
         editor.putString("mobile_phone", body.getMobilePhone());
         editor.putString("email", body.getEmail());

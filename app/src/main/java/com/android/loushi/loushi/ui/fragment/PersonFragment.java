@@ -128,6 +128,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
             parent.removeView(rootView);
         }
 
+        Log.i("test","person fragment onCreateView");
 
         return rootView;
     }

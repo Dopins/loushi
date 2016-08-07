@@ -166,6 +166,7 @@ public class LoginFragment extends Fragment {
                                     if (userLoginJson.getState()) {
                                         Log.e(TAG, "登录成功！");
 
+
                                         CurrentAccount.setPassword(login_edit_password.getText().toString());
                                         BaseActivity.user_id = userLoginJson.getBody()+""; //冗余
                                         getUserInfo(userLoginJson.getBody());
@@ -174,7 +175,7 @@ public class LoginFragment extends Fragment {
 
                                         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                                         imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
-                                        transferMyFragmentToPersonalFragment();
+
                                     } else {
                                         Log.e(TAG, "登录失败！");
                                     }
@@ -209,8 +210,10 @@ public class LoginFragment extends Fragment {
                             Log.e("BIG ", "成功获取用户信息");
                             Log.e(TAG, request.toString());
                             Log.e(TAG, response.toString());
-                            CurrentAccount.initDatas(userInfoJson, getActivity());
 
+
+                            CurrentAccount.initDatas(userInfoJson, getActivity());
+                            transferMyFragmentToPersonalFragment();
 
                         }
                     }

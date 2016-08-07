@@ -58,8 +58,6 @@ public class CommentActivity extends BaseActivity implements
     private String mType;
     private String mPid;
     private int mMessageId; //要在屏幕ixanshi的item
-//    private int firstVisibleItemPosition = 0;
-//    private int lastVisibleItemPosition = 0;
     private boolean isInputOpen;
 
     private InputMethodManager inputManager;
@@ -221,6 +219,7 @@ public class CommentActivity extends BaseActivity implements
                 newComment();
                 break;
             case R.id.imageView_back:
+                hideInputManager();
                 finish();
                 break;
             case R.id.imageView_sure:
@@ -284,8 +283,6 @@ public class CommentActivity extends BaseActivity implements
         if (!isInputOpen) {
             Log.i("test", "editTextComment==" + false);
             editTextComment.requestFocus();
-            editTextComment.requestFocus();
-            Toast.makeText(this, "" + postion, Toast.LENGTH_SHORT).show();
 //            hideInputManager();
             openInputManager();
             editTextComment.setHint("回复" + mCommentList.get(postion).getUserInfo().getNickname() + ":");
