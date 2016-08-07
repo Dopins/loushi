@@ -85,6 +85,8 @@
         <!--android:exported="true"-->
         <!--android:screenOrientation="portrait" />-->
 
+        <meta-data android:value="57a5eda367e58ef278000163" android:name="UMENG_APPKEY"></meta-data>
+        <meta-data android:value="testchannel" android:name="UMENG_CHANNEL"/>
 
     </application>
 

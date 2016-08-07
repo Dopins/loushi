@@ -80,14 +80,14 @@ public class MyApplication extends LitePalApplication {
     }
 
     private void initUMeng(){
-
         MobclickAgent.UMAnalyticsConfig config=new MobclickAgent.UMAnalyticsConfig(
                 getApplicationContext(),
                 "57a5eda367e58ef278000163",
-                "test channel",
+                "testchannel",
                 MobclickAgent.EScenarioType. E_UM_NORMAL,
                 true);
-        MobclickAgent. startWithConfigure(config);
+        MobclickAgent.startWithConfigure(config);
+        MobclickAgent.setDebugMode(true);
     }
 
     private void initBugly(){
