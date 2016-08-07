@@ -23,6 +23,7 @@ import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -174,5 +175,15 @@ public class MyMessageActivity extends BaseActivity implements
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("MyMessageActivity");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("MyMessageActivity");
+    }
 }

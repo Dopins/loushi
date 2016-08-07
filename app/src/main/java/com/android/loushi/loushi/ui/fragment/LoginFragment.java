@@ -50,6 +50,7 @@ import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -175,6 +176,8 @@ public class LoginFragment extends Fragment {
 
                                         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                                         imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+
+                                        MobclickAgent.onProfileSignIn(login_edit_phone.getText().toString());
 
                                     } else {
                                         Log.e(TAG, "登录失败！");

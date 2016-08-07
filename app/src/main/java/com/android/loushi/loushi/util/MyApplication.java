@@ -16,6 +16,7 @@ import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
 import com.squareup.picasso.Picasso;
 import com.taobao.tae.sdk.callback.InitResultCallback;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.umeng.analytics.MobclickAgent;
 
 import org.litepal.LitePalApplication;
 
@@ -74,7 +75,19 @@ public class MyApplication extends LitePalApplication {
         InitTaobao();
 
         initBugly();
+        initUMeng();
 
+    }
+
+    private void initUMeng(){
+
+        MobclickAgent.UMAnalyticsConfig config=new MobclickAgent.UMAnalyticsConfig(
+                getApplicationContext(),
+                "57a5eda367e58ef278000163",
+                "test channel",
+                MobclickAgent.EScenarioType. E_UM_NORMAL,
+                true);
+        MobclickAgent. startWithConfigure(config);
     }
 
     private void initBugly(){
