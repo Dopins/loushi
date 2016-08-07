@@ -25,13 +25,15 @@ public class CurrentAccount {
 
     public static final String TAG = "CurrentAccount";
 
+    public static Context context;
     public static SharedPreferences sharedPreferences;
     public static SharedPreferences.Editor editor;
 
     public static String user_id;
     public static String password;
-    public static String LoginOrNot;
+    public static boolean LoginOrNot;
 
+    //userInfoJson里面的数据
     public static String nickname;
     public static String mobile_phone;
     public static String headImgUrl;
@@ -41,35 +43,44 @@ public class CurrentAccount {
     public static int messageCount;
 
 
+    public static void init(Context context){
+        CurrentAccount.context =context;
+        sharedPreferences = context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        getDatas();
+    }
+    public static void storeAccountInfo(String user_id,String password){
+        editor.putString("user_id",user_id);
+        editor.putString("password",password);
+        editor.commit();
+        setUser_id(sharedPreferences.getString("user_id","null"));
+        setPassword(sharedPreferences.getString("password","null"));
+    }
 
-    public static void initDatas(UserInfoJson userInfoJson, Context context) {
+    public static void storeDatas(UserInfoJson userInfoJson) {
         if(userInfoJson == null) Log.e("BIG ", "null json" );
         if(context == null) Log.e("BIG ", "null context" );
         Log.e("BIG ", "initDatas");
-        sharedPreferences = context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
 
         UserInfoJson.BodyBean body = userInfoJson.getBody();
         editor.putString("nickname", body.getNickname());
         editor.putString("mobile_phone", body.getMobilePhone());
-        editor.putString("email", body.getEmail());
         editor.putString("headImgUrl", body.getHeadImgUrl());
+        editor.putString("email", body.getEmail());
         editor.putString("schoolName", body.getSchool().getName());
         editor.putBoolean("sex", body.isSex());
         editor.putInt("messageCount", body.getMessageCount());
         editor.commit();
         Log.e(TAG, "将数据存储至 SharedPreferences ");
-        getDatas(context);
+        getDatas();
     }
 
-    public static void getDatas(Context context)
+    public static void getDatas()
     {
-        sharedPreferences = context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
         Log.e(TAG, "getDatas");
-        setLoginOrNot(sharedPreferences.getString("LoginOrNot","null"));
         setUser_id(sharedPreferences.getString("user_id","null"));
         setPassword(sharedPreferences.getString("password","null"));
+        setLoginOrNot(sharedPreferences.getBoolean("LoginOrNot",false));
         setNickname(sharedPreferences.getString("nickname","null"));
         setMobile_phone(sharedPreferences.getString("mobilePhone","null"));
         setEmail(sharedPreferences.getString("email","null"));
@@ -129,13 +140,13 @@ public class CurrentAccount {
         CurrentAccount.password = password;
     }
 
-    public static String getLoginOrNot() {
+    public static boolean isLoginOrNot() {
         return LoginOrNot;
     }
 
-    public static void setLoginOrNot(String loginOrNot) {
+    public static void setLoginOrNot(boolean loginOrNot) {
         LoginOrNot = loginOrNot;
-        editor.putString("LoginOrNot",LoginOrNot);
+        editor.putBoolean("LoginOrNot",true);
         editor.commit();
     }
 

@@ -37,8 +37,7 @@ public class MyApplication extends LitePalApplication {
     public void onCreate() {
         super.onCreate();
 
-
-
+        CurrentAccount.init(this);
 
 
         //kookie设置为持久化
