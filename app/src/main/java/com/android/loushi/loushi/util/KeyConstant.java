@@ -16,5 +16,8 @@ public class KeyConstant {
 
     public static final String TOPIC_ID = "topic_id";
     public static final String COMMENT_ID ="comment_id";
+    public static final String MOBILE_PHONE ="mobile_phone";
+    public static final String PASSWORD ="password";
+    public static final String ISTHIRD ="isThird";
 
 }

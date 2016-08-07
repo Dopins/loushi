@@ -17,6 +17,7 @@ public class UrlConstant {
     public static final String MYMESSAGE=prefixUser+"userMessage.action";
     public static final String USERCOLLECTURL =prefixUser+"userCollect.action";
     public static final String USERCOMMENTURL =prefixUser+"userComment.action";
+    public static final String USERLOGINURL =prefixUser+"userLogin.action";
 
 
 
