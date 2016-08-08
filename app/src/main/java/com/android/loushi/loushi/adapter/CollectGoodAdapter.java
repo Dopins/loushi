@@ -52,8 +52,11 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
         if(type.equals("3")) {
             final UserCollectionsJson.BodyBean.GoodsBean goodsBean = beanList.get(position).getGoods();
             holder.tv_name.setText(goodsBean.getName());
+            if (!TextUtils.isEmpty(goodsBean.getImages().get(0).getUrl()))
             Picasso.with(context).load(goodsBean.getImages().get(0).getUrl()).placeholder(R.drawable.loading_small).fit().error(R.drawable.loading_small).into(holder.img_good);
-            holder.tv_price.setText(goodsBean.getPrice()+"");
+            if (!TextUtils.isEmpty(goodsBean.getPrice()+""))
+            holder.tv_price.setText(goodsBean.getPrice() + "");
+            if (!TextUtils.isEmpty(goodsBean.getCollectionNum()+""))
             holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
             holder.btn_like.setChecked(true);
 //        holder.btn_like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

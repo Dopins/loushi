@@ -10,6 +10,7 @@ import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.jsonbean.StrategyJson;
 import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
+import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class RecycleViewPreferSetter {
                 .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
                     @Override
                     public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
+                       Log.e("prefer",new Gson().toJson(responseJson));
                         if (responseJson.getState()) {
                             boolean is_collected=bodyBeanList.get(position).getCollected();
                             int prefer_num=bodyBeanList.get(position).getCollectionNum();

@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.content.Intent;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentTabHost;
 import android.os.Bundle;
@@ -15,11 +16,17 @@ import android.widget.TextView;
 import com.alibaba.sdk.android.AlibabaSDK;
 import com.alibaba.sdk.android.trade.TradeConfigs;
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.event.MainEvent;
+import com.android.loushi.loushi.event.ReceiveSmsEvent;
 import com.android.loushi.loushi.ui.fragment.CategoryFragment;
 import com.android.loushi.loushi.ui.fragment.MyFragment;
 import com.android.loushi.loushi.ui.fragment.PersonFragment;
 import com.android.loushi.loushi.ui.fragment.SceneFragment;
 import com.taobao.tae.sdk.callback.InitResultCallback;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends BaseActivity {
     public FragmentTabHost mTabHost;
@@ -41,6 +48,8 @@ public class MainActivity extends BaseActivity {
 
         initView();
         InitTaobao();
+        if (!EventBus.getDefault().isRegistered(this))
+        EventBus.getDefault().register(this);
         mTabHost.getTabWidget().setDividerDrawable(android.R.color.transparent);
     }
     private void initView(){
@@ -51,18 +60,6 @@ public class MainActivity extends BaseActivity {
         for(int i = 0; i < count; i++){
             //为每一个Tab按钮设置图标、文字和内容
             final TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTextviewArray[i]).setIndicator(getTabItemView(i));
-            //将Tab按钮添加进Tab选项卡中
-//            if(i==2){
-//
-//                Boolean log =getIntent().getBooleanExtra("login",true);
-//                if(!log)
-//                    mTabHost.addTab(tabSpec, MyFragment.class, null);
-//                else {
-//                    mTabHost.addTab(tabSpec, personal.class, null);
-//
-//                }
-//            }
-//            else
                 mTabHost.addTab(tabSpec, fragmentArray[i], null);
         }
 
@@ -108,4 +105,19 @@ protected void onSaveInstanceState(Bundle outState) {
 
         });
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(MainEvent event) {
+        if(event.getMsg()==MainEvent.NEED_LOGIN){
+//            Intent intent =new Intent(MainActivity.this,FeedActivity.class);
+//            startActivity(intent);
+
+        }
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 }

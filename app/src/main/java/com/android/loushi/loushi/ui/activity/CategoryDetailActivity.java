@@ -77,7 +77,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
         if(type.equals("2")) {
             cate_url=topicBean.getImgUrl();
             if (cate_url.indexOf("|||") >= 0)
-                cate_url = cate_url.substring(url.indexOf("|||")+3);
+                cate_url = cate_url.substring(cate_url.indexOf("|||")+3);
             Log.e("url",cate_url);
             if(TextUtils.isEmpty(cate_url))
                 cate_url="";
@@ -278,8 +278,10 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
                 text = topicBean.getDigest();
 
                 //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
-                ShareSomeThing shareSomeThing = new ShareSomeThing(CategoryDetailActivity.this, imgurl, cate_url, text, title,user_id,type,topicBean.getId()+"");
-                shareSomeThing.DoShare();
+                if(!TextUtils.isEmpty(imgurl)) {
+                    ShareSomeThing shareSomeThing = new ShareSomeThing(CategoryDetailActivity.this, imgurl, cate_url, text, title, user_id, type, topicBean.getId() + "");
+                    shareSomeThing.DoShare();
+                }
                 break;
 
 

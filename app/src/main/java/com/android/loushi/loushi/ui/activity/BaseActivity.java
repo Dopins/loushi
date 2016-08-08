@@ -18,6 +18,7 @@ import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.w3c.dom.Text;
 
 import okhttp3.Request;
@@ -61,6 +62,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         startHandler();
         setContentView(getLayoutId());
+
     }
 
     private void startHandler() {
@@ -70,24 +72,24 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void autoLogin() {
         //TODO 第三方登录？？
-        String phone = CurrentAccount.getMobile_phone();
-        String password = CurrentAccount.getPassword();
-        if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password))
-            return;
-        OkHttpUtils.post(UrlConstant.USERLOGINURL)
-                .params(KeyConstant.MOBILE_PHONE, phone)
-                .params(KeyConstant.PASSWORD, password)
-                .params(KeyConstant.ISTHIRD, "false")
-                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
-                    @Override
-                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-                        if (userLoginJson.getState()) {
-                            Log.e(TAG, "autoLogin 登录成功！");
-                        } else {
-                            Log.e(TAG, "autoLogin 登录失败！");
-                        }
-                    }
-                });
+//        String phone = CurrentAccount.getMobile_phone();
+//        String password = CurrentAccount.getPassword();
+//        if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password))
+//            return;
+//        OkHttpUtils.post(UrlConstant.USERLOGINURL)
+//                .params(KeyConstant.MOBILE_PHONE, phone)
+//                .params(KeyConstant.PASSWORD, password)
+//                .params(KeyConstant.ISTHIRD, "false")
+//                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+//                    @Override
+//                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+//                        if (userLoginJson.getState()) {
+//                            Log.e(TAG, "autoLogin 登录成功！");
+//                        } else {
+//                            Log.e(TAG, "autoLogin 登录失败！");
+//                        }
+//                    }
+//                });
 
     }
 
@@ -98,4 +100,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         handler.removeCallbacksAndMessages(null);
         handler = null;
     }
+
+
 }

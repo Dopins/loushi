@@ -5,7 +5,7 @@ package com.android.loushi.loushi.event;
  */
 public class ReceiveSmsEvent {
     int msg;
-    public static int UPDATE_USERINFO=5;
+
 
     public ReceiveSmsEvent(){
         super();

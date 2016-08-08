@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/layout_scene_design">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -16,8 +17,8 @@
     android:layout_height="match_parent"
     android:id="@+id/webview"
     >
-
-</WebView></android.support.v4.widget.NestedScrollView>
+</WebView>
+    </android.support.v4.widget.NestedScrollView>
     <include layout="@layout/collect_bar"
 
     android:layout_height="44dp"

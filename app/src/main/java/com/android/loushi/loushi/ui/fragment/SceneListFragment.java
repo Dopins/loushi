@@ -77,10 +77,10 @@ public class SceneListFragment extends LazyFragment {
             @Override
             public void onItemClick(View view, int position) {
                 //Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
-                Intent intent= new Intent(getActivity(), SceneDetailActivity.class);
+                Intent intent= new Intent(getContext(), SceneDetailActivity.class);
                 String sceneJsonString=new Gson().toJson(bodyBeanList.get(position));
                 intent.putExtra("SCENE_STRING",sceneJsonString);
-                startActivity(intent);
+                getContext().startActivity(intent);
 //                Intent intent = new Intent(getActivity(), WebViewActivity.class);
 //                //intent.putExtra
 //                //传入参数 给webview Post
