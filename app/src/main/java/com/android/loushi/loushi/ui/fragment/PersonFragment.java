@@ -87,6 +87,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 getActivity().startActivity(intent);
                 break;
             case R.id.my_message:
+                iv_message_tips.setVisibility(View.GONE);
                 intent = new Intent(getContext(), MyMessageActivity.class);
                 startActivity(intent);
                 break;
