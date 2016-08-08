@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.TopicItemAdapter;
-import com.android.loushi.loushi.callback.TopicCallback;
+import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
@@ -55,7 +55,6 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected int getLayoutId() {
         return R.layout.activity_topic_item;
-
     }
 
     @Override
@@ -72,76 +71,78 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initView() {
-        //init toolbar
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_title);
-        setSupportActionBar(mToolbar);
-        //init title
-        textViewTitle = (TextView) findViewById(R.id.textView_title);
-        textViewTitle.setText(titlesName[mTopic_id-1]);
-        //init swipe
-        swipeRefreshLayout= (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        swipeRefreshLayout.setColorSchemeColors(this.getResources().getColor(R.color.colorPrimary));
-        //init imageview
-        imageViewSearch = (ImageView) findViewById(R.id.imageView_search);
-        imageViewBack = (ImageView) findViewById(R.id.imageView_back);
-        imageViewSearch.setOnClickListener(this);
-        imageViewBack.setOnClickListener(this);
+
+        initToolbar();
+
+        initSwipeLayout();
+
+        initRecycleView();
+
+        loadData();
+    }
+
+    private void loadData() {
+        loadSomeData(MainActivity.user_id, mTopic_id, mSkip, mTake);
+    }
+
+    private void initRecycleView() {
         recyclerView = (RecyclerView) findViewById(R.id.recycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new TopicItemAdapter(this, mTopicList, TopicItemAdapter.AdapterType.TOPIC);
         recyclerView.addItemDecoration(new SpaceItemDecoration(this, 10));
         recyclerView.setAdapter(mAdapter);
         addItemClickListener();
-        loadSomeData(MainActivity.user_id, mTopic_id, mSkip, mTake);
+    }
+
+    private void initSwipeLayout() {
+        //init swipe
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        swipeRefreshLayout.setColorSchemeColors(this.getResources().getColor(R.color.colorPrimary));
+    }
+
+    private void initToolbar() {
+        //init toolbar
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_title);
+        setSupportActionBar(mToolbar);
+        //init title
+        textViewTitle = (TextView) findViewById(R.id.textView_title);
+        textViewTitle.setText(titlesName[mTopic_id - 1]);//init imageview
+        imageViewSearch = (ImageView) findViewById(R.id.imageView_search);
+        imageViewBack = (ImageView) findViewById(R.id.imageView_back);
+        imageViewSearch.setOnClickListener(this);
+        imageViewBack.setOnClickListener(this);
     }
 
     private void loadSomeData(String userID, Integer groupId, Integer skip, Integer take) {
-//        OkHttpUtils.post("http://119.29.187.58:10000/LouShi/user/userLogin.action")
-//                // 请求方式和请求url
-//                .tag(this).params("mobile_phone", "13750065622").params("password", "mtf071330")
-//                .params("isThird", "false")
-//                        // 请求的 tag, 主要用于取消对应的请求
-//                        // 设置当前请求的缓存key,建议每个不同功能的请求设置一个
-//                        // 缓存模式，详细请看缓存介绍
-//
-//                        //有的操作要设置缓存，有的不要 这个号供测试用
-//
-//                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
-//                    @Override
-//                    public void onResponse(boolean b, UserLoginJson userLoginJson, Request request, Response response) {
-//                        Log.e(TAG,request.header("contentType"));
-//                        //这里现在是48
-//
-//                    }
-//                });
         OkHttpUtils.post(UrlConstant.TOPICURL)
                 .tag(this)
                 .params("user_id", userID)
                 .params("topic_group_id", groupId.toString())
                 .params("skip", skip.toString())
                 .params("take", take.toString())
-                .execute(new TopicCallback() {
-
+                .execute(new JsonCallback<TopicJson>(TopicJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, TopicJson topicJson, Request request, @Nullable Response response) {
                         if (topicJson == null || topicJson.getBody() == null)
                             return;
                         mTopicList.addAll(topicJson.getBody());
                         mAdapter.notifyDataSetChanged();
+                        mSkip+=topicJson.getBody().size();
                     }
                 });
     }
+
     private void addItemClickListener() {
         mAdapter.setmOnItemClickListener(new TopicItemAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
-                Intent intent= new Intent(TopicItemActivity.this, CategoryDetailActivity.class);
-                String jsonString=new Gson().toJson(mTopicList.get(position));
+                Intent intent = new Intent(TopicItemActivity.this, CategoryDetailActivity.class);
+                String jsonString = new Gson().toJson(mTopicList.get(position));
                 Log.e("jsonstring", jsonString);
-                intent.putExtra(CategoryDetailActivity.TYPE,"1");
-                intent.putExtra(CategoryDetailActivity.JSONSTRING,jsonString);
+                intent.putExtra(CategoryDetailActivity.TYPE, "1");
+                intent.putExtra(CategoryDetailActivity.JSONSTRING, jsonString);
                 startActivity(intent);
             }
         });
@@ -161,8 +162,8 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    private void entryToSearch(){
-        Intent intent=new Intent(this,SearchActivity.class);
+    private void entryToSearch() {
+        Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
     }
 }

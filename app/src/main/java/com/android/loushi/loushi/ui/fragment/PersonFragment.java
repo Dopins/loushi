@@ -24,7 +24,9 @@ import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.PersonCollectTabAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.event.MainEvent;
+
 import com.android.loushi.loushi.jsonbean.ResponseJson;
+
 import com.android.loushi.loushi.jsonbean.UserCollectsNum;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.FeedActivity;
@@ -52,7 +54,7 @@ import okhttp3.Response;
  */
 
 //个人中心
-public class PersonFragment extends BaseFragment implements View.OnClickListener{
+public class PersonFragment extends BaseFragment implements View.OnClickListener {
 
     private Toolbar mToolbar;
     private TextView mTv_index;
@@ -65,12 +67,12 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private TextView tv_name_small;
     private RoundImageView img_head_small;
     private View rootView;
-                            //定义viewPager
+    //定义viewPager
     private PersonCollectTabAdapter personCollectTabAdapter;                               //定义adapter
-    private List<Fragment> list_fragment= new ArrayList<>();                                //定义要装fragment的列表
+    private List<Fragment> list_fragment = new ArrayList<>();                                //定义要装fragment的列表
 
 
-    private List<String> list_count= new ArrayList<>();
+    private List<String> list_count = new ArrayList<>();
     //private CategoryFragment categoryFragment;
     private CollectGoodFragment collectGoodFragment;
     private ViewPager mViewPager;
@@ -83,13 +85,13 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.tv_feed:
-                Intent intent=new Intent(getActivity(), FeedActivity.class);
+                Intent intent = new Intent(getActivity(), FeedActivity.class);
                 getActivity().startActivity(intent);
                 break;
             case R.id.my_message:
-                intent=new Intent(getContext(), MyMessageActivity.class);
+                intent = new Intent(getContext(), MyMessageActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btn_profile:
@@ -109,6 +111,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         COLLAPSED,
         INTERNEDIATE
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -139,7 +142,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         return rootView;
     }
 
-    public void initView(){
+    public void initView() {
 
 
         initToolBar();
@@ -150,62 +153,58 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     private void initTablayout() {
         mViewPager = (ViewPager) getView().findViewById(R.id.main_vp_container);
-      if(list_count.size()==0) {
-          OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
-                  .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
-              @Override
-              public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
-                 if(userCollectsNum.isState()) {
-                     list_count.add(userCollectsNum.getBody().getSceneNum() + "");
-                     list_count.add(userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
-                     list_count.add(userCollectsNum.getBody().getGoodsNum() + "");
+        if (list_count.size() == 0) {
+            OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
+                    .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
+                @Override
+                public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
+                    if (userCollectsNum.isState()) {
+                        list_count.add(userCollectsNum.getBody().getSceneNum() + "");
+                        list_count.add(userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
+                        list_count.add(userCollectsNum.getBody().getGoodsNum() + "");
 
 
-                     collectGoodFragment = new CollectGoodFragment();
-                     Bundle bundle;
-                     bundle = new Bundle();
-                     bundle.putString(CollectGoodFragment.TYPE, "0");
-                     collectGoodFragment.setArguments(bundle);
-                     list_fragment.add(collectGoodFragment);
-                     collectGoodFragment = new CollectGoodFragment();
-                     bundle = new Bundle();
-                     bundle.putString(CollectGoodFragment.TYPE, "1");
-                     collectGoodFragment.setArguments(bundle);
-                     list_fragment.add(collectGoodFragment);
-                     collectGoodFragment = new CollectGoodFragment();
-                     bundle = new Bundle();
-                     collectGoodFragment.setArguments(bundle);
-                     bundle.putString(CollectGoodFragment.TYPE, "3");
-                     list_fragment.add(collectGoodFragment);
-                     personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(), list_fragment, list_count, getContext());
-                     mViewPager.setAdapter(personCollectTabAdapter);
+                        collectGoodFragment = new CollectGoodFragment();
+                        Bundle bundle;
+                        bundle = new Bundle();
+                        bundle.putString(CollectGoodFragment.TYPE, "0");
+                        collectGoodFragment.setArguments(bundle);
+                        list_fragment.add(collectGoodFragment);
+                        collectGoodFragment = new CollectGoodFragment();
+                        bundle = new Bundle();
+                        bundle.putString(CollectGoodFragment.TYPE, "1");
+                        collectGoodFragment.setArguments(bundle);
+                        list_fragment.add(collectGoodFragment);
+                        collectGoodFragment = new CollectGoodFragment();
+                        bundle = new Bundle();
+                        collectGoodFragment.setArguments(bundle);
+                        bundle.putString(CollectGoodFragment.TYPE, "3");
+                        list_fragment.add(collectGoodFragment);
+                        personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(), list_fragment, list_count, getContext());
+                        mViewPager.setAdapter(personCollectTabAdapter);
 
-                     mtoorbar_tab.setTabStripWidth(120);
-
-
-                     //mtoorbar_tab.setSelectedIndicatorColors(R.color.colorPrimary);
-                     mtoorbar_tab.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-                         @Override
-                         public int getIndicatorColor(int position) {
-                             return Color.rgb(105, 184, 187);
-                         }
-                     });
-
-                     mtoorbar_tab.setDistributeEvenly(true);
-                     mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, R.id.tv_tab_view_count);
+                        mtoorbar_tab.setTabStripWidth(120);
 
 
-                     //mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, 0);
-                     mtoorbar_tab.setViewPager(mViewPager);
-                 }
-              }
-          });
-      }
-        else
-      {
-          mViewPager = (ViewPager) getView().findViewById(R.id.main_vp_container);
+                        //mtoorbar_tab.setSelectedIndicatorColors(R.color.colorPrimary);
+                        mtoorbar_tab.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+                            @Override
+                            public int getIndicatorColor(int position) {
+                                return Color.rgb(105, 184, 187);
+                            }
+                        });
+
+                        mtoorbar_tab.setDistributeEvenly(true);
+                        mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, R.id.tv_tab_view_count);
 
 
+                        //mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, 0);
+                        mtoorbar_tab.setViewPager(mViewPager);
+                    }
+                }
+            });
+        } else {
+            mViewPager = (ViewPager) getView().findViewById(R.id.main_vp_container);
 
 
 //                list_count.add("32");
@@ -213,45 +212,46 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 //                list_count.add("44");
 //                list_count.add("11");
 
-          personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(), list_fragment, list_count, getContext());
-          mViewPager.setAdapter(personCollectTabAdapter);
+            personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(), list_fragment, list_count, getContext());
+            mViewPager.setAdapter(personCollectTabAdapter);
 
 
-          mtoorbar_tab.setTabStripWidth(120);
+            mtoorbar_tab.setTabStripWidth(120);
 
 
-          //mtoorbar_tab.setSelectedIndicatorColors(R.color.colorPrimary);
-          mtoorbar_tab.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-              @Override
-              public int getIndicatorColor(int position) {
-                  return Color.rgb(105, 184, 187);
-              }
-          });
+            //mtoorbar_tab.setSelectedIndicatorColors(R.color.colorPrimary);
+            mtoorbar_tab.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+                @Override
+                public int getIndicatorColor(int position) {
+                    return Color.rgb(105, 184, 187);
+                }
+            });
 
-          mtoorbar_tab.setDistributeEvenly(true);
-          mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, R.id.tv_tab_view_count);
+            mtoorbar_tab.setDistributeEvenly(true);
+            mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, R.id.tv_tab_view_count);
 
 
-          //mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, 0);
-          mtoorbar_tab.setViewPager(mViewPager);
-      }
+            //mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, 0);
+            mtoorbar_tab.setViewPager(mViewPager);
+        }
 
     }
 
-    public void initToolBar(){
-        mToolbar=(Toolbar)getView().findViewById(R.id.program_toolbar);
+    public void initToolBar() {
+        mToolbar = (Toolbar) getView().findViewById(R.id.program_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         mToolbar.setTitle("");
-        mtoorbar_tab=(SlidingTabLayout)getView().findViewById(R.id.toolbar_tab);
-        tv_name=(TextView)getView().findViewById(R.id.tv_nickname);
-        img_head=(CircularImageView)getView().findViewById(R.id.img_head);
-        img_head_small = (RoundImageView)mToolbar.findViewById(R.id.img_head_small);
-        tv_feed=(TextView)mToolbar.findViewById(R.id.tv_feed);
-        tv_name_small=(TextView)mToolbar.findViewById(R.id.tv_nickname_small);
+        mtoorbar_tab = (SlidingTabLayout) getView().findViewById(R.id.toolbar_tab);
+        tv_name = (TextView) getView().findViewById(R.id.tv_nickname);
+        img_head = (CircularImageView) getView().findViewById(R.id.img_head);
+        img_head_small = (RoundImageView) mToolbar.findViewById(R.id.img_head_small);
+        tv_feed = (TextView) mToolbar.findViewById(R.id.tv_feed);
+        tv_name_small = (TextView) mToolbar.findViewById(R.id.tv_nickname_small);
 
     }
-    private void initButton(){
-        btn_profile = (Button)getView().findViewById(R.id.btn_profile);
+
+    private void initButton() {
+        btn_profile = (Button) getView().findViewById(R.id.btn_profile);
         btn_profile.setOnClickListener(this);
 //        btn_profile.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -261,20 +261,21 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 //            }
 //        });
         tv_feed.setOnClickListener(this);
-        btn_my_message= (ImageView) mToolbar.findViewById(R.id.my_message);
+        btn_my_message = (ImageView) mToolbar.findViewById(R.id.my_message);
         btn_my_message.setOnClickListener(this);
-        btn_my_setting=(ImageView)mToolbar.findViewById(R.id.my_settings);
+        btn_my_setting = (ImageView) mToolbar.findViewById(R.id.my_settings);
         btn_my_setting.setOnClickListener(this);
 
-        iv_message_tips= (ImageView) mToolbar.findViewById(R.id.iv_messagetips);
-        if(MyMessageActivity.hasNewMessage())
+        iv_message_tips = (ImageView) mToolbar.findViewById(R.id.iv_messagetips);
+        if (MyMessageActivity.hasNewMessage())
             iv_message_tips.setVisibility(View.VISIBLE);
         else
             iv_message_tips.setVisibility(View.GONE);
 
     }
-    private void initAppBar(){
-        appBarLayout = (AppBarLayout)getView().findViewById(R.id.app_bar_layout);
+
+    private void initAppBar() {
+        appBarLayout = (AppBarLayout) getView().findViewById(R.id.app_bar_layout);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {

@@ -15,8 +15,8 @@ import com.lzy.okhttputils.cookie.store.CookieStore;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
 import com.squareup.picasso.Picasso;
 import com.taobao.tae.sdk.callback.InitResultCallback;
-
-
+import com.tencent.bugly.crashreport.CrashReport;
+import com.umeng.analytics.MobclickAgent;
 import org.litepal.LitePalApplication;
 
 import java.util.List;
@@ -87,14 +87,25 @@ public class MyApplication extends LitePalApplication {
 
         InitTaobao();
 
-        //initBugly();
+        initBugly();
+        initUMeng();
 
     }
 
+    private void initUMeng(){
+        MobclickAgent.UMAnalyticsConfig config=new MobclickAgent.UMAnalyticsConfig(
+                getApplicationContext(),
+                "57a5eda367e58ef278000163",
+                "testchannel",
+                MobclickAgent.EScenarioType. E_UM_NORMAL,
+                true);
+        MobclickAgent.startWithConfigure(config);
+        MobclickAgent.setDebugMode(true);
+    }
 
-//    private void initBugly(){
-//        CrashReport.initCrashReport(getApplicationContext(), "900045792", true);
-//    }
+    private void initBugly(){
+        CrashReport.initCrashReport(getApplicationContext(), "900045792", true);
+    }
 
     private void InitTaobao() {
         TradeConfigs.defaultTaokePid = "mm_114880276_0_0";

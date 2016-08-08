@@ -25,7 +25,6 @@ import com.alibaba.sdk.android.trade.page.ItemDetailPage;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.GoodDetailAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
-import com.android.loushi.loushi.callback.UserCollectCallback;
 import com.android.loushi.loushi.jsonbean.GoodsJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.SceneGoodJson;
