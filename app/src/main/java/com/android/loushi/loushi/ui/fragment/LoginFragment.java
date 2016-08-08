@@ -94,6 +94,12 @@ public class LoginFragment extends Fragment {
         initPlatformList();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG, "onDestroy ");
+    }
+
     private void setLoginInfoFromCache() {
 
         if(!CurrentAccount.isLoginOrNot()) {
@@ -140,6 +146,7 @@ public class LoginFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 MyFragment.Gone();
+                view.requestFocus();
                 return false;
             }
         });
@@ -148,10 +155,12 @@ public class LoginFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 MyFragment.Gone();
+                view.requestFocus();
                 return false;
             }
 
         });
+
 
         btn_login.setOnClickListener(new View.OnClickListener() {
 
@@ -182,8 +191,7 @@ public class LoginFragment extends Fragment {
                                         Log.e(TAG, "登录成功！");
 
                                         BaseActivity.user_id = userLoginJson.getBody()+""; //冗余
-
-
+                                        Log.e(TAG,userLoginJson.getBody()+"");
                                         CurrentAccount.storeAccountInfo(userLoginJson.getBody()+"",login_edit_phone.getText().toString(),login_edit_password.getText().toString());
                                         getUserInfo(userLoginJson.getBody());
 //                                        transferMyFragmentToPersonalFragment();

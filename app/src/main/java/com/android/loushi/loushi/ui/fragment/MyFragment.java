@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.ViewPagerIndicator;
 
@@ -51,7 +52,6 @@ import java.util.List;
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-        Log.e(TAG, "onActivityCreated");
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
         Boolean LoginOrNot = sharedPreferences.getBoolean("LoginOrNot", false);
         if (LoginOrNot) {
@@ -76,11 +76,7 @@ import java.util.List;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (view == null) {
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("LoginOrNot", false);
-            editor.commit();
-
+            CurrentAccount.setLoginOrNot(false);
             view = inflater.inflate(R.layout.fragment_my, null);
             initView(view);
             initDatas();
@@ -146,7 +142,6 @@ import java.util.List;
     }
 
     private void initView(View view) {
-        Log.d("initView", "initView");
         mViewPager = (ViewPager) view.findViewById(R.id.id_vp);
         mIndicator = (ViewPagerIndicator) view.findViewById(R.id.id_indicator);
         Visible();
@@ -162,7 +157,7 @@ import java.util.List;
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e(TAG, "onDestroy");
+        view = null;
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 }

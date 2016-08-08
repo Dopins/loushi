@@ -97,7 +97,7 @@ public class PersonalInformationActivity extends BaseActivity {
         edit_nickname.setText("mtf");
         edit_phone.setText("13750065622");
         headImgUrl = CurrentAccount.getHeadImgUrl();
-        if (headImgUrl != null){
+        if (headImgUrl != "null"){
             Log.e(TAG, "bindViews: img_url = "+ img_url);
             Picasso.with(this).load(img_url).fit().into(image_circular);
         }else {
@@ -129,13 +129,18 @@ public class PersonalInformationActivity extends BaseActivity {
     }
 
     public void onClickbtn_return(View view){
-        Log.e(TAG, "onClickbtn_return: ");
-        this.finish();
+        Log.e(TAG, "onClickbtn_return");
+        finish();
     }
 
     public void onClickimage_circular(View view) {
         menuWindow = new SelectPicPopupWindow(PersonalInformationActivity.this, itemsOnClick);
         menuWindow.showAtLocation(PersonalInformationActivity.this.findViewById(R.id.personalInFoContainer), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     //改变头像

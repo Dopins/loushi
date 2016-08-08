@@ -66,9 +66,10 @@ public class RegistFragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onActivityCreated(savedInstanceState);
         if(!EventBus.getDefault().isRegistered(this))
         EventBus.getDefault().register(this);
+
         initEvent();
         initSDK();
     }

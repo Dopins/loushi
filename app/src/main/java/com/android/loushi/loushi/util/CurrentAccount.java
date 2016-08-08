@@ -150,6 +150,8 @@ public class CurrentAccount {
 
     public static void setLoginOrNot(boolean loginOrNot) {
         LoginOrNot = loginOrNot;
+        editor.putBoolean("LoginOrNot",loginOrNot);
+        editor.commit();
     }
 
     public static String getMobile_phone() {
