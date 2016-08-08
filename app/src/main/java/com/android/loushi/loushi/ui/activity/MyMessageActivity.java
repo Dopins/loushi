@@ -73,7 +73,6 @@ public class MyMessageActivity extends BaseActivity implements
      * @return
      */
     public static boolean hasNewMessage(){
-        boolean result=false;
         int messageCount= CurrentAccount.getMessageCount();
         return messageCount>0;
     }

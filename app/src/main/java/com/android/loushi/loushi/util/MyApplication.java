@@ -17,7 +17,6 @@ import com.squareup.picasso.Picasso;
 import com.taobao.tae.sdk.callback.InitResultCallback;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
-
 import org.litepal.LitePalApplication;
 
 import java.util.List;
@@ -39,20 +38,29 @@ public class MyApplication extends LitePalApplication {
     public void onCreate() {
         super.onCreate();
 
+
+        OkHttpUtils.init(this);
+        OkHttpUtils.getInstance()
+                .debug("OkHttpUtils")
+                .setCookieStore(new PersistentCookieStore())
+        ;
+
+
+
+        CurrentAccount.init(this);
+
+
         //kookie设置为持久化
         //debug是打印调试信息 可不要
         //域名放在baseactivity的静态变量里
-        OkHttpUtils.init(this);
-        OkHttpUtils.getInstance()
-               .debug("OkHttpUtils")
-                .setCookieStore(new PersistentCookieStore())
-                ;
+
+
 
 //        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
 //
 //                // 请求方式和请求url
-//                .tag(this).params("mobile_phone", "18819475167").params("password", "mtf071330")
-////                .tag(this).params("mobile_phone", "13750065622").params("password", "mtf071330")
+////                .tag(this).params("mobile_phone", "123456").params("password", "mtf071330")
+//                .tag(this).params("mobile_phone", "13750065622").params("password", "mtf071330")
 //                .params("isThird", "false")
 //                        // 请求的 tag, 主要用于取消对应的请求
 //                        // 设置当前请求的缓存key,建议每个不同功能的请求设置一个
@@ -68,10 +76,15 @@ public class MyApplication extends LitePalApplication {
 //                        Log.e(TAG, Integer.toString(userLoginJson.getBody()));
 //                        //这里现在是48了
 //                        Log.e("test", response.toString());
-//                        BaseActivity.user_id=Integer.toString(userLoginJson.getBody());
+//                        BaseActivity.user_id = Integer.toString(userLoginJson.getBody());
+//
+//
 //                    }
 //
+//
 //                });
+
+
         InitTaobao();
 
         initBugly();
@@ -115,6 +128,7 @@ public class MyApplication extends LitePalApplication {
 
         });
     }
+
 
 
 }

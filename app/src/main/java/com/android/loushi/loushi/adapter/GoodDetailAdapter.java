@@ -17,6 +17,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 /**
  * Created by Administrator on 2016/7/25.
  */
@@ -66,7 +68,10 @@ public class GoodDetailAdapter extends RecyclerView.Adapter<GoodDetailAdapter.Go
     }
     private void showBigImage(String url){
         ImageView img_big =new ImageView(context);
+
         Picasso.with(context).load(url).into(img_big);
+        PhotoViewAttacher attacher = new PhotoViewAttacher(img_big);
+        attacher.update();
         final AlertDialog dialog = new AlertDialog.Builder(context).create();
         dialog.setView(img_big);
         dialog.show();

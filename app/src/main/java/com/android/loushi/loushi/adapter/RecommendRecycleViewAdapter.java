@@ -53,12 +53,10 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     public static final int ITEM_TYPE_HEADER = 3;
     private Context context;
     private List<RecommendJson.BodyBean> bodyBeanList = new ArrayList<>();
-    private boolean first_get_ad=true;
 
     public RecommendRecycleViewAdapter(Context context, List<RecommendJson.BodyBean> bodyBeanList) {
         this.context = context;
         this.bodyBeanList = bodyBeanList;
-        adList= new ArrayList<>();
     }
 
     private int getBodyBeanListPosition(int position){
@@ -135,6 +133,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private void setTipView(TipViewHolder holder, int position) {
 
         RecommendJson.BodyBean body = bodyBeanList.get(position);
+        if(body.getStrategy()==null) return;
 
         Picasso.with(context).load(body.getStrategy().getImgUrl()).fit().
                 into(holder.image);
@@ -149,6 +148,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private void setTopicView(TopicViewHolder holder, int position) {
 
         RecommendJson.BodyBean body = bodyBeanList.get(position);
+        if(body.getTopic()==null) return;
 
         Picasso.with(context).load(body.getTopic().getImgUrl()).fit().
                 into(holder.image);
@@ -162,6 +162,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private void setSceneView(SceneViewHolder holder, int position) {
 
         RecommendJson.BodyBean body = bodyBeanList.get(position);
+        if(body.getScene()==null) return ;
 
         Picasso.with(context).load(body.getScene().getImgUrl()).fit().
                 into(holder.image);
@@ -207,15 +208,16 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
         });
         viewPager.setAdapter(adViewpagerAdapter);
 
-        getAdList();
-    }
-    private void setImageView(CarouselViewPager viewPager) {
-
-        if(first_get_ad)  {
-            initAdViewPager(viewPager);
+        if(adList==null){
+            adList= new ArrayList<>();
+            getAdList();
         }else{
             loadAdImage();
         }
+
+    }
+    private void setImageView(CarouselViewPager viewPager) {
+        initAdViewPager(viewPager);
     }
 
     private void loadAdImage(){
@@ -235,7 +237,6 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         if (carouselJson.getState()) {
                             adList.addAll(carouselJson.getBody());
                             loadAdImage();
-                            first_get_ad=false;
                         } else {
                             Log.d("error", carouselJson.getReturn_info());
                         }

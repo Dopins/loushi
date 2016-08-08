@@ -116,7 +116,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="点赞"
+                            android:text="收藏"
                             android:textColor="@color/colorWatch" />
                     </LinearLayout>
 

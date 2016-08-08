@@ -2,14 +2,20 @@ package com.android.loushi.loushi.callback;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.inputmethod.CorrectionInfo;
 
+import com.android.loushi.loushi.event.MainEvent;
+import com.android.loushi.loushi.event.ReceiveSmsEvent;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
+import com.android.loushi.loushi.util.CurrentAccount;
+import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.callback.AbsCallback;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -19,7 +25,7 @@ import okhttp3.Response;
 
 
 public abstract class JsonCallback<T> extends EncryptCallback<T> {
-private Boolean log=true;
+
     private Class<T> clazz;
     private Type type;
 
@@ -43,9 +49,12 @@ private Boolean log=true;
         String code = jsonObject.optString("code", "");
         if(code!=null&&code.equals("10000")) {
             Log.e("clazz", code);
-            if(log) {
+            if(CurrentAccount.isLoginOrNot()) {
 
                 //执行登陆操作
+            }
+            if(!CurrentAccount.isLoginOrNot()){
+                EventBus.getDefault().post(new MainEvent(MainEvent.NEED_LOGIN));
             }
 //            OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
 //
@@ -72,7 +81,7 @@ private Boolean log=true;
 //
 //
 //                    });
-            return null;
+            //return null;
         }
         //Log.e("te",responseData);
 //        if (TextUtils.isEmpty(responseData)) return null;

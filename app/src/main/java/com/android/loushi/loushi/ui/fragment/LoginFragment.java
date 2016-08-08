@@ -45,6 +45,7 @@ import com.android.loushi.loushi.thirdlogin.UserInfo;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.ForgetPasswordActivity;
 import com.android.loushi.loushi.ui.activity.MainActivity;
+import com.android.loushi.loushi.ui.activity.PersonalInformationActivity;
 import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.UnderLineEditText;
@@ -93,17 +94,26 @@ public class LoginFragment extends Fragment {
     }
 
     private void setLoginInfoFromCache() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
-        String phone = sharedPreferences.getString("phone","");
-        String password = sharedPreferences.getString("password","");
-        login_edit_phone.setText(phone);
-        login_edit_password.setText(password);
-        login_edit_phone.setText("13750065622");
-        login_edit_password.setText("mtf071330");
+
+        if(!CurrentAccount.isLoginOrNot()) {
+            login_edit_phone.setText("13750065622");
+            login_edit_password.setText("mtf071330");
+            CurrentAccount.setLoginOrNot(true);
+        }
     }
 
     public void transferMyFragmentToPersonalFragment() {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
         EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
+    }
+
+    public void transferMyFragmentToPersonalInformationActivity() {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+        Intent intent = new Intent(getActivity(), PersonalInformationActivity.class);
+        getActivity().startActivity(intent);
+
     }
 
     @Override
@@ -118,6 +128,7 @@ public class LoginFragment extends Fragment {
             bindViews();
             initView();
             initEvent();
+
         }
         return view;
     }
@@ -167,15 +178,12 @@ public class LoginFragment extends Fragment {
                                     if (userLoginJson.getState()) {
                                         Log.e(TAG, "登录成功！");
 
-
-                                        CurrentAccount.setPassword(login_edit_password.getText().toString());
                                         BaseActivity.user_id = userLoginJson.getBody()+""; //冗余
+
+                                        CurrentAccount.storeAccountInfo(login_edit_phone.getText().toString(),login_edit_password.getText().toString());
                                         getUserInfo(userLoginJson.getBody());
+//                                        transferMyFragmentToPersonalFragment();
 
-                                        Log.e("BIG ","userLogin");
-
-                                        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
 
                                         MobclickAgent.onProfileSignIn(login_edit_phone.getText().toString());
 
@@ -208,14 +216,19 @@ public class LoginFragment extends Fragment {
                 .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
-                        Log.e("BIG ", "userinfo");
                         if(userInfoJson.isState()) {
-                            Log.e("BIG ", "成功获取用户信息");
+                            Log.e(TAG, "成功获取用户信息");
                             Log.e(TAG, request.toString());
                             Log.e(TAG, response.toString());
 
+                            CurrentAccount.storeDatas(userInfoJson);
+                            Log.e(TAG,CurrentAccount.getHeadImgUrl());
+                            Log.e(TAG,CurrentAccount.getNickname());
+                            Log.e(TAG,CurrentAccount.getPassword());
+                            Log.e(TAG,CurrentAccount.getSchoolName());
+                            Log.e(TAG,CurrentAccount.getEmail());
 
-                            CurrentAccount.initDatas(userInfoJson, getActivity());
+                            CurrentAccount.storeDatas(userInfoJson);
                             transferMyFragmentToPersonalFragment();
 
                         }
@@ -362,24 +375,19 @@ public class LoginFragment extends Fragment {
                         .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
                             @Override
                             public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-                                Log.e(TAG, request.toString());
-                                Log.e(TAG, response.toString());
+
                                 if (userLoginJson.getState()) {
 
+                                    CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
+
                                     String code = userLoginJson.getCode();
-                                    if (code !=null && code =="3") Log.e(TAG, "第一次登陆");
+                                    if (code !=null && code =="3") {
+                                        Log.e(TAG, "第三方登陆的第一次登陆");
+                                        transferMyFragmentToPersonalInformationActivity();
+                                    }else {
+                                        transferMyFragmentToPersonalFragment();
+                                    }
 
-                                    Log.e(TAG, "第三方登录成功！");
-                                    BaseActivity.user_id = userLoginJson.getBody()+"";
-
-                                    sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
-                                    editor = sharedPreferences.edit();
-                                    editor.putBoolean("LoginOrNot", true);
-                                    editor.commit();
-
-                                    InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
-                                    transferMyFragmentToPersonalFragment();
                                 } else {
                                     Log.e(TAG, "登录失败！");
                                 }

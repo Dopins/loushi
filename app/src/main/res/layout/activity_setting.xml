@@ -102,6 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="删除已缓存的文章内容及图片"
+                android:id="@+id/tv_cache"
                 android:textSize="14sp"
                 android:textColor="#8a8a8a"/>
         </LinearLayout>
