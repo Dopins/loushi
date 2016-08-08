@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.util.EventLog;
 import android.util.Log;
@@ -155,12 +156,14 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onClick(final View view) {
+
+
 //                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 //                dialog = builder.create();
 //                dialog.show();
                 Log.e(TAG, "login_edit_phone.length() : " + login_edit_phone.length());
                 Log.e(TAG, "login_edit_password.length() : " + login_edit_password.length());
-                if (login_edit_phone.length() != 11 || login_edit_password.length() == 0) {
+                if (!isMobileNO(login_edit_phone.getText().toString()) || login_edit_password.length() == 0) {
                     Log.e(TAG, "请输入有效的电话号码和密码 !");
                 } else {
                     Log.e(TAG, login_edit_phone.getText().toString());
@@ -179,7 +182,8 @@ public class LoginFragment extends Fragment {
 
                                         BaseActivity.user_id = userLoginJson.getBody()+""; //冗余
 
-                                        CurrentAccount.storeAccountInfo(login_edit_phone.getText().toString(),login_edit_password.getText().toString());
+
+                                        CurrentAccount.storeAccountInfo(userLoginJson.getBody()+"",login_edit_phone.getText().toString(),login_edit_password.getText().toString());
                                         getUserInfo(userLoginJson.getBody());
                                         transferMyFragmentToPersonalFragment();
 
@@ -381,7 +385,9 @@ public class LoginFragment extends Fragment {
                                     if (code !=null && code =="3") {
                                         Log.e(TAG, "第三方登陆的第一次登陆");
                                         transferMyFragmentToPersonalInformationActivity();
+                                        transferMyFragmentToPersonalFragment();
                                     }else {
+                                        getUserInfo(userLoginJson.getBody());
                                         transferMyFragmentToPersonalFragment();
                                     }
 
@@ -421,6 +427,19 @@ public class LoginFragment extends Fragment {
             stringBuilder.append(Integer.toHexString(intTmp[i]));
         }
         return stringBuilder.toString().toUpperCase();
+    }
+
+    //手机号码正则匹配
+    public boolean isMobileNO(String mobiles) {
+		/*
+		移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
+		联通：130、131、132、152、155、156、185、186
+		电信：133、153、180、189、（1349卫通）
+		总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
+		*/
+        String telRegex = "[1][358]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
+        if (TextUtils.isEmpty(mobiles)) return false;
+        else return mobiles.matches(telRegex);
     }
 
 }

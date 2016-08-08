@@ -81,6 +81,7 @@ import java.util.List;
             view = inflater.inflate(R.layout.fragment_my, null);
             initView(view);
             initDatas();
+            if(!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
         }
         Visible();

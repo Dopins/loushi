@@ -25,11 +25,13 @@ import com.android.loushi.loushi.jsonbean.Area;
 import com.android.loushi.loushi.jsonbean.ImageJson;
 import com.android.loushi.loushi.jsonbean.School;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
+import com.android.loushi.loushi.jsonbean.UserLoginJson;
+import com.android.loushi.loushi.util.CurrentAccount;
+import com.android.loushi.loushi.util.MaterialSpinner;
 import com.android.loushi.loushi.util.RoundImageView;
 import com.android.loushi.loushi.util.SelectPicPopupWindow;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.google.gson.Gson;
-import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
 
@@ -39,8 +41,8 @@ import java.io.File;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class PersonalInformationActivity extends AppCompatActivity {
-    final private static String TAG = "Test";
+public class PersonalInformationActivity extends BaseActivity {
+    private String TAG = "PersonalInfoActivity";
 
 
     private SelectPicPopupWindow menuWindow;
@@ -76,9 +78,14 @@ public class PersonalInformationActivity extends AppCompatActivity {
 
 
     @Override
+    protected int getLayoutId() {
+        return R.layout.activity_personal_information;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personal_information);
+
         bindViews();
         initDatas();
         test();
@@ -88,11 +95,13 @@ public class PersonalInformationActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         edit_nickname.setText("mtf");
-        edit_phone.setText("13212345678");
-        img_url = sharedPreferences.getString("headImgUrl",null);
-        if (img_url != null){
-            Log.e("???:"+TAG, "bindViews: img_url = "+ img_url);
+        edit_phone.setText("13750065622");
+        headImgUrl = CurrentAccount.getHeadImgUrl();
+        if (headImgUrl != null){
+            Log.e(TAG, "bindViews: img_url = "+ img_url);
             Picasso.with(this).load(img_url).fit().into(image_circular);
+        }else {
+            Log.e(TAG, "headImgUrl为空!");
         }
     }
 
@@ -101,11 +110,11 @@ public class PersonalInformationActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.Toolbar);
         btn_return = (ImageButton) findViewById(R.id.btn_return);
         image_circular = (RoundImageView) findViewById(R.id.image_circular);
-        edit_nickname = (UnderLineEditText) findViewById(R.id.edit_nickname);
+        edit_nickname = (EditText) findViewById(R.id.edit_nickname);
         spinner_sex = (MaterialSpinner) findViewById(R.id.spinner_sex);
         spinner_province = (MaterialSpinner) findViewById(R.id.spinner_province);
         spinner_university = (MaterialSpinner) findViewById(R.id.spinner_university);
-        edit_phone = (UnderLineEditText) findViewById(R.id.edit_phone);
+        edit_phone = (EditText) findViewById(R.id.edit_phone);
         btn_save = (Button) findViewById(R.id.btn_save);
     }
 
@@ -115,8 +124,13 @@ public class PersonalInformationActivity extends AppCompatActivity {
         spinner_sex.setDropdownMaxHeight(600);
         spinner_province.setItems("广东省", "广西省", "山东省", "海南省", "安徽省", "四川省");
         spinner_province.setDropdownMaxHeight(600);
-        spinner_university.setItems("大学1", "大学2", "大学3", "大学4", "大学5");
+        spinner_university.setItems("No.1", "No.2", "No.3", "No.4", "No.5");
         spinner_university.setDropdownMaxHeight(600);
+    }
+
+    public void onClickbtn_return(View view){
+        Log.e(TAG, "onClickbtn_return: ");
+        this.finish();
     }
 
     public void onClickimage_circular(View view) {
@@ -202,23 +216,21 @@ public class PersonalInformationActivity extends AppCompatActivity {
                     byte[] bytes = bStream.toByteArray();
                     String ss = Base64.encodeToString(bytes, Base64.DEFAULT);
                     Log.e(TAG, "ss");
+                    Log.e(TAG, CurrentAccount.getUser_id());
                     image_circular.setImageBitmap(photo);
                     OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userHeadImg.action")
                             .params("img", ss)
-                            .params("user_id","48")
+                            .params("user_id",CurrentAccount.getUser_id())
                             .params("imgFileName", "1.jpg")
                             .execute(new JsonCallback<ImageJson>(ImageJson.class) {
                         @Override
                         public void onResponse(boolean isFromCache, ImageJson imageJson, Request request, @Nullable Response response) {
                             if (imageJson.getState()) {
-                                Log.e("???:"+TAG,request.toString());
-                                //Log.e("???:"+TAG,new Gson().toJson(imageJson));
-                                String url = imageJson.getBody();
-                                img_url = url;
-                                Log.e("???:" + TAG, "onResponse: " + img_url);
-                                editor.putString("headImgUrl",img_url);
-                                editor.commit();
-                                image_circular.setImageBitmap(photo);
+                                headImgUrl = imageJson.getBody();
+
+                                Log.e(TAG, headImgUrl);
+                                CurrentAccount.setHeadImgUrl(headImgUrl);
+
                             }
                         }
 
@@ -231,49 +243,39 @@ public class PersonalInformationActivity extends AppCompatActivity {
     }
 
     public void onClick_btn_save(View view) {
-        Log.e("???: " +TAG, "onClick_btn_save");
+        Log.e(TAG, "onClick_btn_save");
 
-        user_id = sharedPreferences.getString("user_id","");
+        user_id = CurrentAccount.getUser_id();
         nickname = edit_nickname.getText().toString();
-        headImgUrl = sharedPreferences.getString("headImgUrl","");
+        headImgUrl = CurrentAccount.getHeadImgUrl();
         schoolName = spinner_university.getSelectedIndex()+1+"";
         sex = spinner_sex.getSelectedIndex() +"";
 
-        School school = new School();
-        Area area =new Area();
-        area.setId(1);
-        area.setValid(true);
-        area.setCity("");
-        area.setDistrict("");
-        area.setProvince("");
-
-        school.setId(1);
-        school.setName(schoolName);
-        school.setValid(true);
-        school.setArea(area);
-        Log.e("???: " +TAG, "user_id: " +user_id);
-        Log.e("???: " +TAG, "nickname: " +nickname);
-        Log.e("???: " +TAG, "headImgUrl: " +headImgUrl);
-        Log.e("???: " +TAG, "schoolName: " +schoolName);
-        Log.e("???: " +TAG, "sex: " +sex);
-
-        Log.e("???: " +TAG,new Gson().toJson(school));
+        Log.e(TAG,user_id);
+        Log.e(TAG,nickname);
+        Log.e(TAG,headImgUrl);
+        Log.e(TAG,schoolName);
+        Log.e(TAG,sex);
 
         OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfoAlt.action")
-                .params("user_id", user_id).params("nickname", nickname)
-                .params("headImgUrl", headImgUrl).params("school", new Gson().toJson(school))
-                .params("sex", "false")
+                .params("user_id", user_id)
+                .params("nickname", nickname)
+                .params("headImgUrl", headImgUrl)
+                .params("school.id",schoolName )
+                .params("sex", sex)
                 .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
-                        Log.e("???: " +TAG, "UserInfoJson onResponse" +response.toString());
-                        Log.e("???: " +TAG, "userInfoJson.getState(): " + userInfoJson.isState());
+                        Log.e(TAG, "UserInfoJson.onResponse: " +response.toString());
+                        Log.e(TAG, "userInfoJson.getState: " + userInfoJson.isState());
                         if(userInfoJson.isState()){
-                            Log.e("???: " +TAG, "onResponse: 资料提交成功 ！" );
+                            Log.e(TAG, "onResponse: 资料提交成功 ！" );
+                            finish();
                         }
                     }
                 });
-
     }
+
+
 
 }
