@@ -25,6 +25,7 @@ import com.android.loushi.loushi.event.ReceiveSmsEvent;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
+import com.android.loushi.loushi.ui.activity.LoginFirstActivity;
 import com.android.loushi.loushi.ui.activity.PersonalInformationActivity;
 import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.MyfragmentEvent;
@@ -81,8 +82,6 @@ public class RegistFragment extends Fragment {
             bindViews();
             initView();
 
-
-
         }//EventBus.getDefault().register(this);
         return view;
     }
@@ -110,7 +109,6 @@ public class RegistFragment extends Fragment {
             }
         });
 
-        btn_finish = (Button) view.findViewById(R.id.btn_finish);
         btn_finish.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -151,6 +149,7 @@ public class RegistFragment extends Fragment {
         text_cheakword = (TextView) view.findViewById(R.id.text_cheakword);
         regist_edit_checkword = (EditText) view.findViewById(R.id.regist_edit_checkword);
         btn_getcheckword = (Button) view.findViewById(R.id.btn_getcheckword);
+        btn_finish = (Button) view.findViewById(R.id.btn_finish);
 
     }
 

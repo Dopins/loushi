@@ -33,12 +33,15 @@ import com.android.loushi.loushi.ui.activity.FeedActivity;
 import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
 
 import com.android.loushi.loushi.ui.activity.MyMessageActivity;
+import com.android.loushi.loushi.ui.activity.PersonalInformationActivity;
 import com.android.loushi.loushi.ui.activity.SettingActivity;
 import com.android.loushi.loushi.util.CircularImageView;
 import com.android.loushi.loushi.util.CurrentAccount;
+import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.RoundImageView;
 import com.android.loushi.loushi.util.SlidingTabLayout;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -56,6 +59,7 @@ import okhttp3.Response;
 
 //个人中心
 public class PersonFragment extends BaseFragment implements View.OnClickListener {
+    public static final String TAG ="PersonFragment";
 
     private Toolbar mToolbar;
     private TextView mTv_index;
@@ -83,6 +87,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private ImageView btn_my_setting;
     private CollapsingToolbarLayoutState state;
     private ImageView iv_message_tips;
+
+    public MyFragment myFragment;
 
     @Override
     public void onClick(View v) {
@@ -118,13 +124,19 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
+        Log.e(TAG, "onActivityCreated: ");
         super.onActivityCreated(savedInstanceState);
-        Log.e("Test: " + "PersonFragment", "onActivityCreated");
-
         initView();
-        if (!EventBus.getDefault().isRegistered(this))
+        iniDatas();
+       if(!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
         //mToolbar.setTitle("loushi");
+    }
+
+    private void iniDatas() {
+        tv_name.setText(CurrentAccount.getNickname());
+        Picasso.with(getActivity()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
+
     }
 
     @Override
@@ -255,14 +267,13 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     private void initButton() {
         btn_profile = (Button) getView().findViewById(R.id.btn_profile);
-        btn_profile.setOnClickListener(this);
-//        btn_profile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getContext(), GoodDetailActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        btn_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), PersonalInformationActivity.class);
+                startActivity(intent);
+            }
+        });
         tv_feed.setOnClickListener(this);
         btn_my_message = (ImageView) mToolbar.findViewById(R.id.my_message);
         btn_my_message.setOnClickListener(this);
@@ -352,6 +363,22 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    @Subscribe
+    public void onEventMainThread(MyfragmentEvent event) {
+
+        if (event.getmMsg()=="Transfer PersonalFragment to MyFragment!")
+            transferToMyFragment();
+    }
+
+    public void transferToMyFragment() {
+        if (myFragment == null)
+            myFragment = new MyFragment();
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content, myFragment)
+                .commit();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -360,4 +387,9 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!CurrentAccount.LoginOrNot)transferToMyFragment();
+    }
 }

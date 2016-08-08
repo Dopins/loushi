@@ -44,6 +44,7 @@ import com.android.loushi.loushi.thirdlogin.Tool;
 import com.android.loushi.loushi.thirdlogin.UserInfo;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.ForgetPasswordActivity;
+import com.android.loushi.loushi.ui.activity.LoginFirstActivity;
 import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.ui.activity.PersonalInformationActivity;
 import com.android.loushi.loushi.util.CurrentAccount;
@@ -101,17 +102,17 @@ public class LoginFragment extends Fragment {
 
     private void setLoginInfoFromCache() {
 
-        if(!CurrentAccount.isLoginOrNot()) {
-            login_edit_phone.setText("13750065622");
-            login_edit_password.setText("mtf071330");
-            CurrentAccount.setLoginOrNot(true);
-        }
     }
 
     public void transferMyFragmentToPersonalFragment() {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
-        EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
+        if (getActivity() instanceof MainActivity)
+            EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
+        if (getActivity() instanceof LoginFirstActivity) {
+            EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
+            EventBus.getDefault().post(new MyfragmentEvent("Finish LoginFirstActivity"));
+        }
     }
 
     public void transferMyFragmentToPersonalInformationActivity() {
@@ -189,12 +190,11 @@ public class LoginFragment extends Fragment {
                                     if (userLoginJson.getState()) {
                                         Log.e(TAG, "登录成功！");
 
-                                        BaseActivity.user_id = userLoginJson.getBody()+""; //冗余
-                                        Log.e(TAG,userLoginJson.getBody()+"");
-                                        CurrentAccount.storeAccountInfo(userLoginJson.getBody()+"",login_edit_phone.getText().toString(),login_edit_password.getText().toString());
+                                        BaseActivity.user_id = userLoginJson.getBody() + ""; //冗余
+                                        Log.e(TAG, userLoginJson.getBody() + "");
+                                        CurrentAccount.setLoginOrNot(true);
+                                        CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", login_edit_phone.getText().toString(), login_edit_password.getText().toString());
                                         getUserInfo(userLoginJson.getBody());
-//                                        transferMyFragmentToPersonalFragment();
-
 
                                         MobclickAgent.onProfileSignIn(login_edit_phone.getText().toString());
 
@@ -221,23 +221,23 @@ public class LoginFragment extends Fragment {
     private void getUserInfo(int id) {
         Log.e(TAG, "getUserInfo");
         String user_id = id + "";
-        Log.e("BIG ",user_id );
+        Log.e("BIG ", user_id);
         OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfo.action")
                 .params("user_id", user_id)
                 .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
-                        if(userInfoJson.isState()) {
+                        if (userInfoJson.isState()) {
                             Log.e(TAG, "成功获取用户信息");
                             Log.e(TAG, request.toString());
                             Log.e(TAG, response.toString());
 
-                            CurrentAccount.storeDatas(userInfoJson);
-                            Log.e(TAG,CurrentAccount.getHeadImgUrl());
-                            Log.e(TAG,CurrentAccount.getNickname());
-                            Log.e(TAG,CurrentAccount.getPassword());
-                            Log.e(TAG,CurrentAccount.getSchoolName());
-                            Log.e(TAG,CurrentAccount.getEmail());
+                            //CurrentAccount.storeDatas(userInfoJson);
+                            Log.e(TAG, CurrentAccount.getHeadImgUrl());
+                            Log.e(TAG, CurrentAccount.getNickname());
+                            Log.e(TAG, CurrentAccount.getPassword());
+                            Log.e(TAG, CurrentAccount.getSchoolName());
+                            Log.e(TAG, CurrentAccount.getEmail());
 
                             CurrentAccount.storeDatas(userInfoJson);
                             transferMyFragmentToPersonalFragment();
@@ -293,9 +293,9 @@ public class LoginFragment extends Fragment {
         if (Platformlist != null) {
             imgbtn = new ArrayList<ImageButton>(3);
             Log.e("TAG", "创建了img数组");
-            btn_xinlang=(ImageButton)getView().findViewById(R.id.btn_xinlang);
-            btn_qq =(ImageButton)getView().findViewById(R.id.btn_qq);
-            btn_weixin =(ImageButton)getView().findViewById(R.id.btn_weixin);
+            btn_xinlang = (ImageButton) getView().findViewById(R.id.btn_xinlang);
+            btn_qq = (ImageButton) getView().findViewById(R.id.btn_qq);
+            btn_weixin = (ImageButton) getView().findViewById(R.id.btn_weixin);
             Log.e("TAG", "获取到1");
             imgbtn.add(btn_xinlang);
             imgbtn.add(btn_weixin);
@@ -303,7 +303,7 @@ public class LoginFragment extends Fragment {
             //总共三个
 
 
-            int i=0;
+            int i = 0;
             for (Platform platform : Platformlist) {
                 if (!Tool.canGetUserInfo(platform)) {
                     i++;
@@ -315,7 +315,6 @@ public class LoginFragment extends Fragment {
                     i++;
                     continue;
                 }
-
 
 
                 imgbtn.get(i).setTag(platform);
@@ -331,12 +330,13 @@ public class LoginFragment extends Fragment {
                     }
                 });
                 i++;
-                Log.e("TAG",Integer.toString(i));
+                Log.e("TAG", Integer.toString(i));
             }
         }
 
 
     }
+
     private void Thirdlogin(String platformName) {
 
         LoginApi api = new LoginApi(this.getActivity());
@@ -381,7 +381,7 @@ public class LoginFragment extends Fragment {
                 OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
                         .params("account", account)
                         .params("type", type)
-                        .params("token",token)
+                        .params("token", token)
                         .params("isThird", "true")
                         .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
                             @Override
@@ -392,11 +392,11 @@ public class LoginFragment extends Fragment {
                                     CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
 
                                     String code = userLoginJson.getCode();
-                                    if (code !=null && code =="3") {
+                                    if (code != null && code == "3") {
                                         Log.e(TAG, "第三方登陆的第一次登陆");
                                         transferMyFragmentToPersonalInformationActivity();
                                         transferMyFragmentToPersonalFragment();
-                                    }else {
+                                    } else {
                                         getUserInfo(userLoginJson.getBody());
                                         transferMyFragmentToPersonalFragment();
                                     }
@@ -406,7 +406,6 @@ public class LoginFragment extends Fragment {
                                 }
                             }
                         });
-
 
 
                 return false;
@@ -426,6 +425,7 @@ public class LoginFragment extends Fragment {
         //Log.e("TAG",Boolean.toString(api.getCanLogin()));
 
     }
+
     private String generateToken(String account) {
         char[] charTmp = account.toCharArray();
         int[] intTmp = new int[account.length()];
@@ -441,8 +441,8 @@ public class LoginFragment extends Fragment {
 
     //手机号码正则匹配
     public boolean isMobileNO(String mobiles) {
-		/*
-		移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
+        /*
+        移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
 		联通：130、131、132、152、155、156、185、186
 		电信：133、153、180、189、（1349卫通）
 		总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
