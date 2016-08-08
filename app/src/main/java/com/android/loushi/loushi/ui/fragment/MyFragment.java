@@ -59,6 +59,9 @@ import java.util.List;
         } else {
             Log.e(TAG, " Have not login !");
         }
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
 
 //        mToolbar=(Toolbar)getView().findViewById(R.id.program_toolbar);
 //        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
@@ -125,7 +128,7 @@ import java.util.List;
 
         }
 
-        mAdapter = new FragmentPagerAdapter(getFragmentManager()) {
+        mAdapter = new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public int getCount() {
                 return mTabContents.size();

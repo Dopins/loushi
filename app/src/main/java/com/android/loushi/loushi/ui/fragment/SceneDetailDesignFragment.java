@@ -15,6 +15,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
@@ -40,7 +41,7 @@ import okhttp3.Response;
 public class SceneDetailDesignFragment extends BaseFragment {
     private WebView webView;
     private LinearLayout collect_bar;
-
+   private RelativeLayout layout_scene_design;
     private LinearLayout collect;
     private LinearLayout comment;
     private LinearLayout share;
@@ -76,38 +77,19 @@ public class SceneDetailDesignFragment extends BaseFragment {
         return view;
     }
     private void initWebview(){
+        //layout_scene_design =(RelativeLayout)findViewById(R.id.layout_scene_design);
+
         webView=(WebView)getView().findViewById(R.id.webview);
+        //webView=new WebView(getContext());
+
         url="http://www.loushi666.com:8080/loushi/scene.html?user_id="+ BaseActivity.user_id+"&scene_id="+scene_id;
-        Log.e("url",url);
+        Log.e("sceneurl",url);
         webView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
                 super.onProgressChanged(view, progress);
             }
         });
 
-
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-        int screenDensity = getResources().getDisplayMetrics().densityDpi ;
-        Log.e("density", screenDensity +"");
-        WebSettings.ZoomDensity zoomDensity = WebSettings.ZoomDensity.MEDIUM ;
-        switch (screenDensity){
-            case DisplayMetrics.DENSITY_LOW :
-                zoomDensity = WebSettings.ZoomDensity.CLOSE;
-                break;
-            case DisplayMetrics.DENSITY_MEDIUM:
-                zoomDensity = WebSettings.ZoomDensity.MEDIUM;
-                break;
-            case DisplayMetrics.DENSITY_HIGH:
-                zoomDensity = WebSettings.ZoomDensity.FAR;
-                break ;
-            default:
-                zoomDensity = WebSettings.ZoomDensity.FAR;
-        }
-        webView.getSettings().setDefaultZoom(zoomDensity);
-        webView.getSettings().setBlockNetworkImage(false);
-
-        webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -123,6 +105,15 @@ public class SceneDetailDesignFragment extends BaseFragment {
 
             }
         });
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+
+
+        webView.getSettings().setBlockNetworkImage(false);
+
+
+
+        webView.loadUrl(url);
 
     }
     private void initCollectBar(){
@@ -162,9 +153,9 @@ public class SceneDetailDesignFragment extends BaseFragment {
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),CommentActivity.class);
-                intent.putExtra(KeyConstant.TYPE,"0");
-                intent.putExtra(KeyConstant.PID, scene_id+"");
+                Intent intent = new Intent(getActivity(), CommentActivity.class);
+                intent.putExtra(KeyConstant.TYPE, "0");
+                intent.putExtra(KeyConstant.PID, scene_id + "");
                 getActivity().startActivity(intent);
             }
         });
@@ -177,12 +168,24 @@ public class SceneDetailDesignFragment extends BaseFragment {
                 String text = sceneJson.getDigest();
 
                 //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
-                ShareSomeThing shareSomeThing = new ShareSomeThing(getApplicationContext(), imgurl, url, text, title,BaseActivity.user_id,"1",sceneJson.getId()+"");
+                ShareSomeThing shareSomeThing = new ShareSomeThing(getApplicationContext(), imgurl, url, text, title, BaseActivity.user_id, "1", sceneJson.getId() + "");
                 shareSomeThing.DoShare();
             }
         });
-        tv_comment_count.setText(sceneJson.getCommentNum()+"");
-        tv_collect_count.setText(sceneJson.getCollectionNum()+"");
-        tv_share_count.setText(sceneJson.getForwordNum()+"");
+        tv_comment_count.setText(sceneJson.getCommentNum() + "");
+        tv_collect_count.setText(sceneJson.getCollectionNum() + "");
+        tv_share_count.setText(sceneJson.getForwordNum() + "");
+    }
+
+    @Override
+     public void onDetach() {
+        super.onDetach();
+        webView.destroy();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("webview","ondestory");
     }
 }

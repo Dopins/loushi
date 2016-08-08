@@ -52,6 +52,7 @@ import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -185,8 +186,10 @@ public class LoginFragment extends Fragment {
 
                                         CurrentAccount.storeAccountInfo(userLoginJson.getBody()+"",login_edit_phone.getText().toString(),login_edit_password.getText().toString());
                                         getUserInfo(userLoginJson.getBody());
-                                        transferMyFragmentToPersonalFragment();
+//                                        transferMyFragmentToPersonalFragment();
 
+
+                                        MobclickAgent.onProfileSignIn(login_edit_phone.getText().toString());
 
                                     } else {
                                         Log.e(TAG, "登录失败！");

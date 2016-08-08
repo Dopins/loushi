@@ -149,7 +149,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                   .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
               @Override
               public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
-                 if(userCollectsNum!=null) {
+                 if(userCollectsNum.isState()) {
                      list_count.add(userCollectsNum.getBody().getSceneNum() + "");
                      list_count.add(userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
                      list_count.add(userCollectsNum.getBody().getGoodsNum() + "");

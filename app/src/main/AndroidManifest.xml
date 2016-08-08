@@ -44,23 +44,17 @@
             android:name=".ui.activity.SearchActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
 
-        <activity android:name=".ui.activity.TopicItemActivity">
-
-        </activity>
+        <activity android:name=".ui.activity.TopicItemActivity"/>
 
         <activity android:name=".ui.activity.SceneDetailActivity"></activity>
         <activity android:name=".ui.activity.GoodDetailActivity"></activity>
         <activity android:name=".ui.activity.ForgetPasswordActivity" />
         <activity android:name=".ui.activity.PersonalInformationActivity"></activity>
-        <activity android:name=".ui.activity.CommentActivity">
+        <activity android:name=".ui.activity.CommentActivity"/>
+        <activity android:name=".ui.activity.MyMessageActivity"/>
 
-        </activity>
-        <activity android:name=".ui.activity.MyMessageActivity">
-
-        </activity>
-
-<activity android:name=".ui.activity.CategoryDetailActivity"></activity>
-<activity android:name=".ui.activity.FeedActivity"></activity>
+        <activity android:name=".ui.activity.CategoryDetailActivity"></activity>
+        <activity android:name=".ui.activity.FeedActivity"></activity>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -90,6 +84,10 @@
         <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
         <!--android:exported="true"-->
         <!--android:screenOrientation="portrait" />-->
+
+        <meta-data android:value="57a5eda367e58ef278000163" android:name="UMENG_APPKEY"></meta-data>
+        <meta-data android:value="testchannel" android:name="UMENG_CHANNEL"/>
+
     </application>
 
 </manifest>

@@ -14,16 +14,16 @@ public class ResponseJson  implements Serializable {
      * body : {}
      */
 
-    private Boolean state;
+    private boolean state;
     private String code;
     private String return_info;
     private BodyBean body;
 
-    public Boolean getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(Boolean state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 

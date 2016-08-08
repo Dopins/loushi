@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.event.ReceiveSmsEvent;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
@@ -81,7 +82,7 @@ public class RegistFragment extends Fragment {
 
 
 
-        }
+        }//EventBus.getDefault().register(this);
         return view;
     }
 
@@ -175,21 +176,21 @@ public class RegistFragment extends Fragment {
                 //回调完成
                 if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     EventBus.getDefault().post(
-                            new ReceiveSmsEvent(1));
+                            new MainEvent(1));
                     //验证码验证成功
                 }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
                     EventBus.getDefault().post(
-                            new ReceiveSmsEvent(2));
+                            new MainEvent(2));
 
                     //获取验证码成功
                 }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
                     EventBus.getDefault().post(
-                            new ReceiveSmsEvent(3));
+                            new MainEvent(3));
                     //返回支持发送验证码的国家列表
                 }
             }else{
                 EventBus.getDefault().post(
-                        new ReceiveSmsEvent(4));
+                        new MainEvent(4));
                 //Toast.makeText(getActivity(), "失败", Toast.LENGTH_SHORT).show();
                 ((Throwable)data).printStackTrace();
                 Log.e("regist",Log.getStackTraceString((Throwable)data));
@@ -229,7 +230,7 @@ public class RegistFragment extends Fragment {
         else return mobiles.matches(telRegex);
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(ReceiveSmsEvent event) {
+    public void onEventMainThread(MainEvent event) {
         if(event.getMsg()==1){
             Log.e("event", "1");
             Toast.makeText(getContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();

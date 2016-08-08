@@ -1,6 +1,7 @@
 package com.android.loushi.loushi.adapter;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -117,6 +118,7 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     DateUtils.calulateTime(myMessage.getComment().getCDate()));
         }else if(holder instanceof TitleViewHolder){
             ((TitleViewHolder) holder).textViewTitle.setText(position==0?TITLENEW:TITLEOLD);
+
         }
     }
 
