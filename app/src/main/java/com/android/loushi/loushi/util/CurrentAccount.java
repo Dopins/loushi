@@ -48,12 +48,14 @@ public class CurrentAccount {
         editor = sharedPreferences.edit();
         getDatas();
     }
-    public static void storeAccountInfo(String user_id,String password){
+    public static void storeAccountInfo(String user_id,String mobile_phone,String password){
+        CurrentAccount.user_id = user_id;
+        CurrentAccount.mobile_phone = mobile_phone;
+        CurrentAccount.password = password;
         editor.putString("user_id",user_id);
+        editor.putString("mobile_phone",mobile_phone);
         editor.putString("password",password);
         editor.commit();
-        setUser_id(sharedPreferences.getString("user_id","null"));
-        setPassword(sharedPreferences.getString("password","null"));
     }
 
     public static void storeDatas(UserInfoJson userInfoJson) {
@@ -104,6 +106,8 @@ public class CurrentAccount {
 
     public static void setHeadImgUrl(String headImgUrl) {
         CurrentAccount.headImgUrl = headImgUrl;
+        editor.putString("headImgUrl",headImgUrl);
+        editor.commit();
     }
 
     public static int getMessageCount() {

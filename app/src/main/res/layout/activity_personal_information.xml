@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/personalInFoContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
-    android:orientation="vertical"
-    android:id="@+id/personalInFoContainer">
+    android:orientation="vertical">
 
 
     <android.support.v7.widget.Toolbar
@@ -25,13 +25,14 @@
                 android:layout_width="?android:attr/actionBarSize"
                 android:layout_height="?android:attr/actionBarSize"
                 android:background="@color/colorPrimary"
+                android:onClick="onClickbtn_return"
                 android:src="@drawable/arrow_back" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/btn_return"
                 android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/btn_return"
                 android:text="个人资料"
                 android:textColor="@color/colorWhite"
                 android:textSize="16dp" />
@@ -40,9 +41,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
                 android:text="注销"
-                android:layout_centerVertical="true"
                 android:textColor="@color/colorWhite"
                 android:textSize="16dp" />
 
@@ -62,7 +63,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:background="@drawable/tab_my"
-            android:onClick="onClickimage_circular"/>
+            android:onClick="onClickimage_circular" />
 
         <LinearLayout
             android:id="@+id/layout_nickname"
@@ -78,13 +79,11 @@
                 android:text="昵称"
                 android:textColor="@color/dark_gray" />
 
-            <com.android.loushi.loushi.util.UnderLineEditText
+            <EditText
                 android:id="@+id/edit_nickname"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@null"
+                android:layout_height="wrap_content"
                 android:hint="Jordin Spark"
-                android:lineSpacingMultiplier="2"
                 android:textColor="@color/hint"
                 android:textColorHint="@color/hint"
                 android:textSize="15dp" />
@@ -105,22 +104,13 @@
                 android:text="性别"
                 android:textColor="@color/dark_gray" />
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
 
-                <com.jaredrummler.materialspinner.MaterialSpinner
-                    android:id="@+id/spinner_sex"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/hint" />
+            <com.android.loushi.loushi.util.MaterialSpinner
+                android:id="@+id/spinner_sex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/hint" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="35dp"
-                    android:background="@color/hint"></View>
-            </FrameLayout>
 
         </LinearLayout>
 
@@ -143,42 +133,22 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.5">
 
-                    <com.jaredrummler.materialspinner.MaterialSpinner
-                        android:id="@+id/spinner_province"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/hint" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="35dp"
-                        android:background="@color/hint"></View>
-                </FrameLayout>
-
-                <FrameLayout
+                <com.android.loushi.loushi.util.MaterialSpinner
+                    android:id="@+id/spinner_province"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="1.0">
+                    android:layout_weight="1.0"
+                    android:textColor="@color/hint" />
 
-                    <com.jaredrummler.materialspinner.MaterialSpinner
-                        android:id="@+id/spinner_university"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/hint" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="35dp"
-                        android:background="@color/hint"></View>
-                </FrameLayout>
+                <com.android.loushi.loushi.util.MaterialSpinner
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/spinner_university"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/hint"
+                    android:layout_weight="1.0"/>
 
             </LinearLayout>
 
@@ -198,13 +168,11 @@
                 android:text="手机"
                 android:textColor="@color/dark_gray" />
 
-            <com.android.loushi.loushi.util.UnderLineEditText
+            <EditText
                 android:id="@+id/edit_phone"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@null"
+                android:layout_height="wrap_content"
                 android:hint="13728384943"
-                android:lineSpacingMultiplier="2"
                 android:textColorHint="@color/hint"
                 android:textSize="15dp" />
         </LinearLayout>
@@ -217,10 +185,10 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:background="@drawable/shape_btn_finish"
+            android:onClick="onClick_btn_save"
             android:text="保持修改"
             android:textColor="@color/colorWhite"
-            android:textSize="15dp"
-            android:onClick="onClick_btn_save"/>
+            android:textSize="15dp" />
 
     </RelativeLayout>
 

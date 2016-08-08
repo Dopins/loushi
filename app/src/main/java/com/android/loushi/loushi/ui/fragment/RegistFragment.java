@@ -1,5 +1,7 @@
 package com.android.loushi.loushi.ui.fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Message;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,7 +23,11 @@ import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.event.ReceiveSmsEvent;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
+import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
+import com.android.loushi.loushi.ui.activity.PersonalInformationActivity;
+import com.android.loushi.loushi.util.CurrentAccount;
+import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.lzy.okhttputils.OkHttpUtils;
 
@@ -41,6 +48,7 @@ import static cn.smssdk.SMSSDK.submitVerificationCode;
  */
 public class RegistFragment extends Fragment {
     public static final String BUNDLE_TITLE = "title";
+    public static final String TAG = "RegistFragment";
 
     
 
@@ -59,11 +67,8 @@ public class RegistFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
+        if(!EventBus.getDefault().isRegistered(this))
+        EventBus.getDefault().register(this);
 
         initEvent();
         initSDK();
@@ -104,30 +109,20 @@ public class RegistFragment extends Fragment {
                 return false;
             }
         });
-    }
 
-    private void initView() {
-    }
-
-    private void bindViews() {
-
-        text_phone = (TextView) view.findViewById(R.id.text_phone);
-        regist_edit_phone = (EditText) view.findViewById(R.id.regist_edit_phone);
-        text_keyword = (TextView) view.findViewById(R.id.text_keyword);
-        regist_edit_password = (EditText) view.findViewById(R.id.regist_edit_password);
-        text_cheakword = (TextView) view.findViewById(R.id.text_cheakword);
-        regist_edit_checkword = (EditText) view.findViewById(R.id.regist_edit_checkword);
-        btn_getcheckword = (Button) view.findViewById(R.id.btn_getcheckword);
         btn_finish = (Button) view.findViewById(R.id.btn_finish);
         btn_finish.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                //提交验证码
 
+                //提交验证码
                 submitVerificationCode("86", regist_edit_phone.getText().toString(), regist_edit_checkword.getText().toString());
                 //在最下面的eventbus回调中执行注册登陆操作
             }
         });
+
+
         btn_getcheckword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +137,21 @@ public class RegistFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void initView() {
+    }
+
+    private void bindViews() {
+
+        text_phone = (TextView) view.findViewById(R.id.text_phone);
+        regist_edit_phone = (EditText) view.findViewById(R.id.regist_edit_phone);
+        text_keyword = (TextView) view.findViewById(R.id.text_keyword);
+        regist_edit_password = (EditText) view.findViewById(R.id.regist_edit_password);
+        text_cheakword = (TextView) view.findViewById(R.id.text_cheakword);
+        regist_edit_checkword = (EditText) view.findViewById(R.id.regist_edit_checkword);
+        btn_getcheckword = (Button) view.findViewById(R.id.btn_getcheckword);
+
     }
 
 
@@ -206,7 +216,7 @@ public class RegistFragment extends Fragment {
     public void onDestroy(){
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        SMSSDK.unregisterEventHandler(eh);
+        //SMSSDK.unregisterEventHandler(eh);
     }
     //手机号码正则匹配
     public boolean isMobileNO(String mobiles) {
@@ -239,6 +249,31 @@ public class RegistFragment extends Fragment {
                         //执行登陆操作，存下user_id
                         //并跳到完善信息页面
                         //完善信息后发送event通知转换界面
+                        Log.e(TAG, regist_edit_phone.getText().toString());
+                        Log.e(TAG, regist_edit_password.getText().toString());
+                        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
+                                .params("mobile_phone", regist_edit_phone.getText().toString())
+                                .params("password", regist_edit_password.getText().toString())
+                                .params("isThird", "false")
+                                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+                                    @Override
+                                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+                                        Log.e(TAG, request.toString());
+                                        Log.e(TAG, response.toString());
+                                        if (userLoginJson.getState()) {
+                                            Log.e(TAG, "注册-登录成功！");
+
+                                            BaseActivity.user_id = userLoginJson.getBody()+""; //冗余
+
+                                            CurrentAccount.storeAccountInfo(userLoginJson.getBody()+"",regist_edit_phone.getText().toString(),regist_edit_password.getText().toString());
+
+                                            transferMyFragmentToPersonalInformationActivity();
+
+                                        } else {
+                                            Log.e(TAG, "登录失败！");
+                                        }
+                                    }
+                                });
 
 
                     }
@@ -254,5 +289,22 @@ public class RegistFragment extends Fragment {
         }
 
     }
+
+    public void transferMyFragmentToPersonalInformationActivity() {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+        Intent intent = new Intent(getContext(), PersonalInformationActivity.class);
+        getContext().startActivity(intent);
+
+        transferMyFragmentToPersonalFragment();
+
+    }
+
+    public void transferMyFragmentToPersonalFragment() {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+        EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
+    }
+
 
 }
