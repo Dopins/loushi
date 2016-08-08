@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -57,12 +58,16 @@ public class SceneDetailActivity extends  BaseActivity {
     private ImageView back;
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
-
+    private AppBarLayout appBarLayout;
     private SceneJson.BodyBean scenebean;
-
+    public static  CollapsingToolbarLayoutState state;
     private String sceneJsonString="";
     public  String scene_id="1";
-
+    public enum CollapsingToolbarLayoutState {
+        EXPANDED,
+        COLLAPSED,
+        INTERNEDIATE
+    }
     @Override
     protected int getLayoutId() {
         return R.layout.activity_scene_detail;
@@ -86,7 +91,43 @@ public class SceneDetailActivity extends  BaseActivity {
         initView();
         initTablayout();
         initToobar();
+        initAppBar();
         //bindCollectBarView();
+    }
+    private void initAppBar() {
+        appBarLayout = (AppBarLayout)findViewById(R.id.app_bar_layout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+                if (verticalOffset == 0) {
+                    if (state != CollapsingToolbarLayoutState.EXPANDED) {
+                        Log.e("coll", "展开");
+                        state = CollapsingToolbarLayoutState.EXPANDED;//修改状态标记为展开
+
+                        //collapsingToolbarLayout.setTitle("EXPANDED");//设置title为EXPANDED
+                    }
+                } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
+                    if (state != CollapsingToolbarLayoutState.COLLAPSED) {
+                        Log.e("coll", "折叠");
+
+                        //collapsingToolbarLayout.setTitle("");//设置title不显示
+                        //playButton.setVisibility(View.VISIBLE);//隐藏播放按钮
+                        state = CollapsingToolbarLayoutState.COLLAPSED;//修改状态标记为折叠
+                    }
+                } else {
+                    if (state != CollapsingToolbarLayoutState.INTERNEDIATE) {
+                        Log.e("coll", "中间");
+                        if (state == CollapsingToolbarLayoutState.COLLAPSED) {
+
+                            //playButton.setVisibility(View.GONE);//由折叠变为中间状态时隐藏播放按钮
+                        }
+                        //collapsingToolbarLayout.setTitle("INTERNEDIATE");//设置title为INTERNEDIATE
+                        state = CollapsingToolbarLayoutState.INTERNEDIATE;//修改状态标记为中间
+                    }
+                }
+            }
+        });
     }
 
     private void initView() {
