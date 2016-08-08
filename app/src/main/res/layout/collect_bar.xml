@@ -23,7 +23,7 @@
         android:background="@drawable/cb_zan"
         android:clickable="false"
         android:id="@+id/collect_bar_btn_like"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="30dp"
         />
     <TextView
         android:layout_width="wrap_content"

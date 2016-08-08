@@ -59,8 +59,10 @@ public class MainActivity extends BaseActivity {
         int count = fragmentArray.length;
         for(int i = 0; i < count; i++){
             //为每一个Tab按钮设置图标、文字和内容
+
             final TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTextviewArray[i]).setIndicator(getTabItemView(i));
                 mTabHost.addTab(tabSpec, fragmentArray[i], null);
+
         }
 
     }

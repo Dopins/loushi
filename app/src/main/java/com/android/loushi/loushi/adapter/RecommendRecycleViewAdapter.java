@@ -16,6 +16,7 @@ import com.android.loushi.loushi.R;
 
 
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.jsonbean.CarouselJson;
 import com.android.loushi.loushi.jsonbean.RecommendJson;
 
@@ -27,6 +28,8 @@ import com.android.loushi.loushi.viewpager.CarouselViewPager;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
 
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -360,6 +363,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
             changeBodyList(type, position, num, true);
         }
+        EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_COLLECT));
     }
     private void setPrefer(final String type, String pid,final mViewHolder holder,final int position) {
 

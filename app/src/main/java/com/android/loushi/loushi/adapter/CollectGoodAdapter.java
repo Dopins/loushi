@@ -1,6 +1,7 @@
 package com.android.loushi.loushi.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,6 +19,10 @@ import com.android.loushi.loushi.R;
 
 import com.android.loushi.loushi.jsonbean.UserCollectionsGood;
 import com.android.loushi.loushi.jsonbean.UserCollectionsJson;
+import com.android.loushi.loushi.ui.activity.BaseActivity;
+import com.android.loushi.loushi.ui.activity.CategoryDetailActivity;
+import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
+import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -44,6 +49,7 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
         return new CollectGoodViewHolder(LayoutInflater.from(
                 context).inflate(R.layout.collect_good_item, parent,
                 false));
+
     }
 
     @Override
@@ -59,6 +65,16 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
             if (!TextUtils.isEmpty(goodsBean.getCollectionNum()+""))
             holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
             holder.btn_like.setChecked(true);
+            holder.img_good.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, GoodDetailActivity.class);
+                    intent.putExtra(BaseActivity.GOOD_STRING, new Gson().toJson(goodsBean));
+                    intent.putExtra("GOOD_ID", goodsBean.getId()+"");
+                    context.startActivity(intent);
+                }
+            });
+
 //        holder.btn_like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
@@ -110,6 +126,15 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
                 if (!TextUtils.isEmpty(goodsBean.getBrowseNum() + ""))
                     holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum()) + "人浏览");
                 holder.btn_like.setVisibility(View.GONE);
+                holder.img_good.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, SceneDetailActivity.class);
+                        intent.putExtra("SCENE_STRING",new Gson().toJson(goodsBean));
+
+                        context.startActivity(intent);
+                    }
+                });
             }
         }
         if(type.equals("1")){
@@ -122,8 +147,17 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
                 holder.price_symbol.setVisibility(View.INVISIBLE);
                 Picasso.with(context).load(goodsBean.getImgUrl()).placeholder(R.drawable.loading_small).fit().into(holder.img_good);
 
-                holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum())+"人浏览");
+                holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum()) + "人浏览");
                 holder.btn_like.setVisibility(View.GONE);
+                holder.img_good.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, CategoryDetailActivity.class);
+                        intent.putExtra("JSONSTRING", new Gson().toJson(goodsBean));
+                        intent.putExtra("TYPE","1");
+                        context.startActivity(intent);
+                    }
+                });
             }
         }
         if(type.equals("1")){
@@ -138,10 +172,20 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
                 holder.price_symbol.setVisibility(View.INVISIBLE);
                 Picasso.with(context).load(url).placeholder(R.drawable.loading_small).fit().into(holder.img_good);
 
-                holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum())+"人浏览");
+                holder.tv_like_count.setText(Integer.toString(goodsBean.getBrowseNum()) + "人浏览");
                 holder.btn_like.setVisibility(View.GONE);
+                holder.img_good.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, CategoryDetailActivity.class);
+                        intent.putExtra("JSONSTRING", new Gson().toJson(goodsBean));
+                        intent.putExtra("TYPE", "2");
+                        context.startActivity(intent);
+                    }
+                });
             }
         }
+
 
     }
 
