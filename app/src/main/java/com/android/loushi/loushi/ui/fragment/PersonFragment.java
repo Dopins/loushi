@@ -18,11 +18,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.PersonCollectTabAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.event.MainEvent;
+
+import com.android.loushi.loushi.jsonbean.ResponseJson;
+
 import com.android.loushi.loushi.jsonbean.UserCollectsNum;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.FeedActivity;
@@ -116,16 +120,15 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         Log.e("Test: " + "PersonFragment", "onActivityCreated");
 
         initView();
+       if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         //mToolbar.setTitle("loushi");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_personal, null);
-//
-//
-//        return inflater.inflate(R.layout.fragment_personal, container, false);
+
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_personal, null);
         }
@@ -311,6 +314,36 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
             }
         });
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(MainEvent event) {
+        Log.e("person","接收消息");
+        if (event.getMsg() == MainEvent.UPDATE_COLLECT) {
+            Log.e("person","接收消息"+MainEvent.UPDATE_COLLECT+"");
+            if(list_count.size()!=0) {
+                OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
+                        .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
+                    @Override
+                    public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
+                        if(userCollectsNum.isState()) {
+                            list_count.set(0,userCollectsNum.getBody().getSceneNum() + "");
+                            list_count.set(1,userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
+                            list_count.set(2,userCollectsNum.getBody().getGoodsNum() + "");
+
+                        }
+                    }
+                });
+                personCollectTabAdapter.notifyDataSetChanged();
+            }
+
+        }
+    }
+    @Override
+      public void onDestroy() {
+        super.onDestroy();
+        Log.e("person","destroy");
+        EventBus.getDefault().unregister(this);//反注册EventBus
+    }
+
 
 
 }
