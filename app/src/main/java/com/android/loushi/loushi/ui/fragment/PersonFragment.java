@@ -116,7 +116,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         Log.e("Test: " + "PersonFragment", "onActivityCreated");
 
         initView();
-//        if(!EventBus.getDefault().isRegistered(this))
+       if(!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
         //mToolbar.setTitle("loushi");
     }
@@ -313,7 +313,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         });
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(MainEvent event) {
+    public void onEvent(MainEvent event) {
         Log.e("person","接收消息");
         if (event.getMsg() == MainEvent.UPDATE_COLLECT) {
             Log.e("person","接收消息"+MainEvent.UPDATE_COLLECT+"");

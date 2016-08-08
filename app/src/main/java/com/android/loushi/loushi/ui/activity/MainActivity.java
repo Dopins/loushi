@@ -57,6 +57,7 @@ public class MainActivity extends BaseActivity {
         mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.content);
         int count = fragmentArray.length;
+
         for(int i = 0; i < count; i++){
             //为每一个Tab按钮设置图标、文字和内容
 
@@ -65,6 +66,8 @@ public class MainActivity extends BaseActivity {
 
         }
 
+        TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTextviewArray[2]).setIndicator(getTabItemView(2));
+        
     }
 
 

@@ -363,6 +363,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
             changeBodyList(type, position, num, true);
         }
+        Log.e("person","发出消息");
         EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_COLLECT));
     }
     private void setPrefer(final String type, String pid,final mViewHolder holder,final int position) {
