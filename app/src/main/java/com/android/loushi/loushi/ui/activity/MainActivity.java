@@ -97,23 +97,26 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private void updateUserInfo(){
-        if(!hasLogin())
-            return ;
+    private void updateUserInfo() {
+        if (!hasLogin()||MyMessageActivity.hasNewMessage())
+            return;
         OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfo.action")
                 .params(KeyConstant.USER_ID, MainActivity.user_id)
                 .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
-                        if(userInfoJson.isState()) {
-                            Log.i(TAG,"getMessageCount=="+userInfoJson.getBody().getMessageCount());
+                        if (userInfoJson.isState()) {
+                            if(userInfoJson.getBody().getMessageCount()==0)
+                                return ;
+                            Log.i(TAG, "getMessageCount==" + userInfoJson.getBody().getMessageCount());
                             CurrentAccount.setMessageCount(userInfoJson.getBody().getMessageCount());
+                            EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_USERINFO));
                         }
                     }
                 });
     }
 
-    private boolean hasLogin(){
+    private boolean hasLogin() {
         String phone = CurrentAccount.getMobile_phone();
         String password = CurrentAccount.getPassword();
         if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password))
@@ -124,8 +127,8 @@ public class MainActivity extends BaseActivity {
 
     private void autoLogin() {
         //TODO 第三方登录？？
-       if(!hasLogin())
-           return ;
+        if (!hasLogin())
+            return;
         String phone = CurrentAccount.getMobile_phone();
         String password = CurrentAccount.getPassword();
         OkHttpUtils.post(UrlConstant.USERLOGINURL)
@@ -152,18 +155,17 @@ public class MainActivity extends BaseActivity {
         int count = fragmentArray.length;
 
 
-        for(int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
 
             //为每一个Tab按钮设置图标、文字和内容
 
             final TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTextviewArray[i]).setIndicator(getTabItemView(i));
 
-                mTabHost.addTab(tabSpec, fragmentArray[i], null);
+            mTabHost.addTab(tabSpec, fragmentArray[i], null);
 
         }
 
 
-        
     }
 
 
