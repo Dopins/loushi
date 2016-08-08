@@ -30,7 +30,6 @@ import okhttp3.Response;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-
     private static final String TAG = "BaseActivity";
 
     public static final String url = "http://www.loushi666.com/LouShi/";

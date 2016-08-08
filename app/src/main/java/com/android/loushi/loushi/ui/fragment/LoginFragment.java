@@ -35,7 +35,6 @@ import org.litepal.crud.DataSupport;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
-import com.android.loushi.loushi.callback.UserCollectCallback;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.thirdlogin.LoginApi;

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.callback.UserCollectCallback;
+import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.StrategyJson;
 import com.android.loushi.loushi.jsonbean.TopicJson;
@@ -35,8 +35,8 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
 
     private static final String TAG = "TopicItemRVAdapter";
 
-    public enum AdapterType{
-        TOPIC,TIPS;
+    public enum AdapterType {
+        HOLDER, TOPIC, TIPS;
     }
 
     private AdapterType mAdapterType;
@@ -49,11 +49,11 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
 
     public TopicItemAdapter(Context context, List dataList, AdapterType type) {
         this.mContext = context;
-        this.mAdapterType=type;
-        if(AdapterType.TOPIC==type)
-            this.mTopicList = (List<TopicJson.BodyBean>)dataList;
+        this.mAdapterType = type;
+        if (AdapterType.TOPIC == type)
+            this.mTopicList = (List<TopicJson.BodyBean>) dataList;
         else
-            this.mTipsList=(List<StrategyJson.BodyBean>)dataList;
+            this.mTipsList = (List<StrategyJson.BodyBean>) dataList;
     }
 
     @Override
@@ -64,30 +64,30 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        if(mAdapterType==AdapterType.TOPIC)
+        if (mAdapterType == AdapterType.TOPIC)
             bindTopicViewHolder(holder, position);
         else
-            bindTipsViewHolder(holder,position);
+            bindTipsViewHolder(holder, position);
     }
 
     /**
      * 为tipsadapter类型设置viewholder
+     *
      * @param holder
      * @param position
      */
     private void bindTipsViewHolder(final ViewHolder holder, int position) {
         final StrategyJson.BodyBean tips = mTipsList.get(position);
-//        Log.i(TAG,"imaurl=="+tips.getImgUrl()+
-//                ",date=="+tips.getWDate()+
-//                ",collected=="+tips.getCollected()
-//                +",id=="+tips.getId()
-//                +",browsenum=="+tips.getBrowseNum());
-
-        String[] urls=tips.getImgUrl().split("\\|\\|\\|");
-        String urlImg=urls[0];
+        String[] urls = tips.getImgUrl().split("\\|\\|\\|");
+        String urlImg = urls[0];
 //        String urlClick=urls[1];
 //        Log.i(TAG,"urlImg=="+urlImg+",urlClick=="+urlClick);
 
+        //TODO 两个url的使用
+        holderInitView(holder, tips, urlImg);
+    }
+
+    private void holderInitView(final ViewHolder holder, final StrategyJson.BodyBean tips, String urlImg) {
         Picasso.with(mContext)
                 .load(urlImg)
                 .into(holder.card_image);
@@ -96,36 +96,45 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
         holder.card_date.setText(tips.getWDate());
         holder.num_prefer.setText(tips.getCollectionNum() + "");
         holder.num_watch.setText(tips.getBrowseNum() + "");
+        //TODO 没提供标题
 //        holder.card_title.setText(tips.getTipsGroup().getName());
         holder.card_detail.setText(tips.getName());
         // 设置点赞响应
-        holder.checkbox_prefer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.btn_prefer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-                //TODO 获取用户id
-                //TODO 网络不好时  点击checkkbox设置无效问题
+            public void onClick(View v) {
+                final boolean isChecked = !holder.checkbox_prefer.isChecked();
                 OkHttpUtils.post(UrlConstant.USERCOLLECTURL)
                         .tag(this)
                         .params(KeyConstant.USER_ID, MainActivity.user_id)
-                        .params(KeyConstant.TYPE, "1")
+                        .params(KeyConstant.TYPE, AdapterType.TIPS.ordinal() + "")
                         .params(KeyConstant.PID, tips.getId() + "")
-                        .execute(new UserCollectCallback() {
+//                        .execute(new UserCollectCallback() {
+//                            @Override
+//                            public void onResponse(boolean isFromCache, ResponseJson responseJson, Request request, @Nullable Response response) {
+//                                if (responseJson.getState()) {
+//                                    if (isChecked) {
+//                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText() + "") + 1 + "");
+//                                    } else {
+//                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText() + "") - 1 + "");
+//                                    }
+//                                    holder.checkbox_prefer.setChecked(isChecked);
+//                                } else {
+//                                    Toast.makeText(mContext, "出了点小问题，请重试" + responseJson.getReturn_info(), Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+                        .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
                             @Override
                             public void onResponse(boolean isFromCache, ResponseJson responseJson, Request request, @Nullable Response response) {
                                 if (responseJson.getState()) {
-                                    if(isChecked){
-                                        Toast.makeText(mContext, "收藏成功啦", Toast.LENGTH_SHORT).show();
-//                                        holder.num_prefer.setText(topic.getCollectionNum()+1+"");
-                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText()+"")+1+"");
-                                    }else{
-                                        Toast.makeText(mContext, "取消收藏成功啦", Toast.LENGTH_SHORT).show();
-//                                        holder.num_prefer.setText(topic.getCollectionNum()+"");
-                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText()+"")-1+"");
+                                    if (isChecked) {
+                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText() + "") + 1 + "");
+                                    } else {
+                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText() + "") - 1 + "");
                                     }
+                                    holder.checkbox_prefer.setChecked(isChecked);
                                 } else {
                                     Toast.makeText(mContext, "出了点小问题，请重试" + responseJson.getReturn_info(), Toast.LENGTH_SHORT).show();
-//                                    holder.checkbox_prefer.setChecked(!isChecked);
-
                                 }
                             }
                         });
@@ -134,14 +143,18 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
     }
 
 
-
     /**
      * 为topicadapter类型设置viewholder
+     *
      * @param holder
      * @param position
      */
     private void bindTopicViewHolder(final ViewHolder holder, int position) {
         final TopicJson.BodyBean topic = mTopicList.get(position);
+        holderInitView(holder, topic);
+    }
+
+    private void holderInitView(final ViewHolder holder, final TopicJson.BodyBean topic) {
         Picasso.with(mContext)
                 .load(topic.getImgUrl())
                 .into(holder.card_image);
@@ -157,41 +170,34 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
         holder.btn_prefer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final boolean isChecked=!holder.checkbox_prefer.isChecked();
+                final boolean isChecked = !holder.checkbox_prefer.isChecked();
                 OkHttpUtils.post(UrlConstant.USERCOLLECTURL)
                         .tag(this)
                         .params(KeyConstant.USER_ID, MainActivity.user_id)
-                        .params(KeyConstant.TYPE, "1")
+                        .params(KeyConstant.TYPE, AdapterType.TOPIC.ordinal() + "")
                         .params(KeyConstant.PID, topic.getId() + "")
-                        .execute(new UserCollectCallback() {
+                        .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
                             @Override
                             public void onResponse(boolean isFromCache, ResponseJson responseJson, Request request, @Nullable Response response) {
                                 if (responseJson.getState()) {
-                                    if(isChecked){
-                                        Toast.makeText(mContext, "收藏成功啦", Toast.LENGTH_SHORT).show();
-                                        holder.num_prefer.setText(topic.getCollectionNum()+1+"");
-//                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText()+"")+1+"");
-                                    }else{
-                                        Toast.makeText(mContext, "取消收藏成功啦", Toast.LENGTH_SHORT).show();
-                                        holder.num_prefer.setText(topic.getCollectionNum()-1+"");
-//                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText()+"")-1+"");
+                                    if (isChecked) {
+                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText() + "") + 1 + "");
+                                    } else {
+                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText() + "") - 1 + "");
                                     }
                                     holder.checkbox_prefer.setChecked(isChecked);
                                 } else {
                                     Toast.makeText(mContext, "出了点小问题，请重试" + responseJson.getReturn_info(), Toast.LENGTH_SHORT).show();
-//                                    holder.checkbox_prefer.setChecked(!isChecked);
-
                                 }
                             }
                         });
             }
         });
-
     }
 
     @Override
     public int getItemCount() {
-        if (mAdapterType==AdapterType.TOPIC)
+        if (mAdapterType == AdapterType.TOPIC)
             return mTopicList.size();
         else
             return mTipsList.size();
@@ -220,14 +226,14 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
             num_prefer = (TextView) itemView.findViewById(R.id.num_prefer);
             image_watch = (ImageView) itemView.findViewById(R.id.image_watch);
             num_watch = (TextView) itemView.findViewById(R.id.num_watch);
-            btn_prefer= (LinearLayout) itemView.findViewById(R.id.btn_prefer);
+            btn_prefer = (LinearLayout) itemView.findViewById(R.id.btn_prefer);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            if(mOnItemClickListener!=null)
-                mOnItemClickListener.onItemClick(v,getPosition());
+            if (mOnItemClickListener != null)
+                mOnItemClickListener.onItemClick(v, getPosition());
         }
     }
 
@@ -236,10 +242,9 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
         this.mOnItemClickListener = mOnItemClickListener;
     }
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
-
 
 
 }

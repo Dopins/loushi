@@ -25,6 +25,8 @@ import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.umeng.analytics.MobclickAgent;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,9 @@ public class MyMessageActivity extends BaseActivity implements
 
     private MyMessageAdapter mAdapter;
     private static List<UserMessageJson.BodyBean> myMessageList = new ArrayList<UserMessageJson.BodyBean>();
+
+    private int mTake=20;
+    private int mSkip=0;
 
     @Override
     protected int getLayoutId() {
@@ -79,7 +84,7 @@ public class MyMessageActivity extends BaseActivity implements
 
     private void loadMessage(){
         if(myMessageList==null||myMessageList.size()==0)
-            loadComment(MainActivity.user_id);
+            loadComment(MainActivity.user_id,mSkip,mTake);
         else{
             if(mAdapter!=null){
                 try {
@@ -92,10 +97,12 @@ public class MyMessageActivity extends BaseActivity implements
         }
     }
 
-    private void loadComment(String user_id) {
+    private void loadComment(String user_id,int skip,int take) {
         OkHttpUtils.post(UrlConstant.MYMESSAGE)
                 .tag(this)
                 .params(KeyConstant.USER_ID, user_id)
+//                .params(KeyConstant.SKIP, skip+"")
+//                .params(KeyConstant.TAKE, take+"")
                 .execute(new JsonCallback<UserMessageJson>(UserMessageJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserMessageJson userMessageJson,
@@ -103,6 +110,7 @@ public class MyMessageActivity extends BaseActivity implements
                         if (userMessageJson.getState()) {
                             myMessageList.clear();
                             myMessageList.addAll(userMessageJson.getBody());
+                            mSkip+=userMessageJson.getBody().size();
                             try {
                                 mAdapter.parseMessage();
                             } catch (ParseException e) {
@@ -128,8 +136,6 @@ public class MyMessageActivity extends BaseActivity implements
                 String pid=mAdapter.getPositionPid(postion)+"";
                 String type=mAdapter.getPositionType(postion)+"";
                 int p=mAdapter.getPositionCommentId(postion);
-//                Toast.makeText(MyMessageActivity.this,
-//                        "pid,type,position"+pid+type+postion, Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(MyMessageActivity.this,CommentActivity.class);
                 intent.putExtra(KeyConstant.TYPE,type);
                 intent.putExtra(KeyConstant.PID,pid);

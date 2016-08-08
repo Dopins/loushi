@@ -77,9 +77,10 @@ public class TipsFragment extends LazyFragment {
 
                         Log.i(TAG, "onResponse-- " + new Gson().toJson(strategyJson));
                         if (strategyJson.getState()) {
-                            mSkip += mTake;
                             mTipsList.addAll(strategyJson.getBody());
                             mAdapter.notifyDataSetChanged();
+//                            mSkip += mTake;
+                            mSkip += strategyJson.getBody().size();
                         } else
                             Toast.makeText(getContext(), "" + strategyJson.getReturn_info(), Toast.LENGTH_SHORT).show();
 //                        Log.e(TAG,bodyBean.getBody().size()+"");
@@ -116,7 +117,6 @@ public class TipsFragment extends LazyFragment {
             @Override
             public void onBottom() {
 //                loadData(tempUserID,mSkip,mTake);
-                Toast.makeText(getContext(), "底部加载成功, [mSkip,mTake]==[" + mSkip + "," + mTake + "]", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -146,7 +146,6 @@ public class TipsFragment extends LazyFragment {
                 mTipsList.clear();
                 loadData();
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getContext(), "刷新成功", Toast.LENGTH_SHORT).show();
             }
         });
     }
