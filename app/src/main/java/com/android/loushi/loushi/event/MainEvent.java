@@ -5,9 +5,9 @@ package com.android.loushi.loushi.event;
  */
 public class MainEvent {
     int msg;
-    public static int UPDATE_USERINFO=5;
-    public static int NEED_LOGIN=6;
-    public static int UPDATE_COLLECT=7;
+    public final static int UPDATE_USERINFO=5;
+    public final static int NEED_LOGIN=6;
+    public final static int UPDATE_COLLECT=7;
 
     public MainEvent(){
         super();

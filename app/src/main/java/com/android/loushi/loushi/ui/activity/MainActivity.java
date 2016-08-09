@@ -1,16 +1,14 @@
 package com.android.loushi.loushi.ui.activity;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTabHost;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -21,11 +19,10 @@ import com.alibaba.sdk.android.trade.TradeConfigs;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.event.MainEvent;
-import com.android.loushi.loushi.event.ReceiveSmsEvent;
+import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.ui.fragment.CategoryFragment;
 import com.android.loushi.loushi.ui.fragment.MyFragment;
-import com.android.loushi.loushi.ui.fragment.PersonFragment;
 import com.android.loushi.loushi.ui.fragment.SceneFragment;
 import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.KeyConstant;
@@ -54,7 +51,9 @@ public class MainActivity extends BaseActivity {
             R.drawable.tab_my_button};
 
     private final static int FLAG_LOGIN = 1;
-    private final static int DELAYTIME = 29 * 60 * 1000;
+    private final static int FLAG_GET_USRINFO = 2;
+    private final static int DELAYTIME_LOGIN = 29 * 60 * 1000;
+    private final static int DELAYTIME_USERINFO = 10 * 1000;
 
     public Handler handler = new Handler() {
         @Override
@@ -62,7 +61,11 @@ public class MainActivity extends BaseActivity {
             switch (msg.what) {
                 case FLAG_LOGIN:
                     autoLogin();
-                    startHandler();
+                    handler.sendEmptyMessageDelayed(FLAG_LOGIN, DELAYTIME_LOGIN);
+                    break;
+                case FLAG_GET_USRINFO:
+                    updateUserInfo();
+                    handler.sendEmptyMessageDelayed(FLAG_GET_USRINFO, DELAYTIME_USERINFO);
                     break;
             }
             super.handleMessage(msg);
@@ -89,15 +92,45 @@ public class MainActivity extends BaseActivity {
     }
 
     private void startHandler() {
-        handler.sendEmptyMessageDelayed(FLAG_LOGIN, DELAYTIME);
+        handler.sendEmptyMessageDelayed(FLAG_LOGIN, DELAYTIME_LOGIN);
+        handler.sendEmptyMessageDelayed(FLAG_GET_USRINFO, DELAYTIME_USERINFO);
+    }
+
+
+    private void updateUserInfo() {
+        if (!hasLogin()||MyMessageActivity.hasNewMessage())
+            return;
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfo.action")
+                .params(KeyConstant.USER_ID, MainActivity.user_id)
+                .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
+                    @Override
+                    public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
+                        if (userInfoJson.isState()) {
+                            if(userInfoJson.getBody().getMessageCount()==0)
+                                return ;
+                            Log.i(TAG, "getMessageCount==" + userInfoJson.getBody().getMessageCount());
+                            CurrentAccount.setMessageCount(userInfoJson.getBody().getMessageCount());
+                            EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_USERINFO));
+                        }
+                    }
+                });
+    }
+
+    private boolean hasLogin() {
+        String phone = CurrentAccount.getMobile_phone();
+        String password = CurrentAccount.getPassword();
+        if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password))
+            return false;
+        else
+            return true;
     }
 
     private void autoLogin() {
         //TODO 第三方登录？？
+        if (!hasLogin())
+            return;
         String phone = CurrentAccount.getMobile_phone();
         String password = CurrentAccount.getPassword();
-        if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password))
-            return;
         OkHttpUtils.post(UrlConstant.USERLOGINURL)
                 .params(KeyConstant.MOBILE_PHONE, phone)
                 .params(KeyConstant.PASSWORD, password)
@@ -122,18 +155,17 @@ public class MainActivity extends BaseActivity {
         int count = fragmentArray.length;
 
 
-        for(int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
 
             //为每一个Tab按钮设置图标、文字和内容
 
             final TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTextviewArray[i]).setIndicator(getTabItemView(i));
 
-                mTabHost.addTab(tabSpec, fragmentArray[i], null);
+            mTabHost.addTab(tabSpec, fragmentArray[i], null);
 
         }
 
 
-        
     }
 
 

@@ -100,6 +100,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
             case R.id.my_message:
                 intent = new Intent(getContext(), MyMessageActivity.class);
                 startActivity(intent);
+                iv_message_tips.setVisibility(View.GONE);
+                CurrentAccount.setMessageCount(0);
                 break;
             case R.id.btn_profile:
                 //TODO
@@ -280,11 +282,17 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         btn_my_setting.setOnClickListener(this);
 
         iv_message_tips = (ImageView) mToolbar.findViewById(R.id.iv_messagetips);
+        updataMsgTips();
+    }
+
+    /**
+     * 刷新小红点显示
+     */
+    private void updataMsgTips() {
         if (MyMessageActivity.hasNewMessage())
             iv_message_tips.setVisibility(View.VISIBLE);
         else
             iv_message_tips.setVisibility(View.GONE);
-
     }
 
     private void initAppBar() {
@@ -326,26 +334,32 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
             }
         });
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(MainEvent event) {
-        Log.e("person","接收消息");
-        if (event.getMsg() == MainEvent.UPDATE_COLLECT) {
-            Log.e("person","接收消息"+MainEvent.UPDATE_COLLECT+"");
-            if(list_count.size()!=0) {
-                OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
-                        .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
-                    @Override
-                    public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
-                        if(userCollectsNum.isState()) {
-                            list_count.set(0,userCollectsNum.getBody().getSceneNum() + "");
-                            list_count.set(1,userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
-                            list_count.set(2,userCollectsNum.getBody().getGoodsNum() + "");
+        Log.e("person", "接收消息");
 
+        switch (event.getMsg()) {
+            case MainEvent.UPDATE_COLLECT:
+                Log.e("person", "接收消息" + MainEvent.UPDATE_COLLECT + "");
+                if (list_count.size() != 0) {
+                    OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
+                            .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
+                        @Override
+                        public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
+                            if (userCollectsNum.isState()) {
+                                list_count.set(0, userCollectsNum.getBody().getSceneNum() + "");
+                                list_count.set(1, userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
+                                list_count.set(2, userCollectsNum.getBody().getGoodsNum() + "");
+
+                            }
                         }
-                    }
-                });
-                personCollectTabAdapter.notifyDataSetChanged();
-            }
+                    });
+                    personCollectTabAdapter.notifyDataSetChanged();
+                }
+                break;
+            case MainEvent.UPDATE_USERINFO:
+                updataMsgTips();
 
         }
     }
@@ -367,11 +381,12 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-      public void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
-        Log.e("person","destroy");
+        Log.e("person", "destroy");
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
+
 
     @Override
     public void onResume() {
