@@ -227,7 +227,6 @@ public class MainActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
         handler.removeCallbacksAndMessages(null);
         handler = null;
-        MobclickAgent.onProfileSignOff();
     }
 
 }

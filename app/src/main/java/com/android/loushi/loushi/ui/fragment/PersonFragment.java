@@ -43,6 +43,7 @@ import com.android.loushi.loushi.util.SlidingTabLayout;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.cache.CacheMode;
 import com.squareup.picasso.Picasso;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -418,5 +419,14 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
             iniDatas();
             CurrentAccount.setReFresh(false);
         }
+        MobclickAgent.onPageStart(TAG);
+
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(TAG);
+    }
+
 }

@@ -381,6 +381,7 @@ public class LoginFragment extends Fragment {
                                         getUserInfo(userLoginJson.getBody());
 
                                     }
+                                    MobclickAgent.onProfileSignIn(platform.getName(),account);
 
                                 } else {
                                     Log.e(TAG, "登录失败！");

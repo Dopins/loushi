@@ -38,6 +38,7 @@ import com.android.loushi.loushi.util.UnderLineEditText;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.w3c.dom.Text;
@@ -140,6 +141,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
     public void onClickExit(View view) {
         CurrentAccount.setLoginOrNot(false);
+        MobclickAgent.onProfileSignOff();
         finish();
     }
 
