@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
@@ -28,12 +30,16 @@ import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.MaterialSpinner;
+import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.RoundImageView;
 import com.android.loushi.loushi.util.SelectPicPopupWindow;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -75,6 +81,7 @@ public class PersonalInformationActivity extends BaseActivity {
     private MaterialSpinner spinner_university;
     private EditText edit_phone;
     private Button btn_save;
+    private TextView text_exit;
 
 
     @Override
@@ -105,6 +112,11 @@ public class PersonalInformationActivity extends BaseActivity {
         }
     }
 
+    public void onClickExit(View view){
+        CurrentAccount.setLoginOrNot(false);
+        finish();
+    }
+
     private void bindViews() {
 
         toolbar = (Toolbar) findViewById(R.id.Toolbar);
@@ -116,6 +128,7 @@ public class PersonalInformationActivity extends BaseActivity {
         spinner_university = (MaterialSpinner) findViewById(R.id.spinner_university);
         edit_phone = (EditText) findViewById(R.id.edit_phone);
         btn_save = (Button) findViewById(R.id.btn_save);
+        text_exit = (TextView) findViewById(R.id.Exit);
     }
 
     private void initDatas() {

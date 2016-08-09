@@ -33,11 +33,15 @@ import com.android.loushi.loushi.ui.activity.FeedActivity;
 import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
 
 import com.android.loushi.loushi.ui.activity.MyMessageActivity;
+import com.android.loushi.loushi.ui.activity.PersonalInformationActivity;
 import com.android.loushi.loushi.ui.activity.SettingActivity;
 import com.android.loushi.loushi.util.CircularImageView;
+import com.android.loushi.loushi.util.CurrentAccount;
+import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.RoundImageView;
 import com.android.loushi.loushi.util.SlidingTabLayout;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -55,6 +59,7 @@ import okhttp3.Response;
 
 //个人中心
 public class PersonFragment extends BaseFragment implements View.OnClickListener {
+    public static final String TAG ="PersonFragment";
 
     private Toolbar mToolbar;
     private TextView mTv_index;
@@ -83,6 +88,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private CollapsingToolbarLayoutState state;
     private ImageView iv_message_tips;
 
+    public MyFragment myFragment;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -93,6 +100,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
             case R.id.my_message:
                 intent = new Intent(getContext(), MyMessageActivity.class);
                 startActivity(intent);
+                iv_message_tips.setVisibility(View.GONE);
+                CurrentAccount.setMessageCount(0);
                 break;
             case R.id.btn_profile:
                 //TODO
@@ -115,13 +124,19 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
+        Log.e(TAG, "onActivityCreated: ");
         super.onActivityCreated(savedInstanceState);
-        Log.e("Test: " + "PersonFragment", "onActivityCreated");
-
         initView();
+        iniDatas();
        if(!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
         //mToolbar.setTitle("loushi");
+    }
+
+    private void iniDatas() {
+        tv_name.setText(CurrentAccount.getNickname());
+        Picasso.with(getActivity()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
+
     }
 
     @Override
@@ -252,14 +267,13 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     private void initButton() {
         btn_profile = (Button) getView().findViewById(R.id.btn_profile);
-        btn_profile.setOnClickListener(this);
-//        btn_profile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getContext(), GoodDetailActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        btn_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), PersonalInformationActivity.class);
+                startActivity(intent);
+            }
+        });
         tv_feed.setOnClickListener(this);
         btn_my_message = (ImageView) mToolbar.findViewById(R.id.my_message);
         btn_my_message.setOnClickListener(this);
@@ -267,11 +281,17 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         btn_my_setting.setOnClickListener(this);
 
         iv_message_tips = (ImageView) mToolbar.findViewById(R.id.iv_messagetips);
+        updataMsgTips();
+    }
+
+    /**
+     * 刷新小红点显示
+     */
+    private void updataMsgTips() {
         if (MyMessageActivity.hasNewMessage())
             iv_message_tips.setVisibility(View.VISIBLE);
         else
             iv_message_tips.setVisibility(View.GONE);
-
     }
 
     private void initAppBar() {
@@ -313,36 +333,63 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
             }
         });
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(MainEvent event) {
-        Log.e("person","接收消息");
-        if (event.getMsg() == MainEvent.UPDATE_COLLECT) {
-            Log.e("person","接收消息"+MainEvent.UPDATE_COLLECT+"");
-            if(list_count.size()!=0) {
-                OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
-                        .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
-                    @Override
-                    public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
-                        if(userCollectsNum.isState()) {
-                            list_count.set(0,userCollectsNum.getBody().getSceneNum() + "");
-                            list_count.set(1,userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
-                            list_count.set(2,userCollectsNum.getBody().getGoodsNum() + "");
+        Log.e("person", "接收消息");
 
+        switch (event.getMsg()) {
+            case MainEvent.UPDATE_COLLECT:
+                Log.e("person", "接收消息" + MainEvent.UPDATE_COLLECT + "");
+                if (list_count.size() != 0) {
+                    OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
+                            .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
+                        @Override
+                        public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
+                            if (userCollectsNum.isState()) {
+                                list_count.set(0, userCollectsNum.getBody().getSceneNum() + "");
+                                list_count.set(1, userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
+                                list_count.set(2, userCollectsNum.getBody().getGoodsNum() + "");
+
+                            }
                         }
-                    }
-                });
-                personCollectTabAdapter.notifyDataSetChanged();
-            }
+                    });
+                    personCollectTabAdapter.notifyDataSetChanged();
+                }
+                break;
+            case MainEvent.UPDATE_USERINFO:
+                updataMsgTips();
 
         }
     }
+
+    @Subscribe
+    public void onEventMainThread(MyfragmentEvent event) {
+
+        if (event.getmMsg()=="Transfer PersonalFragment to MyFragment!")
+            transferToMyFragment();
+    }
+
+    public void transferToMyFragment() {
+        if (myFragment == null)
+            myFragment = new MyFragment();
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content, myFragment)
+                .commit();
+    }
+
     @Override
-      public void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
-        Log.e("person","destroy");
+        Log.e("person", "destroy");
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!CurrentAccount.LoginOrNot)transferToMyFragment();
+    }
 }

@@ -30,13 +30,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-    /**
-     * Created by Administrator on 2016/7/18.
-     */
-    public class MyFragment extends BaseFragment {
-        public static final String TAG = "MyFragment";
-        private Toolbar mToolbar;
-        private TextView mTv_index;
+/**
+ * Created by Administrator on 2016/7/18.
+ */
+public class MyFragment extends BaseFragment {
+    public static final String TAG = "MyFragment";
+    private Toolbar mToolbar;
+    private TextView mTv_index;
 
     private List<Fragment> mTabContents = new ArrayList<Fragment>();
     private FragmentPagerAdapter mAdapter;
@@ -52,9 +52,8 @@ import java.util.List;
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserLogin", Context.MODE_PRIVATE);
-        Boolean LoginOrNot = sharedPreferences.getBoolean("LoginOrNot", false);
-        if (LoginOrNot) {
+        Log.e(TAG, "onActivityCreated");
+        if (CurrentAccount.LoginOrNot) {
             transferToPersonalFragment();
         } else {
             Log.e(TAG, " Have not login !");
@@ -76,12 +75,11 @@ import java.util.List;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (view == null) {
-            CurrentAccount.setLoginOrNot(false);
             view = inflater.inflate(R.layout.fragment_my, null);
-            initView(view);
+            initView();
             initDatas();
-            if(!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(this);
+            if (!EventBus.getDefault().isRegistered(this))
+                EventBus.getDefault().register(this);
         }
         Visible();
         return view;
@@ -141,7 +139,7 @@ import java.util.List;
         mIndicator.setViewPager(mViewPager, 0);
     }
 
-    private void initView(View view) {
+    private void initView() {
         mViewPager = (ViewPager) view.findViewById(R.id.id_vp);
         mIndicator = (ViewPagerIndicator) view.findViewById(R.id.id_indicator);
         Visible();
@@ -150,6 +148,7 @@ import java.util.List;
     @Subscribe
     public void onEventMainThread(MyfragmentEvent event) {
         Log.e(TAG, event.getmMsg());
+        if (event.getmMsg()=="Transfer MyFragment to PersonalFragment!")
         transferToPersonalFragment();
     }
 
@@ -159,5 +158,11 @@ import java.util.List;
         super.onDestroy();
         view = null;
         EventBus.getDefault().unregister(this);//反注册EventBus
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (CurrentAccount.isLoginOrNot())transferToPersonalFragment();
     }
 }

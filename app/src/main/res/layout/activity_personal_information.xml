@@ -45,6 +45,8 @@
                 android:layout_marginRight="30dp"
                 android:text="注销"
                 android:textColor="@color/colorWhite"
+                android:id="@+id/Exit"
+                android:onClick="onClickExit"
                 android:textSize="16dp" />
 
         </RelativeLayout>
