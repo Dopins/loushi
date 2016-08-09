@@ -8,6 +8,7 @@ import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 
 import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.cache.CacheMode;
 
 import okhttp3.Request;
 import okhttp3.Response;
@@ -24,9 +25,10 @@ public class SceneListHabitFragment extends SceneListFragment {
         OkHttpUtils.post(BaseActivity.url + "base/scene")
                 // 请求方式和请求url
                 .tag(this).params("user_id", BaseActivity.user_id)
-                .params("scene_group_id",3+"")
-                .params("skip", skip+"")
-                .params("take",take+"")
+                .params("scene_group_id", 3 + "")
+                .params("skip", skip + "")
+                .params("take",take+"").cacheKey("getSceneHabit").
+                cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
                 .execute(new JsonCallback<SceneJson>(SceneJson.class) {
                     @Override
                     public void onResponse(boolean b, SceneJson sceneJson, Request request, Response response) {

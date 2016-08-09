@@ -243,15 +243,15 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private void downloadApp(){
         DownloadManager dManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         Uri uri = Uri.parse("http://dingphone.ufile.ucloud.com.cn/apk/guanwang/time2plato.apk");
-        Log.e("splash","1");
+
         DownloadManager.Request request = new DownloadManager.Request(uri);
-        Log.e("splash", "2");
+
         // 设置下载路径和文件名
 
         request.setDestinationInExternalPublicDir("download", "time2plato.apk");
-        Log.e("splash", "3");
-        request.setDescription("柏拉图新版本下载");
-        Log.e("splash", "4");
+
+        request.setDescription("陋室新版本下载");
+
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
         request.setMimeType("application/vnd.android.package-archive");
@@ -263,18 +263,18 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         // 设置为可见和可管理
 
         request.setVisibleInDownloadsUi(true);
-        Log.e("splash", "5");
+
 
         //dManager.enqueue(request);
 
         final long refernece = dManager.enqueue(request);
-        Log.e("splash","6");
+
         // 把当前下载的ID保存起来
 
         SharedPreferences sPreferences = getSharedPreferences("downloadplato", 0);
-        Log.e("splash", "7");
+
         sPreferences.edit().putLong("plato", refernece).commit();
-        Log.e("splash", "8");
+
         //InitTaobao();
         //继续执行
     }

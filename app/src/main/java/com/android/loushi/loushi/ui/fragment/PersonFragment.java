@@ -41,6 +41,7 @@ import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.RoundImageView;
 import com.android.loushi.loushi.util.SlidingTabLayout;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.cache.CacheMode;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -136,7 +137,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private void iniDatas() {
         tv_name.setText(CurrentAccount.getNickname());
         Picasso.with(getActivity()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
-
+        tv_name_small.setText(CurrentAccount.getNickname());
+        Picasso.with(getActivity()).load(CurrentAccount.getHeadImgUrl()).into(img_head_small);
     }
 
     @Override
@@ -171,7 +173,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         Log.e("personinit", list_count.size() + "");
         if (list_count.size() == 0) {
             OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
-                    .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
+                    .params("user_id", BaseActivity.user_id).tag(this).
+                    execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
                 @Override
                 public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
                     if (userCollectsNum.isState()) {
@@ -377,14 +380,9 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                         Log.e("collectnumnew", list_count.get(2));
                         personCollectTabAdapter.setListCount(list_count);
                         personCollectTabAdapter.notifyDataSetChanged();
-                       
+                        mViewPager.setAdapter(personCollectTabAdapter);
+                        mtoorbar_tab.setViewPager(mViewPager);
 
-                        //personCollectTabAdapter.flag=false;
-
-                        //mViewPager.setAdapter(personCollectTabAdapter);
-                        // mtoorbar_tab.notifyAll();
-                        //personCollectTabAdapter=new PersonCollectTabAdapter(getChildFragmentManager(), list_fragment, list_count, getContext());
-                        //mViewPager.notify();
                     }
 
                 }
@@ -413,6 +411,12 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
+        Log.e(TAG, "onResume");
         if(!CurrentAccount.LoginOrNot)transferToMyFragment();
+        if(CurrentAccount.isReFresh()){
+            Log.e(TAG, "iniDatas");
+            iniDatas();
+            CurrentAccount.setReFresh(false);
+        }
     }
 }

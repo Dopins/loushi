@@ -16,6 +16,7 @@ import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.cache.CacheMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,14 +38,15 @@ public class SceneListInterestFragment extends SceneListFragment {
                 .tag(this).params("user_id", BaseActivity.user_id)
                 .params("scene_group_id",1+"")
                 .params("skip", skip+"")
-                .params("take",take+"")
+                .params("take",take+"").cacheKey("getSceneInterest").
+                cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
                 .execute(new JsonCallback<SceneJson>(SceneJson.class) {
                     @Override
                     public void onResponse(boolean b, SceneJson sceneJson, Request request, Response response) {
                         if (sceneJson.getState()) {
                             bodyBeanList.addAll(sceneJson.getBody());
-                            get_total+=bodyBeanList.size();
-                            if(sceneJson.getBody().size()<oneTakeNum) has_data=false;
+                            get_total += bodyBeanList.size();
+                            if (sceneJson.getBody().size() < oneTakeNum) has_data = false;
                             sceneRecyclerViewAdapter.notifyDataSetChanged();
                             swipeRefreshLayout.setRefreshing(false);
                         } else {

@@ -68,10 +68,8 @@ import okhttp3.Response;
  * Created by Administrator on 2016/7/19.
  */
 public class LoginFragment extends Fragment {
+
     public static final String TAG = "LoginFragment";
-    public static SharedPreferences sharedPreferences;
-    public static SharedPreferences.Editor editor;
-    private AlertDialog dialog;
 
     // Content View Elements
 
@@ -90,19 +88,9 @@ public class LoginFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setLoginInfoFromCache();
         initPlatformList();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.e(TAG, "onDestroy ");
-    }
-
-    private void setLoginInfoFromCache() {
-
-    }
 
     public void transferMyFragmentToPersonalFragment() {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -121,11 +109,6 @@ public class LoginFragment extends Fragment {
         Intent intent = new Intent(getActivity(), PersonalInformationActivity.class);
         getActivity().startActivity(intent);
 
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -167,12 +150,6 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(final View view) {
 
-
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                dialog = builder.create();
-//                dialog.show();
-                Log.e(TAG, "login_edit_phone.length() : " + login_edit_phone.length());
-                Log.e(TAG, "login_edit_password.length() : " + login_edit_password.length());
                 if (!isMobileNO(login_edit_phone.getText().toString()) || login_edit_password.length() == 0) {
                     Log.e(TAG, "请输入有效的电话号码和密码 !");
                 } else {
@@ -193,7 +170,7 @@ public class LoginFragment extends Fragment {
                                         BaseActivity.user_id = userLoginJson.getBody() + ""; //冗余
                                         Log.e(TAG, userLoginJson.getBody() + "");
                                         CurrentAccount.setLoginOrNot(true);
-                                        CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", login_edit_phone.getText().toString(), login_edit_password.getText().toString());
+                                        CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", login_edit_phone.getText().toString(), login_edit_password.getText().toString(),false,"0");
                                         getUserInfo(userLoginJson.getBody());
 
                                         MobclickAgent.onProfileSignIn(login_edit_phone.getText().toString());
@@ -232,16 +209,18 @@ public class LoginFragment extends Fragment {
                             Log.e(TAG, request.toString());
                             Log.e(TAG, response.toString());
 
+                            UserInfoJson.BodyBean body = userInfoJson.getBody();
                             //CurrentAccount.storeDatas(userInfoJson);
-                            Log.e(TAG, CurrentAccount.getHeadImgUrl());
-                            Log.e(TAG, CurrentAccount.getNickname());
-                            Log.e(TAG, CurrentAccount.getPassword());
-                            Log.e(TAG, CurrentAccount.getSchoolName());
-                            Log.e(TAG, CurrentAccount.getEmail());
+                            Log.e(TAG,"1 :"+ body.getNickname());
+                            Log.e(TAG,"2 :"+ body.getMobilePhone());
+                            Log.e(TAG,"3 :"+ body.getHeadImgUrl());
+                            Log.e(TAG,"4 :"+ body.getEmail());
+//                            Log.e(TAG,"5 :"+ body.getSchool().getName());
+                            Log.e(TAG,"6 :"+ body.isSex());
+                            Log.e(TAG,"7 :"+ body.getMessageCount());
 
                             CurrentAccount.storeDatas(userInfoJson);
                             transferMyFragmentToPersonalFragment();
-
                         }
                     }
                 });
@@ -359,10 +338,11 @@ public class LoginFragment extends Fragment {
                 Log.e("LoginAPP", platform.getDb().getUserGender());
                 Log.e("LoginAPP", platform.getDb().getUserName());
 
-                String account = platform.getDb().getUserId();
-                String token = generateToken(account);
+                final String account = platform.getDb().getUserId();
+                final String token = generateToken(account);
+                Log.e("LoginAPP", token);
                 //token是接口需要
-                String type;
+                final String type;
                 //判断类型
                 //在这里执行登陆操作  并存储个人信息，判断是否是第一次用这个第三方登陆，
                 // 如果不是则不用存储，直接调用服务器原有信息
@@ -390,15 +370,16 @@ public class LoginFragment extends Fragment {
                                 if (userLoginJson.getState()) {
 
                                     CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
-
+                                    CurrentAccount.storeAccountInfo(userLoginJson.getBody()+"",account,token,true,type);
                                     String code = userLoginJson.getCode();
                                     if (code != null && code == "3") {
                                         Log.e(TAG, "第三方登陆的第一次登陆");
                                         transferMyFragmentToPersonalInformationActivity();
                                         transferMyFragmentToPersonalFragment();
                                     } else {
+                                        BaseActivity.user_id =userLoginJson.getBody() +"";
                                         getUserInfo(userLoginJson.getBody());
-                                        transferMyFragmentToPersonalFragment();
+
                                     }
 
                                 } else {

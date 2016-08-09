@@ -1,9 +1,11 @@
 package com.android.loushi.loushi.jsonbean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/8/1.
  */
-public class UserCollectsNum {
+public class UserCollectsNum implements Serializable{
     /**
      * goodsNum : 6
      * sceneNum : 4
@@ -55,7 +57,7 @@ public class UserCollectsNum {
         this.state = state;
     }
 
-    public static class BodyBean {
+    public static class BodyBean implements Serializable{
         private int goodsNum;
         private int sceneNum;
         private int strategyNum;

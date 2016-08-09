@@ -264,7 +264,7 @@ public class RegistFragment extends Fragment {
 
                                             BaseActivity.user_id = userLoginJson.getBody()+""; //冗余
 
-                                            CurrentAccount.storeAccountInfo(userLoginJson.getBody()+"",regist_edit_phone.getText().toString(),regist_edit_password.getText().toString());
+                                            CurrentAccount.storeAccountInfo(userLoginJson.getBody()+"",regist_edit_phone.getText().toString(),regist_edit_password.getText().toString(),false,"0");
 
                                             transferMyFragmentToPersonalInformationActivity();
 
