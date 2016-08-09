@@ -16,7 +16,7 @@
         android:text="13750065622"
         android:textColorHint="@color/hint"
         android:inputType="phone"
-        android:drawableLeft="@drawable/ic_phone_black_24dp"
+        android:drawableLeft="@drawable/call"
         android:drawablePadding="5dp"/>
 
     <EditText
@@ -28,7 +28,7 @@
         android:text="mtf071330"
         android:textColorHint="@color/hint"
         android:inputType="textPassword"
-        android:drawableLeft="@drawable/ic_lock_black_24dp"
+        android:drawableLeft="@drawable/password"
         android:drawablePadding="5dp"/>
 
     <Button

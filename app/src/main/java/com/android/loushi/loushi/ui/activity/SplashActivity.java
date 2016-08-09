@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.inputmethod.CorrectionInfo;
 import android.widget.Toast;
 
 import com.alibaba.sdk.android.AlibabaSDK;
@@ -51,6 +52,12 @@ public class SplashActivity extends BaseActivity {
         CheckUpdate();
 
 
+
+    }
+    private void CheckCanLogin(){
+        if(CurrentAccount.isLoginOrNot()){
+            
+        }
     }
     private void InitTaobao() {
         TradeConfigs.defaultTaokePid = "mm_114880276_0_0";

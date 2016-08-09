@@ -137,7 +137,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private void iniDatas() {
         tv_name.setText(CurrentAccount.getNickname());
         Picasso.with(getActivity()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
-
+        tv_name_small.setText(CurrentAccount.getNickname());
+        Picasso.with(getActivity()).load(CurrentAccount.getHeadImgUrl()).into(img_head_small);
     }
 
     @Override
@@ -409,6 +410,12 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
+        Log.e(TAG, "onResume");
         if(!CurrentAccount.LoginOrNot)transferToMyFragment();
+        if(CurrentAccount.isReFresh()){
+            Log.e(TAG, "iniDatas");
+            iniDatas();
+            CurrentAccount.setReFresh(false);
+        }
     }
 }

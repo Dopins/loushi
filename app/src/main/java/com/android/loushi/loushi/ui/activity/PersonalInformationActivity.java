@@ -100,22 +100,14 @@ public class PersonalInformationActivity extends BaseActivity {
     }
 
     private void test() {
-        sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        edit_nickname.setText("mtf");
-        edit_phone.setText("13750065622");
+
         headImgUrl = CurrentAccount.getHeadImgUrl();
-        if (headImgUrl != "null"){
-            Log.e(TAG, "bindViews: img_url = "+ img_url);
+        if (headImgUrl != "null") {
+            Log.e(TAG, "bindViews: img_url = " + img_url);
             Picasso.with(this).load(img_url).fit().into(image_circular);
-        }else {
+        } else {
             Log.e(TAG, "headImgUrl为空!");
         }
-    }
-
-    public void onClickExit(View view){
-        CurrentAccount.setLoginOrNot(false);
-        finish();
     }
 
     private void bindViews() {
@@ -142,19 +134,18 @@ public class PersonalInformationActivity extends BaseActivity {
         spinner_university.setDropdownMaxHeight(600);
     }
 
-    public void onClickbtn_return(View view){
-        Log.e(TAG, "onClickbtn_return");
+    public void onClickbtn_return(View view) {
+        finish();
+    }
+
+    public void onClickExit(View view) {
+        CurrentAccount.setLoginOrNot(false);
         finish();
     }
 
     public void onClickimage_circular(View view) {
         menuWindow = new SelectPicPopupWindow(PersonalInformationActivity.this, itemsOnClick);
         menuWindow.showAtLocation(PersonalInformationActivity.this.findViewById(R.id.personalInFoContainer), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     //改变头像
@@ -239,7 +230,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
                     OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userHeadImg")
                             .params("img", ss)
-                            .params("user_id",CurrentAccount.getUser_id())
+                            .params("user_id", CurrentAccount.getUser_id())
                             .params("imgFileName", "1.jpg")
                             .execute(new DialogCallback<ImageJson>(PersonalInformationActivity.this,ImageJson.class) {
                         @Override
@@ -253,8 +244,7 @@ public class PersonalInformationActivity extends BaseActivity {
                             }
                         }
 
-
-                    });
+                            });
                 }
             }
         }
@@ -267,34 +257,35 @@ public class PersonalInformationActivity extends BaseActivity {
         user_id = CurrentAccount.getUser_id();
         nickname = edit_nickname.getText().toString();
         headImgUrl = CurrentAccount.getHeadImgUrl();
-        schoolName = spinner_university.getSelectedIndex()+1+"";
-        sex = spinner_sex.getSelectedIndex() +"";
+        schoolName = spinner_university.getSelectedIndex() + 1 + "";
+        sex = spinner_sex.getSelectedIndex() + "";
 
-        Log.e(TAG,user_id);
-        Log.e(TAG,nickname);
-        Log.e(TAG,headImgUrl);
-        Log.e(TAG,schoolName);
-        Log.e(TAG,sex);
+        Log.e(TAG, user_id);
+        Log.e(TAG, nickname);
+        Log.e(TAG, headImgUrl);
+        Log.e(TAG, schoolName);
+        Log.e(TAG, sex);
 
         OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfoAlt.action")
                 .params("user_id", user_id)
                 .params("nickname", nickname)
                 .params("headImgUrl", headImgUrl)
-                .params("school.id",schoolName )
+                .params("school.id", schoolName)
                 .params("sex", sex)
                 .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
-                        Log.e(TAG, "UserInfoJson.onResponse: " +response.toString());
+                        Log.e(TAG, "UserInfoJson.onResponse: " + response.toString());
                         Log.e(TAG, "userInfoJson.getState: " + userInfoJson.isState());
-                        if(userInfoJson.isState()){
-                            Log.e(TAG, "onResponse: 资料提交成功 ！" );
+                        if (userInfoJson.isState()) {
+                            Log.e(TAG, "onResponse: 资料提交成功 ！");
+                            CurrentAccount.storeDatas(nickname, headImgUrl, schoolName, sex);
+                            CurrentAccount.setReFresh(true);
                             finish();
                         }
                     }
                 });
     }
-
 
 
 }
