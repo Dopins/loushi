@@ -359,6 +359,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 break;
             case MainEvent.UPDATE_USERINFO:
                 updataMsgTips();
+                break;
 
         }
     }
