@@ -54,7 +54,7 @@ public class MyFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         Log.e(TAG, "onActivityCreated");
         if (CurrentAccount.LoginOrNot) {
-            transferToPersonalFragment();
+            //transferToPersonalFragment();
         } else {
             Log.e(TAG, " Have not login !");
         }

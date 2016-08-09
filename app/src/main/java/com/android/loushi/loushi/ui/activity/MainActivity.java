@@ -106,8 +106,8 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
                         if (userInfoJson.isState()) {
-                            if(userInfoJson.getBody().getMessageCount()==0)
-                                return ;
+//                            if(userInfoJson.getBody().getMessageCount()==0)
+//                                return ;
                             Log.i(TAG, "getMessageCount==" + userInfoJson.getBody().getMessageCount());
                             CurrentAccount.setMessageCount(userInfoJson.getBody().getMessageCount());
                             EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_USERINFO));
