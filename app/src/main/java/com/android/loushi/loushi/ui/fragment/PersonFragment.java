@@ -41,6 +41,7 @@ import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.RoundImageView;
 import com.android.loushi.loushi.util.SlidingTabLayout;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.cache.CacheMode;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -171,7 +172,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         Log.e("personinit", list_count.size() + "");
         if (list_count.size() == 0) {
             OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
-                    .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
+                    .params("user_id", BaseActivity.user_id).tag(this).
+                    execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
                 @Override
                 public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
                     if (userCollectsNum.isState()) {

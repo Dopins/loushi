@@ -119,6 +119,7 @@ public class CollectGoodFragment extends LazyFragment {
                 .tag(this).params("type", type).params("user_id", BaseActivity.user_id)
                 .params("skip", skip + "").params("take", "6")
 
+
                         // 请求的 tag, 主要用于取消对应的请求
                    // 缓存模式，详细请看缓存介绍
                 .execute(new JsonCallback<UserCollectionsJson>(UserCollectionsJson.class) {

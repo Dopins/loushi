@@ -50,6 +50,7 @@ public class SplashActivity extends BaseActivity {
         InitTaobao();
         CheckUpdate();
 
+
     }
     private void InitTaobao() {
         TradeConfigs.defaultTaokePid = "mm_114880276_0_0";
