@@ -379,6 +379,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
                         if (responseJson.getState()) {
                             changeSelectedState(type,holder,position);
+
                         } else {
                             Log.d("error", responseJson.getReturn_info());
                         }

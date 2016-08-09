@@ -3,6 +3,7 @@ package com.android.loushi.loushi.util;
 import android.util.Log;
 
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.jsonbean.GuideJson;
 import com.android.loushi.loushi.jsonbean.RecommendJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
@@ -12,6 +13,8 @@ import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -61,6 +64,7 @@ public class RecycleViewPreferSetter {
                                 bodyBeanList.get(position).setCollectionNum(prefer_num+1);
                                 selectedStateSetter.SetSelectedState((prefer_num + 1)+"", true);
                             }
+                            EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_COLLECT));
 
                         } else {
                             Log.d("error", responseJson.getReturn_info());

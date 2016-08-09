@@ -1,11 +1,13 @@
 package com.android.loushi.loushi.ui.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.sdk.android.AlibabaSDK;
 import com.alibaba.sdk.android.trade.TradeConfigs;
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.util.CurrentAccount;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
 import com.taobao.tae.sdk.callback.InitResultCallback;
@@ -48,6 +50,14 @@ public class SplashActivity extends BaseActivity {
             }
 
         });
+    }
+    private boolean hasLogin() {
+        String phone = CurrentAccount.getMobile_phone();
+        String password = CurrentAccount.getPassword();
+        if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password))
+            return false;
+        else
+            return true;
     }
 
 }

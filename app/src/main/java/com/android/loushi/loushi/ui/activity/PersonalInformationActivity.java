@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.callback.DialogCallback;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.Area;
 import com.android.loushi.loushi.jsonbean.ImageJson;
@@ -233,14 +234,14 @@ public class PersonalInformationActivity extends BaseActivity {
                     photo.compress(Bitmap.CompressFormat.JPEG, 30, bStream);
                     byte[] bytes = bStream.toByteArray();
                     String ss = Base64.encodeToString(bytes, Base64.DEFAULT);
-                    Log.e(TAG, "ss");
+                    Log.e(TAG, ss);
                     Log.e(TAG, CurrentAccount.getUser_id());
-                    image_circular.setImageBitmap(photo);
-                    OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userHeadImg.action")
+
+                    OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userHeadImg")
                             .params("img", ss)
                             .params("user_id",CurrentAccount.getUser_id())
                             .params("imgFileName", "1.jpg")
-                            .execute(new JsonCallback<ImageJson>(ImageJson.class) {
+                            .execute(new DialogCallback<ImageJson>(PersonalInformationActivity.this,ImageJson.class) {
                         @Override
                         public void onResponse(boolean isFromCache, ImageJson imageJson, Request request, @Nullable Response response) {
                             if (imageJson.getState()) {
@@ -248,7 +249,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
                                 Log.e(TAG, headImgUrl);
                                 CurrentAccount.setHeadImgUrl(headImgUrl);
-
+                                image_circular.setImageBitmap(photo);
                             }
                         }
 

@@ -168,6 +168,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     private void initTablayout() {
         mViewPager = (ViewPager) getView().findViewById(R.id.main_vp_container);
+        Log.e("personinit", list_count.size() + "");
         if (list_count.size() == 0) {
             OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
                     .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
@@ -341,21 +342,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         switch (event.getMsg()) {
             case MainEvent.UPDATE_COLLECT:
                 Log.e("person", "接收消息" + MainEvent.UPDATE_COLLECT + "");
-                if (list_count.size() != 0) {
-                    OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
-                            .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
-                        @Override
-                        public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
-                            if (userCollectsNum.isState()) {
-                                list_count.set(0, userCollectsNum.getBody().getSceneNum() + "");
-                                list_count.set(1, userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
-                                list_count.set(2, userCollectsNum.getBody().getGoodsNum() + "");
-
-                            }
-                        }
-                    });
-                    personCollectTabAdapter.notifyDataSetChanged();
-                }
+                updateCollect();
                 break;
             case MainEvent.UPDATE_USERINFO:
                 updataMsgTips();
@@ -369,6 +356,41 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
         if (event.getmMsg()=="Transfer PersonalFragment to MyFragment!")
             transferToMyFragment();
+    }
+    private void updateCollect(){
+        Log.e("person",list_count.size()+"");
+        if (list_count.size() != 0) {
+            Log.e("collectnumold",list_count.get(0));
+            Log.e("collectnumold",list_count.get(1));
+            Log.e("collectnumold",list_count.get(2));
+            //personCollectTabAdapter.notifyDataSetChanged();
+            OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
+                    .params("user_id", BaseActivity.user_id).tag(this).execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
+                @Override
+                public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
+                    if (userCollectsNum.isState()) {
+                        list_count.set(0, userCollectsNum.getBody().getSceneNum() + "");
+                        list_count.set(1, userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
+                        list_count.set(2, userCollectsNum.getBody().getGoodsNum() + "");
+                        Log.e("collectnumnew", list_count.get(0));
+                        Log.e("collectnumnew", list_count.get(1));
+                        Log.e("collectnumnew", list_count.get(2));
+                        personCollectTabAdapter.setListCount(list_count);
+                        personCollectTabAdapter.notifyDataSetChanged();
+                       
+
+                        //personCollectTabAdapter.flag=false;
+
+                        //mViewPager.setAdapter(personCollectTabAdapter);
+                        // mtoorbar_tab.notifyAll();
+                        //personCollectTabAdapter=new PersonCollectTabAdapter(getChildFragmentManager(), list_fragment, list_count, getContext());
+                        //mViewPager.notify();
+                    }
+
+                }
+            });
+
+        }
     }
 
     public void transferToMyFragment() {
