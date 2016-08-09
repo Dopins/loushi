@@ -139,6 +139,7 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
                         if (userLoginJson.getState()) {
+                            BaseActivity.user_id=userLoginJson.getBody()+"";
                             Log.e(TAG, "autoLogin 登录成功！");
                         } else {
                             Log.e(TAG, "autoLogin 登录失败！");

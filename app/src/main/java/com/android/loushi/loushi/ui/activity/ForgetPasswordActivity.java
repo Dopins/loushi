@@ -156,29 +156,30 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
                 public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
                     if(responseJson.getState()){
                         ToastUtils.show(ForgetPasswordActivity.this, "修改密码成功", Toast.LENGTH_SHORT);
-                        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
-                                .params("mobile_phone", edit_phone.getText().toString())
-                                .params("password", edit_newpassword.getText().toString())
-                                .params("isThird", "false")
-                                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
-                                    @Override
-                                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-
-                                        if (userLoginJson.getState()) {
-                                            Log.e("forget", "忘记密码-登录成功！");
-
-                                            BaseActivity.user_id = userLoginJson.getBody() + ""; //冗余
-
-                                            CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", edit_phone.getText().toString(), edit_newpassword.getText().toString());
-
-                                            //transferMyFragmentToPersonalInformationActivity();
-                                            EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
-                                            finish();
-                                        } else {
-                                            Log.e("forget", "登录失败！");
-                                        }
-                                    }
-                                });
+//                        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
+//                                .params("mobile_phone", edit_phone.getText().toString())
+//                                .params("password", edit_newpassword.getText().toString())
+//                                .params("isThird", "false")
+//                                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+//                                    @Override
+//                                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+//
+//                                        if (userLoginJson.getState()) {
+//                                            Log.e("forget", "忘记密码-登录成功！");
+//
+//                                            BaseActivity.user_id = userLoginJson.getBody() + ""; //冗余
+//
+//                                            CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", edit_phone.getText().toString(), edit_newpassword.getText().toString());
+//
+//                                            //transferMyFragmentToPersonalInformationActivity();
+//                                            EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
+//                                            finish();
+//                                        } else {
+//                                            Log.e("forget", "登录失败！");
+//                                        }
+//                                    }
+//                                });
+                        finish();
                     }
                     else
                         ToastUtils.show(ForgetPasswordActivity.this, responseJson.getReturn_info(), Toast.LENGTH_SHORT);
