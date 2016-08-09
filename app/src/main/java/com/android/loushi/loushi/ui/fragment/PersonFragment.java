@@ -376,14 +376,9 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                         Log.e("collectnumnew", list_count.get(2));
                         personCollectTabAdapter.setListCount(list_count);
                         personCollectTabAdapter.notifyDataSetChanged();
-                       
+                        mViewPager.setAdapter(personCollectTabAdapter);
+                        mtoorbar_tab.setViewPager(mViewPager);
 
-                        //personCollectTabAdapter.flag=false;
-
-                        //mViewPager.setAdapter(personCollectTabAdapter);
-                        // mtoorbar_tab.notifyAll();
-                        //personCollectTabAdapter=new PersonCollectTabAdapter(getChildFragmentManager(), list_fragment, list_count, getContext());
-                        //mViewPager.notify();
                     }
 
                 }

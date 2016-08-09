@@ -13,6 +13,7 @@ import com.android.loushi.loushi.adapter.CollectGoodAdapter;
 
 
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.jsonbean.UserCollectionsGood;
@@ -24,6 +25,10 @@ import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.cache.CacheMode;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +63,8 @@ public class CollectGoodFragment extends LazyFragment {
             }
         }
         initview();
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
     }
 //@Override
 //public void onActivityCreated(Bundle savedInstanceState) {
@@ -144,20 +151,44 @@ public class CollectGoodFragment extends LazyFragment {
                 .execute(new JsonCallback<UserCollectionsJson>(UserCollectionsJson.class) {
                              @Override
                              public void onResponse(boolean b, UserCollectionsJson userCollectionsJson, Request request, Response response) {
-                                 if(userCollectionsJson.getState()) {
-                                     skip_s+=6;
-                                     if(skip>Integer.parseInt(userCollectionsJson.getReturn_info()))
-                                         is_tip_all=true;
+                                 if (userCollectionsJson.getState()) {
+                                     skip_s += 6;
+                                     if (skip > Integer.parseInt(userCollectionsJson.getReturn_info()))
+                                         is_tip_all = true;
                                      beanList.addAll(userCollectionsJson.getBody());
 
 
-
-                                 collectGoodAdapter.notifyDataSetChanged(); }
+                                     collectGoodAdapter.notifyDataSetChanged();
+                                 }
                              }
 
                          }
 
                 );
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(MainEvent event) {
+        Log.e("COLLECTGOOD", "接收消息");
+
+        switch (event.getMsg()) {
+            case MainEvent.UPDATE_COLLECT:
+                Log.e("COLLECTGOOD", "接收消息" + MainEvent.UPDATE_COLLECT + "");
+                updateCollect();
+                break;
+
+
+        }
+    }
+
+    private void updateCollect() {
+        beanList = new ArrayList<UserCollectionsJson.BodyBean>();
+        skip=0;
+        skip_s=0;
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
 }
