@@ -40,6 +40,7 @@ import com.android.loushi.loushi.util.UnderLineEditText;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.w3c.dom.Text;
@@ -142,6 +143,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
     public void onClickExit(View view) {
         CurrentAccount.setLoginOrNot(false);
+        MobclickAgent.onProfileSignOff();
         finish();
     }
 
@@ -227,10 +229,10 @@ public class PersonalInformationActivity extends BaseActivity {
                     photo.compress(Bitmap.CompressFormat.JPEG, 30, bStream);
                     byte[] bytes = bStream.toByteArray();
                     String ss = Base64.encodeToString(bytes, Base64.DEFAULT);
-                    Log.e(TAG, "ss");
+                    Log.e(TAG, ss);
                     Log.e(TAG, CurrentAccount.getUser_id());
-                    image_circular.setImageBitmap(photo);
-                    OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userHeadImg.action")
+
+                    OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userHeadImg")
                             .params("img", ss)
                             .params("user_id", CurrentAccount.getUser_id())
                             .params("imgFileName", "1.jpg")
@@ -243,9 +245,11 @@ public class PersonalInformationActivity extends BaseActivity {
                                         Log.e(TAG, "上传头像成功！");
                                         Log.e(TAG, headImgUrl);
                                         CurrentAccount.setHeadImgUrl(headImgUrl);
+                                        image_circular.setImageBitmap(photo);
 
                                     }
                                 }
+
 
 
                             });

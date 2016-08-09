@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity {
     private final static int FLAG_LOGIN = 1;
     private final static int FLAG_GET_USRINFO = 2;
     private final static int DELAYTIME_LOGIN = 29 * 60 * 1000;
-    private final static int DELAYTIME_USERINFO = 10 * 1000;
+    private final static int DELAYTIME_USERINFO = 60 * 1000;
 
     public Handler handler = new Handler() {
         @Override
@@ -106,8 +106,8 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
                         if (userInfoJson.isState()) {
-                            if(userInfoJson.getBody().getMessageCount()==0)
-                                return ;
+//                            if(userInfoJson.getBody().getMessageCount()==0)
+//                                return ;
                             Log.i(TAG, "getMessageCount==" + userInfoJson.getBody().getMessageCount());
                             CurrentAccount.setMessageCount(userInfoJson.getBody().getMessageCount());
                             EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_USERINFO));
@@ -139,6 +139,7 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
                         if (userLoginJson.getState()) {
+                            BaseActivity.user_id=userLoginJson.getBody()+"";
                             Log.e(TAG, "autoLogin 登录成功！");
                         } else {
                             Log.e(TAG, "autoLogin 登录失败！");
@@ -226,7 +227,6 @@ public class MainActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
         handler.removeCallbacksAndMessages(null);
         handler = null;
-        MobclickAgent.onProfileSignOff();
     }
 
 }

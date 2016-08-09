@@ -38,161 +38,169 @@
                 android:textSize="16dp" />
 
             <TextView
+                android:id="@+id/Exit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
+                android:onClick="onClickExit"
                 android:text="注销"
                 android:textColor="@color/colorWhite"
-                android:id="@+id/Exit"
-                android:onClick="onClickExit"
                 android:textSize="16dp" />
 
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
 
-    <RelativeLayout
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingLeft="31dp"
         android:paddingRight="31dp"
+        android:scrollbars="none"
         android:paddingTop="33dp">
 
-        <com.android.loushi.loushi.util.RoundImageView
-            android:id="@+id/image_circular"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/tab_my"
-            android:onClick="onClickimage_circular" />
-
-        <LinearLayout
-            android:id="@+id/layout_nickname"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/image_circular"
-            android:layout_marginTop="15dp"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="昵称"
-                android:textColor="@color/dark_gray" />
-
-            <EditText
-                android:id="@+id/edit_nickname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Jordin Spark"
-                android:textColor="@color/hint"
-                android:textColorHint="@color/hint"
-                android:textSize="15dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_sex"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/layout_nickname"
-            android:layout_marginTop="15dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="性别"
-                android:textColor="@color/dark_gray" />
-
-
-            <com.android.loushi.loushi.util.MaterialSpinner
-                android:id="@+id/spinner_sex"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/hint" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_school"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/layout_sex"
-            android:layout_marginTop="15dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="所在高校"
-                android:textColor="@color/dark_gray" />
+            <com.android.loushi.loushi.util.RoundImageView
+                android:id="@+id/image_circular"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/tab_my"
+                android:onClick="onClickimage_circular" />
 
             <LinearLayout
+                android:id="@+id/layout_nickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_below="@+id/image_circular"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="昵称"
+                    android:textColor="@color/dark_gray" />
 
-                <com.android.loushi.loushi.util.MaterialSpinner
-                    android:id="@+id/spinner_province"
+                <EditText
+                    android:id="@+id/edit_nickname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:textColor="@color/hint" />
-
-
-                <com.android.loushi.loushi.util.MaterialSpinner
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/spinner_university"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:hint="Jordin Spark"
                     android:textColor="@color/hint"
-                    android:layout_weight="1.0"/>
+                    android:textColorHint="@color/hint"
+                    android:textSize="15dp" />
 
             </LinearLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/layout_school"
-            android:layout_marginTop="15dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="手机"
-                android:textColor="@color/dark_gray" />
-
-            <EditText
-                android:id="@+id/edit_phone"
+            <LinearLayout
+                android:id="@+id/layout_sex"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="13728384943"
-                android:textColorHint="@color/hint"
+                android:layout_below="@+id/layout_nickname"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="性别"
+                    android:textColor="@color/dark_gray" />
+
+
+                <com.android.loushi.loushi.util.MaterialSpinner
+                    android:id="@+id/spinner_sex"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/hint" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_school"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_sex"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="所在高校"
+                    android:textColor="@color/dark_gray" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <com.android.loushi.loushi.util.MaterialSpinner
+                        android:id="@+id/spinner_province"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:textColor="@color/hint" />
+
+
+                    <com.android.loushi.loushi.util.MaterialSpinner
+                        android:id="@+id/spinner_university"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1.0"
+                        android:textColor="@color/hint" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_school"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="手机"
+                    android:textColor="@color/dark_gray" />
+
+                <EditText
+                    android:id="@+id/edit_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="13728384943"
+                    android:textColorHint="@color/hint"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="297dp"
+                android:layout_height="46dp"
+                android:layout_below="@+id/layout_phone"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/shape_btn_finish"
+                android:onClick="onClick_btn_save"
+                android:text="保存修改"
+                android:textColor="@color/colorWhite"
                 android:textSize="15dp" />
-        </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_save"
-            android:layout_width="297dp"
-            android:layout_height="46dp"
-            android:layout_below="@+id/layout_phone"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/shape_btn_finish"
-            android:onClick="onClick_btn_save"
-            android:text="保持修改"
-            android:textColor="@color/colorWhite"
-            android:textSize="15dp" />
+        </RelativeLayout>
 
-    </RelativeLayout>
+    </ScrollView>
 
 
 </LinearLayout>

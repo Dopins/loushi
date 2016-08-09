@@ -16,6 +16,10 @@ import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.DialogCallback;
 import com.android.loushi.loushi.event.ReceiveSmsEvent;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
+import com.android.loushi.loushi.jsonbean.UserLoginJson;
+import com.android.loushi.loushi.util.CurrentAccount;
+import com.android.loushi.loushi.util.MyfragmentEvent;
+import com.android.loushi.loushi.util.ToastUtils;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.lzy.okhttputils.OkHttpUtils;
 
@@ -151,10 +155,35 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
                 @Override
                 public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
                     if(responseJson.getState()){
-                        Toast.makeText(ForgetPasswordActivity.this,"修改密码成功",Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(ForgetPasswordActivity.this, "修改密码成功", Toast.LENGTH_SHORT);
+//                        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
+//                                .params("mobile_phone", edit_phone.getText().toString())
+//                                .params("password", edit_newpassword.getText().toString())
+//                                .params("isThird", "false")
+//                                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+//                                    @Override
+//                                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+//
+//                                        if (userLoginJson.getState()) {
+//                                            Log.e("forget", "忘记密码-登录成功！");
+//
+//                                            BaseActivity.user_id = userLoginJson.getBody() + ""; //冗余
+//
+//                                            CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", edit_phone.getText().toString(), edit_newpassword.getText().toString());
+//
+//                                            //transferMyFragmentToPersonalInformationActivity();
+//                                            EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
+//                                            finish();
+//                                        } else {
+//                                            Log.e("forget", "登录失败！");
+//                                        }
+//                                    }
+//                                });
+                        finish();
                     }
                     else
-                        Toast.makeText(ForgetPasswordActivity.this,responseJson.getReturn_info(),Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(ForgetPasswordActivity.this, responseJson.getReturn_info(), Toast.LENGTH_SHORT);
+
                 }
 
             });

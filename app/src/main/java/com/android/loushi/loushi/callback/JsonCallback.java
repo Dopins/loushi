@@ -8,8 +8,11 @@ import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.event.ReceiveSmsEvent;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
+import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.util.CurrentAccount;
+import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.MyfragmentEvent;
+import com.android.loushi.loushi.util.UrlConstant;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.callback.AbsCallback;
@@ -50,7 +53,24 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
         if(code!=null&&code.equals("10000")) {
             Log.e("clazz", code);
             if(CurrentAccount.isLoginOrNot()) {
-
+                String phone = CurrentAccount.getMobile_phone();
+                String password = CurrentAccount.getPassword();
+                Log.e("my",phone+password);
+                OkHttpUtils.post(UrlConstant.USERLOGINURL)
+                        .params(KeyConstant.MOBILE_PHONE, phone)
+                        .params(KeyConstant.PASSWORD, password)
+                        .params(KeyConstant.ISTHIRD, "false")
+                        .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+                            @Override
+                            public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+                                if (userLoginJson.getState()) {
+                                    BaseActivity.user_id = userLoginJson.getBody() + "";
+                                    Log.e("callback", "autoLogin 登录成功！");
+                                } else {
+                                    Log.e("callback", "autoLogin 登录失败！");
+                                }
+                            }
+                        });
                 //执行登陆操作
             }
             if(!CurrentAccount.isLoginOrNot()){

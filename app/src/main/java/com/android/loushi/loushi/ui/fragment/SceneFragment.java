@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.ViewPagerAdapter;
 import com.android.loushi.loushi.ui.activity.SearchActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,9 @@ import java.util.List;
 
 //场景
 public class SceneFragment extends BaseFragment {
+
+    private static final String TAG="SceneFragment";
+
     private View rootView;
     private Toolbar mToolbar;
     private TextView mTv_index;
@@ -127,6 +131,18 @@ public class SceneFragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         // TODO Auto-generated method stub
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(TAG);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(TAG);
     }
 
 }
