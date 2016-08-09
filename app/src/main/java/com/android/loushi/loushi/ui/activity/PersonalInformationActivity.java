@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +34,7 @@ import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.MaterialSpinner;
 import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.RoundImageView;
+import com.android.loushi.loushi.util.SelectHeadPicDialog;
 import com.android.loushi.loushi.util.SelectPicPopupWindow;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.google.gson.Gson;
@@ -50,8 +53,7 @@ import okhttp3.Response;
 public class PersonalInformationActivity extends BaseActivity {
     private String TAG = "PersonalInfoActivity";
 
-
-    private SelectPicPopupWindow menuWindow;
+    private Dialog dialog;
     public final static int PHOTO_ZOOM = 0;
     public final static int TAKE_PHOTO = 1;
     public final static int PHOTO_RESULT = 2;
@@ -97,7 +99,7 @@ public class PersonalInformationActivity extends BaseActivity {
     private void test() {
 
         headImgUrl = CurrentAccount.getHeadImgUrl();
-        if (headImgUrl != "null") {
+        if (!headImgUrl.equals("null")) {
             Log.e(TAG, "test : img_url = " + headImgUrl);
             Picasso.with(this).load(headImgUrl).fit().into(image_circular);
         } else {
@@ -129,7 +131,6 @@ public class PersonalInformationActivity extends BaseActivity {
         spinner_province.setDropdownMaxHeight(300);
         spinner_university.setItems("No.1", "No.2", "No.3", "No.4", "No.5");
         spinner_university.setDropdownMaxHeight(300);
-        Log.e(TAG, "Sex : " +CurrentAccount.getSex());
         if (CurrentAccount.getSex() != null && CurrentAccount.getSex().equals("1")) spinner_sex.setSelectedIndex(1);
         else spinner_sex.setSelectedIndex(0);
 
@@ -145,15 +146,16 @@ public class PersonalInformationActivity extends BaseActivity {
     }
 
     public void onClickimage_circular(View view) {
-        menuWindow = new SelectPicPopupWindow(PersonalInformationActivity.this, itemsOnClick);
-        menuWindow.showAtLocation(PersonalInformationActivity.this.findViewById(R.id.personalInFoContainer), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+
+        dialog = new SelectHeadPicDialog(this,itemsOnClick);
+        dialog.show();
     }
 
     //改变头像
     private View.OnClickListener itemsOnClick = new View.OnClickListener() {
 
         public void onClick(View v) {
-            menuWindow.dismiss();
+            dialog.dismiss();
             switch (v.getId()) {
                 case R.id.tv_call_camera:
                     imageDir = "temp.jpg";
