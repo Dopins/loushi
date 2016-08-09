@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity {
     private final static int FLAG_LOGIN = 1;
     private final static int FLAG_GET_USRINFO = 2;
     private final static int DELAYTIME_LOGIN = 29 * 60 * 1000;
-    private final static int DELAYTIME_USERINFO = 10 * 1000;
+    private final static int DELAYTIME_USERINFO = 60 * 1000;
 
     public Handler handler = new Handler() {
         @Override

@@ -59,6 +59,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="31dp"
         android:paddingRight="31dp"
+        android:scrollbars="none"
         android:paddingTop="33dp">
 
         <RelativeLayout

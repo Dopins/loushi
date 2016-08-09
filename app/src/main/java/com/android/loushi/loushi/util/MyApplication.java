@@ -38,7 +38,6 @@ public class MyApplication extends LitePalApplication {
     public void onCreate() {
         super.onCreate();
 
-
         OkHttpUtils.init(this);
         OkHttpUtils.getInstance()
                 .debug("OkHttpUtils")
@@ -68,6 +67,8 @@ public class MyApplication extends LitePalApplication {
 
         initBugly();
         initUMeng();
+
+
 
     }
 
@@ -107,7 +108,5 @@ public class MyApplication extends LitePalApplication {
 
         });
     }
-
-
 
 }
