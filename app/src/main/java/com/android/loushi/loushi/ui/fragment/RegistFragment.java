@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.callback.DialogCallback;
 import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.event.ReceiveSmsEvent;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
@@ -241,7 +242,7 @@ public class RegistFragment extends Fragment {
                     params("mobile_phone",regist_edit_phone.getText().toString()).
                     params("password",regist_edit_password.getText().toString()).
                     params("verify_code", regist_edit_checkword.getText().toString()).
-                    params("token", token).execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
+                    params("token", token).execute(new DialogCallback<ResponseJson>((AppCompatActivity) getActivity(), ResponseJson.class) {
                 @Override
                 public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
                     if (responseJson.getState()) {
@@ -254,7 +255,7 @@ public class RegistFragment extends Fragment {
                                 .params("mobile_phone", regist_edit_phone.getText().toString())
                                 .params("password", regist_edit_password.getText().toString())
                                 .params("isThird", "false")
-                                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+                                .execute(new DialogCallback<UserLoginJson>((AppCompatActivity) getActivity(), UserLoginJson.class) {
                                     @Override
                                     public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
                                         Log.e(TAG, request.toString());

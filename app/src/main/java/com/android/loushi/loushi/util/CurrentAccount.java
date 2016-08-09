@@ -9,6 +9,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.jsonbean.Area;
+import com.android.loushi.loushi.jsonbean.UserAreaJson;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
@@ -40,6 +42,10 @@ public class CurrentAccount {
 
     public static boolean ReFresh;
 
+    //userAreaJson里面的数据
+    public static String province;
+    public static String district;
+    public static String city;
 
     //userInfoJson里面的数据
     public static String nickname;
@@ -73,6 +79,25 @@ public class CurrentAccount {
         editor.putBoolean("Third", Third);
         editor.putString("Third_type", Third_type);
         editor.commit();
+    }
+
+    public static void storeDatas(UserAreaJson userAreaJson){
+        Log.e("BIG ", "initDatas");
+
+        UserAreaJson.BodyBean body = (UserAreaJson.BodyBean) userAreaJson.getBody();
+        if (body.getProvince() != null) editor.putString("province", body.getProvince());
+        if (body.getDistrict() != null) editor.putString("district", body.getDistrict());
+        if (body.getCity() != null) editor.putString("city", body.getCity());
+        editor.commit();
+        Log.e(TAG, "将数据存储至 SharedPreferences ");
+        getAreaDatas();
+
+    }
+
+    private static void getAreaDatas() {
+        setProvince(sharedPreferences.getString("province","null"));
+        setDistrict(sharedPreferences.getString("district","null"));
+        setCity(sharedPreferences.getString("city","null"));
     }
 
     public static void storeDatas(UserInfoJson userInfoJson) {
@@ -243,6 +268,30 @@ public class CurrentAccount {
 
     public static void setAccount(String account) {
         CurrentAccount.account = account;
+    }
+
+    public static String getProvince() {
+        return province;
+    }
+
+    public static void setProvince(String province) {
+        CurrentAccount.province = province;
+    }
+
+    public static String getCity() {
+        return city;
+    }
+
+    public static void setCity(String city) {
+        CurrentAccount.city = city;
+    }
+
+    public static String getDistrict() {
+        return district;
+    }
+
+    public static void setDistrict(String district) {
+        CurrentAccount.district = district;
     }
 
 }

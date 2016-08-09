@@ -22,7 +22,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.callback.DialogCallback;
 import com.android.loushi.loushi.jsonbean.Area;
 import com.android.loushi.loushi.jsonbean.ImageJson;
 import com.android.loushi.loushi.jsonbean.School;
@@ -58,10 +58,6 @@ public class PersonalInformationActivity extends BaseActivity {
     public static final String IMAGE_UNSPECIFIED = "image/*";
     private String imageDir;
     private Uri imageUri;
-    private String img_url;
-
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
 
     private String user_id;
     private String nickname;
@@ -102,8 +98,8 @@ public class PersonalInformationActivity extends BaseActivity {
 
         headImgUrl = CurrentAccount.getHeadImgUrl();
         if (headImgUrl != "null") {
-            Log.e(TAG, "bindViews: img_url = " + img_url);
-            Picasso.with(this).load(img_url).fit().into(image_circular);
+            Log.e(TAG, "test : img_url = " + headImgUrl);
+            Picasso.with(this).load(headImgUrl).fit().into(image_circular);
         } else {
             Log.e(TAG, "headImgUrl为空!");
         }
@@ -124,13 +120,19 @@ public class PersonalInformationActivity extends BaseActivity {
     }
 
     private void initDatas() {
-
-        spinner_sex.setItems("男", "女");
-        spinner_sex.setDropdownMaxHeight(600);
+        if(CurrentAccount.getHeadImgUrl()!= null)Picasso.with(this).load(CurrentAccount.getHeadImgUrl()).into(image_circular);
+        if(CurrentAccount.getNickname()!= null)edit_nickname.setText(CurrentAccount.getNickname());
+        if(CurrentAccount.getMobile_phone()!= null)edit_phone.setText(CurrentAccount.getMobile_phone());
+        spinner_sex.setItems("女", "男");
+        spinner_sex.setDropdownMaxHeight(300);
         spinner_province.setItems("广东省", "广西省", "山东省", "海南省", "安徽省", "四川省");
-        spinner_province.setDropdownMaxHeight(600);
+        spinner_province.setDropdownMaxHeight(300);
         spinner_university.setItems("No.1", "No.2", "No.3", "No.4", "No.5");
-        spinner_university.setDropdownMaxHeight(600);
+        spinner_university.setDropdownMaxHeight(300);
+        Log.e(TAG, "Sex : " +CurrentAccount.getSex());
+        if (CurrentAccount.getSex() != null && CurrentAccount.getSex().equals("1")) spinner_sex.setSelectedIndex(1);
+        else spinner_sex.setSelectedIndex(0);
+
     }
 
     public void onClickbtn_return(View view) {
@@ -161,8 +163,7 @@ public class PersonalInformationActivity extends BaseActivity {
                     startActivityForResult(intent, TAKE_PHOTO);
                     break;
                 case R.id.tv_call_gallery:
-                    File outputImage = new File(Environment.getExternalStorageDirectory()
-                            , "output_Image.jpg");
+                    File outputImage = new File(Environment.getExternalStorageDirectory(), "output_Image.jpg");
                     try {
                         if (outputImage.exists()) {
                             outputImage.delete();
@@ -231,7 +232,7 @@ public class PersonalInformationActivity extends BaseActivity {
                             .params("img", ss)
                             .params("user_id", CurrentAccount.getUser_id())
                             .params("imgFileName", "1.jpg")
-                            .execute(new JsonCallback<ImageJson>(ImageJson.class) {
+                            .execute(new DialogCallback<ImageJson>(this, ImageJson.class) {
                                 @Override
                                 public void onResponse(boolean isFromCache, ImageJson imageJson, Request request, @Nullable Response response) {
                                     if (imageJson.getState()) {
@@ -273,7 +274,7 @@ public class PersonalInformationActivity extends BaseActivity {
                 .params("headImgUrl", headImgUrl)
                 .params("school.id", schoolName)
                 .params("sex", sex)
-                .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
+                .execute(new DialogCallback<UserInfoJson>(this, UserInfoJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
                         Log.e(TAG, "UserInfoJson.onResponse: " + response.toString());

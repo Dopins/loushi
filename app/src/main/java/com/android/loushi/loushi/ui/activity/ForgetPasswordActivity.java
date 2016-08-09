@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.callback.DialogCallback;
 import com.android.loushi.loushi.event.ReceiveSmsEvent;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.util.UnderLineEditText;
@@ -147,7 +147,7 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
             OkHttpUtils.post(String.format("%s%s",BaseActivity.url,"user/userForgetPassword")).params("mobile_phone", edit_phone.getText().toString())
                     .params("newpassword", edit_newpassword.getText().toString())
                     .params("verify_code", regist_edit_checkword.getText().toString())
-                    .params("token", token).execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
+                    .params("token", token).execute(new DialogCallback<ResponseJson>(this, ResponseJson.class) {
                 @Override
                 public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
                     if(responseJson.getState()){
