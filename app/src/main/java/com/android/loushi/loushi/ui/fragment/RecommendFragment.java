@@ -173,6 +173,7 @@ public class RecommendFragment extends LazyFragment {
                                 Log.e("recomend","数据");
                                 bodyBeanList.addAll(recommendJson.getBody());
                                 rDate = bodyBeanList.get(bodyBeanList.size() - 1).getRDate().substring(0, 10);
+                                Log.e("tag",rDate);
                                 recommendRecycleViewAdapter.notifyDataSetChanged();
                                 Log.e("recomend", "更新");
                            // }

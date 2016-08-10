@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +41,7 @@ public class SceneFragment extends BaseFragment {
     private List<String> list_title;                                     //tab名称列表
 
     private RecommendFragment recommendFragment;
-    private SceneListInterestFragment sceneListInterestFragment;
-    private SceneListStyleFragment sceneListStyleFragment;
-    private SceneListHabitFragment sceneListHabitFragment;
+    private SceneListMainPageFragment sceneListMainPageFragment;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -54,7 +51,7 @@ public class SceneFragment extends BaseFragment {
         mToolbar.setTitle("");
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         mTv_index = (TextView) mToolbar.findViewById(R.id.toolbar_index);
-        mTv_index.setText("场景");
+        mTv_index.setText("主页");
 
         LinearLayout btn_search=(LinearLayout)getView().findViewById(R.id.btn_search);
         btn_search.setOnClickListener(new View.OnClickListener() {
@@ -91,32 +88,24 @@ public class SceneFragment extends BaseFragment {
 
         //初始化各fragment
         recommendFragment = new RecommendFragment();
-        sceneListInterestFragment = new SceneListInterestFragment();
-        sceneListStyleFragment = new SceneListStyleFragment();
-        sceneListHabitFragment = new SceneListHabitFragment();
+        sceneListMainPageFragment = new SceneListMainPageFragment();
 
         //将fragment装进列表中
         list_fragment = new ArrayList<>();
         list_fragment.add(recommendFragment);
-        list_fragment.add(sceneListInterestFragment);
-        list_fragment.add(sceneListStyleFragment);
-        list_fragment.add(sceneListHabitFragment);
+        list_fragment.add(sceneListMainPageFragment);
 
 
         //将名称加载tab名字列表，正常情况下，我们应该在values/arrays.xml中进行定义然后调用
         list_title = new ArrayList<>();
         list_title.add("推荐");
-        list_title.add("兴趣");
-        list_title.add("风格");
-        list_title.add("习惯");
+        list_title.add("场景");
 
         //设置TabLayout的模式
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         //为TabLayout添加tab名称
         tabLayout.addTab(tabLayout.newTab().setText(list_title.get(0)));
         tabLayout.addTab(tabLayout.newTab().setText(list_title.get(1)));
-        tabLayout.addTab(tabLayout.newTab().setText(list_title.get(2)));
-        tabLayout.addTab(tabLayout.newTab().setText(list_title.get(3)));
 
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), list_fragment, list_title);
 
