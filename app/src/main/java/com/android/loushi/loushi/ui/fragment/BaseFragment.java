@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.loushi.loushi.R;
+import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
 
@@ -85,5 +86,18 @@ public  class  BaseFragment extends Fragment {
             throw new RuntimeException(var3);
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(getContext());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(getContext());
+    }
+
 }
 

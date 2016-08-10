@@ -29,7 +29,9 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Request;
 import okhttp3.Response;
@@ -132,6 +134,13 @@ public class MyMessageActivity extends BaseActivity implements
                 intent.putExtra(KeyConstant.TYPE,type);
                 intent.putExtra(KeyConstant.PID,pid);
                 intent.putExtra(KeyConstant.COMMENT_ID,p);
+
+                Map map=new HashMap<String,String>();
+                map.put("test_pid",pid);
+                map.put("test_type",type);
+                MobclickAgent.onEventValue(MyMessageActivity.this,
+                        "评论",map,postion);
+
                 startActivity(intent);
             }
         });

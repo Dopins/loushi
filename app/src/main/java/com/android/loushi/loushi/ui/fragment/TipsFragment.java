@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
 
@@ -84,6 +85,7 @@ public class TipsFragment extends LazyFragment {
                         } else
                             Toast.makeText(getContext(), "" + strategyJson.getReturn_info(), Toast.LENGTH_SHORT).show();
 //                        Log.e(TAG,bodyBean.getBody().size()+"");
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
     }
@@ -103,6 +105,12 @@ public class TipsFragment extends LazyFragment {
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        swipeRefreshLayout.setProgressViewOffset(
+                true,
+                0,
+                (int) TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,24,getResources().getDisplayMetrics()));
+        swipeRefreshLayout.setRefreshing(true);
         recycleViewTips = (RecyclerView) findViewById(R.id.recycleView);
         mAdapter = new TopicItemAdapter(getContext(),
                 mTipsList,
@@ -145,7 +153,6 @@ public class TipsFragment extends LazyFragment {
                 mSkip = 0;
                 mTipsList.clear();
                 loadData();
-                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
