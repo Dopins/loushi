@@ -51,21 +51,21 @@ public class MyApplication extends LitePalApplication {
         String phone = CurrentAccount.getMobile_phone();
         String password = CurrentAccount.getPassword();
         Log.e("my",phone+password);
-        OkHttpUtils.post(UrlConstant.USERLOGINURL)
-                .params(KeyConstant.MOBILE_PHONE, phone)
-                .params(KeyConstant.PASSWORD, password)
-                .params(KeyConstant.ISTHIRD, "false")
-                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
-                    @Override
-                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-                        if (userLoginJson.getState()) {
-                            BaseActivity.user_id = userLoginJson.getBody() + "";
-                            Log.e(TAG, "autoLogin 登录成功！");
-                        } else {
-                            Log.e(TAG, "autoLogin 登录失败！");
-                        }
-                    }
-                });
+//        OkHttpUtils.post(UrlConstant.USERLOGINURL)
+//                .params(KeyConstant.MOBILE_PHONE, phone)
+//                .params(KeyConstant.PASSWORD, password)
+//                .params(KeyConstant.ISTHIRD, "false")
+//                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+//                    @Override
+//                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+//                        if (userLoginJson.getState()) {
+//                            BaseActivity.user_id = userLoginJson.getBody() + "";
+//                            Log.e(TAG, "autoLogin 登录成功！");
+//                        } else {
+//                            Log.e(TAG, "autoLogin 登录失败！");
+//                        }
+//                    }
+//                });
 
         //kookie设置为持久化
         //debug是打印调试信息 可不要

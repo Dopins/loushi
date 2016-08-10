@@ -4,12 +4,14 @@ import android.Manifest;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,10 +23,13 @@ import com.alibaba.sdk.android.trade.TradeConfigs;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.UpdateVersionJson;
+import com.android.loushi.loushi.jsonbean.UserInfoJson;
+import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.util.CurrentAccount;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
 import com.taobao.tae.sdk.callback.InitResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -50,14 +55,101 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
         InitTaobao();
         CheckUpdate();
-
+        CheckCanLogin();
 
 
     }
     private void CheckCanLogin(){
         if(CurrentAccount.isLoginOrNot()){
-            
+            if(CurrentAccount.isThird()){
+                LoginThird();
+            }
+            else{
+               LoginNotThird();
+            }
+
         }
+        else
+            GoMainACtivity();
+    }
+    private void LoginThird(){
+        final String account=CurrentAccount.getAccount();
+        String password=CurrentAccount.getPassword();
+        final String type =CurrentAccount.Third_type;
+
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
+                .params("account", account)
+                .params("type", type)
+                .params("token", password)
+                .params("isThird", "true")
+                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+                    @Override
+                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+
+                        if (userLoginJson.getState()) {
+
+                            //CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
+                            String code = userLoginJson.getCode();
+                            if (code != null && code == "3") {
+
+                            } else {
+                                BaseActivity.user_id =userLoginJson.getBody() +"";
+                                CurrentAccount.setUser_id(userLoginJson.getBody() +"");
+                                getUserInfo(userLoginJson.getBody());
+                            }
+
+                        } else {
+                            CurrentAccount.setLoginOrNot(false);
+                            Log.e("splashthirdlogin", "登录失败！");
+                        }
+                    }
+                });
+    }
+    private void LoginNotThird(){
+        final String account=CurrentAccount.getAccount();
+        String password=CurrentAccount.getPassword();
+        Log.e("splashaccount",account+password);
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
+                .params("mobile_phone", account)
+                .params("password", password)
+                .params("isThird", "false")
+                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+                    @Override
+                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+
+                        if (userLoginJson.getState()) {
+                            Log.e("splashnotthird", "登录成功！");
+
+                            BaseActivity.user_id = userLoginJson.getBody() + ""; //冗余
+                            CurrentAccount.setUser_id(userLoginJson.getBody() +"");
+                            getUserInfo(userLoginJson.getBody());
+
+                        } else {
+                            CurrentAccount.setLoginOrNot(false);
+                            Log.e("splashnotthirdlogin", "登录失败！");
+                        }
+                        GoMainACtivity();
+                    }
+                });
+    }
+    private void getUserInfo(int id) {
+        //Log.e(TAG, "getUserInfo");
+        String user_id = id + "";
+        Log.e("BIG ", user_id);
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfo.action")
+                .params("user_id", user_id)
+                .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
+                    @Override
+                    public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
+                        if (userInfoJson.isState()) {
+
+                            CurrentAccount.storeDatas(userInfoJson);
+
+                            //transferMyFragmentToPersonalFragment();
+                        }
+                        //GoMainACtivity();
+                    }
+                });
     }
     private void InitTaobao() {
         TradeConfigs.defaultTaokePid = "mm_114880276_0_0";
@@ -237,6 +329,11 @@ public class SplashActivity extends BaseActivity {
 
         //InitTaobao();
         //继续执行
+    }
+    private void GoMainACtivity(){
+        Intent intent = new Intent(SplashActivity.this,MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

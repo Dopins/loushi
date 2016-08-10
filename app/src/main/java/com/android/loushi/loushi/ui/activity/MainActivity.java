@@ -23,6 +23,7 @@ import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.ui.fragment.CategoryFragment;
 import com.android.loushi.loushi.ui.fragment.MyFragment;
+import com.android.loushi.loushi.ui.fragment.PersonFragment;
 import com.android.loushi.loushi.ui.fragment.SceneFragment;
 import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.KeyConstant;
@@ -88,7 +89,7 @@ public class MainActivity extends BaseActivity {
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
         mTabHost.getTabWidget().setDividerDrawable(android.R.color.transparent);
-        startHandler();
+        //startHandler();
     }
 
     private void startHandler() {
@@ -161,8 +162,14 @@ public class MainActivity extends BaseActivity {
             //为每一个Tab按钮设置图标、文字和内容
 
             final TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTextviewArray[i]).setIndicator(getTabItemView(i));
-
-            mTabHost.addTab(tabSpec, fragmentArray[i], null);
+            if(i==2) {
+                if(!CurrentAccount.isLoginOrNot())
+                mTabHost.addTab(tabSpec, fragmentArray[i], null);
+                else
+                    mTabHost.addTab(tabSpec, PersonFragment.class, null);
+            }
+            else
+                mTabHost.addTab(tabSpec, fragmentArray[i], null);
 
         }
 
