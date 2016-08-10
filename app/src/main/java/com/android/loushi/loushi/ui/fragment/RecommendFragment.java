@@ -21,6 +21,7 @@ import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.cache.CacheMode;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -157,7 +158,7 @@ public class RecommendFragment extends LazyFragment {
                 // 请求方式和请求url
                 .params("user_id",BaseActivity.user_id)
                 .params("rdate", rDate)
-                .params("take", take + "")
+                .params("take", take + "").cacheKey("recommend").cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
                 .execute(new JsonCallback<RecommendJson>(RecommendJson.class) {
                     @Override
                     public void onResponse(boolean b, RecommendJson recommendJson, Request request, Response response) {
@@ -166,8 +167,8 @@ public class RecommendFragment extends LazyFragment {
                             if (recommendJson.getBody().size() < oneTakeNum) has_data = false;
 
                             if (isEmpty(recommendJson)) {
-                                has_data=false;
-                            }else{
+                                has_data = false;
+                            } else {
                                 bodyBeanList.addAll(recommendJson.getBody());
                                 rDate = bodyBeanList.get(bodyBeanList.size() - 1).getRDate().substring(0, 10);
                                 recommendRecycleViewAdapter.notifyDataSetChanged();

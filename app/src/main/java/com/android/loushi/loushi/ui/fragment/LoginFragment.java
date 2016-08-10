@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.BoolRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -35,7 +36,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.litepal.crud.DataSupport;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.callback.DialogCallback;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.thirdlogin.LoginApi;
@@ -159,7 +160,7 @@ public class LoginFragment extends Fragment {
                             .params("mobile_phone", login_edit_phone.getText().toString())
                             .params("password", login_edit_password.getText().toString())
                             .params("isThird", "false")
-                            .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+                            .execute(new DialogCallback<UserLoginJson>((AppCompatActivity) getActivity(), UserLoginJson.class) {
                                 @Override
                                 public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
                                     Log.e(TAG, request.toString());
@@ -201,7 +202,7 @@ public class LoginFragment extends Fragment {
         Log.e("BIG ", user_id);
         OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfo.action")
                 .params("user_id", user_id)
-                .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
+                .execute(new DialogCallback<UserInfoJson>((AppCompatActivity) getActivity(), UserInfoJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
                         if (userInfoJson.isState()) {
@@ -363,7 +364,7 @@ public class LoginFragment extends Fragment {
                         .params("type", type)
                         .params("token", token)
                         .params("isThird", "true")
-                        .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+                        .execute(new DialogCallback<UserLoginJson>((AppCompatActivity) getActivity(), UserLoginJson.class) {
                             @Override
                             public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
 
@@ -372,10 +373,11 @@ public class LoginFragment extends Fragment {
                                     CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
                                     CurrentAccount.storeAccountInfo(userLoginJson.getBody()+"",account,token,true,type);
                                     String code = userLoginJson.getCode();
-                                    if (code != null && code == "3") {
+                                    if (code != null && code.equals("3")) {
                                         Log.e(TAG, "第三方登陆的第一次登陆");
                                         transferMyFragmentToPersonalInformationActivity();
                                         transferMyFragmentToPersonalFragment();
+
                                     } else {
                                         BaseActivity.user_id =userLoginJson.getBody() +"";
                                         getUserInfo(userLoginJson.getBody());

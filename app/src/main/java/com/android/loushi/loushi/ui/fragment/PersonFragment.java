@@ -107,6 +107,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.btn_profile:
                 //TODO
+                intent = new Intent(getActivity(), PersonalInformationActivity.class);
+                startActivity(intent);
                 break;
             case R.id.my_settings:
                 intent = new Intent(getActivity(), SettingActivity.class);
@@ -174,55 +176,55 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         Log.e("personinit", list_count.size() + "");
         if (list_count.size() == 0) {
             OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
-                    .params("user_id", BaseActivity.user_id).tag(this).
+                    .params("user_id", BaseActivity.user_id).tag(this).cacheKey("usercollectnums").cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE).
                     execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
-                @Override
-                public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
-                    if (userCollectsNum.isState()) {
-                        list_count.add(userCollectsNum.getBody().getSceneNum() + "");
-                        list_count.add(userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
-                        list_count.add(userCollectsNum.getBody().getGoodsNum() + "");
+                        @Override
+                        public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
+                            if (userCollectsNum.isState()) {
+                                list_count.add(userCollectsNum.getBody().getSceneNum() + "");
+                                list_count.add(userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
+                                list_count.add(userCollectsNum.getBody().getGoodsNum() + "");
 
 
-                        collectGoodFragment = new CollectGoodFragment();
-                        Bundle bundle;
-                        bundle = new Bundle();
-                        bundle.putString(CollectGoodFragment.TYPE, "0");
-                        collectGoodFragment.setArguments(bundle);
-                        list_fragment.add(collectGoodFragment);
-                        collectGoodFragment = new CollectGoodFragment();
-                        bundle = new Bundle();
-                        bundle.putString(CollectGoodFragment.TYPE, "1");
-                        collectGoodFragment.setArguments(bundle);
-                        list_fragment.add(collectGoodFragment);
-                        collectGoodFragment = new CollectGoodFragment();
-                        bundle = new Bundle();
-                        collectGoodFragment.setArguments(bundle);
-                        bundle.putString(CollectGoodFragment.TYPE, "3");
-                        list_fragment.add(collectGoodFragment);
-                        personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(), list_fragment, list_count, getContext());
-                        mViewPager.setAdapter(personCollectTabAdapter);
+                                collectGoodFragment = new CollectGoodFragment();
+                                Bundle bundle;
+                                bundle = new Bundle();
+                                bundle.putString(CollectGoodFragment.TYPE, "0");
+                                collectGoodFragment.setArguments(bundle);
+                                list_fragment.add(collectGoodFragment);
+                                collectGoodFragment = new CollectGoodFragment();
+                                bundle = new Bundle();
+                                bundle.putString(CollectGoodFragment.TYPE, "1");
+                                collectGoodFragment.setArguments(bundle);
+                                list_fragment.add(collectGoodFragment);
+                                collectGoodFragment = new CollectGoodFragment();
+                                bundle = new Bundle();
+                                collectGoodFragment.setArguments(bundle);
+                                bundle.putString(CollectGoodFragment.TYPE, "3");
+                                list_fragment.add(collectGoodFragment);
+                                personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(), list_fragment, list_count, getContext());
+                                mViewPager.setAdapter(personCollectTabAdapter);
 
-                        mtoorbar_tab.setTabStripWidth(120);
+                                mtoorbar_tab.setTabStripWidth(120);
 
 
-                        //mtoorbar_tab.setSelectedIndicatorColors(R.color.colorPrimary);
-                        mtoorbar_tab.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-                            @Override
-                            public int getIndicatorColor(int position) {
-                                return Color.rgb(105, 184, 187);
+                                //mtoorbar_tab.setSelectedIndicatorColors(R.color.colorPrimary);
+                                mtoorbar_tab.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+                                    @Override
+                                    public int getIndicatorColor(int position) {
+                                        return Color.rgb(105, 184, 187);
+                                    }
+                                });
+
+                                mtoorbar_tab.setDistributeEvenly(true);
+                                mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, R.id.tv_tab_view_count);
+
+
+                                //mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, 0);
+                                mtoorbar_tab.setViewPager(mViewPager);
                             }
-                        });
-
-                        mtoorbar_tab.setDistributeEvenly(true);
-                        mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, R.id.tv_tab_view_count);
-
-
-                        //mtoorbar_tab.setCustomTabView(R.layout.tab_item_view_collect, 0);
-                        mtoorbar_tab.setViewPager(mViewPager);
-                    }
-                }
-            });
+                        }
+                    });
         } else {
             mViewPager = (ViewPager) getView().findViewById(R.id.main_vp_container);
 
@@ -272,13 +274,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     private void initButton() {
         btn_profile = (Button) getView().findViewById(R.id.btn_profile);
-        btn_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), PersonalInformationActivity.class);
-                startActivity(intent);
-            }
-        });
+        btn_profile.setOnClickListener(this);
         tv_feed.setOnClickListener(this);
         btn_my_message = (ImageView) mToolbar.findViewById(R.id.my_message);
         btn_my_message.setOnClickListener(this);
@@ -351,6 +347,9 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
             case MainEvent.UPDATE_USERINFO:
                 updataMsgTips();
                 break;
+            case MainEvent.LOGIN_UPDATEINFO:
+                Log.e("person","接收消息"+MainEvent.LOGIN_UPDATEINFO+"");
+                break;
 
         }
     }
@@ -405,6 +404,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     public void onDestroy() {
         super.onDestroy();
         Log.e("person", "destroy");
+        rootView = null;
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 

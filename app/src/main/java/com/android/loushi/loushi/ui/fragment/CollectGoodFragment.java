@@ -117,7 +117,7 @@ public class CollectGoodFragment extends LazyFragment {
                 OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollections")
                 // 请求方式和请求url
                 .tag(this).params("type", type).params("user_id", BaseActivity.user_id)
-                .params("skip", skip + "").params("take", "6")
+                .params("skip", skip + "").params("take", "6").cacheKey("userCollections").cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
 
 
                         // 请求的 tag, 主要用于取消对应的请求
@@ -125,6 +125,10 @@ public class CollectGoodFragment extends LazyFragment {
                 .execute(new JsonCallback<UserCollectionsJson>(UserCollectionsJson.class) {
                              @Override
                              public void onResponse(boolean b, UserCollectionsJson userCollectionsJson, Request request, Response response) {
+                                 if(b){
+                                     if(beanList.size()!=0)
+                                         return;
+                                 }
                                  if(userCollectionsJson.getState()) {
                                      skip+=6;
                                      if(skip>Integer.parseInt(userCollectionsJson.getReturn_info()))

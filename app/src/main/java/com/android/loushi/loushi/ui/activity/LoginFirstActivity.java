@@ -101,7 +101,7 @@ public class LoginFirstActivity extends AppCompatActivity {
     @Subscribe
     public void onEventMainThread(MyfragmentEvent event) {
         Log.e(TAG, event.getmMsg());
-        if (event.getmMsg() == "Finish LoginFirstActivity") {
+        if (event.getmMsg().equals("Finish LoginFirstActivity")) {
             finish();
         }
     }

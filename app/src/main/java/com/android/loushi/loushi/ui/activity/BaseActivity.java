@@ -34,7 +34,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public static final String url = "http://www.loushi666.com/LouShi/";
     public static final String url_update = "http://www.loushi666.com/LouShi/base/updateVersion";
-    public static String user_id = "48";
+    public static final String url_login="http://www.loushi666.com/LouShi/user/userLogin.action";
+    public static final String url_scene_content="http://119.29.209.2.com:8080/loushi/scene.html?user_id="+ BaseActivity.user_id+"&scene_id=";
+    public static String user_id = "0";
     public static String TYPE = "TYPE";
     public static String GOOD_STRING = "GOOD_STRING";
     public static final String url_goods="http://www.loushi666.com/LouShi/base/goods";

@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -23,9 +24,11 @@ import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.ui.fragment.CategoryFragment;
 import com.android.loushi.loushi.ui.fragment.MyFragment;
+import com.android.loushi.loushi.ui.fragment.PersonFragment;
 import com.android.loushi.loushi.ui.fragment.SceneFragment;
 import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.ToastUtils;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.taobao.tae.sdk.callback.InitResultCallback;
@@ -84,11 +87,11 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         initView();
-        InitTaobao();
+
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
         mTabHost.getTabWidget().setDividerDrawable(android.R.color.transparent);
-        startHandler();
+        //startHandler();
     }
 
     private void startHandler() {
@@ -161,8 +164,14 @@ public class MainActivity extends BaseActivity {
             //为每一个Tab按钮设置图标、文字和内容
 
             final TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTextviewArray[i]).setIndicator(getTabItemView(i));
-
-            mTabHost.addTab(tabSpec, fragmentArray[i], null);
+            if(i==2) {
+                if(!CurrentAccount.isLoginOrNot())
+                mTabHost.addTab(tabSpec, fragmentArray[i], null);
+                else
+                    mTabHost.addTab(tabSpec, PersonFragment.class, null);
+            }
+            else
+                mTabHost.addTab(tabSpec, fragmentArray[i], null);
 
         }
 
@@ -213,11 +222,17 @@ public class MainActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(MainEvent event) {
-        if (event.getMsg() == MainEvent.NEED_LOGIN) {
-//            Intent intent =new Intent(MainActivity.this,FeedActivity.class);
-//            startActivity(intent);
-
+        Log.e("mainevent",event.getMsg()+"");
+        switch (event.getMsg()){
+            case MainEvent.NEED_LOGIN:
+                Intent intent =new Intent(MainActivity.this,LoginFirstActivity.class);
+                startActivity(intent);
+                break;
+            case MainEvent.STATE_CONNECT_FAIL:
+                ToastUtils.show(MainActivity.this,"网络错误",ToastUtils.LENGTH_LONG);
+                break;
         }
+
 
     }
 
@@ -228,5 +243,6 @@ public class MainActivity extends BaseActivity {
         handler.removeCallbacksAndMessages(null);
         handler = null;
     }
+
 
 }

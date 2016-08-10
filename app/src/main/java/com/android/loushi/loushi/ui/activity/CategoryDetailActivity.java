@@ -1,6 +1,5 @@
 package com.android.loushi.loushi.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -8,7 +7,6 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -23,16 +21,12 @@ import com.android.loushi.loushi.callback.DialogCallback;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.GoodsJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
-import com.android.loushi.loushi.jsonbean.StrategyJson;
 import com.android.loushi.loushi.jsonbean.TopicJson;
 import com.android.loushi.loushi.util.KeyConstant;
-import com.android.loushi.loushi.util.MyWebView;
 import com.android.loushi.loushi.util.ShareSomeThing;
-import com.android.loushi.loushi.util.ToastUtils;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
-import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -125,7 +119,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
                             good_id += url.charAt(i);
                     }
 
-                    Log.e("goodid",good_id);
+                    Log.e("goodid", good_id);
                     getGoodDetail(good_id);
                     return true;
                 } else
@@ -142,9 +136,8 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
 
         webView.getSettings().setSupportZoom(true);
 
-        webView.getSettings().setUseWideViewPort(false); //可任意比例缩放
         webView.getSettings().setDisplayZoomControls(false);
-
+        webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setBlockNetworkImage(false);
 
         //webView.getSettings().setLoadWithOverviewMode(true);

@@ -8,6 +8,8 @@ public class MainEvent {
     public final static int UPDATE_USERINFO=5;
     public final static int NEED_LOGIN=6;
     public final static int UPDATE_COLLECT=7;
+    public final static int LOGIN_UPDATEINFO=8;
+    public final static int STATE_CONNECT_FAIL=9;
 
     public MainEvent(){
         super();
