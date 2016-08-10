@@ -25,6 +25,7 @@ import com.alibaba.sdk.android.trade.page.ItemDetailPage;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.GoodDetailAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.jsonbean.GoodsJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.SceneGoodJson;
@@ -35,6 +36,8 @@ import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
 import com.taobao.tae.sdk.model.TaokeParams;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.LineNumberInputStream;
 import java.util.ArrayList;
@@ -182,7 +185,7 @@ public class GoodDetailActivity extends  BaseActivity {
                                     String imgurl = goodBean.getImages().get(0).getUrl();
                                     String title = goodBean.getName();
                                     String text = goodBean.getIntroduction();
-                                    String url ="http://www.baidu.com";
+                                    String url =String.format("%s%s",BaseActivity.url_good_share,good_id);
                                             //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
                                     ShareSomeThing shareSomeThing = new ShareSomeThing(getApplicationContext(), imgurl, url, text, title,user_id,"3",goodBean.getId()+"");
                                     shareSomeThing.DoShare();
@@ -228,6 +231,7 @@ public class GoodDetailActivity extends  BaseActivity {
 
             }
         });
+
     }
     private void initCollect(final boolean Collected){
         if(Collected)
@@ -253,6 +257,7 @@ public class GoodDetailActivity extends  BaseActivity {
                                 tv_collect_count.setText(num + "");
                                 btn_collect.setSelected(true);
                             }
+                            EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_COLLECT));
                         }
                     }
                 });

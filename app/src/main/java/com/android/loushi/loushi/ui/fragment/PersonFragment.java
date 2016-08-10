@@ -357,7 +357,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     @Subscribe
     public void onEventMainThread(MyfragmentEvent event) {
 
-        if (event.getmMsg()=="Transfer PersonalFragment to MyFragment!")
+        if (event.getmMsg().equals("Transfer PersonalFragment to MyFragment!"))
             transferToMyFragment();
     }
     private void updateCollect(){

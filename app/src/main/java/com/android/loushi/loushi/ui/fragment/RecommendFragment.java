@@ -163,16 +163,19 @@ public class RecommendFragment extends LazyFragment {
                     @Override
                     public void onResponse(boolean b, RecommendJson recommendJson, Request request, Response response) {
                         if (recommendJson.getState()) {
-
+                            Log.e("recommendjson",new Gson().toJson(recommendJson));
                             if (recommendJson.getBody().size() < oneTakeNum) has_data = false;
 
-                            if (isEmpty(recommendJson)) {
-                                has_data = false;
-                            } else {
+                          //  if (isEmpty(recommendJson)) {
+//                                Log.e("recomend","没数据");
+//                                has_data = false;
+//                            } else {
+                                Log.e("recomend","数据");
                                 bodyBeanList.addAll(recommendJson.getBody());
                                 rDate = bodyBeanList.get(bodyBeanList.size() - 1).getRDate().substring(0, 10);
                                 recommendRecycleViewAdapter.notifyDataSetChanged();
-                            }
+                                Log.e("recomend", "更新");
+                           // }
                             swipeRefreshLayout.setRefreshing(false);
 
                         } else {

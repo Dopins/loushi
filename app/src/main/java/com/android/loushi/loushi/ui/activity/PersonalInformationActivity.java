@@ -1,6 +1,7 @@
 package com.android.loushi.loushi.ui.activity;
 
 import android.app.Dialog;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,8 +26,10 @@ import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.DialogCallback;
+import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.Area;
 import com.android.loushi.loushi.jsonbean.ImageJson;
+import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.School;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
@@ -39,6 +42,7 @@ import com.android.loushi.loushi.util.SelectPicPopupWindow;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.squareup.picasso.Downloader;
 import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
 
@@ -51,7 +55,7 @@ import java.io.File;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class PersonalInformationActivity extends BaseActivity {
+public class PersonalInformationActivity extends BaseActivity implements View.OnClickListener{
     private String TAG = "PersonalInfoActivity";
 
     private Dialog dialog;
@@ -95,6 +99,9 @@ public class PersonalInformationActivity extends BaseActivity {
         bindViews();
         initDatas();
         test();
+//        if(!EventBus.getDefault().isRegistered(this))
+//            EventBus.getDefault().register(this);
+
     }
 
     private void test() {
@@ -142,15 +149,27 @@ public class PersonalInformationActivity extends BaseActivity {
     }
 
     public void onClickExit(View view) {
-        CurrentAccount.setLoginOrNot(false);
-        MobclickAgent.onProfileSignOff();
-        finish();
+        LogOut();
     }
 
     public void onClickimage_circular(View view) {
 
         dialog = new SelectHeadPicDialog(this,itemsOnClick);
         dialog.show();
+    }
+    public void LogOut(){
+        Log.e("personinfo", CurrentAccount.getUser_id());
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogout").params("user_id",CurrentAccount.getUser_id())
+                .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
+                    @Override
+                    public void onResponse(boolean b, ResponseJson responseJson, Request request, @Nullable Response response) {
+                        if (responseJson.getState()) {
+                            CurrentAccount.setLoginOrNot(false);
+                            MobclickAgent.onProfileSignOff();
+                            finish();
+                        }
+                    }
+                });
     }
 
     //改变头像
@@ -296,4 +315,14 @@ public class PersonalInformationActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //EventBus.getDefault().post(new MyfragmentEvent("Transfer PersonalFragment to MyFragment!"));
+    }
 }

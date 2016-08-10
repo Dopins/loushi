@@ -47,7 +47,7 @@ public class CurrentAccount {
     public static String district;
     public static String city;
 
-    //userInfoJson里面的数据
+    //userInfoJson里面的数据d
     public static String nickname;
     public static String mobile_phone;
     public static String headImgUrl;
@@ -138,6 +138,7 @@ public class CurrentAccount {
         setUser_id(sharedPreferences.getString("user_id", "null"));
         setPassword(sharedPreferences.getString("password", "null"));
         setLoginOrNot(sharedPreferences.getBoolean("LoginOrNot", false));
+        Log.e("splashthird",sharedPreferences.getBoolean("Third", false)+"");
         setThird(sharedPreferences.getBoolean("Third", false));
         setNickname(sharedPreferences.getString("nickname", "null"));
         setMobile_phone(sharedPreferences.getString("mobile_phone", "null"));
@@ -243,7 +244,7 @@ public class CurrentAccount {
     }
 
     public static void setThird(boolean Third) {
-        Third = Third;
+        CurrentAccount.Third = Third;
     }
 
     public static boolean isReFresh() {
@@ -259,7 +260,7 @@ public class CurrentAccount {
     }
 
     public static void setThird_type(String third_type) {
-        Third_type = third_type;
+        CurrentAccount.Third_type = third_type;
     }
 
     public static String getAccount() {

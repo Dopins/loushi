@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.DialogCallback;
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.jsonbean.GoodsJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.TopicJson;
@@ -26,6 +27,8 @@ import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.ShareSomeThing;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import okhttp3.Request;
 import okhttp3.Response;
@@ -250,6 +253,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
                                 tv_collect_count.setText(num + "");
                                 btn_collect.setSelected(true);
                             }
+                            EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_COLLECT));
                         }
                     }
                 });

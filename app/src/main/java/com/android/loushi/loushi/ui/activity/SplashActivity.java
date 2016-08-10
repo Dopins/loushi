@@ -28,6 +28,7 @@ import com.android.loushi.loushi.jsonbean.UpdateVersionJson;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.util.CurrentAccount;
+import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
 import com.taobao.tae.sdk.callback.InitResultCallback;
@@ -65,10 +66,13 @@ public class SplashActivity extends BaseActivity {
     }
     private void CheckCanLogin(){
         if(CurrentAccount.isLoginOrNot()){
+            Log.e("splash","可登陆");
             if(CurrentAccount.isThird()){
+                Log.e("splash","disanfang");
                 LoginThird();
             }
             else{
+                Log.e("splash","feidisanfang");
                LoginNotThird();
             }
 
@@ -89,12 +93,12 @@ public class SplashActivity extends BaseActivity {
                 .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-                         Log.e("splash","loginresponse");
+                         Log.e("splash",new Gson().toJson(userLoginJson));
                         if (userLoginJson.getState()) {
 
                             //CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
                             String code = userLoginJson.getCode();
-                            if (code != null && code == "3") {
+                            if (code != null && code.equals("3")) {
 
                             } else {
                                 BaseActivity.user_id =userLoginJson.getBody() +"";

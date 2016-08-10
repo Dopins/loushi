@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
@@ -30,6 +31,8 @@ import com.android.loushi.loushi.util.ShareSomeThing;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
+
+import org.greenrobot.eventbus.EventBus;
 
 import okhttp3.Request;
 import okhttp3.Response;
@@ -86,7 +89,7 @@ public class SceneDetailDesignFragment extends BaseFragment {
         webView.getSettings().setAppCacheEnabled(true);
         //设置缓存模式
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-        url=BaseActivity.url_scene_content+scene_id;
+        url="http://www.loushi666.com:8080/loushi/scene.html?user_id="+ BaseActivity.user_id+"&scene_id="+scene_id;
         Log.e("sceneurl",url);
         webView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
@@ -198,6 +201,7 @@ public class SceneDetailDesignFragment extends BaseFragment {
                                 tv_collect_count.setText(num + "");
                                 btn_collect.setSelected(true);
                             }
+                            EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_COLLECT));
                         }
                     }
                 });

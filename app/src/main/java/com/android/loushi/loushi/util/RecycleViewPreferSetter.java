@@ -101,6 +101,7 @@ public class RecycleViewPreferSetter {
                                 bodyBeanList.get(position).setCollectionNum(prefer_num+1);
                                 selectedStateSetter.SetSelectedState((prefer_num + 1)+"", true);
                             }
+                            EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_COLLECT));
 
                         } else {
                             Log.d("error", responseJson.getReturn_info());
@@ -137,6 +138,7 @@ public class RecycleViewPreferSetter {
                                 bodyBeanList.get(position).setCollectionNum(prefer_num+1);
                                 selectedStateSetter.SetSelectedState((prefer_num + 1)+"", true);
                             }
+                            EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_COLLECT));
 
                         } else {
                             Log.d("error", responseJson.getReturn_info());

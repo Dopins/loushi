@@ -78,7 +78,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
             return ITEM_TYPE_SCENE;
         } else if (position % 3 == 2 && bodyBeanList.get(getBodyBeanListPosition(position)).getStrategy()!=null ) {
             return ITEM_TYPE_TIP;
-        } else if (position % 3 == 0 && position != 0 && bodyBeanList.get(getBodyBeanListPosition(position)).getTopic()!=null ) {
+        } else if (position % 3 == 0 && bodyBeanList.get(getBodyBeanListPosition(position)).getTopic()!=null ) {
             return ITEM_TYPE_TOPIC;
         }
         return -1;
@@ -135,7 +135,6 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     private void setTipView(TipViewHolder holder, int position) {
-
         RecommendJson.BodyBean body = bodyBeanList.get(position);
         if(body.getStrategy()==null) return;
 

@@ -34,9 +34,11 @@ import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.litepal.crud.DataSupport;
+import org.w3c.dom.Text;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.DialogCallback;
+import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.thirdlogin.LoginApi;
@@ -50,6 +52,7 @@ import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.ui.activity.PersonalInformationActivity;
 import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.MyfragmentEvent;
+import com.android.loushi.loushi.util.ToastUtils;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
@@ -151,9 +154,16 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(final View view) {
 
-                if (!isMobileNO(login_edit_phone.getText().toString()) || login_edit_password.length() == 0) {
-                    Log.e(TAG, "请输入有效的电话号码和密码 !");
-                } else {
+                if (!isMobileNO(login_edit_phone.getText().toString())) {
+                    ToastUtils.show(getActivity(),"请输入有效的电话号码!",ToastUtils.LENGTH_SHORT);
+                    Log.e(TAG, "请输入有效的电话号码!");
+                }
+                if(login_edit_password.getText().toString().length()<6){
+                    ToastUtils.show(getActivity(),"密码不能少于6位",ToastUtils.LENGTH_SHORT);
+                }
+                else {
+
+
                     Log.e(TAG, login_edit_phone.getText().toString());
                     Log.e(TAG, login_edit_password.getText().toString());
                     OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
@@ -171,6 +181,7 @@ public class LoginFragment extends Fragment {
                                         BaseActivity.user_id = userLoginJson.getBody() + ""; //冗余
                                         Log.e(TAG, userLoginJson.getBody() + "");
                                         CurrentAccount.setLoginOrNot(true);
+                                        CurrentAccount.setThird(false);
                                         CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", login_edit_phone.getText().toString(), login_edit_password.getText().toString(),false,"0");
                                         getUserInfo(userLoginJson.getBody());
 
@@ -212,13 +223,13 @@ public class LoginFragment extends Fragment {
 
                             UserInfoJson.BodyBean body = userInfoJson.getBody();
                             //CurrentAccount.storeDatas(userInfoJson);
-                            Log.e(TAG,"1 :"+ body.getNickname());
-                            Log.e(TAG,"2 :"+ body.getMobilePhone());
-                            Log.e(TAG,"3 :"+ body.getHeadImgUrl());
-                            Log.e(TAG,"4 :"+ body.getEmail());
+                            Log.e(TAG, "1 :" + body.getNickname());
+                            Log.e(TAG, "2 :" + body.getMobilePhone());
+                            Log.e(TAG, "3 :" + body.getHeadImgUrl());
+                            Log.e(TAG, "4 :" + body.getEmail());
 //                            Log.e(TAG,"5 :"+ body.getSchool().getName());
-                            Log.e(TAG,"6 :"+ body.isSex());
-                            Log.e(TAG,"7 :"+ body.getMessageCount());
+                            Log.e(TAG, "6 :" + body.isSex());
+                            Log.e(TAG, "7 :" + body.getMessageCount());
 
                             CurrentAccount.storeDatas(userInfoJson);
                             transferMyFragmentToPersonalFragment();
@@ -375,10 +386,29 @@ public class LoginFragment extends Fragment {
                                     String code = userLoginJson.getCode();
                                     if (code != null && code.equals("3")) {
                                         Log.e(TAG, "第三方登陆的第一次登陆");
-                                        transferMyFragmentToPersonalInformationActivity();
+                                        CurrentAccount.setLoginOrNot(true);
+                                        CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", account, token, true, type);
+                                        //transferMyFragmentToPersonalInformationActivity();
+                                        CurrentAccount.setHeadImgUrl(platform.getDb().getUserIcon());
+                                        CurrentAccount.setNickname(platform.getDb().getUserName());
+                                        String sexBool="true";
+                                        String sex="男";
+                                        if(!TextUtils.isEmpty(platform.getDb().getUserGender())&&platform.getDb().getUserGender().equals("f")) {
+                                            sex = "女";
+                                            sexBool="false";
+                                        }
+                                        CurrentAccount.setSex(sex);
+                                        CurrentAccount.storeDatas(platform.getDb().getUserName(), platform.getDb().getUserIcon(), null, sex);
+                                        BaseActivity.user_id=userLoginJson.getBody() +"";
+                                        postUserInfo(userLoginJson.getBody() +"",platform.getDb().getUserName(),platform.getDb().getUserIcon(),sexBool);
                                         transferMyFragmentToPersonalFragment();
 
                                     } else {
+                                        CurrentAccount.setLoginOrNot(true);
+                                        CurrentAccount.setThird(true);
+                                        CurrentAccount.setThird_type(type);
+                                        CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", account, token, true, type);
+
                                         BaseActivity.user_id =userLoginJson.getBody() +"";
                                         getUserInfo(userLoginJson.getBody());
 
@@ -408,6 +438,24 @@ public class LoginFragment extends Fragment {
 
         //Log.e("TAG",Boolean.toString(api.getCanLogin()));
 
+    }
+    private void postUserInfo(String user_id,String nickname,String headImgUrl,String sex){
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfoAlt.action")
+                .params("user_id", user_id)
+                .params("nickname", nickname)
+                .params("headImgUrl", headImgUrl)
+                .params("sex", sex)
+                .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
+                    @Override
+                    public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
+                        Log.e(TAG, "UserInfoJson.onResponse: " + response.toString());
+                        Log.e(TAG, "userInfoJson.getState: " + userInfoJson.isState());
+                        if (userInfoJson.isState()) {
+                            Log.e(TAG, "onResponse: 资料提交成功 ！");
+                            CurrentAccount.setReFresh(true);
+                        }
+                    }
+                });
     }
 
     private String generateToken(String account) {
