@@ -171,6 +171,7 @@ public class RecommendFragment extends LazyFragment {
                             } else {
                                 bodyBeanList.addAll(recommendJson.getBody());
                                 rDate = bodyBeanList.get(bodyBeanList.size() - 1).getRDate().substring(0, 10);
+                                Log.e("tag",rDate);
                                 recommendRecycleViewAdapter.notifyDataSetChanged();
                             }
                             swipeRefreshLayout.setRefreshing(false);

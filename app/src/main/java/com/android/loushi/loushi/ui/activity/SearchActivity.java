@@ -59,10 +59,7 @@ public class SearchActivity extends BaseActivity {
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str = btn_search.getText().toString();
-                if (str.equals("取消")) {
                     finish();
-                }
             }
         });
 
@@ -85,8 +82,6 @@ public class SearchActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 keyword = editText_search.getText().toString();
-                if (keyword.length() != 0) btn_search.setText("取消");
-                else btn_search.setText("搜索");
                 if (flag) {
                     search();
                 }
