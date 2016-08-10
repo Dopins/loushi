@@ -26,6 +26,7 @@ import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.fragment.RecommendFragment;
 import com.android.loushi.loushi.viewpager.CarouselViewPager;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.cache.CacheMode;
 import com.squareup.picasso.Picasso;
 
 
@@ -233,6 +234,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private void getAdList() {
 
         OkHttpUtils.post(BaseActivity.url + "base/carousel")
+                .cacheKey("carousel").cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
                 // 请求方式和请求url
                 .execute(new JsonCallback<CarouselJson>(CarouselJson.class) {
                     @Override

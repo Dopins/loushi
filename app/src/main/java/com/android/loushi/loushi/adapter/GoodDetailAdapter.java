@@ -1,5 +1,7 @@
 package com.android.loushi.loushi.adapter;
 
+import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -67,20 +70,32 @@ public class GoodDetailAdapter extends RecyclerView.Adapter<GoodDetailAdapter.Go
 
     }
     private void showBigImage(String url){
-        ImageView img_big =new ImageView(context);
+        //ImageView img_big =new ImageView(context);
+        PhotoView img_big = new PhotoView(context);
 
         Picasso.with(context).load(url).into(img_big);
         PhotoViewAttacher attacher = new PhotoViewAttacher(img_big);
         attacher.update();
-        final AlertDialog dialog = new AlertDialog.Builder(context).create();
-        dialog.setView(img_big);
+
+        final Dialog dialog = new Dialog(context,R.style.Dialog_Fullscreen);
+        //dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        dialog.setContentView(img_big);
         dialog.show();
-        img_big.setOnClickListener(new View.OnClickListener() {
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+        attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+
             @Override
-            public void onClick(View v) {
+            public void onPhotoTap(View view, float v, float v1) {
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onOutsidePhotoTap() {
                 dialog.dismiss();
             }
         });
+
 
     }
 }

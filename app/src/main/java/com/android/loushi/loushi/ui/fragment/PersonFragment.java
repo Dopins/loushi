@@ -107,6 +107,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.btn_profile:
                 //TODO
+                intent = new Intent(getActivity(), PersonalInformationActivity.class);
+                startActivity(intent);
                 break;
             case R.id.my_settings:
                 intent = new Intent(getActivity(), SettingActivity.class);
@@ -174,7 +176,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         Log.e("personinit", list_count.size() + "");
         if (list_count.size() == 0) {
             OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
-                    .params("user_id", BaseActivity.user_id).tag(this).
+                    .params("user_id", BaseActivity.user_id).tag(this).cacheKey("usercollectnums").cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE).
                     execute(new JsonCallback<UserCollectsNum>(UserCollectsNum.class) {
                         @Override
                         public void onResponse(boolean b, UserCollectsNum userCollectsNum, Request request, Response response) {
@@ -272,13 +274,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     private void initButton() {
         btn_profile = (Button) getView().findViewById(R.id.btn_profile);
-        btn_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), PersonalInformationActivity.class);
-                startActivity(intent);
-            }
-        });
+        btn_profile.setOnClickListener(this);
         tv_feed.setOnClickListener(this);
         btn_my_message = (ImageView) mToolbar.findViewById(R.id.my_message);
         btn_my_message.setOnClickListener(this);
@@ -350,6 +346,9 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 break;
             case MainEvent.UPDATE_USERINFO:
                 updataMsgTips();
+                break;
+            case MainEvent.LOGIN_UPDATEINFO:
+                Log.e("person","接收消息"+MainEvent.LOGIN_UPDATEINFO+"");
                 break;
 
         }

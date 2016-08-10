@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -22,6 +23,7 @@ import com.alibaba.sdk.android.AlibabaSDK;
 import com.alibaba.sdk.android.trade.TradeConfigs;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.jsonbean.UpdateVersionJson;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
@@ -31,11 +33,13 @@ import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
 import com.taobao.tae.sdk.callback.InitResultCallback;
 import com.umeng.analytics.MobclickAgent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.StringReader;
 
+import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -85,7 +89,7 @@ public class SplashActivity extends BaseActivity {
                 .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-
+                         Log.e("splash","loginresponse");
                         if (userLoginJson.getState()) {
 
                             //CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
@@ -94,14 +98,24 @@ public class SplashActivity extends BaseActivity {
 
                             } else {
                                 BaseActivity.user_id =userLoginJson.getBody() +"";
-                                CurrentAccount.setUser_id(userLoginJson.getBody() +"");
+                                CurrentAccount.setUser_id(userLoginJson.getBody() + "");
                                 getUserInfo(userLoginJson.getBody());
+
                             }
 
                         } else {
                             CurrentAccount.setLoginOrNot(false);
                             Log.e("splashthirdlogin", "登录失败！");
                         }
+                        GoMainACtivity();
+
+                    }
+
+                    @Override
+                    public void onError(boolean isFromCache, Call call, @Nullable Response response, @Nullable Exception e) {
+                        super.onError(isFromCache, call, response, e);
+                        Log.e("splash", "loginerror");
+                        GoMainACtivity();
                     }
                 });
     }
@@ -116,18 +130,26 @@ public class SplashActivity extends BaseActivity {
                 .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-
+                        Log.e("splash","loginresponse");
                         if (userLoginJson.getState()) {
                             Log.e("splashnotthird", "登录成功！");
 
                             BaseActivity.user_id = userLoginJson.getBody() + ""; //冗余
-                            CurrentAccount.setUser_id(userLoginJson.getBody() +"");
+                            CurrentAccount.setUser_id(userLoginJson.getBody() + "");
                             getUserInfo(userLoginJson.getBody());
+
 
                         } else {
                             CurrentAccount.setLoginOrNot(false);
                             Log.e("splashnotthirdlogin", "登录失败！");
                         }
+                        //SystemClock.sleep(2000);
+                        GoMainACtivity();
+                    }
+                    @Override
+                    public void onError(boolean isFromCache, Call call, @Nullable Response response, @Nullable Exception e) {
+                        super.onError(isFromCache, call, response, e);
+                        Log.e("splash", "loginerror");
                         GoMainACtivity();
                     }
                 });
@@ -142,9 +164,9 @@ public class SplashActivity extends BaseActivity {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
                         if (userInfoJson.isState()) {
-
+                            Log.e("splashgetinfo","getinfo");
                             CurrentAccount.storeDatas(userInfoJson);
-
+                            EventBus.getDefault().post(new MainEvent(MainEvent.LOGIN_UPDATEINFO));
                             //transferMyFragmentToPersonalFragment();
                         }
                         //GoMainACtivity();

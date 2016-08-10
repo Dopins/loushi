@@ -373,10 +373,11 @@ public class LoginFragment extends Fragment {
                                     CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
                                     CurrentAccount.storeAccountInfo(userLoginJson.getBody()+"",account,token,true,type);
                                     String code = userLoginJson.getCode();
-                                    if (code != null && code == "3") {
+                                    if (code != null && code.equals("3")) {
                                         Log.e(TAG, "第三方登陆的第一次登陆");
                                         transferMyFragmentToPersonalInformationActivity();
                                         transferMyFragmentToPersonalFragment();
+
                                     } else {
                                         BaseActivity.user_id =userLoginJson.getBody() +"";
                                         getUserInfo(userLoginJson.getBody());

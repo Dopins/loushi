@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -29,13 +26,11 @@ import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.CommentActivity;
 import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
 import com.android.loushi.loushi.util.KeyConstant;
-import com.android.loushi.loushi.util.MyWebView;
 import com.android.loushi.loushi.util.ShareSomeThing;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
 
-import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -70,7 +65,7 @@ public class SceneDetailDesignFragment extends BaseFragment {
         sceneJson=new Gson().fromJson(sceneJsonString, SceneJson.BodyBean.class);
         nestedScrollView=(NestedScrollView)getView().findViewById(R.id.nestedscrollview);
         initWebview();
-//        initCollectBar();
+        initCollectBar();
 
 //        Log.e(TAG,"onActivityCreated");
     }
@@ -91,7 +86,7 @@ public class SceneDetailDesignFragment extends BaseFragment {
         webView.getSettings().setAppCacheEnabled(true);
         //设置缓存模式
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-        url="http://www.loushi666.com:8080/loushi/scene.html?user_id="+ BaseActivity.user_id+"&scene_id="+scene_id;
+        url=BaseActivity.url_scene_content+scene_id;
         Log.e("sceneurl",url);
         webView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
