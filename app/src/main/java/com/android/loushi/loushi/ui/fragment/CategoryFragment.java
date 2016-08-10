@@ -13,6 +13,7 @@ import android.widget.TableLayout;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.CategoryViewPagerAdapter;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,5 +86,17 @@ public class CategoryFragment extends BaseFragment {
 
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(TAG);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(TAG);
     }
 }

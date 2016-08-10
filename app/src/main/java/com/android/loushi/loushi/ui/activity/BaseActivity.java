@@ -63,5 +63,4 @@ public abstract class BaseActivity extends AppCompatActivity {
         MobclickAgent.onPause(this);
     }
 
-
 }

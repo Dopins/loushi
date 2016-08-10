@@ -83,18 +83,8 @@ public class MyMessageActivity extends BaseActivity implements
     }
 
     private void loadMessage(){
-        if(myMessageList==null||myMessageList.size()==0)
             loadComment(MainActivity.user_id,mSkip,mTake);
-        else{
-            if(mAdapter!=null){
-                try {
-                    mAdapter.parseMessage();
-                    mAdapter.notifyDataSetChanged();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+            Log.i("mytest","loadMessage reload message");
     }
 
     private void loadComment(String user_id,int skip,int take) {
@@ -120,6 +110,8 @@ public class MyMessageActivity extends BaseActivity implements
                         } else
                             Toast.makeText(MyMessageActivity.this, "网络异常...", Toast.LENGTH_SHORT)
                                     .show();
+                        swipeRefreshLayout.setRefreshing(false);
+
                     }
                 });
     }
@@ -174,9 +166,7 @@ public class MyMessageActivity extends BaseActivity implements
 
     @Override
     public void onRefresh() {
-        myMessageList.clear();
         loadMessage();
-        swipeRefreshLayout.setRefreshing(false);
     }
 
 

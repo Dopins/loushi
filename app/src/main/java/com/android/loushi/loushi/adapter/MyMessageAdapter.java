@@ -33,15 +33,11 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final String PREFIXWORD="回复了你:";
 
     private OnItemClickListener mOnItemClickListener;
-    private CircleImageTransformation mTransformation;
 
     private Context mContext;
     private List<UserMessageJson.BodyBean> myMessageList;
 
-//    private List<UserMessageJson.BodyBean> mNewMessgeList=new ArrayList<UserMessageJson.BodyBean>();
-//    private List<UserMessageJson.BodyBean> mOldMessageList=new ArrayList<UserMessageJson.BodyBean>();
     private int newCommentCount;  //新评论条数
-
 
     private static int TITLECOUNT=2;
     private static int BOTTOMCOUNT=1;
@@ -55,7 +51,6 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public MyMessageAdapter(Context mContext, List<UserMessageJson.BodyBean> myMessageList){
         this.mContext=mContext;
         this.myMessageList=myMessageList;
-        this.mTransformation=new CircleImageTransformation();
 
     }
 
@@ -126,8 +121,6 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public int getItemCount() {
         return myMessageList.size()+TITLECOUNT+BOTTOMCOUNT;
     }
-
-
 
     /**
      * 由当前在recycleview的位置获取在信息列表中的位置
