@@ -42,10 +42,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static final String url_goods="http://www.loushi666.com/LouShi/base/goods";
 
     protected abstract int getLayoutId();
+    protected Context mContext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext=this;
         setContentView(getLayoutId());
     }
 

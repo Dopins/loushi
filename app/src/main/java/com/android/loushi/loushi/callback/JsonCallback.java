@@ -201,6 +201,7 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
     @Override
     public void onError(boolean isFromCache, Call call, Response response, Exception e) {
         super.onError(isFromCache, call, response, e);
+        //Log.e("callerror",response.toString());
         EventBus.getDefault().post(new MainEvent(MainEvent.STATE_CONNECT_FAIL));
     }
 }

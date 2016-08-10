@@ -54,17 +54,17 @@ public class TipsFragment extends LazyFragment {
         setContentView(R.layout.fragment_tips);
         initView();
         if (isFirstShow) {
-            loadData();
+            loadData(false);
             isFirstShow = false;
         }
     }
 
-    private void loadData() {
-        loadData(MainActivity.user_id, mSkip, mTake);
+    private void loadData(boolean isClean) {
+        loadData(MainActivity.user_id, mSkip, mTake,isClean);
     }
 
 
-    private void loadData(String userId, Integer skip, final Integer take) {
+    private void loadData(String userId, Integer skip, final Integer take, final boolean isClean) {
 
         Log.i("test", "tips load --skip,take==" + skip + "," + take + ",,,isFirstShow==" + isFirstShow);
         OkHttpUtils.post(UrlConstant.TIPSCURL)
@@ -78,6 +78,8 @@ public class TipsFragment extends LazyFragment {
 
                         Log.i(TAG, "onResponse-- " + new Gson().toJson(strategyJson));
                         if (strategyJson.getState()) {
+                            if(isClean)
+                                mTipsList.clear();
                             mTipsList.addAll(strategyJson.getBody());
                             mAdapter.notifyDataSetChanged();
 //                            mSkip += mTake;
@@ -151,8 +153,7 @@ public class TipsFragment extends LazyFragment {
             @Override
             public void onRefresh() {
                 mSkip = 0;
-                mTipsList.clear();
-                loadData();
+                loadData(true);
             }
         });
     }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.android.loushi.loushi.R;
 
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.jsonbean.EmptyMsgJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.jsonbean.UserMessageJson;
 import com.android.loushi.loushi.ui.activity.MainActivity;
@@ -61,7 +62,11 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public MyMessageAdapter(Context mContext, List<UserMessageJson.BodyBean> myMessageList){
         this.mContext=mContext;
         this.myMessageList=myMessageList;
-
+        try {
+            parseMessage();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -224,11 +229,12 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public void onClick(View v) {
             OkHttpUtils.post(UrlConstant.CLEARMSGURL)
                     .params(KeyConstant.USER_ID, MainActivity.user_id)
-                    .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+                    .execute(new JsonCallback<EmptyMsgJson>(EmptyMsgJson.class) {
                         @Override
-                        public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, @Nullable Response response) {
+                        public void onResponse(boolean isFromCache, EmptyMsgJson userLoginJson, Request request, @Nullable Response response) {
                             if(userLoginJson.getState()){
                                 myMessageList.clear();
+                                newCommentCount=0;
                                 MyMessageAdapter.this.notifyDataSetChanged();
                             }else
                                 Toast.makeText(mContext,userLoginJson.getReturn_info(),Toast.LENGTH_SHORT).show();

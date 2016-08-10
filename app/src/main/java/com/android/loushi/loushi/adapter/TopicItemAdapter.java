@@ -93,11 +93,10 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
                 .into(holder.card_image);
         holder.num_prefer.setText(Integer.toString(tips.getCollectionNum()));
         holder.checkbox_prefer.setChecked(tips.getCollected());
-        holder.card_date.setText(tips.getWDate());
+//        holder.card_date.setText(tips.getWDate());
         holder.num_prefer.setText(tips.getCollectionNum() + "");
         holder.num_watch.setText(tips.getBrowseNum() + "");
         //TODO 没提供标题
-//        holder.card_title.setText(tips.getTipsGroup().getName());
         holder.card_detail.setText(tips.getName());
         // 设置点赞响应
         holder.btn_prefer.setOnClickListener(new View.OnClickListener() {
@@ -109,20 +108,6 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
                         .params(KeyConstant.USER_ID, MainActivity.user_id)
                         .params(KeyConstant.TYPE, AdapterType.TIPS.ordinal() + "")
                         .params(KeyConstant.PID, tips.getId() + "")
-//                        .execute(new UserCollectCallback() {
-//                            @Override
-//                            public void onResponse(boolean isFromCache, ResponseJson responseJson, Request request, @Nullable Response response) {
-//                                if (responseJson.getState()) {
-//                                    if (isChecked) {
-//                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText() + "") + 1 + "");
-//                                    } else {
-//                                        holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText() + "") - 1 + "");
-//                                    }
-//                                    holder.checkbox_prefer.setChecked(isChecked);
-//                                } else {
-//                                    Toast.makeText(mContext, "出了点小问题，请重试" + responseJson.getReturn_info(), Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
                         .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
                             @Override
                             public void onResponse(boolean isFromCache, ResponseJson responseJson, Request request, @Nullable Response response) {
@@ -134,7 +119,7 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
                                     }
                                     holder.checkbox_prefer.setChecked(isChecked);
                                 } else {
-                                    Toast.makeText(mContext, "出了点小问题，请重试" + responseJson.getReturn_info(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, "出了点小问题，请重试..." + responseJson.getReturn_info(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -160,10 +145,11 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
                 .into(holder.card_image);
         holder.num_prefer.setText(Integer.toString(topic.getCollectionNum()));
         holder.checkbox_prefer.setChecked(topic.getCollected());
-        holder.card_date.setText(topic.getWDate());
+//        holder.card_date.setText(topic.getWDate());
         holder.num_prefer.setText(topic.getCollectionNum() + "");
         holder.num_watch.setText(topic.getBrowseNum() + "");
-        holder.card_title.setText(topic.getTopicGroup().getName());
+//        holder.card_title.setText(topic.getTopicGroup().getName());
+        holder.card_title.setText(topic.getDigest());
         holder.card_detail.setText(topic.getName());
         // 设置点赞响应
         //TODO   抽取方法

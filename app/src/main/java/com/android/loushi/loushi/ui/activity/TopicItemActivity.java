@@ -32,7 +32,7 @@ import okhttp3.Response;
 /**
  * Created by binpeiluo on 2016/7/24 0024.
  */
-public class TopicItemActivity extends BaseActivity implements View.OnClickListener {
+public class TopicItemActivity extends BaseActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "TopicItemActivity";
 
@@ -73,16 +73,13 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
     private void initView() {
 
         initToolbar();
-
         initSwipeLayout();
-
         initRecycleView();
-
-        loadData();
+        loadData(false);
     }
 
-    private void loadData() {
-        loadSomeData(MainActivity.user_id, mTopic_id, mSkip, mTake);
+    private void loadData(boolean isClean) {
+        loadSomeData(MainActivity.user_id, mTopic_id, mSkip, mTake,isClean);
     }
 
     private void initRecycleView() {
@@ -99,6 +96,8 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         swipeRefreshLayout.setColorSchemeColors(this.getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     private void initToolbar() {
@@ -114,7 +113,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
         imageViewBack.setOnClickListener(this);
     }
 
-    private void loadSomeData(String userID, Integer groupId, Integer skip, Integer take) {
+    private void loadSomeData(String userID, Integer groupId, Integer skip, Integer take,final boolean isClean) {
         OkHttpUtils.post(UrlConstant.TOPICURL)
                 .tag(this)
                 .params("user_id", userID)
@@ -124,11 +123,20 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
                 .execute(new JsonCallback<TopicJson>(TopicJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, TopicJson topicJson, Request request, @Nullable Response response) {
-                        if (topicJson == null || topicJson.getBody() == null)
-                            return;
-                        mTopicList.addAll(topicJson.getBody());
-                        mAdapter.notifyDataSetChanged();
-                        mSkip+=topicJson.getBody().size();
+                        if (topicJson.getState()) {
+                            if(isClean)
+                                mTopicList.clear();
+                            mTopicList.addAll(topicJson.getBody());
+                            mAdapter.notifyDataSetChanged();
+                            mSkip += topicJson.getBody().size();
+                        }else
+                            Toast.makeText(mContext,topicJson.getReturn_info(),Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.setRefreshing(false);
+//                        if (topicJson == null || topicJson.getBody() == null)
+//                            return;
+//                        mTopicList.addAll(topicJson.getBody());
+//                        mAdapter.notifyDataSetChanged();
+//                        mSkip+=topicJson.getBody().size();
                     }
                 });
     }
@@ -165,5 +173,11 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
     private void entryToSearch() {
         Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onRefresh() {
+        mSkip=0;
+        loadData(true);
     }
 }

@@ -135,6 +135,7 @@ public class MyMessageActivity extends BaseActivity implements
                 intent.putExtra(KeyConstant.PID,pid);
                 intent.putExtra(KeyConstant.COMMENT_ID,p);
 
+                //TODO 删除test
                 Map map=new HashMap<String,String>();
                 map.put("test_pid",pid);
                 map.put("test_type",type);
@@ -151,6 +152,7 @@ public class MyMessageActivity extends BaseActivity implements
                 0,
                 (int)TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,24,getResources().getDisplayMetrics()));
+        swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
