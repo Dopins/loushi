@@ -160,6 +160,8 @@ public class GoodDetailActivity extends  BaseActivity {
                             tv_introduce.setText(goodBean.getIntroduction());
                             goodDetailAdapter.notifyDataSetChanged();
 
+
+
                             tv_collect_count.setText(goodBean.getCollectionNum() + "");
                             tv_share_count.setText(goodBean.getForwordNum() + "");
                             tv_comment_count.setText(goodBean.getForwordNum() + "");
