@@ -1,4 +1,4 @@
-﻿package com.android.loushi.loushi.util;
+package com.android.loushi.loushi.util;
 
 import android.content.Context;
 import android.util.Log;
