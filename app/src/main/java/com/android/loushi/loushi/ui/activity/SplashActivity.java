@@ -28,6 +28,7 @@ import com.android.loushi.loushi.jsonbean.UpdateVersionJson;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.util.CurrentAccount;
+import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
 import com.taobao.tae.sdk.callback.InitResultCallback;
@@ -65,10 +66,13 @@ public class SplashActivity extends BaseActivity {
     }
     private void CheckCanLogin(){
         if(CurrentAccount.isLoginOrNot()){
+            Log.e("splash","可登陆");
             if(CurrentAccount.isThird()){
+                Log.e("splash","disanfang");
                 LoginThird();
             }
             else{
+                Log.e("splash","feidisanfang");
                LoginNotThird();
             }
 
@@ -86,18 +90,19 @@ public class SplashActivity extends BaseActivity {
                 .params("type", type)
                 .params("token", password)
                 .params("isThird", "true")
+                .connTimeOut(3000)
                 .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-                         Log.e("splash","loginresponse");
+                        Log.e("splash", new Gson().toJson(userLoginJson));
                         if (userLoginJson.getState()) {
 
                             //CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
                             String code = userLoginJson.getCode();
-                            if (code != null && code == "3") {
+                            if (code != null && code.equals("3")) {
 
                             } else {
-                                BaseActivity.user_id =userLoginJson.getBody() +"";
+                                BaseActivity.user_id = userLoginJson.getBody() + "";
                                 CurrentAccount.setUser_id(userLoginJson.getBody() + "");
                                 getUserInfo(userLoginJson.getBody());
 
@@ -125,7 +130,7 @@ public class SplashActivity extends BaseActivity {
         Log.e("splashaccount",account+password);
         OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
                 .params("mobile_phone", account)
-                .params("password", password)
+                .params("password", password).connTimeOut(3000)
                 .params("isThird", "false")
                 .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
                     @Override
@@ -322,7 +327,7 @@ public class SplashActivity extends BaseActivity {
 
         // 设置下载路径和文件名
 
-        request.setDestinationInExternalPublicDir("download", "time2plato.apk");
+        request.setDestinationInExternalPublicDir("download", "loushiv"+GetVersionCode()+".apk");
 
         request.setDescription("陋室新版本下载");
 

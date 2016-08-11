@@ -229,7 +229,10 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case MainEvent.STATE_CONNECT_FAIL:
-                ToastUtils.show(MainActivity.this,"网络错误",ToastUtils.LENGTH_LONG);
+                ToastUtils.show(MainActivity.this, "网络错误,请检查网络设置", ToastUtils.LENGTH_LONG);
+                break;
+            case MainEvent.LOGIN_UPDATEINFO:
+                Log.e("person", "接收消息" + MainEvent.LOGIN_UPDATEINFO + "");
                 break;
         }
 

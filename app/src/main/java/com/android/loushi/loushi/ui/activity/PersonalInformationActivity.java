@@ -1,6 +1,7 @@
 package com.android.loushi.loushi.ui.activity;
 
 import android.app.Dialog;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,8 +27,11 @@ import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.DialogCallback;
+import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.Area;
 import com.android.loushi.loushi.jsonbean.ImageJson;
+import com.android.loushi.loushi.jsonbean.ProvinceJson;
+import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.School;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
@@ -39,6 +44,7 @@ import com.android.loushi.loushi.util.SelectPicPopupWindow;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.squareup.picasso.Downloader;
 import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
 
@@ -47,11 +53,13 @@ import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class PersonalInformationActivity extends BaseActivity {
+public class PersonalInformationActivity extends BaseActivity implements View.OnClickListener{
     private String TAG = "PersonalInfoActivity";
 
     private Dialog dialog;
@@ -78,10 +86,14 @@ public class PersonalInformationActivity extends BaseActivity {
     private MaterialSpinner spinner_sex;
     private MaterialSpinner spinner_province;
     private MaterialSpinner spinner_university;
+    private MaterialSpinner spinner_city;
     private EditText edit_phone;
     private Button btn_save;
-    private TextView text_exit;
 
+    private TextView text_exit;
+    private List<String> list_province =new ArrayList<String>();
+    private List<String>list_city;
+    private List<ProvinceJson.BodyBean>bodyBeanlist;
 
     @Override
     protected int getLayoutId() {
@@ -95,6 +107,9 @@ public class PersonalInformationActivity extends BaseActivity {
         bindViews();
         initDatas();
         test();
+//        if(!EventBus.getDefault().isRegistered(this))
+//            EventBus.getDefault().register(this);
+
     }
 
     private void test() {
@@ -114,6 +129,7 @@ public class PersonalInformationActivity extends BaseActivity {
         btn_return = (ImageButton) findViewById(R.id.btn_return);
         image_circular = (RoundImageView) findViewById(R.id.image_circular);
         edit_nickname = (EditText) findViewById(R.id.edit_nickname);
+        spinner_city=(MaterialSpinner) findViewById(R.id.spinner_city);
         spinner_sex = (MaterialSpinner) findViewById(R.id.spinner_sex);
         spinner_province = (MaterialSpinner) findViewById(R.id.spinner_province);
         spinner_university = (MaterialSpinner) findViewById(R.id.spinner_university);
@@ -127,12 +143,28 @@ public class PersonalInformationActivity extends BaseActivity {
         if(CurrentAccount.getNickname()!= null)edit_nickname.setText(CurrentAccount.getNickname());
         if(CurrentAccount.getMobile_phone()!= null)edit_phone.setText(CurrentAccount.getMobile_phone());
         spinner_sex.setItems("女", "男");
+
+
+
+
+
+
         spinner_sex.setDropdownMaxHeight(300);
-        spinner_province.setItems("广东省", "广西省", "山东省", "海南省", "安徽省", "四川省");
+
+        getProvince();
+        spinner_province.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                getCity(list_province.get(position));
+            }
+        });
         spinner_province.setDropdownMaxHeight(300);
         spinner_university.setItems("No.1", "No.2", "No.3", "No.4", "No.5");
         spinner_university.setDropdownMaxHeight(300);
-        if (CurrentAccount.getSex() != null && CurrentAccount.getSex().equals("1")) spinner_sex.setSelectedIndex(1);
+        if (CurrentAccount.getSex() != null && CurrentAccount.getSex().equals("1")) {
+            Log.e(TAG+"sex",CurrentAccount.getSex());
+            spinner_sex.setSelectedIndex(1);
+        }
         else spinner_sex.setSelectedIndex(0);
 
     }
@@ -142,15 +174,27 @@ public class PersonalInformationActivity extends BaseActivity {
     }
 
     public void onClickExit(View view) {
-        CurrentAccount.setLoginOrNot(false);
-        MobclickAgent.onProfileSignOff();
-        finish();
+        LogOut();
     }
 
     public void onClickimage_circular(View view) {
 
         dialog = new SelectHeadPicDialog(this,itemsOnClick);
         dialog.show();
+    }
+    public void LogOut(){
+        Log.e("personinfo", CurrentAccount.getUser_id());
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogout").params("user_id",CurrentAccount.getUser_id())
+                .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
+                    @Override
+                    public void onResponse(boolean b, ResponseJson responseJson, Request request, @Nullable Response response) {
+                        if (responseJson.getState()) {
+                            CurrentAccount.setLoginOrNot(false);
+                            MobclickAgent.onProfileSignOff();
+                            finish();
+                        }
+                    }
+                });
     }
 
     //改变头像
@@ -266,20 +310,23 @@ public class PersonalInformationActivity extends BaseActivity {
         nickname = edit_nickname.getText().toString();
         headImgUrl = CurrentAccount.getHeadImgUrl();
         schoolName = spinner_university.getSelectedIndex() + 1 + "";
-        sex = spinner_sex.getSelectedIndex() + "";
+        String sexBool="false";
+        if(spinner_sex.getSelectedIndex()==1)
+            sexBool="true";
+        //sex = spinner_sex.getSelectedIndex() + "";
 
         Log.e(TAG, user_id);
         Log.e(TAG, nickname);
         Log.e(TAG, headImgUrl);
         Log.e(TAG, schoolName);
-        Log.e(TAG, sex);
+        //Log.e(TAG, sex);
 
         OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfoAlt.action")
                 .params("user_id", user_id)
                 .params("nickname", nickname)
                 .params("headImgUrl", headImgUrl)
                 .params("school.id", schoolName)
-                .params("sex", sex)
+                .params("sex", sexBool)
                 .execute(new DialogCallback<UserInfoJson>(this, UserInfoJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
@@ -287,6 +334,7 @@ public class PersonalInformationActivity extends BaseActivity {
                         Log.e(TAG, "userInfoJson.getState: " + userInfoJson.isState());
                         if (userInfoJson.isState()) {
                             Log.e(TAG, "onResponse: 资料提交成功 ！");
+
                             CurrentAccount.storeDatas(nickname, headImgUrl, schoolName, sex);
                             CurrentAccount.setReFresh(true);
                             finish();
@@ -294,6 +342,55 @@ public class PersonalInformationActivity extends BaseActivity {
                     }
                 });
     }
+    public void getProvince(){
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userArea").execute(new JsonCallback<ProvinceJson>(ProvinceJson.class) {
+
+            @Override
+            public void onResponse(boolean b, ProvinceJson provinceJson, Request request, @Nullable Response response) {
+                if(provinceJson.isState()){
+                    bodyBeanlist=new ArrayList<ProvinceJson.BodyBean>();
+                    bodyBeanlist.addAll(provinceJson.getBody());
+                    for (ProvinceJson.BodyBean tmp:bodyBeanlist){
+                        list_province.add(tmp.getProvince());
+                        spinner_province.setItems(list_province);
+                    }
+
+                }
+            }
+        });
+    }
+    public void getCity(String province){
+        Log.e("获取城市",province);
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userArea").
+                params("province",province).execute(new JsonCallback<ProvinceJson>(ProvinceJson.class) {
+
+            @Override
+            public void onResponse(boolean b, ProvinceJson provinceJson, Request request, @Nullable Response response) {
+                Log.e("cityresponse",new Gson().toJson(provinceJson));
+                if (provinceJson.isState()) {
+                    bodyBeanlist = new ArrayList<ProvinceJson.BodyBean>();
+                    bodyBeanlist.addAll(provinceJson.getBody());
+                    list_city = new ArrayList<String>();
+                    for (ProvinceJson.BodyBean tmp : bodyBeanlist) {
+                        if (!TextUtils.isEmpty(tmp.getCity()))
+                        list_city.add(tmp.getCity());
+                        spinner_city.setItems(list_city);
+                    }
+
+                }
+            }
+        });
+    }
 
 
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //EventBus.getDefault().post(new MyfragmentEvent("Transfer PersonalFragment to MyFragment!"));
+    }
 }

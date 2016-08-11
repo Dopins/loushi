@@ -149,8 +149,8 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
         holder.num_prefer.setText(topic.getCollectionNum() + "");
         holder.num_watch.setText(topic.getBrowseNum() + "");
 //        holder.card_title.setText(topic.getTopicGroup().getName());
-        holder.card_title.setText(topic.getDigest());
-        holder.card_detail.setText(topic.getName());
+        holder.card_title.setText(topic.getName());
+        holder.card_detail.setText(topic.getDigest());
         // 设置点赞响应
         //TODO   抽取方法
         holder.btn_prefer.setOnClickListener(new View.OnClickListener() {

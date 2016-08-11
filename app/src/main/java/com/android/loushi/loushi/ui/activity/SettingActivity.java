@@ -44,7 +44,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private Toolbar program_toolbar;
     private ImageView back;
     private LinearLayout ll_update;
-    private TextView updateversion;
+    private TextView tv_updateversion;
     private LinearLayout ll_clear_cache;
     private LinearLayout ll_feedback;
     private LinearLayout ll_about_us;
@@ -64,7 +64,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         program_toolbar = (Toolbar) findViewById(R.id.program_toolbar);
         back = (ImageView) program_toolbar.findViewById(R.id.back);
         ll_update = (LinearLayout) findViewById(R.id.ll_update);
-        updateversion = (TextView) findViewById(R.id.updateversion);
+        tv_updateversion = (TextView) findViewById(R.id.tv_updateversion);
+        tv_updateversion.setText(String.format("%s%s","当前版本",GetVersionCode()));
         ll_clear_cache = (LinearLayout) findViewById(R.id.ll_clear_cache);
         ll_clear_cache.setOnClickListener(this);
         ll_feedback = (LinearLayout) findViewById(R.id.ll_feedback);
@@ -112,7 +113,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                              public void onClick(DialogInterface dialog, int which) {
                                  Log.e("splash", "选择确定");
                                  DataCleanManager.clearAllCache(SettingActivity.this);
-                                 tv_cache.setText("0k");
+                                 tv_cache.setText("确定");
                                  ToastUtils.show(SettingActivity.this,"已清除缓存",Toast.LENGTH_SHORT);
                              }
                          })
@@ -248,7 +249,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
         // 设置下载路径和文件名
 
-        request.setDestinationInExternalPublicDir("download", "time2plato.apk");
+        request.setDestinationInExternalPublicDir("download", "loushiv"+GetVersionCode()+".apk");
 
         request.setDescription("陋室新版本下载");
 

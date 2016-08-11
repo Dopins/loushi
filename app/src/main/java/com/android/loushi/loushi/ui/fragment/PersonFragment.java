@@ -139,9 +139,10 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     private void iniDatas() {
         tv_name.setText(CurrentAccount.getNickname());
-        Picasso.with(getActivity()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
+        Log.e("person", CurrentAccount.getHeadImgUrl());
+        Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
         tv_name_small.setText(CurrentAccount.getNickname());
-        Picasso.with(getActivity()).load(CurrentAccount.getHeadImgUrl()).into(img_head_small);
+        Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head_small);
     }
 
     @Override
@@ -357,7 +358,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     @Subscribe
     public void onEventMainThread(MyfragmentEvent event) {
 
-        if (event.getmMsg()=="Transfer PersonalFragment to MyFragment!")
+        if (event.getmMsg().equals("Transfer PersonalFragment to MyFragment!"))
             transferToMyFragment();
     }
     private void updateCollect(){

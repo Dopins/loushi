@@ -65,7 +65,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/updateversion"
+                android:id="@+id/tv_updateversion"
+
                 android:text="当前版本"
                 android:textSize="14sp"
                 android:textColor="#8a8a8a"/>
