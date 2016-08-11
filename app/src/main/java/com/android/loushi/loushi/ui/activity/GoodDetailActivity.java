@@ -49,10 +49,10 @@ import okhttp3.Response;
 /**
  * Created by Administrator on 2016/7/25.
  */
-public class GoodDetailActivity extends  BaseActivity {
+public class GoodDetailActivity extends BaseActivity {
     private LinearLayout show_taobao;
     //下方bar
-    private  LinearLayout collect_bar;
+    private LinearLayout collect_bar;
     private LinearLayout collect;
     private LinearLayout comment;
     private LinearLayout share;
@@ -72,12 +72,12 @@ public class GoodDetailActivity extends  BaseActivity {
     private Toolbar program_toolbar;
     private ImageView back;
     private Button btn_buy;
-    private String goodjsonString="";
+    private String goodjsonString = "";
     private GoodsJson.BodyBean goodBean;
 
     private GoodDetailAdapter goodDetailAdapter;
     private List<GoodsJson.BodyBean.ImagesBean> list;
-    private  String good_id="1";
+    private String good_id = "1";
 
     @Override
     protected int getLayoutId() {
@@ -90,17 +90,18 @@ public class GoodDetailActivity extends  BaseActivity {
         setContentView(R.layout.activity_good_detail);
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        if(getIntent().getStringExtra("GOOD_ID")!=null)
-            good_id=getIntent().getStringExtra("GOOD_ID");
-        goodjsonString=getIntent().getStringExtra(BaseActivity.GOOD_STRING);
-        goodBean=new Gson().fromJson(goodjsonString,GoodsJson.BodyBean.class);
+        if (getIntent().getStringExtra("GOOD_ID") != null)
+            good_id = getIntent().getStringExtra("GOOD_ID");
+        goodjsonString = getIntent().getStringExtra(BaseActivity.GOOD_STRING);
+        goodBean = new Gson().fromJson(goodjsonString, GoodsJson.BodyBean.class);
         //透明导航栏
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         bindView();
         init();
 
     }
-    private void bindView(){
+
+    private void bindView() {
         img_good = (ImageView) findViewById(R.id.img_good);
         program_toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.program_toolbar);
 
@@ -109,7 +110,7 @@ public class GoodDetailActivity extends  BaseActivity {
         price_symbol = (TextView) findViewById(R.id.price_symbol);
         tv_good_price = (TextView) findViewById(R.id.tv_good_price);
         btn_buy = (Button) findViewById(R.id.btn_buy);
-        back=(ImageView)program_toolbar.findViewById(R.id.back);
+        back = (ImageView) program_toolbar.findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,22 +121,24 @@ public class GoodDetailActivity extends  BaseActivity {
 
 
     }
-    private void bindCollectBarView(){
-        collect_bar=(LinearLayout)findViewById(R.id.collect_bar);
+
+    private void bindCollectBarView() {
+        collect_bar = (LinearLayout) findViewById(R.id.collect_bar);
         //collect_bar.setVisibility(View.GONE);
-        collect = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_like);
-        comment = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_comment);
-        share = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_share);
-        btn_collect=(ImageButton)collect.findViewById(R.id.collect_bar_btn_like);
-        tv_collect_count=(TextView)collect.findViewById(R.id.collect_bar_tv_like);
-        tv_comment_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_comment);
-        tv_share_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_share);
+        collect = (LinearLayout) collect_bar.findViewById(R.id.collect_bar_linear_like);
+        comment = (LinearLayout) collect_bar.findViewById(R.id.collect_bar_linear_comment);
+        share = (LinearLayout) collect_bar.findViewById(R.id.collect_bar_linear_share);
+        btn_collect = (ImageButton) collect.findViewById(R.id.collect_bar_btn_like);
+        tv_collect_count = (TextView) collect.findViewById(R.id.collect_bar_tv_like);
+        tv_comment_count = (TextView) collect_bar.findViewById(R.id.collect_bar_tv_comment);
+        tv_share_count = (TextView) collect_bar.findViewById(R.id.collect_bar_tv_share);
 
     }
+
     private void init() {
-        recyclerView = (RecyclerView)findViewById(R.id.recycleView);
+        recyclerView = (RecyclerView) findViewById(R.id.recycleView);
         list = new ArrayList<GoodsJson.BodyBean.ImagesBean>();
-        goodDetailAdapter = new GoodDetailAdapter(this,list);
+        goodDetailAdapter = new GoodDetailAdapter(this, list);
         getGood();
         //SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(this,5);
 
@@ -144,7 +147,8 @@ public class GoodDetailActivity extends  BaseActivity {
         recyclerView.setAdapter(goodDetailAdapter);
         //recyclerView.addItemDecoration(spaceItemDecoration);
     }
-    private void getGood(){
+
+    private void getGood() {
 //        OkHttpUtils.post("http://www.loushi666.com/LouShi/base/goods.action")
 //
 //                .tag(getApplicationContext()).params("user_id", BaseActivity.user_id).params("good_id", good_id)
@@ -154,51 +158,50 @@ public class GoodDetailActivity extends  BaseActivity {
 //                        Log.e("atg", new Gson().toJson(goodsJson));
 //                        if (goodsJson.getState()) {
 
-                            //bodyBeanList.addAll(sceneGoodJson.getBody());
-                            list.addAll(goodBean.getImages());
-                            list.remove(0);
-                            Picasso.with(GoodDetailActivity.this).load(goodBean.getImages().get(1).getUrl()).into(img_good);
-                            tv_good_name.setText(goodBean.getName());
-                            tv_good_price.setText(goodBean.getPrice() + "");
-                            tv_introduce.setText(goodBean.getIntroduction());
-                            goodDetailAdapter.notifyDataSetChanged();
+        //bodyBeanList.addAll(sceneGoodJson.getBody());
+        list.addAll(goodBean.getImages());
+        list.remove(0);
+        Picasso.with(GoodDetailActivity.this).load(goodBean.getImages().get(1).getUrl()).into(img_good);
+        tv_good_name.setText(goodBean.getName());
+        tv_good_price.setText(goodBean.getPrice() + "");
+        tv_introduce.setText(goodBean.getIntroduction());
+        goodDetailAdapter.notifyDataSetChanged();
 
 
+        tv_collect_count.setText(goodBean.getCollectionNum() + "");
+        tv_share_count.setText(goodBean.getForwordNum() + "");
+        tv_comment_count.setText(goodBean.getForwordNum() + "");
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GoodDetailActivity.this, CommentActivity.class);
+                intent.putExtra(KeyConstant.TYPE, "3");
+                intent.putExtra(KeyConstant.PID, goodBean.getId() + "");
+                startActivity(intent);
+            }
+        });
+        Log.e("collect1", btn_collect.isSelected() + "");
+        initCollect(goodBean.getCollected());
+        Log.e("good", goodBean.getUrl());
+        initButton(goodBean.getUrl());
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String imgurl = goodBean.getImages().get(0).getUrl();
+                String title = goodBean.getName();
+                String text = goodBean.getIntroduction();
+                String url = String.format("%s%s", BaseActivity.url_good_share, good_id);
+                //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
+                ShareSomeThing shareSomeThing = new ShareSomeThing(getApplicationContext(), imgurl, url, text, title, user_id, "3", goodBean.getId() + "");
+                shareSomeThing.DoShare();
+            }
+        });
 
-                            tv_collect_count.setText(goodBean.getCollectionNum() + "");
-                            tv_share_count.setText(goodBean.getForwordNum() + "");
-                            tv_comment_count.setText(goodBean.getForwordNum() + "");
-                            comment.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(GoodDetailActivity.this, CommentActivity.class);
-                                    intent.putExtra(KeyConstant.TYPE, "3");
-                                    intent.putExtra(KeyConstant.PID, goodBean.getId() + "");
-                                    startActivity(intent);
-                                }
-                            });
-                            Log.e("collect1", btn_collect.isSelected() + "");
-                            initCollect(goodBean.getCollected());
-                            Log.e("good", goodBean.getUrl());
-                            initButton(goodBean.getUrl());
-                            share.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    String imgurl = goodBean.getImages().get(0).getUrl();
-                                    String title = goodBean.getName();
-                                    String text = goodBean.getIntroduction();
-                                    String url =String.format("%s%s",BaseActivity.url_good_share,good_id);
-                                            //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
-                                    ShareSomeThing shareSomeThing = new ShareSomeThing(getApplicationContext(), imgurl, url, text, title,user_id,"3",goodBean.getId()+"");
-                                    shareSomeThing.DoShare();
-                                }
-                            });
-
-                        }
+    }
 
 
-    private void initButton(final String url){
-        btn_buy=(Button)findViewById(R.id.btn_buy);
+    private void initButton(final String url) {
+        btn_buy = (Button) findViewById(R.id.btn_buy);
         btn_buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,8 +211,8 @@ public class GoodDetailActivity extends  BaseActivity {
     }
 
 
-    public void showItemDetailPage(View view,String id){
-        Log.e("taobaourl",id);
+    public void showItemDetailPage(View view, String id) {
+        Log.e("taobaourl", id);
         TradeService tradeService = AlibabaSDK.getService(TradeService.class);
 
         ItemDetailPage itemDetailPage = new ItemDetailPage(id, null);
@@ -235,8 +238,9 @@ public class GoodDetailActivity extends  BaseActivity {
         });
 
     }
-    private void initCollect(final boolean Collected){
-        if(Collected)
+
+    private void initCollect(final boolean Collected) {
+        if (Collected)
             btn_collect.setSelected(true);
         collect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,8 +270,6 @@ public class GoodDetailActivity extends  BaseActivity {
             }
         });
     }
-
-
 
 
 }
