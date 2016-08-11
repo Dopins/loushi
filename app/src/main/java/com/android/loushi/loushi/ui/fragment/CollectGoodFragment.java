@@ -117,7 +117,7 @@ public class CollectGoodFragment extends LazyFragment {
                 OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollections")
                 // 请求方式和请求url
                 .tag(this).params("type", type).params("user_id", BaseActivity.user_id)
-                .params("skip", skip + "").params("take", "6").cacheKey("userCollections").cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
+                .params("skip", skip + "").params("take", "6")
 
 
                         // 请求的 tag, 主要用于取消对应的请求

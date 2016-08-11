@@ -27,6 +27,7 @@ import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.LoginFirstActivity;
+import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.ui.activity.PersonalInformationActivity;
 import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.MyfragmentEvent;
@@ -265,9 +266,10 @@ public class RegistFragment extends Fragment {
 
                                             BaseActivity.user_id = userLoginJson.getBody()+""; //冗余
 
-                                            CurrentAccount.storeAccountInfo(userLoginJson.getBody()+"",regist_edit_phone.getText().toString(),regist_edit_password.getText().toString(),false,"0");
+                                            CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", regist_edit_phone.getText().toString(), regist_edit_password.getText().toString(), false, "0");
 
                                             transferMyFragmentToPersonalInformationActivity();
+
 
                                         } else {
                                             Log.e(TAG, "登录失败！");
@@ -301,9 +303,15 @@ public class RegistFragment extends Fragment {
     }
 
     public void transferMyFragmentToPersonalFragment() {
+
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
-        EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
+        if (getActivity() instanceof MainActivity)
+            EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
+        if (getActivity() instanceof LoginFirstActivity) {
+            EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
+            EventBus.getDefault().post(new MyfragmentEvent("Finish LoginFirstActivity"));
+        }
     }
 
 

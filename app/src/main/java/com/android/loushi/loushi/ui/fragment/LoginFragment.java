@@ -392,12 +392,12 @@ public class LoginFragment extends Fragment {
                                         CurrentAccount.setHeadImgUrl(platform.getDb().getUserIcon());
                                         CurrentAccount.setNickname(platform.getDb().getUserName());
                                         String sexBool="true";
-                                        String sex="男";
+                                        String sex="1";
                                         if(!TextUtils.isEmpty(platform.getDb().getUserGender())&&platform.getDb().getUserGender().equals("f")) {
-                                            sex = "女";
+                                            sex = "0";
                                             sexBool="false";
                                         }
-                                        CurrentAccount.setSex(sex);
+                                        //CurrentAccount.setSex(sex);
                                         CurrentAccount.storeDatas(platform.getDb().getUserName(), platform.getDb().getUserIcon(), null, sex);
                                         BaseActivity.user_id=userLoginJson.getBody() +"";
                                         postUserInfo(userLoginJson.getBody() +"",platform.getDb().getUserName(),platform.getDb().getUserIcon(),sexBool);
