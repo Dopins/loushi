@@ -126,12 +126,14 @@ public class SceneFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd(TAG);
+        Log.i(TAG,"onPause");
     }
 
     @Override
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(TAG);
+        Log.i(TAG,"onResume");
     }
 
 }

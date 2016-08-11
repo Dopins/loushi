@@ -1,6 +1,7 @@
 package com.android.loushi.loushi.adapter;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,9 +14,16 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 
+import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.jsonbean.EmptyMsgJson;
+import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.jsonbean.UserMessageJson;
+import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.util.CircleImageTransformation;
 import com.android.loushi.loushi.util.DateUtils;
+import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.UrlConstant;
+import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -24,6 +32,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by binpeiluo on 2016/7/21 0021.
@@ -51,7 +62,11 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public MyMessageAdapter(Context mContext, List<UserMessageJson.BodyBean> myMessageList){
         this.mContext=mContext;
         this.myMessageList=myMessageList;
-
+        try {
+            parseMessage();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -200,21 +215,32 @@ public class MyMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
     }
-    public class BottomViewHolder extends RecyclerView.ViewHolder  {
+    public class BottomViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
 
         private LinearLayout btn_cleanComment;
 
         public BottomViewHolder(View itemView) {
             super(itemView);
             btn_cleanComment= (LinearLayout) itemView.findViewById(R.id.btn_cleanComment);
-            btn_cleanComment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(mContext,"clear up",Toast.LENGTH_SHORT).show();
-                }
-            });
+            btn_cleanComment.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            OkHttpUtils.post(UrlConstant.CLEARMSGURL)
+                    .params(KeyConstant.USER_ID, MainActivity.user_id)
+                    .execute(new JsonCallback<EmptyMsgJson>(EmptyMsgJson.class) {
+                        @Override
+                        public void onResponse(boolean isFromCache, EmptyMsgJson userLoginJson, Request request, @Nullable Response response) {
+                            if(userLoginJson.getState()){
+                                myMessageList.clear();
+                                newCommentCount=0;
+                                MyMessageAdapter.this.notifyDataSetChanged();
+                            }else
+                                Toast.makeText(mContext,userLoginJson.getReturn_info(),Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
 
 

@@ -91,7 +91,7 @@ public class MainActivity extends BaseActivity {
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
         mTabHost.getTabWidget().setDividerDrawable(android.R.color.transparent);
-        //startHandler();
+        startHandler();
     }
 
     private void startHandler() {
