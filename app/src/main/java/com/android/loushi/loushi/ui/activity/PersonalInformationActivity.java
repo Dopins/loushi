@@ -59,7 +59,7 @@ import java.util.List;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class PersonalInformationActivity extends BaseActivity implements View.OnClickListener{
+public class PersonalInformationActivity extends BaseActivity{
     private String TAG = "PersonalInfoActivity";
 
     private Dialog dialog;
@@ -94,6 +94,8 @@ public class PersonalInformationActivity extends BaseActivity implements View.On
     private List<String> list_province =new ArrayList<String>();
     private List<String>list_city;
     private List<ProvinceJson.BodyBean>bodyBeanlist;
+    private List<Area.BodyBean>schoolbodyBeanlist;
+    private List<String>list_school;
 
     @Override
     protected int getLayoutId() {
@@ -155,7 +157,9 @@ public class PersonalInformationActivity extends BaseActivity implements View.On
         spinner_province.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                getCity(list_province.get(position));
+                getCity(position+"");
+                //这里面获取城市
+                //然后给城市的spinner设置点击事件 先判断list是不是空
             }
         });
         spinner_province.setDropdownMaxHeight(300);
@@ -188,6 +192,7 @@ public class PersonalInformationActivity extends BaseActivity implements View.On
                 .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
                     @Override
                     public void onResponse(boolean b, ResponseJson responseJson, Request request, @Nullable Response response) {
+                        Log.e("personinfo", new Gson().toJson(responseJson));
                         if (responseJson.getState()) {
                             CurrentAccount.setLoginOrNot(false);
                             MobclickAgent.onProfileSignOff();
@@ -362,7 +367,7 @@ public class PersonalInformationActivity extends BaseActivity implements View.On
     public void getCity(String province){
         Log.e("获取城市",province);
         OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userArea").
-                params("province",province).execute(new JsonCallback<ProvinceJson>(ProvinceJson.class) {
+                params("province", province).execute(new JsonCallback<ProvinceJson>(ProvinceJson.class) {
 
             @Override
             public void onResponse(boolean b, ProvinceJson provinceJson, Request request, @Nullable Response response) {
@@ -381,12 +386,18 @@ public class PersonalInformationActivity extends BaseActivity implements View.On
             }
         });
     }
-
-
-    @Override
-    public void onClick(View v) {
-
+    public void getSchool(String area_id){
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userSchool.action").params("area_id",area_id)
+                .params("skip","0").params("take","100").execute(new JsonCallback<Area>(Area.class) {
+                    @Override
+                    public void onResponse(boolean b, Area area, Request request, @Nullable Response response) {
+                         //TODO
+                    }
+                });
     }
+
+
+
 
     @Override
     protected void onDestroy() {
