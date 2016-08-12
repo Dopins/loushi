@@ -68,7 +68,6 @@ public class CollectGoodFragment extends LazyFragment {
     }
 //@Override
 //public void onActivityCreated(Bundle savedInstanceState) {
-//    // TODO Auto-generated method stub
 //    super.onActivityCreated(savedInstanceState);
 //    initview();
 ////        Log.e(TAG,"onActivityCreated");

@@ -20,4 +20,8 @@ public class KeyConstant {
     public static final String PASSWORD ="password";
     public static final String ISTHIRD ="isThird";
 
+
+    public static final String AREA_ID ="area_id";
+    public static final String PROVINCE ="province";
+
 }

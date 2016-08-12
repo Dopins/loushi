@@ -420,14 +420,14 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
             iniDatas();
             CurrentAccount.setReFresh(false);
         }
-        MobclickAgent.onPageStart(TAG);
+//        MobclickAgent.onPageStart(TAG);
 
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd(TAG);
+//        MobclickAgent.onPageEnd(TAG);
     }
 
 }

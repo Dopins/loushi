@@ -24,6 +24,7 @@ import com.lzy.okhttputils.request.BaseRequest;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 
 import okhttp3.Call;
@@ -58,72 +59,71 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
         String responseData = response.body().string();
         JSONObject jsonObject = new JSONObject(responseData);
         String code = jsonObject.optString("code", "");
-        if(code!=null&&(code.equals("10000")||code.equals("10001"))) {
+        if (code != null && (code.equals("10000") || code.equals("10001"))) {
             Log.e("clazz", code);
-            if(CurrentAccount.isLoginOrNot()) {
-               if(!CurrentAccount.isThird()) {
-                   String phone = CurrentAccount.getAccount();
-                   String password = CurrentAccount.getPassword();
-                   Log.e("my", phone + password);
-                   OkHttpUtils.post(UrlConstant.USERLOGINURL)
-                           .params(KeyConstant.MOBILE_PHONE, phone)
-                           .params(KeyConstant.PASSWORD, password)
-                           .params(KeyConstant.ISTHIRD, "false")
-                           .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
-                               @Override
-                               public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-                                   if (userLoginJson.getState()) {
+            if (CurrentAccount.isLoginOrNot()) {
+                if (!CurrentAccount.isThird()) {
+                    String phone = CurrentAccount.getAccount();
+                    String password = CurrentAccount.getPassword();
+                    Log.e("my", phone + password);
+                    OkHttpUtils.post(UrlConstant.USERLOGINURL)
+                            .params(KeyConstant.MOBILE_PHONE, phone)
+                            .params(KeyConstant.PASSWORD, password)
+                            .params(KeyConstant.ISTHIRD, "false")
+                            .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+                                @Override
+                                public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+                                    if (userLoginJson.getState()) {
 
-                                       BaseActivity.user_id = userLoginJson.getBody() + "";
-                                       CurrentAccount.setUser_id(BaseActivity.user_id);
-                                       Log.e("callback", "autoLogin 登录成功！");
-                                   } else {
-                                       Log.e("callback", "autoLogin 登录失败！");
-                                   }
-                               }
-                           });
-               }
-                else{
-                   final String account=CurrentAccount.getAccount();
-                   String password=CurrentAccount.getPassword();
-                   final String type =CurrentAccount.Third_type;
+                                        BaseActivity.user_id = userLoginJson.getBody() + "";
+                                        CurrentAccount.setUser_id(BaseActivity.user_id);
+                                        Log.e("callback", "autoLogin 登录成功！");
+                                    } else {
+                                        Log.e("callback", "autoLogin 登录失败！");
+                                    }
+                                }
+                            });
+                } else {
+                    final String account = CurrentAccount.getAccount();
+                    String password = CurrentAccount.getPassword();
+                    final String type = CurrentAccount.Third_type;
 
-                   OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
-                           .params("account", account)
-                           .params("type", type)
-                           .params("token", password)
-                           .params("isThird", "true")
-                           .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
-                               @Override
-                               public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-                                   Log.e("splash","loginresponse");
-                                   if (userLoginJson.getState()) {
-                                       //CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
-                                       String code = userLoginJson.getCode();
-                                       if (code != null && code == "3") {
+                    OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
+                            .params("account", account)
+                            .params("type", type)
+                            .params("token", password)
+                            .params("isThird", "true")
+                            .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+                                @Override
+                                public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+                                    Log.e("splash", "loginresponse");
+                                    if (userLoginJson.getState()) {
+                                        //CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
+                                        String code = userLoginJson.getCode();
+                                        if (code != null && code == "3") {
 
-                                       } else {
-                                           BaseActivity.user_id =userLoginJson.getBody() +"";
-                                           CurrentAccount.setUser_id(userLoginJson.getBody() + "");
-                                       }
+                                        } else {
+                                            BaseActivity.user_id = userLoginJson.getBody() + "";
+                                            CurrentAccount.setUser_id(userLoginJson.getBody() + "");
+                                        }
 
-                                   } else {
-                                       CurrentAccount.setLoginOrNot(false);
-                                       Log.e("splashthirdlogin", "登录失败！");
-                                   }
-                               }
+                                    } else {
+                                        CurrentAccount.setLoginOrNot(false);
+                                        Log.e("splashthirdlogin", "登录失败！");
+                                    }
+                                }
 
-                               @Override
-                               public void onError(boolean isFromCache, Call call, @Nullable Response response, @Nullable Exception e) {
-                                   super.onError(isFromCache, call, response, e);
-                                   Log.e("splash", "loginerror");
-                               }
-                           });
+                                @Override
+                                public void onError(boolean isFromCache, Call call, @Nullable Response response, @Nullable Exception e) {
+                                    super.onError(isFromCache, call, response, e);
+                                    Log.e("splash", "loginerror");
+                                }
+                            });
                 }
                 //执行登陆操作
 
             }
-            if(!CurrentAccount.isLoginOrNot()){
+            if (!CurrentAccount.isLoginOrNot()) {
                 EventBus.getDefault().post(new MainEvent(MainEvent.NEED_LOGIN));
             }
 //            if(!CurrentAccount.isLoginOrNot()){
@@ -159,8 +159,8 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
         //Log.e("te",responseData);
 //        if (TextUtils.isEmpty(responseData)) return null;
         //JSONObject jsonObject = new JSONObject(responseData);
-       // String res=responseData;
-       // ResponseJson responseJson = new Gson().fromJson(res, ResponseJson.class);
+        // String res=responseData;
+        // ResponseJson responseJson = new Gson().fromJson(res, ResponseJson.class);
 //        if (responseJson.getCode()!=null)
 //            Log.e("clazz","4");
 //        else
@@ -168,24 +168,24 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
 //        final String code =jsonObject.optString("code");
 //        if(TextUtils.isEmpty(code)) {
 
-            /**
-             在这里实现code10000的登陆
-             */
-            //Log.e("te",responseData);
-            if (clazz == String.class) {
-                Log.e("clazz", "0");
-                return (T) responseData;
-            }
-            if (clazz != null) {
-                Log.e("clazz", "1");
+        /**
+         在这里实现code10000的登陆
+         */
+        //Log.e("te",responseData);
+        if (clazz == String.class) {
+            Log.e("clazz", "0");
+            return (T) responseData;
+        }
+        if (clazz != null) {
+            Log.e("clazz", "1");
 
-                //ResponseJson responseJson = new Gson().fromJson(responseData,ResponseJson.class);
-                return new Gson().fromJson(responseData, clazz);
-            }
-            if (type != null) {
-                Log.e("clazz", "2");
-                return new Gson().fromJson(responseData, type);
-            }
+            //ResponseJson responseJson = new Gson().fromJson(responseData,ResponseJson.class);
+            return new Gson().fromJson(responseData, clazz);
+        }
+        if (type != null) {
+            Log.e("clazz", "2");
+            return new Gson().fromJson(responseData, type);
+        }
 
 //        OkHttpUtils.getInstance().getDelivery().post(new Runnable() {
 //            @Override

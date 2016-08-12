@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,12 +92,14 @@ public  class  BaseFragment extends Fragment {
     public void onResume() {
         super.onResume();
         MobclickAgent.onResume(getContext());
+        Log.i("mytest","fragment onResume");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPause(getContext());
+        Log.i("mytest","fragment onPause");
     }
 
 }

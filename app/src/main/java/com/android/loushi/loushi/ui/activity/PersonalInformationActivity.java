@@ -1,55 +1,41 @@
 package com.android.loushi.loushi.ui.activity;
 
 import android.app.Dialog;
-import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.DialogCallback;
 import com.android.loushi.loushi.callback.JsonCallback;
-import com.android.loushi.loushi.jsonbean.Area;
 import com.android.loushi.loushi.jsonbean.ImageJson;
 import com.android.loushi.loushi.jsonbean.ProvinceJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
-import com.android.loushi.loushi.jsonbean.School;
+import com.android.loushi.loushi.jsonbean.SchoolJson;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
-import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.util.CurrentAccount;
+import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.MaterialSpinner;
-import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.RoundImageView;
 import com.android.loushi.loushi.util.SelectHeadPicDialog;
-import com.android.loushi.loushi.util.SelectPicPopupWindow;
-import com.android.loushi.loushi.util.UnderLineEditText;
+import com.android.loushi.loushi.util.UrlConstant;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
-import com.squareup.picasso.Downloader;
 import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
-
-import org.greenrobot.eventbus.EventBus;
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -59,7 +45,8 @@ import java.util.List;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class PersonalInformationActivity extends BaseActivity implements View.OnClickListener{
+public class PersonalInformationActivity extends BaseActivity
+        implements MaterialSpinner.OnItemSelectedListener {
     private String TAG = "PersonalInfoActivity";
 
     private Dialog dialog;
@@ -91,9 +78,9 @@ public class PersonalInformationActivity extends BaseActivity implements View.On
     private Button btn_save;
 
     private TextView text_exit;
-    private List<String> list_province =new ArrayList<String>();
-    private List<String>list_city;
-    private List<ProvinceJson.BodyBean>bodyBeanlist;
+    private List<ProvinceJson.BodyBean> provinceBeanlist;
+    private List<SchoolJson.BodyBean> schoolBeanList;
+    private List<ProvinceJson.BodyBean> cityBeanList;
 
     @Override
     protected int getLayoutId() {
@@ -106,7 +93,7 @@ public class PersonalInformationActivity extends BaseActivity implements View.On
 
         bindViews();
         initDatas();
-        test();
+        //test();
 //        if(!EventBus.getDefault().isRegistered(this))
 //            EventBus.getDefault().register(this);
 
@@ -129,7 +116,7 @@ public class PersonalInformationActivity extends BaseActivity implements View.On
         btn_return = (ImageButton) findViewById(R.id.btn_return);
         image_circular = (RoundImageView) findViewById(R.id.image_circular);
         edit_nickname = (EditText) findViewById(R.id.edit_nickname);
-        spinner_city=(MaterialSpinner) findViewById(R.id.spinner_city);
+        spinner_city = (MaterialSpinner) findViewById(R.id.spinner_city);
         spinner_sex = (MaterialSpinner) findViewById(R.id.spinner_sex);
         spinner_province = (MaterialSpinner) findViewById(R.id.spinner_province);
         spinner_university = (MaterialSpinner) findViewById(R.id.spinner_university);
@@ -139,33 +126,24 @@ public class PersonalInformationActivity extends BaseActivity implements View.On
     }
 
     private void initDatas() {
-        if(CurrentAccount.getHeadImgUrl()!= null)Picasso.with(this).load(CurrentAccount.getHeadImgUrl()).into(image_circular);
-        if(CurrentAccount.getNickname()!= null)edit_nickname.setText(CurrentAccount.getNickname());
-        if(CurrentAccount.getMobile_phone()!= null)edit_phone.setText(CurrentAccount.getMobile_phone());
+        if (CurrentAccount.getHeadImgUrl() != null)
+            Picasso.with(this).load(CurrentAccount.getHeadImgUrl()).into(image_circular);
+        if (CurrentAccount.getNickname() != null)
+            edit_nickname.setText(CurrentAccount.getNickname());
+        if (CurrentAccount.getMobile_phone() != null)
+            edit_phone.setText(CurrentAccount.getMobile_phone());
+
+
         spinner_sex.setItems("女", "男");
-
-
-
-
-
-
         spinner_sex.setDropdownMaxHeight(300);
-
         getProvince();
-        spinner_province.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                getCity(list_province.get(position));
-            }
-        });
+        spinner_province.setOnItemSelectedListener(this);
         spinner_province.setDropdownMaxHeight(300);
-        spinner_university.setItems("No.1", "No.2", "No.3", "No.4", "No.5");
-        spinner_university.setDropdownMaxHeight(300);
+        spinner_city.setOnItemSelectedListener(this);
         if (CurrentAccount.getSex() != null && CurrentAccount.getSex().equals("1")) {
-            Log.e(TAG+"sex",CurrentAccount.getSex());
+            Log.e(TAG + "sex", CurrentAccount.getSex());
             spinner_sex.setSelectedIndex(1);
-        }
-        else spinner_sex.setSelectedIndex(0);
+        } else spinner_sex.setSelectedIndex(0);
 
     }
 
@@ -179,12 +157,13 @@ public class PersonalInformationActivity extends BaseActivity implements View.On
 
     public void onClickimage_circular(View view) {
 
-        dialog = new SelectHeadPicDialog(this,itemsOnClick);
+        dialog = new SelectHeadPicDialog(this, itemsOnClick);
         dialog.show();
     }
-    public void LogOut(){
+
+    public void LogOut() {
         Log.e("personinfo", CurrentAccount.getUser_id());
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogout").params("user_id",CurrentAccount.getUser_id())
+        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogout").params("user_id", CurrentAccount.getUser_id())
                 .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
                     @Override
                     public void onResponse(boolean b, ResponseJson responseJson, Request request, @Nullable Response response) {
@@ -295,7 +274,6 @@ public class PersonalInformationActivity extends BaseActivity implements View.On
                                 }
 
 
-
                             });
                 }
             }
@@ -310,9 +288,9 @@ public class PersonalInformationActivity extends BaseActivity implements View.On
         nickname = edit_nickname.getText().toString();
         headImgUrl = CurrentAccount.getHeadImgUrl();
         schoolName = spinner_university.getSelectedIndex() + 1 + "";
-        String sexBool="false";
-        if(spinner_sex.getSelectedIndex()==1)
-            sexBool="true";
+        String sexBool = "false";
+        if (spinner_sex.getSelectedIndex() == 1)
+            sexBool = "true";
         //sex = spinner_sex.getSelectedIndex() + "";
 
         Log.e(TAG, user_id);
@@ -342,55 +320,113 @@ public class PersonalInformationActivity extends BaseActivity implements View.On
                     }
                 });
     }
-    public void getProvince(){
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userArea").execute(new JsonCallback<ProvinceJson>(ProvinceJson.class) {
 
-            @Override
-            public void onResponse(boolean b, ProvinceJson provinceJson, Request request, @Nullable Response response) {
-                if(provinceJson.isState()){
-                    bodyBeanlist=new ArrayList<ProvinceJson.BodyBean>();
-                    bodyBeanlist.addAll(provinceJson.getBody());
-                    for (ProvinceJson.BodyBean tmp:bodyBeanlist){
-                        list_province.add(tmp.getProvince());
-                        spinner_province.setItems(list_province);
-                    }
-
-                }
-            }
-        });
+    private void getSchoolList(String id) {
+        getSchoolList(id, 0, 100);
     }
-    public void getCity(String province){
-        Log.e("获取城市",province);
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userArea").
-                params("province",province).execute(new JsonCallback<ProvinceJson>(ProvinceJson.class) {
 
+    private void getSchoolList(String area_id, int skip, int take) {
+        OkHttpUtils.post(UrlConstant.GETSCHOOLGURL)
+                .params(KeyConstant.AREA_ID, area_id)
+                .params(KeyConstant.SKIP, skip + "")
+                .params(KeyConstant.TAKE, take + "")
+                .execute(new JsonCallback<SchoolJson>(SchoolJson.class) {
+                    @Override
+                    public void onResponse(boolean b, SchoolJson schoolJson, Request request, @Nullable Response response) {
+                        if (schoolJson.isState()) {
+                            if (schoolJson.getBody() == null)
+                                return;
+                            schoolBeanList = new ArrayList<SchoolJson.BodyBean>();
+                            schoolBeanList.addAll(schoolJson.getBody());
+                            int len = schoolBeanList.size();
+                            List<String> schools = new ArrayList<String>();
+                            for (int i = 0; i < len; i++)
+                                schools.add(schoolBeanList.get(i).getName());
+                            spinner_university.setItems(schools);
+                        } else
+                            Toast.makeText(mContext, schoolJson.getReturn_info(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+    }
+
+    public void getProvince() {
+        OkHttpUtils.post(UrlConstant.USERAREAGURL)
+                .execute(new JsonCallback<ProvinceJson>(ProvinceJson.class) {
             @Override
             public void onResponse(boolean b, ProvinceJson provinceJson, Request request, @Nullable Response response) {
-                Log.e("cityresponse",new Gson().toJson(provinceJson));
                 if (provinceJson.isState()) {
-                    bodyBeanlist = new ArrayList<ProvinceJson.BodyBean>();
-                    bodyBeanlist.addAll(provinceJson.getBody());
-                    list_city = new ArrayList<String>();
-                    for (ProvinceJson.BodyBean tmp : bodyBeanlist) {
-                        if (!TextUtils.isEmpty(tmp.getCity()))
-                        list_city.add(tmp.getCity());
-                        spinner_city.setItems(list_city);
-                    }
-
+                    provinceBeanlist = new ArrayList<ProvinceJson.BodyBean>();
+                    provinceBeanlist.addAll(provinceJson.getBody());
+                    int len = provinceBeanlist.size();
+                    List<String> provices = new ArrayList<String>();
+                    for (int i = 0; i < len; i++)
+                        provices.add(provinceBeanlist.get(i).getProvince());
+                    spinner_province.setItems(provices);
+                   initDefaultCity();
                 }
             }
         });
     }
 
-
-    @Override
-    public void onClick(View v) {
-
+    private void getCityList(String province) {
+        OkHttpUtils.post(UrlConstant.USERAREAGURL)
+                .params(KeyConstant.PROVINCE, province)
+                .execute(new JsonCallback<ProvinceJson>(ProvinceJson.class) {
+                    @Override
+                    public void onResponse(boolean b, ProvinceJson provinceJson, Request request, @Nullable Response response) {
+                        Log.e("cityresponse", new Gson().toJson(provinceJson));
+                        if (provinceJson.isState()) {
+                            if (provinceJson.getBody() == null)
+                                return;
+                            cityBeanList = new ArrayList<ProvinceJson.BodyBean>();
+                            cityBeanList.addAll(provinceJson.getBody());
+                            List<String> citys = new ArrayList<String>();
+                            int len = cityBeanList.size();
+                            for (int i = 0; i < len; i++) {
+                                citys.add(cityBeanList.get(i).getCity());
+                            }
+                            spinner_city.setItems(citys);
+                            initDefaultSchool();
+                        }
+                    }
+                });
     }
+
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //EventBus.getDefault().post(new MyfragmentEvent("Transfer PersonalFragment to MyFragment!"));
+    }
+
+    @Override
+    public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+
+        switch(view.getId()){
+            case R.id.spinner_sex:
+                break;
+            case R.id.spinner_province:
+                getCityList(provinceBeanlist.get(position).getId()+"");
+                break;
+            case R.id.spinner_city:
+                getSchoolList(cityBeanList.get(position).getId() + "");
+                break;
+            case R.id.spinner_university:
+                break;
+        }
+    }
+
+    private void initDefaultCity(){
+        if(cityBeanList==null||cityBeanList.size()==0)
+            return;
+        getCityList(cityBeanList.get(0).getId() + "");
+    }
+    private void initDefaultSchool(){
+        if(schoolBeanList==null||schoolBeanList.size()==0)
+            return;
+        getSchoolList(schoolBeanList.get(0).getId() + "");
     }
 }
