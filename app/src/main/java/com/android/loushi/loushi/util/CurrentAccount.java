@@ -2,297 +2,184 @@ package com.android.loushi.loushi.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.media.audiofx.LoudnessEnhancer;
-import android.nfc.Tag;
-import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.loushi.loushi.callback.JsonCallback;
-import com.android.loushi.loushi.jsonbean.Area;
 import com.android.loushi.loushi.jsonbean.UserAreaJson;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
-import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
-import com.lzy.okhttputils.OkHttpUtils;
-
-import javax.security.auth.login.LoginException;
-
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Created by Administrator on 2016/8/6.
  */
 public class CurrentAccount {
 
-    public static final String TAG = "CurrentAccount";
+    private static final String TAG = "CurrentAccount";
+    private static final String TABLENAME = "UserInfo";
+    public static final String ACCOUNT = "account";
+    public static final String PASSWORD = "password";
+    public static final String IS_THIRD = "Third";
+    public static final String THIRD_TYPE = "Third_type";
+    public static final String PROVINCE = "province";
+    public static final String DISTRICT = "district";
+    public static final String CITY = "city";
+    public static final String NICKNAME = "nickname";
+    public static final String MOBILE_PHONE = "mobile_phone";
+    public static final String HEAD_IMG_URL = "headImgUrl";
+    public static final String EMAIL = "email";
+    public static final String SCHOOL_NAME = "schoolName";
+    public static final String SEX = "sex";
+    public static final String MESSAGE_COUNT = "messageCount";
+    public static final String USER_ID = "user_id";
+    public static final String LOGIN_OR_NOT = "LoginOrNot";
+    public static final String REFRESH = "reFresh";
 
-    public static Context context;
-    public static SharedPreferences sharedPreferences;
-    public static SharedPreferences.Editor editor;
 
-    public static String user_id;
-    public static String account;
 
-    public static String password;
-    public static boolean LoginOrNot;
-    public static boolean Third;
-    public static String Third_type;
+     private static final String SEX_MEN="男";
+     private static final String SEX_WOMEN="女";
 
-    public static boolean ReFresh;
-
-    //userAreaJson里面的数据
-    public static String province;
-    public static String district;
-    public static String city;
-
-    //userInfoJson里面的数据d
-    public static String nickname;
-    public static String mobile_phone;
-    public static String headImgUrl;
-    public static String email;
-    public static String schoolName;
-    public static String sex;
-    public static int messageCount;
+    private static Context context;
+    private static SharedPreferences sp;
+    private static SharedPreferences.Editor editor;
 
     public static void init(Context context) {
         CurrentAccount.context = context;
-        sharedPreferences = context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        getDatas();
+        sp = context.getSharedPreferences(TABLENAME, Context.MODE_PRIVATE);
+        editor = sp.edit();
+        //getDatas();
     }
 
     public static void storeAccountInfo(String user_id, String account, String password, Boolean Third, String Third_type) {
-        CurrentAccount.user_id = user_id;
-        CurrentAccount.account = account;
-        CurrentAccount.password = password;
-        CurrentAccount.Third = Third;
-        CurrentAccount.Third_type = Third_type;
-        if(!Third){
-            CurrentAccount.mobile_phone = account;
-            editor.putString("mobile_phone", account);
+        if (!Third) {
+            editor.putString(MOBILE_PHONE, account);
         }
-        editor.putString("user_id", user_id);
-        editor.putString("account", account);
-        editor.putString("password", password);
-        editor.putBoolean("Third", Third);
-        editor.putString("Third_type", Third_type);
+        editor.putString(USER_ID, user_id);
+        editor.putString(ACCOUNT, account);
+        editor.putString(PASSWORD, password);
+        editor.putBoolean(IS_THIRD, Third);
+        editor.putString(THIRD_TYPE, Third_type);
+        BaseActivity.user_id=user_id;
         editor.commit();
     }
 
-    public static void storeDatas(UserAreaJson userAreaJson){
+    public static void storeUserInfo(UserAreaJson userAreaJson) {
         Log.e("BIG ", "initDatas");
-
         UserAreaJson.BodyBean body = (UserAreaJson.BodyBean) userAreaJson.getBody();
-        if (body.getProvince() != null) editor.putString("province", body.getProvince());
-        if (body.getDistrict() != null) editor.putString("district", body.getDistrict());
-        if (body.getCity() != null) editor.putString("city", body.getCity());
+        if (body.getProvince() != null) editor.putString(PROVINCE, body.getProvince());
+        if (body.getDistrict() != null) editor.putString(DISTRICT, body.getDistrict());
+        if (body.getCity() != null) editor.putString(CITY, body.getCity());
         editor.commit();
         Log.e(TAG, "将数据存储至 SharedPreferences ");
-        getAreaDatas();
-
     }
 
-    private static void getAreaDatas() {
-        setProvince(sharedPreferences.getString("province","null"));
-        setDistrict(sharedPreferences.getString("district","null"));
-        setCity(sharedPreferences.getString("city","null"));
-    }
-
-    public static void storeDatas(UserInfoJson userInfoJson) {
+    public static void storeUserInfo(UserInfoJson userInfoJson) {
         if (userInfoJson == null) Log.e("BIG ", "null json");
         if (context == null) Log.e("BIG ", "null context");
-        Log.e("BIG ", "initDatas");
-
         UserInfoJson.BodyBean body = userInfoJson.getBody();
         Log.e(TAG, "current prase" + body.toString());
-        if (body.getNickname() != null) editor.putString("nickname", body.getNickname());
-        if (body.getMobilePhone() != null) editor.putString("mobile_phone", body.getMobilePhone());
-        if (body.getHeadImgUrl() != null) editor.putString("headImgUrl", body.getHeadImgUrl());
-        if (body.getEmail() != null) editor.putString("email", body.getEmail());
-        if (body.getSchool() != null)
-            editor.putString("schoolName", body.getSchool().getName());
-        if (body.isSex()) editor.putString("sex", "1");
-        else editor.putString("sex", "0");
-        editor.putInt("messageCount", body.getMessageCount());
+        editor.putString(EMAIL, body.getEmail());
+        editor.putString(HEAD_IMG_URL, body.getHeadImgUrl());
+        editor.putString(USER_ID,body.getUserID()+"");
+        editor.putString(MESSAGE_COUNT, body.getMessageCount()+"");
+        editor.putString(MOBILE_PHONE, body.getMobilePhone());
+        editor.putString(NICKNAME, body.getNickname());
+        if(body.getSchool()!=null)
+            editor.putString(SCHOOL_NAME, body.getSchool().getName());
+        editor.putString(SEX, body.isSex()?SEX_MEN:SEX_WOMEN);
         editor.commit();
         Log.e(TAG, "将数据存储至 SharedPreferences ");
-        getDatas();
     }
 
-    public static void storeDatas(String nickname, String headImgUrl, String schoolName, String sex) {
-        CurrentAccount.nickname = nickname;
-        CurrentAccount.headImgUrl = headImgUrl;
-        CurrentAccount.schoolName = schoolName;
-        CurrentAccount.sex = sex;
-        editor.putString("nickname", nickname);
-        editor.putString("headImgUrl", headImgUrl);
-        editor.putString("schoolName", schoolName);
-        editor.putString("sex", sex);
+    public static void storeUserInfo(String nickname, String headImgUrl, String sex,String province,String city,String schoolName) {
+        editor.putString(NICKNAME, nickname);
+        editor.putString(HEAD_IMG_URL, headImgUrl);
+        editor.putString(SEX, sex);
+        editor.putString(PROVINCE, province);
+        editor.putString(CITY, city);
+        editor.putString(SCHOOL_NAME, schoolName);
         editor.commit();
     }
 
-    public static void getDatas() {
-        Log.e(TAG, "getDatas");
-        setUser_id(sharedPreferences.getString("user_id", "null"));
-        setPassword(sharedPreferences.getString("password", "null"));
-        setLoginOrNot(sharedPreferences.getBoolean("LoginOrNot", false));
-        Log.e("splashthird",sharedPreferences.getBoolean("Third", false)+"");
-        setThird(sharedPreferences.getBoolean("Third", false));
-        setNickname(sharedPreferences.getString("nickname", "null"));
-        setMobile_phone(sharedPreferences.getString("mobile_phone", "null"));
-        setEmail(sharedPreferences.getString("email", "null"));
-        setHeadImgUrl(sharedPreferences.getString("headImgUrl", "null"));
-        setSchoolName(sharedPreferences.getString("schoolName", "null"));
-        setSex(sharedPreferences.getString("sex", "null"));
-        setMessageCount(sharedPreferences.getInt("messageCount", 0));
-        setThird_type(sharedPreferences.getString("Third_type", "0"));
-        setAccount(sharedPreferences.getString("account","null"));
-    }
-
-    public static String getSchoolName() {
-        return schoolName;
-    }
-
-    public static void setSchoolName(String schoolName) {
-        CurrentAccount.schoolName = schoolName;
-    }
-
-    public static String getHeadImgUrl() {
-        return headImgUrl;
-    }
-
-    public static void setHeadImgUrl(String headImgUrl) {
-        CurrentAccount.headImgUrl = headImgUrl;
-        editor.putString("headImgUrl", headImgUrl);
+    public static void set(String key,String value){
+        editor.putString(key,value);
         editor.commit();
     }
-
-    public static int getMessageCount() {
-        return messageCount;
-    }
-
-    public static void setMessageCount(int messageCount) {
-        CurrentAccount.messageCount = messageCount;
-    }
-
-    public static String getNickname() {
-        return nickname;
-    }
-
-    public static void setNickname(String nickname) {
-        CurrentAccount.nickname = nickname;
-    }
-
-
-    public static String getUser_id() {
-        return user_id;
-    }
-
-    public static void setUser_id(String user_id) {
-        CurrentAccount.user_id = user_id;
-    }
-
-
-    public static String getPassword() {
-        return password;
-    }
-
-    public static void setPassword(String password) {
-        CurrentAccount.password = password;
-    }
-
-    public static boolean isLoginOrNot() {
-        return LoginOrNot;
-    }
-
-    public static void setLoginOrNot(boolean loginOrNot) {
-        LoginOrNot = loginOrNot;
-        editor.putBoolean("LoginOrNot", loginOrNot);
+    public static void set(String key,boolean value){
+        editor.putBoolean(key,value);
         editor.commit();
     }
-
-    public static String getMobile_phone() {
-        return mobile_phone;
+    public static String get(String key,String defvalue){
+        return sp.getString(key,defvalue);
+    }
+    public static boolean get(String key,boolean defvalue){
+        return sp.getBoolean(key,defvalue);
     }
 
-    public static void setMobile_phone(String mobile_phone) {
-        CurrentAccount.mobile_phone = mobile_phone;
+    public static boolean isThird(){
+        return get(IS_THIRD,false);
+    }
+    public static String getAccount(){
+        return get(ACCOUNT,"");
+    }
+    public static String getPassword(){
+        return get(PASSWORD,"");
+    }
+    public static String getThirdType(){
+        return get(THIRD_TYPE,"");
+    }
+    public static void setThirdType(String thirdType){
+        set(THIRD_TYPE,thirdType);
     }
 
-
-    public static String getSex() {
-        return sex;
+    public static void setUserId(String user_id){
+        set(USER_ID,user_id);
+        BaseActivity.user_id=user_id;
+    }
+    public static void setLoginOrNot(boolean loginOrNot){
+        set(LOGIN_OR_NOT,loginOrNot);
+    }
+    public static void setIsThird(boolean isThird){
+        set(IS_THIRD,isThird);
+    }
+    public static void setHeadImgUrl(String url){
+        set(HEAD_IMG_URL,url);
+    }
+    public static void setNickname(String name){
+        set(NICKNAME,name);
+    }
+    public static void setReFresh(boolean reFresh){
+        set(REFRESH,reFresh);
     }
 
-    public static void setSex(String sex) {
-        CurrentAccount.sex = sex;
+    public static void setMessageCount(String messageCount){
+        set(MESSAGE_COUNT,messageCount);
     }
 
-
-    public static String getEmail() {
-        return email;
+    public static boolean getReFresh(){
+        return get(REFRESH,false);
     }
 
-    public static void setEmail(String email) {
-        CurrentAccount.email = email;
+    public static String getMessageCount(){
+        return get(MESSAGE_COUNT,0+"");
+    }
+    public static String getMobilePhone(){
+        return get(MOBILE_PHONE,"");
+    }
+    public static boolean getLoginOrNot(){
+        return get(LOGIN_OR_NOT,false);
+    }
+    public static String getHeadImgUrl(){
+        return get(HEAD_IMG_URL,"");
+    }
+    public static String getNickname(){
+        return get(NICKNAME,"");
+    }
+    public static String getSex(){
+        return get(SEX,"男");
+    }
+    public static String getUserId(){
+        return get(USER_ID,"");
     }
 
-    public static boolean isThird() {
-        return Third;
-    }
-
-    public static void setThird(boolean Third) {
-        CurrentAccount.Third = Third;
-    }
-
-    public static boolean isReFresh() {
-        return ReFresh;
-    }
-
-    public static void setReFresh(boolean reFresh) {
-        ReFresh = reFresh;
-    }
-
-    public static String getThird_type() {
-        return Third_type;
-    }
-
-    public static void setThird_type(String third_type) {
-        CurrentAccount.Third_type = third_type;
-    }
-
-    public static String getAccount() {
-        return account;
-    }
-
-    public static void setAccount(String account) {
-        CurrentAccount.account = account;
-    }
-
-    public static String getProvince() {
-        return province;
-    }
-
-    public static void setProvince(String province) {
-        CurrentAccount.province = province;
-    }
-
-    public static String getCity() {
-        return city;
-    }
-
-    public static void setCity(String city) {
-        CurrentAccount.city = city;
-    }
-
-    public static String getDistrict() {
-        return district;
-    }
-
-    public static void setDistrict(String district) {
-        CurrentAccount.district = district;
-    }
 
 }

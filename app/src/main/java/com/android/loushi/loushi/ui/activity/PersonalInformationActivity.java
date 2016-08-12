@@ -78,7 +78,7 @@ public class PersonalInformationActivity extends BaseActivity
     private Button btn_save;
 
     private TextView text_exit;
-    private List<ProvinceJson.BodyBean> provinceBeanlist;
+    private List<ProvinceJson.BodyBean> provinceBeanList;
     private List<SchoolJson.BodyBean> schoolBeanList;
     private List<ProvinceJson.BodyBean> cityBeanList;
 
@@ -130,20 +130,22 @@ public class PersonalInformationActivity extends BaseActivity
             Picasso.with(this).load(CurrentAccount.getHeadImgUrl()).into(image_circular);
         if (CurrentAccount.getNickname() != null)
             edit_nickname.setText(CurrentAccount.getNickname());
-        if (CurrentAccount.getMobile_phone() != null)
-            edit_phone.setText(CurrentAccount.getMobile_phone());
-
+        if (CurrentAccount.getMobilePhone() != null)
+            edit_phone.setText(CurrentAccount.getMobilePhone());
 
         spinner_sex.setItems("女", "男");
         spinner_sex.setDropdownMaxHeight(300);
-        getProvince();
-        spinner_province.setOnItemSelectedListener(this);
-        spinner_province.setDropdownMaxHeight(300);
-        spinner_city.setOnItemSelectedListener(this);
-        if (CurrentAccount.getSex() != null && CurrentAccount.getSex().equals("1")) {
+        if (CurrentAccount.getSex().equals("男")) {
             Log.e(TAG + "sex", CurrentAccount.getSex());
             spinner_sex.setSelectedIndex(1);
         } else spinner_sex.setSelectedIndex(0);
+        //TODO
+//        if(CurrentAccount.)
+        getProvinceList();
+        spinner_province.setOnItemSelectedListener(this);
+        spinner_province.setDropdownMaxHeight(300);
+        spinner_city.setOnItemSelectedListener(this);
+
 
     }
 
@@ -162,8 +164,9 @@ public class PersonalInformationActivity extends BaseActivity
     }
 
     public void LogOut() {
-        Log.e("personinfo", CurrentAccount.getUser_id());
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogout").params("user_id", CurrentAccount.getUser_id())
+        Log.e("personinfo", CurrentAccount.getUserId());
+        OkHttpUtils.post(UrlConstant.USERLOGOUTURL)
+                .params(KeyConstant.USER_ID, CurrentAccount.getUserId())
                 .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
                     @Override
                     public void onResponse(boolean b, ResponseJson responseJson, Request request, @Nullable Response response) {
@@ -254,12 +257,12 @@ public class PersonalInformationActivity extends BaseActivity
                     byte[] bytes = bStream.toByteArray();
                     String ss = Base64.encodeToString(bytes, Base64.DEFAULT);
                     Log.e(TAG, ss);
-                    Log.e(TAG, CurrentAccount.getUser_id());
+                    Log.e(TAG, CurrentAccount.getUserId());
 
-                    OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userHeadImg")
-                            .params("img", ss)
-                            .params("user_id", CurrentAccount.getUser_id())
-                            .params("imgFileName", "1.jpg")
+                    OkHttpUtils.post(UrlConstant.USERHEADIMGURL)
+                            .params(KeyConstant.IMG, ss)
+                            .params(KeyConstant.USER_ID, CurrentAccount.getUserId())
+                            .params(KeyConstant.IMGFILENAME, "1.jpg")
                             .execute(new DialogCallback<ImageJson>(this, ImageJson.class) {
                                 @Override
                                 public void onResponse(boolean isFromCache, ImageJson imageJson, Request request, @Nullable Response response) {
@@ -285,7 +288,7 @@ public class PersonalInformationActivity extends BaseActivity
     public void onClick_btn_save(View view) {
         Log.e(TAG, "onClick_btn_save");
 
-        user_id = CurrentAccount.getUser_id();
+        user_id = CurrentAccount.getUserId();
         nickname = edit_nickname.getText().toString();
         headImgUrl = CurrentAccount.getHeadImgUrl();
         schoolName = spinner_university.getSelectedIndex() + 1 + "";
@@ -300,12 +303,12 @@ public class PersonalInformationActivity extends BaseActivity
         Log.e(TAG, schoolName);
         //Log.e(TAG, sex);
 
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfoAlt.action")
-                .params("user_id", user_id)
-                .params("nickname", nickname)
-                .params("headImgUrl", headImgUrl)
-                .params("school.id", schoolName)
-                .params("sex", sexBool)
+        OkHttpUtils.post(UrlConstant.USERINFOALTURL)
+                .params(KeyConstant.USER_ID, user_id)
+                .params(KeyConstant.NICKNAME, nickname)
+                .params(KeyConstant.HEADIMGURL, headImgUrl)
+                .params(KeyConstant.school_id, schoolName)
+                .params(KeyConstant.SEX, sexBool)
                 .execute(new DialogCallback<UserInfoJson>(this, UserInfoJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
@@ -314,7 +317,11 @@ public class PersonalInformationActivity extends BaseActivity
                         if (userInfoJson.isState()) {
                             Log.e(TAG, "onResponse: 资料提交成功 ！");
 
-                            CurrentAccount.storeDatas(nickname, headImgUrl, schoolName, sex);
+                            String province=spinner_province.getText().toString();
+                            String city=spinner_city.getText().toString();
+                            String sex=spinner_sex.getText().toString();
+                            String schoolName=spinner_university.getText().toString();
+                            CurrentAccount.storeUserInfo(nickname, headImgUrl, sex,province,city,schoolName);
                             CurrentAccount.setReFresh(true);
                             finish();
                         }
@@ -352,18 +359,18 @@ public class PersonalInformationActivity extends BaseActivity
                 });
 
     }
-    public void getProvince() {
+    public void getProvinceList() {
         OkHttpUtils.post(UrlConstant.USERAREAGURL)
                 .execute(new JsonCallback<ProvinceJson>(ProvinceJson.class) {
             @Override
             public void onResponse(boolean b, ProvinceJson provinceJson, Request request, @Nullable Response response) {
                 if (provinceJson.isState()) {
-                    provinceBeanlist = new ArrayList<ProvinceJson.BodyBean>();
-                    provinceBeanlist.addAll(provinceJson.getBody());
-                    int len = provinceBeanlist.size();
+                    provinceBeanList = new ArrayList<ProvinceJson.BodyBean>();
+                    provinceBeanList.addAll(provinceJson.getBody());
+                    int len = provinceBeanList.size();
                     List<String> provices = new ArrayList<String>();
                     for (int i = 0; i < len; i++)
-                        provices.add(provinceBeanlist.get(i).getProvince());
+                        provices.add(provinceBeanList.get(i).getProvince());
                     spinner_province.setItems(provices);
                    initDefaultCity();
                 }
@@ -411,7 +418,7 @@ public class PersonalInformationActivity extends BaseActivity
             case R.id.spinner_sex:
                 break;
             case R.id.spinner_province:
-                getCityList(provinceBeanlist.get(position).getId()+"");
+                getCityList(provinceBeanList.get(position).getId()+"");
                 break;
             case R.id.spinner_city:
                 getSchoolList(cityBeanList.get(position).getId() + "");
@@ -422,14 +429,14 @@ public class PersonalInformationActivity extends BaseActivity
     }
 
     private void initDefaultCity(){
-        if(cityBeanList==null||cityBeanList.size()==0)
+        if(provinceBeanList ==null||provinceBeanList.size()==0)
             return;
-        getCityList(cityBeanList.get(0).getId() + "");
+        getCityList(provinceBeanList.get(0).getId() + "");
     }
 
     private void initDefaultSchool(){
-        if(schoolBeanList==null||schoolBeanList.size()==0)
+        if(cityBeanList==null||cityBeanList.size()==0)
             return;
-        getSchoolList(schoolBeanList.get(0).getId() + "");
+        getSchoolList(cityBeanList.get(0).getId() + "");
     }
 }

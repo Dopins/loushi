@@ -61,7 +61,7 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
         String code = jsonObject.optString("code", "");
         if (code != null && (code.equals("10000") || code.equals("10001"))) {
             Log.e("clazz", code);
-            if (CurrentAccount.isLoginOrNot()) {
+            if (CurrentAccount.getLoginOrNot()) {
                 if (!CurrentAccount.isThird()) {
                     String phone = CurrentAccount.getAccount();
                     String password = CurrentAccount.getPassword();
@@ -76,7 +76,7 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
                                     if (userLoginJson.getState()) {
 
                                         BaseActivity.user_id = userLoginJson.getBody() + "";
-                                        CurrentAccount.setUser_id(BaseActivity.user_id);
+                                        CurrentAccount.setUserId(BaseActivity.user_id);
                                         Log.e("callback", "autoLogin 登录成功！");
                                     } else {
                                         Log.e("callback", "autoLogin 登录失败！");
@@ -86,7 +86,7 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
                 } else {
                     final String account = CurrentAccount.getAccount();
                     String password = CurrentAccount.getPassword();
-                    final String type = CurrentAccount.Third_type;
+                    final String type = CurrentAccount.getThirdType();
 
                     OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
                             .params("account", account)
@@ -104,7 +104,7 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
 
                                         } else {
                                             BaseActivity.user_id = userLoginJson.getBody() + "";
-                                            CurrentAccount.setUser_id(userLoginJson.getBody() + "");
+                                            CurrentAccount.setUserId(userLoginJson.getBody() + "");
                                         }
 
                                     } else {
@@ -123,7 +123,7 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
                 //执行登陆操作
 
             }
-            if (!CurrentAccount.isLoginOrNot()) {
+            if (!CurrentAccount.getLoginOrNot()) {
                 EventBus.getDefault().post(new MainEvent(MainEvent.NEED_LOGIN));
             }
 //            if(!CurrentAccount.isLoginOrNot()){

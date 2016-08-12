@@ -52,7 +52,7 @@ public class MyFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.e(TAG, "onActivityCreated");
-        if (CurrentAccount.LoginOrNot) {
+        if (CurrentAccount.getLoginOrNot()) {
             //transferToPersonalFragment();
         } else {
             Log.e(TAG, " Have not login !");
@@ -162,6 +162,6 @@ public class MyFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (CurrentAccount.isLoginOrNot())transferToPersonalFragment();
+        if (CurrentAccount.getLoginOrNot())transferToPersonalFragment();
     }
 }

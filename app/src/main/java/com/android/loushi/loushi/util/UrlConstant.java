@@ -21,6 +21,10 @@ public class UrlConstant {
     public static final String CLEARMSGURL =prefixUser+"userEmptyComment.action";
     public static final String GETSCHOOLGURL =prefixUser+"userSchool.action";
     public static final String USERAREAGURL =prefixUser+"userArea.action";
+    public static final String USERINFOURL =prefixUser+"userinfo.action";
+    public static final String USERINFOALTURL =prefixUser+"userinfoAlt.action";
+    public static final String USERLOGOUTURL =prefixUser+"userLogout.action";
+    public static final String USERHEADIMGURL =prefixUser+"userHeadImg.action";
 
 
 
