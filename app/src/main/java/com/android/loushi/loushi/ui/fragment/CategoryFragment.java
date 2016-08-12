@@ -37,7 +37,6 @@ public class CategoryFragment extends BaseFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
         initView();
     }
@@ -91,14 +90,12 @@ public class CategoryFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd(TAG);
-        Log.i(TAG,"onPause");
+//        MobclickAgent.onPageEnd(TAG);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart(TAG);
-        Log.i(TAG,"onResume");
+//        MobclickAgent.onPageStart(TAG);
     }
 }

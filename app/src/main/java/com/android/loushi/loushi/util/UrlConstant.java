@@ -5,8 +5,8 @@ package com.android.loushi.loushi.util;
  */
 public class UrlConstant {
 
-    public static final String prefixBase="http://www.loushi666.com/LouShi/base/";
-    public static final String prefixUser="http://www.loushi666.com/LouShi/user/";
+    private static final String prefixBase="http://www.loushi666.com/LouShi/base/";
+    private static final String prefixUser="http://www.loushi666.com/LouShi/user/";
 
     //base
     public static final String TOPICURL=prefixBase+"topic.action";
@@ -19,6 +19,8 @@ public class UrlConstant {
     public static final String USERCOMMENTURL =prefixUser+"userComment.action";
     public static final String USERLOGINURL =prefixUser+"userLogin.action";
     public static final String CLEARMSGURL =prefixUser+"userEmptyComment.action";
+    public static final String GETSCHOOLGURL =prefixUser+"userSchool.action";
+    public static final String USERAREAGURL =prefixUser+"userArea.action";
 
 
 

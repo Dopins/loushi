@@ -119,22 +119,19 @@ public class SceneFragment extends BaseFragment {
     }
 
     public void onSaveInstanceState(Bundle outState) {
-        // TODO Auto-generated method stub
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd(TAG);
-        Log.i(TAG, "onPause");
+//        MobclickAgent.onPageEnd(TAG);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart(TAG);
-        Log.i(TAG,"onResume");
+//        MobclickAgent.onPageStart(TAG);
     }
 
 }

@@ -60,7 +60,6 @@ public class SceneDetailDesignFragment extends BaseFragment {
     private int downX=0;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
         if(!TextUtils.isEmpty(getArguments().getString("SCENE_ID")))
         scene_id = getArguments().getString("SCENE_ID");
