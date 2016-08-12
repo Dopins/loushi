@@ -343,6 +343,7 @@ public class PersonalInformationActivity extends BaseActivity
                             List<String> schools = new ArrayList<String>();
                             for (int i = 0; i < len; i++)
                                 schools.add(schoolBeanList.get(i).getName());
+                            Log.i("mytest","size=="+schools.size());
                             spinner_university.setItems(schools);
                         } else
                             Toast.makeText(mContext, schoolJson.getReturn_info(), Toast.LENGTH_SHORT).show();
@@ -425,6 +426,7 @@ public class PersonalInformationActivity extends BaseActivity
             return;
         getCityList(cityBeanList.get(0).getId() + "");
     }
+
     private void initDefaultSchool(){
         if(schoolBeanList==null||schoolBeanList.size()==0)
             return;
