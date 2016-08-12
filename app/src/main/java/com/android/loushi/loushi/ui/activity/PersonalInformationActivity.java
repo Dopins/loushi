@@ -167,6 +167,7 @@ public class PersonalInformationActivity extends BaseActivity
                 .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
                     @Override
                     public void onResponse(boolean b, ResponseJson responseJson, Request request, @Nullable Response response) {
+                        Log.e("personinfo", new Gson().toJson(responseJson));
                         if (responseJson.getState()) {
                             CurrentAccount.setLoginOrNot(false);
                             MobclickAgent.onProfileSignOff();
@@ -350,7 +351,6 @@ public class PersonalInformationActivity extends BaseActivity
                 });
 
     }
-
     public void getProvince() {
         OkHttpUtils.post(UrlConstant.USERAREAGURL)
                 .execute(new JsonCallback<ProvinceJson>(ProvinceJson.class) {
@@ -369,6 +369,7 @@ public class PersonalInformationActivity extends BaseActivity
             }
         });
     }
+
 
     private void getCityList(String province) {
         OkHttpUtils.post(UrlConstant.USERAREAGURL)

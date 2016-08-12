@@ -30,6 +30,7 @@ import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.ToastUtils;
 import com.android.loushi.loushi.util.UrlConstant;
+import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.taobao.tae.sdk.callback.InitResultCallback;
 import com.umeng.analytics.MobclickAgent;
@@ -38,6 +39,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -132,23 +134,59 @@ public class MainActivity extends BaseActivity {
         //TODO 第三方登录？？
         if (!hasLogin())
             return;
-        String phone = CurrentAccount.getMobile_phone();
-        String password = CurrentAccount.getPassword();
-        OkHttpUtils.post(UrlConstant.USERLOGINURL)
-                .params(KeyConstant.MOBILE_PHONE, phone)
-                .params(KeyConstant.PASSWORD, password)
-                .params(KeyConstant.ISTHIRD, "false")
-                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
-                    @Override
-                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-                        if (userLoginJson.getState()) {
-                            BaseActivity.user_id=userLoginJson.getBody()+"";
-                            Log.e(TAG, "autoLogin 登录成功！");
-                        } else {
-                            Log.e(TAG, "autoLogin 登录失败！");
+        if(!CurrentAccount.isThird()) {
+            String phone = CurrentAccount.getAccount();
+            String password = CurrentAccount.getPassword();
+            OkHttpUtils.post(UrlConstant.USERLOGINURL)
+                    .params(KeyConstant.MOBILE_PHONE, phone)
+                    .params(KeyConstant.PASSWORD, password)
+                    .params(KeyConstant.ISTHIRD, "false")
+                    .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+                        @Override
+                        public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+                            if (userLoginJson.getState()) {
+                                BaseActivity.user_id = userLoginJson.getBody() + "";
+                                Log.e(TAG, "autoLogin 登录成功！");
+                            } else {
+                                Log.e(TAG, "autoLogin 登录失败！");
+                            }
                         }
-                    }
-                });
+                    });
+        }
+        else{
+            final String account=CurrentAccount.getAccount();
+            String password=CurrentAccount.getPassword();
+            final String type =CurrentAccount.Third_type;
+
+            OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
+                    .params("account", account)
+                    .params("type", type)
+                    .params("token", password)
+                    .params("isThird", "true")
+                    .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
+                        @Override
+                        public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+                            Log.e("splash", new Gson().toJson(userLoginJson));
+                            if (userLoginJson.getState()) {
+                                //CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
+                                String code = userLoginJson.getCode();
+                                if (code != null && code.equals("3")) {
+                                } else {
+                                    BaseActivity.user_id = userLoginJson.getBody() + "";
+                                    CurrentAccount.setUser_id(userLoginJson.getBody() + "");
+                                }
+
+                            } else {
+                                CurrentAccount.setLoginOrNot(false);
+                                Log.e("splashthirdlogin", "登录失败！");
+                            }
+
+
+                        }
+
+
+                    });
+        }
 
     }
 
