@@ -1,10 +1,13 @@
 package com.android.loushi.loushi.util;
 
 import android.util.Log;
+import android.widget.Toast;
 
 
+import com.alibaba.nb.android.trade.AliTradeSDK;
+import com.alibaba.nb.android.trade.callback.AliTradeInitCallback;
 import com.alibaba.sdk.android.AlibabaSDK;
-import com.alibaba.sdk.android.trade.TradeConfigs;
+
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
@@ -14,7 +17,7 @@ import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.cookie.store.CookieStore;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
 import com.squareup.picasso.Picasso;
-import com.taobao.tae.sdk.callback.InitResultCallback;
+
 import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 import org.litepal.LitePalApplication;
@@ -32,7 +35,7 @@ import okhttp3.Response;
  * Created by Administrator on 2016/4/16.
  */
 public class MyApplication extends LitePalApplication {
-
+    public static final String APP_KEY = "23393904";
     private static final String TAG="MyApplication";
 
     public void onCreate() {
@@ -88,7 +91,7 @@ public class MyApplication extends LitePalApplication {
     }
 
     private void InitTaobao() {
-        TradeConfigs.defaultTaokePid = "mm_114880276_0_0";
+/*        TradeConfigs.defaultTaokePid = "mm_114880276_0_0";
         AlibabaSDK.asyncInit(this, new InitResultCallback() {
 
             @Override
@@ -106,7 +109,29 @@ public class MyApplication extends LitePalApplication {
                 Log.e("splash", "nosuccess" + message);
             }
 
-        });
+        });*/
+        try {
+            AlibabaSDK.turnOnDebug();
+            //电商SDK初始化
+            AliTradeSDK.asyncInit(this, APP_KEY, new AliTradeInitCallback() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(MyApplication.this, "初始化成功", Toast.LENGTH_SHORT).show();
+                    Log.e("myapplication", "chenggong");
+
+                }
+
+                @Override
+                public void onFailure(int code, String msg) {
+                    Toast.makeText(MyApplication.this, "初始化失败" + code + msg, Toast.LENGTH_SHORT).show();
+                    Log.e("myapplication", "shibai" + code + msg);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("myapplication",Log.getStackTraceString(e));
+        }
+
     }
 
 }
