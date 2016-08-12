@@ -90,7 +90,7 @@
             android:name="UMENG_CHANNEL"
             android:value="testchannel" />
 
-       
+
     </application>
 
 </manifest>

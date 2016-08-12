@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 
 import com.alibaba.sdk.android.AlibabaSDK;
-import com.alibaba.sdk.android.trade.TradeConfigs;
+
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.event.MainEvent;
@@ -32,7 +32,7 @@ import com.android.loushi.loushi.util.ToastUtils;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
-import com.taobao.tae.sdk.callback.InitResultCallback;
+
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -237,7 +237,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void InitTaobao() {
-        TradeConfigs.defaultTaokePid = "mm_114880276_0_0";
+       /* TradeConfigs.defaultTaokePid = "mm_114880276_0_0";
         AlibabaSDK.asyncInit(this, new InitResultCallback() {
 
             @Override
@@ -255,7 +255,7 @@ public class MainActivity extends BaseActivity {
                 Log.e("splash", "nosuccess" + message);
             }
 
-        });
+        });*/
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

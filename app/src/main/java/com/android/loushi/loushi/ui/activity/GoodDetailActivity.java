@@ -17,11 +17,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.sdk.android.AlibabaSDK;
-import com.alibaba.sdk.android.trade.TradeService;
-import com.alibaba.sdk.android.trade.callback.TradeProcessCallback;
-import com.alibaba.sdk.android.trade.model.TradeResult;
-import com.alibaba.sdk.android.trade.page.ItemDetailPage;
+import com.alibaba.nb.android.trade.AliTradeSDK;
+import com.alibaba.nb.android.trade.callback.AliTradeProcessCallback;
+import com.alibaba.nb.android.trade.constants.AliTradeConstants;
+import com.alibaba.nb.android.trade.model.AliOpenType;
+import com.alibaba.nb.android.trade.model.AliTradeResult;
+import com.alibaba.nb.android.trade.model.AliTradeShowParams;
+import com.alibaba.nb.android.trade.model.AliTradeTaokeParams;
+import com.alibaba.nb.android.trade.uibridge.AliTradeDetailPage;
+import com.alibaba.nb.android.trade.uibridge.IAliTradeService;
+
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.GoodDetailAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
@@ -35,13 +40,15 @@ import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
-import com.taobao.tae.sdk.model.TaokeParams;
+
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.LineNumberInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Request;
 import okhttp3.Response;
@@ -212,28 +219,27 @@ public class GoodDetailActivity extends BaseActivity {
 
 
     public void showItemDetailPage(View view, String id) {
-        Log.e("taobaourl", id);
-        TradeService tradeService = AlibabaSDK.getService(TradeService.class);
+        AliTradeShowParams aliTradeShowParams = new AliTradeShowParams(AliOpenType.H5, false);
+        AliTradeDetailPage tradePage=new AliTradeDetailPage(url);
+        IAliTradeService aliTradeService = AliTradeSDK.getService(IAliTradeService.class);
+        Map<String, String> exParams = new HashMap<>();
+        exParams.put(AliTradeConstants.ISV_CODE, "appisvcode");
 
-        ItemDetailPage itemDetailPage = new ItemDetailPage(id, null);
-        TaokeParams taokeParams = new TaokeParams(); //若非淘客taokeParams设置为null即可
-        taokeParams.pid = "mm_114880276_0_0";
-
-
-        tradeService.show(itemDetailPage, taokeParams, GoodDetailActivity.this, null, new TradeProcessCallback() {
+        AliTradeTaokeParams aliTradeTaokeParams = new AliTradeTaokeParams("mm_114880276_0_0", "", "");
+        aliTradeService.show(GoodDetailActivity.this, tradePage, aliTradeShowParams, aliTradeTaokeParams, exParams, new AliTradeProcessCallback() {
 
             @Override
-            public void onFailure(int code, String msg) {
-                Toast.makeText(GoodDetailActivity.this, "失败 " + code + msg,
+            public void onTradeSuccess(AliTradeResult tradeResult) {
+                Toast.makeText(GoodDetailActivity.this, "显示商品详情页成功",
                         Toast.LENGTH_SHORT).show();
-
+                //打开电商组件，用户操作中成功信息回调。tradeResult：成功信息（结果类型：加购，支付；支付结果）
             }
 
             @Override
-            public void onPaySuccess(TradeResult tradeResult) {
-                Toast.makeText(GoodDetailActivity.this, "成功", Toast.LENGTH_SHORT)
-                        .show();
-
+            public void onFailure(int code, String msg) {
+                Toast.makeText(GoodDetailActivity.this, "显示商品详情页失败 " + code + msg,
+                        Toast.LENGTH_SHORT).show();
+                //打开电商组件，用户操作中错误信息回调。code：错误码；msg：错误信息
             }
         });
 
