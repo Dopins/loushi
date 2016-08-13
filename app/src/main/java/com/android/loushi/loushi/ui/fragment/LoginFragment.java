@@ -397,7 +397,7 @@ public class LoginFragment extends Fragment {
                                         }
                                         CurrentAccount.storeUserInfo(platform.getDb().getUserName(),
                                                 platform.getDb().getUserIcon(),
-                                                sex,"","","");
+                                                sex,"","","","");
                                         postUserInfo(userLoginJson.getBody() + "", platform.getDb().getUserName(), platform.getDb().getUserIcon(), sexBool);
                                         transferMyFragmentToPersonalFragment();
 

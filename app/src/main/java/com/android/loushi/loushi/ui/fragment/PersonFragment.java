@@ -141,7 +141,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private void iniDatas() {
         tv_name.setText(CurrentAccount.getNickname());
         Log.e("person", CurrentAccount.getHeadImgUrl());
-        if(TextUtils.isEmpty(CurrentAccount.getHeadImgUrl())){
+        if(!TextUtils.isEmpty(CurrentAccount.getHeadImgUrl())){
             Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head_small);
             Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
         }

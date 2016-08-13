@@ -32,6 +32,7 @@ public class CurrentAccount {
     public static final String USER_ID = "user_id";
     public static final String LOGIN_OR_NOT = "LoginOrNot";
     public static final String REFRESH = "reFresh";
+    public static final String SCHOOL_ID = "school_id";
 
 
 
@@ -90,13 +91,14 @@ public class CurrentAccount {
         Log.e(TAG, "将数据存储至 SharedPreferences ");
     }
 
-    public static void storeUserInfo(String nickname, String headImgUrl, String sex,String province,String city,String schoolName) {
+    public static void storeUserInfo(String nickname, String headImgUrl, String sex,String province,String city,String schoolName,String school_id) {
         editor.putString(NICKNAME, nickname);
         editor.putString(HEAD_IMG_URL, headImgUrl);
         editor.putString(SEX, sex);
         editor.putString(PROVINCE, province);
         editor.putString(CITY, city);
         editor.putString(SCHOOL_NAME, schoolName);
+        editor.putString(SCHOOL_ID, school_id);
         editor.commit();
     }
 
@@ -191,4 +193,11 @@ public class CurrentAccount {
         return get(CITY,"");
     }
 
+
+    public static String getSchoolId(){
+        return get(SCHOOL_ID,"");
+    }
+    public static void setSchoolId(String schoolId){
+        set(SCHOOL_ID,schoolId);
+    }
 }

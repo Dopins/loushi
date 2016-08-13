@@ -127,18 +127,18 @@ public class PersonalInformationActivity extends BaseActivity
 
     private void initDatas() {
         // init img
-        if (CurrentAccount.getHeadImgUrl() != null)
+        if (!TextUtils.isEmpty(CurrentAccount.getHeadImgUrl()))
             Picasso.with(this).load(CurrentAccount.getHeadImgUrl()).into(image_circular);
         //init nickname
-        if (CurrentAccount.getNickname() != null){
+        if (!TextUtils.isEmpty(CurrentAccount.getNickname())){
             edit_nickname.setText(CurrentAccount.getNickname());
             edit_nickname.setSelection(CurrentAccount.getNickname().length());
         }
         //init phone
-        if (CurrentAccount.getMobilePhone() != null)
+        if (!TextUtils.isEmpty(CurrentAccount.getMobilePhone()))
             edit_phone.setText(CurrentAccount.getMobilePhone());
         //init sex
-        if (CurrentAccount.getSex().equals("男")) {
+        if (!CurrentAccount.getSex().equals("男")) {
             Log.e(TAG + "sex", CurrentAccount.getSex());
             spinner_sex.setSelectedIndex(1);
         } else
@@ -150,10 +150,10 @@ public class PersonalInformationActivity extends BaseActivity
             spinner_province.setText(CurrentAccount.getProvince());
         }
         //init city
-        if(TextUtils.isEmpty(CurrentAccount.getCity()))
+        if(!TextUtils.isEmpty(CurrentAccount.getCity()))
             spinner_city.setText(CurrentAccount.getProvince());
         //init school
-        if(TextUtils.isEmpty(CurrentAccount.getSchoolName()))
+        if(!TextUtils.isEmpty(CurrentAccount.getSchoolName()))
             spinner_university.setText(CurrentAccount.getSchoolName());
 
 
@@ -305,24 +305,28 @@ public class PersonalInformationActivity extends BaseActivity
         String provice=spinner_province.getText().toString();
         String city=spinner_city.getText().toString();
         String schoolName=spinner_university.getText().toString();
-        String school_id=schoolBeanList.get(spinner_university.getSelectedIndex()).getId()+"";
+        final String school_id;
+        if(schoolBeanList!=null&&schoolBeanList.size()!=0)
+            school_id= schoolBeanList.get(spinner_university.getSelectedIndex()).getId()+"";
+        else
+            school_id=CurrentAccount.getSchoolId();
         String sex=spinner_sex.getText().toString();
-        String sexBool = "false";
+        String sexBool = "true";
         String phone=edit_phone.getText().toString();
         if (spinner_sex.getSelectedIndex() == 1)
-            sexBool = "true";
+            sexBool = "false";
         //sex = spinner_sex.getSelectedIndex() + "";
 
-        Log.e(TAG,"user_id,nickname,provice,city,school,school_id,phone=="
+        Log.e(TAG,"user_id,nickname,provice,city,school,school_id,phone,headImgUrl=="
                 +user_id+","+nickname+","+sex+","
                 +provice+","+city+","+schoolName+","+school_id+","
-                +phone);
+                +phone+","+headImgUrl);
 
         OkHttpUtils.post(UrlConstant.USERINFOALTURL)
                 .params(KeyConstant.USER_ID, user_id)
                 .params(KeyConstant.NICKNAME, nickname)
                 .params(KeyConstant.HEADIMGURL, headImgUrl)
-                .params(KeyConstant.school_id, schoolName)
+                .params(KeyConstant.school_id, school_id)
                 .params(KeyConstant.SEX, sexBool)
                 .execute(new DialogCallback<UserInfoJson>(this, UserInfoJson.class) {
                     @Override
@@ -336,7 +340,7 @@ public class PersonalInformationActivity extends BaseActivity
                             String city=spinner_city.getText().toString();
                             String sex=spinner_sex.getText().toString();
                             String schoolName=spinner_university.getText().toString();
-                            CurrentAccount.storeUserInfo(nickname, headImgUrl, sex,province,city,schoolName);
+                            CurrentAccount.storeUserInfo(nickname, headImgUrl, sex,province,city,schoolName,school_id);
                             CurrentAccount.setReFresh(true);
                             finish();
                         }
