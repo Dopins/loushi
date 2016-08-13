@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -46,7 +47,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class PersonalInformationActivity extends BaseActivity
-        implements MaterialSpinner.OnItemSelectedListener {
+        implements MaterialSpinner.OnItemSelectedListener
+        , View.OnClickListener {
     private String TAG = "PersonalInfoActivity";
 
     private Dialog dialog;
@@ -113,6 +115,14 @@ public class PersonalInformationActivity extends BaseActivity
         edit_phone = (EditText) findViewById(R.id.edit_phone);
         btn_save = (Button) findViewById(R.id.btn_save);
         text_exit = (TextView) findViewById(R.id.Exit);
+
+        spinner_sex.setItems(sexList);
+        spinner_sex.setDropdownMaxHeight(300);
+        spinner_province.setOnItemSelectedListener(this);
+        spinner_province.setDropdownMaxHeight(300);
+        spinner_province.setOnClickListener(this);
+        spinner_city.setDropdownMaxHeight(300);
+        spinner_city.setOnItemSelectedListener(this);
     }
 
     private void initDatas() {
@@ -128,19 +138,23 @@ public class PersonalInformationActivity extends BaseActivity
         if (CurrentAccount.getMobilePhone() != null)
             edit_phone.setText(CurrentAccount.getMobilePhone());
         //init sex
-        spinner_sex.setItems(sexList);
-        spinner_sex.setDropdownMaxHeight(300);
         if (CurrentAccount.getSex().equals("男")) {
             Log.e(TAG + "sex", CurrentAccount.getSex());
             spinner_sex.setSelectedIndex(1);
-        } else spinner_sex.setSelectedIndex(0);
-
-        //TODO
-//        if(CurrentAccount.)
-        getProvinceList();
-        spinner_province.setOnItemSelectedListener(this);
-        spinner_province.setDropdownMaxHeight(300);
-        spinner_city.setOnItemSelectedListener(this);
+        } else
+            spinner_sex.setSelectedIndex(0);
+        //init provice
+        if(TextUtils.isEmpty(CurrentAccount.getProvince()))
+            getProvinceList();
+        else{
+            spinner_province.setText(CurrentAccount.getProvince());
+        }
+        //init city
+        if(TextUtils.isEmpty(CurrentAccount.getCity()))
+            spinner_city.setText(CurrentAccount.getProvince());
+        //init school
+        if(TextUtils.isEmpty(CurrentAccount.getSchoolName()))
+            spinner_university.setText(CurrentAccount.getSchoolName());
 
 
     }
@@ -288,16 +302,21 @@ public class PersonalInformationActivity extends BaseActivity
         nickname = edit_nickname.getText().toString();
         headImgUrl = CurrentAccount.getHeadImgUrl();
         schoolName = spinner_university.getSelectedIndex() + 1 + "";
+        String provice=spinner_province.getText().toString();
+        String city=spinner_city.getText().toString();
+        String schoolName=spinner_university.getText().toString();
+        String school_id=schoolBeanList.get(spinner_university.getSelectedIndex()).getId()+"";
+        String sex=spinner_sex.getText().toString();
         String sexBool = "false";
+        String phone=edit_phone.getText().toString();
         if (spinner_sex.getSelectedIndex() == 1)
             sexBool = "true";
         //sex = spinner_sex.getSelectedIndex() + "";
 
-        Log.e(TAG, user_id);
-        Log.e(TAG, nickname);
-        Log.e(TAG, headImgUrl);
-        Log.e(TAG, schoolName);
-        //Log.e(TAG, sex);
+        Log.e(TAG,"user_id,nickname,provice,city,school,school_id,phone=="
+                +user_id+","+nickname+","+sex+","
+                +provice+","+city+","+schoolName+","+school_id+","
+                +phone);
 
         OkHttpUtils.post(UrlConstant.USERINFOALTURL)
                 .params(KeyConstant.USER_ID, user_id)
@@ -346,7 +365,7 @@ public class PersonalInformationActivity extends BaseActivity
                             List<String> schools = new ArrayList<String>();
                             for (int i = 0; i < len; i++)
                                 schools.add(schoolBeanList.get(i).getName());
-                            Log.i("mytest","size=="+schools.size());
+                            Log.i(TAG,"size=="+schools.size());
                             spinner_university.setItems(schools);
                         } else
                             Toast.makeText(mContext, schoolJson.getReturn_info(), Toast.LENGTH_SHORT).show();
@@ -434,5 +453,18 @@ public class PersonalInformationActivity extends BaseActivity
         if(cityBeanList==null||cityBeanList.size()==0)
             return;
         getSchoolList(cityBeanList.get(0).getId() + "");
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.spinner_province:
+                getProvinceList();
+                break;
+//            case R.id.spinner_city:
+//                break;
+//            case R.id.spinner_university:
+//                break;
+        }
     }
 }

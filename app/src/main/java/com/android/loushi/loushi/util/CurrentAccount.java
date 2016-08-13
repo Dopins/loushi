@@ -184,5 +184,11 @@ public class CurrentAccount {
     public static String getSchoolName(){
         return get(SCHOOL_NAME,"");
     }
+    public static String getProvince(){
+        return get(PROVINCE,"");
+    }
+    public static String getCity(){
+        return get(CITY,"");
+    }
 
 }

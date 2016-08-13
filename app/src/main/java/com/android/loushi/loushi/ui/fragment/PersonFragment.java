@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -140,9 +141,11 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private void iniDatas() {
         tv_name.setText(CurrentAccount.getNickname());
         Log.e("person", CurrentAccount.getHeadImgUrl());
-        Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
+        if(TextUtils.isEmpty(CurrentAccount.getHeadImgUrl())){
+            Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head_small);
+            Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
+        }
         tv_name_small.setText(CurrentAccount.getNickname());
-        Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head_small);
     }
 
     @Override
