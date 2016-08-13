@@ -48,9 +48,6 @@ public class MyApplication extends LitePalApplication {
                 .setCookieStore(new PersistentCookieStore())
         ;
         CurrentAccount.init(this);
-        String phone = CurrentAccount.getMobile_phone();
-        String password = CurrentAccount.getPassword();
-        Log.e("my",phone+password);
 //        OkHttpUtils.post(UrlConstant.USERLOGINURL)
 //                .params(KeyConstant.MOBILE_PHONE, phone)
 //                .params(KeyConstant.PASSWORD, password)
@@ -67,7 +64,7 @@ public class MyApplication extends LitePalApplication {
 //                    }
 //                });
 
-        InitTaobao();
+        //InitTaobao();
 
         initBugly();
         initUMeng();

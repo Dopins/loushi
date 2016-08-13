@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,6 +70,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private SlidingTabLayout mtoorbar_tab;
     private AppBarLayout appBarLayout;
     private TextView tv_name;
+    private TextView tv_school;
     private CircularImageView img_head;
     private TextView tv_feed;
     private TextView tv_name_small;
@@ -266,6 +268,9 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         mToolbar.setTitle("");
         mtoorbar_tab = (SlidingTabLayout) getView().findViewById(R.id.toolbar_tab);
         tv_name = (TextView) getView().findViewById(R.id.tv_nickname);
+        tv_school=(TextView)getView().findViewById(R.id.tv_school);
+        if(!TextUtils.isEmpty(CurrentAccount.getSchoolName()))
+            tv_school.setText(CurrentAccount.getSchoolName());
         img_head = (CircularImageView) getView().findViewById(R.id.img_head);
         img_head_small = (RoundImageView) mToolbar.findViewById(R.id.img_head_small);
         tv_feed = (TextView) mToolbar.findViewById(R.id.tv_feed);

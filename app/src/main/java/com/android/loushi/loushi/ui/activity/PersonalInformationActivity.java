@@ -288,6 +288,8 @@ public class PersonalInformationActivity extends BaseActivity
         user_id = CurrentAccount.getUser_id();
         nickname = edit_nickname.getText().toString();
         headImgUrl = CurrentAccount.getHeadImgUrl();
+        schoolName=CurrentAccount.getSchoolName();
+
         schoolName = spinner_university.getSelectedIndex() + 1 + "";
         String sexBool = "false";
         if (spinner_sex.getSelectedIndex() == 1)
@@ -304,7 +306,7 @@ public class PersonalInformationActivity extends BaseActivity
                 .params("user_id", user_id)
                 .params("nickname", nickname)
                 .params("headImgUrl", headImgUrl)
-                .params("school.id", schoolName)
+                .params("school.id", "")
                 .params("sex", sexBool)
                 .execute(new DialogCallback<UserInfoJson>(this, UserInfoJson.class) {
                     @Override
@@ -313,8 +315,10 @@ public class PersonalInformationActivity extends BaseActivity
                         Log.e(TAG, "userInfoJson.getState: " + userInfoJson.isState());
                         if (userInfoJson.isState()) {
                             Log.e(TAG, "onResponse: 资料提交成功 ！");
-
-                            CurrentAccount.storeDatas(nickname, headImgUrl, schoolName, sex);
+                            String school = null;
+                            if(schoolBeanList.size()!=0)
+                                school=schoolBeanList.get(spinner_university.getSelectedIndex()).getName();
+                            CurrentAccount.storeDatas(nickname, headImgUrl, school, sex);
                             CurrentAccount.setReFresh(true);
                             finish();
                         }
