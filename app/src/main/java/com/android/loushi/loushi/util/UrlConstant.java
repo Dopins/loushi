@@ -12,6 +12,7 @@ public class UrlConstant {
     public static final String TOPICURL=prefixBase+"topic.action";
     public static final String TIPSCURL=prefixBase+"strategy.action";
     public static final String COMMENTCURL=prefixBase+"comment.action";
+    public static final String SHAREURL=prefixBase+"forward.action";
 
     //user
     public static final String MYMESSAGE=prefixUser+"userMessage.action";

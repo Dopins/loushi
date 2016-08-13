@@ -315,12 +315,12 @@ public class PersonalInformationActivity extends BaseActivity
         String phone=edit_phone.getText().toString();
         if (spinner_sex.getSelectedIndex() == 1)
             sexBool = "false";
-        //sex = spinner_sex.getSelectedIndex() + "";
 
-        Log.e(TAG,"user_id,nickname,provice,city,school,school_id,phone,headImgUrl=="
-                +user_id+","+nickname+","+sex+","
-                +provice+","+city+","+schoolName+","+school_id+","
-                +phone+","+headImgUrl);
+//        Log.e(TAG,"user_id,nickname,provice,city,school,school_id,phone,headImgUrl=="
+//                +user_id+","+nickname+","+sex+","
+//                +provice+","+city+","+schoolName+","+school_id+","
+//                +phone+","+headImgUrl);
+
 
         OkHttpUtils.post(UrlConstant.USERINFOALTURL)
                 .params(KeyConstant.USER_ID, user_id)
@@ -335,7 +335,6 @@ public class PersonalInformationActivity extends BaseActivity
                         Log.e(TAG, "userInfoJson.getState: " + userInfoJson.isState());
                         if (userInfoJson.isState()) {
                             Log.e(TAG, "onResponse: 资料提交成功 ！");
-
                             String province=spinner_province.getText().toString();
                             String city=spinner_city.getText().toString();
                             String sex=spinner_sex.getText().toString();

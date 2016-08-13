@@ -145,11 +145,11 @@ public class MyFragment extends BaseFragment {
         Visible();
     }
 
-    @Subscribe (threadMode = ThreadMode.MAIN)
-    public void onEvent(MyfragmentEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(MyfragmentEvent event) {
         Log.e(TAG, event.getmMsg());
         if (event.getmMsg().equals("Transfer MyFragment to PersonalFragment!"))
-            transferToPersonalFragment();
+        transferToPersonalFragment();
     }
 
 

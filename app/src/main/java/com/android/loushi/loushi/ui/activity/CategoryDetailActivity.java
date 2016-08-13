@@ -281,6 +281,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
                 if (!TextUtils.isEmpty(imgurl)) {
                     ShareSomeThing shareSomeThing = new ShareSomeThing(CategoryDetailActivity.this, imgurl, cate_url, text, title, user_id, type+"", topicBean.getId() + "");
                     shareSomeThing.DoShare();
+
                 }
                 break;
 

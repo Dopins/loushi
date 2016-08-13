@@ -222,6 +222,9 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
                 else
                 submitVerificationCode("86", edit_phone.getText().toString(), regist_edit_checkword.getText().toString());
                 break;
+            case R.id.btn_return:
+                finish();
+                break;
         }
     }
 }

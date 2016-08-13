@@ -237,7 +237,7 @@ public class RegistFragment extends Fragment {
     public void onEventMainThread(MainEvent event) {
         if(event.getMsg()==1){
             Log.e("event", "1");
-            Toast.makeText(getContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
             //生成Token
             String token = generateToken(regist_edit_phone.getText().toString()+regist_edit_checkword.getText().toString());
             //发送注册请求

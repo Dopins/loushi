@@ -17,6 +17,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+
+import com.alibaba.nb.android.trade.AliTradeSDK;
+import com.alibaba.nb.android.trade.callback.AliTradeInitCallback;
+import com.alibaba.nb.android.trade.model.AliTradeTaokeParams;
+import com.alibaba.sdk.android.AlibabaSDK;
+
+
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.event.MainEvent;
@@ -43,7 +50,7 @@ import okhttp3.Response;
  * Created by Administrator on 2016/8/6.
  */
 public class SplashActivity extends BaseActivity {
-
+    public static final String APP_KEY = "23393904";
     @Override
     protected int getLayoutId() {
         return R.layout.activity_splash;
@@ -179,7 +186,8 @@ public class SplashActivity extends BaseActivity {
 //                Toast.makeText(getApplicationContext(), "初始化成功", Toast.LENGTH_SHORT)
 //                        .show();
                 Log.e("splash", "success");
-                //showItemDetailPage(ll);
+                //showItemDetailP
+                age(ll);
             }
 
             @Override
@@ -190,6 +198,29 @@ public class SplashActivity extends BaseActivity {
             }
 
         });*/
+        try {
+            AlibabaSDK.turnOnDebug();
+            //电商SDK初始化
+            AliTradeSDK.asyncInit(this, APP_KEY, new AliTradeInitCallback() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(SplashActivity.this, "初始化成功", Toast.LENGTH_SHORT).show();
+                    Log.e("myapplication", "chenggong");
+                    AliTradeTaokeParams taokeParams = new AliTradeTaokeParams("mm_114880276_0_0", "", "");
+                    AliTradeSDK.setTaokeParams(taokeParams);
+                    AliTradeSDK.setSyncForTaoke(true);
+                }
+
+                @Override
+                public void onFailure(int code, String msg) {
+                    Toast.makeText(SplashActivity.this, "初始化失败" + code + msg, Toast.LENGTH_SHORT).show();
+                    Log.e("myapplication", "shibai" + code + msg);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("myapplication",Log.getStackTraceString(e));
+        }
     }
 
     private void CheckUpdate(){

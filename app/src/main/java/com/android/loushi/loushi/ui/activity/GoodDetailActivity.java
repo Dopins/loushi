@@ -24,6 +24,7 @@ import com.alibaba.nb.android.trade.model.AliOpenType;
 import com.alibaba.nb.android.trade.model.AliTradeResult;
 import com.alibaba.nb.android.trade.model.AliTradeShowParams;
 import com.alibaba.nb.android.trade.model.AliTradeTaokeParams;
+import com.alibaba.nb.android.trade.uibridge.AliTradeBasePage;
 import com.alibaba.nb.android.trade.uibridge.AliTradeDetailPage;
 import com.alibaba.nb.android.trade.uibridge.IAliTradeService;
 
@@ -220,13 +221,20 @@ public class GoodDetailActivity extends BaseActivity {
 
     public void showItemDetailPage(View view, String id) {
         AliTradeShowParams aliTradeShowParams = new AliTradeShowParams(AliOpenType.H5, false);
-        AliTradeDetailPage tradePage=new AliTradeDetailPage(url);
+        AliTradeBasePage aliTradeBasePage = new AliTradeDetailPage(id);
+        //AliTradeDetailPage tradePage=new AliTradeDetailPage(url);
         IAliTradeService aliTradeService = AliTradeSDK.getService(IAliTradeService.class);
         Map<String, String> exParams = new HashMap<>();
         exParams.put(AliTradeConstants.ISV_CODE, "appisvcode");
+        exParams.put("alibaba", "阿里巴巴");
 
+        if (null == aliTradeService) {
+            Toast.makeText(GoodDetailActivity.this, "无法获取tradeService",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
         AliTradeTaokeParams aliTradeTaokeParams = new AliTradeTaokeParams("mm_114880276_0_0", "", "");
-        aliTradeService.show(GoodDetailActivity.this, tradePage, aliTradeShowParams, aliTradeTaokeParams, exParams, new AliTradeProcessCallback() {
+        aliTradeService.show(GoodDetailActivity.this, aliTradeBasePage, aliTradeShowParams, aliTradeTaokeParams, exParams, new AliTradeProcessCallback() {
 
             @Override
             public void onTradeSuccess(AliTradeResult tradeResult) {

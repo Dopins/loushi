@@ -113,7 +113,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                              public void onClick(DialogInterface dialog, int which) {
                                  Log.e("splash", "选择确定");
                                  DataCleanManager.clearAllCache(SettingActivity.this);
-                                 tv_cache.setText("确定");
+                                 tv_cache.setText("0K");
                                  ToastUtils.show(SettingActivity.this,"已清除缓存",Toast.LENGTH_SHORT);
                              }
                          })

@@ -5,10 +5,15 @@ import android.util.Log;
 
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.jsonbean.ResponseJson;
+import com.lzy.okhttputils.OkHttpUtils;
 
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Administrator on 2016/4/28.
@@ -98,6 +103,17 @@ public class ShareSomeThing {
 //            @Override
 //            public void onResponse(ResponseJson responseJson) {
 //                Log.e("share",Boolean.toString(responseJson.getState()));
+//            }
+//        });
+//        OkHttpUtils.post(UrlConstant.SHAREURL)
+//                .params("user_id",KeyConstant.USER_ID)
+//                .params("pid",pid)
+//                .params("type",type).execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
+//            @Override
+//            public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
+//                if(responseJson.getState()){
+//                   Log.e("share","转发成功");
+//                }
 //            }
 //        });
 

@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.alibaba.nb.android.trade.AliTradeSDK;
 import com.alibaba.nb.android.trade.callback.AliTradeInitCallback;
+import com.alibaba.nb.android.trade.model.AliTradeTaokeParams;
 import com.alibaba.sdk.android.AlibabaSDK;
 
 import com.android.loushi.loushi.callback.JsonCallback;
@@ -48,9 +49,8 @@ public class MyApplication extends LitePalApplication {
                 .setCookieStore(new PersistentCookieStore())
         ;
         CurrentAccount.init(this);
-        String phone = CurrentAccount.getMobilePhone();
-        String password = CurrentAccount.getPassword();
-        Log.e("my", phone + password);
+
+
 //        OkHttpUtils.post(UrlConstant.USERLOGINURL)
 //                .params(KeyConstant.MOBILE_PHONE, phone)
 //                .params(KeyConstant.PASSWORD, password)
@@ -67,7 +67,7 @@ public class MyApplication extends LitePalApplication {
 //                    }
 //                });
 
-        InitTaobao();
+        //InitTaobao();
 
         initBugly();
         initUMeng();
@@ -118,7 +118,9 @@ public class MyApplication extends LitePalApplication {
                 public void onSuccess() {
                     Toast.makeText(MyApplication.this, "初始化成功", Toast.LENGTH_SHORT).show();
                     Log.e("myapplication", "chenggong");
-
+                    AliTradeTaokeParams taokeParams = new AliTradeTaokeParams("mm_114880276_0_0", "", "");
+                    AliTradeSDK.setTaokeParams(taokeParams);
+                    AliTradeSDK.setSyncForTaoke(true);
                 }
 
                 @Override
