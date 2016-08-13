@@ -1,16 +1,9 @@
 package com.android.loushi.loushi.ui.fragment;
 
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.BoolRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +11,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
-import android.util.EventLog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,13 +20,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
-import org.litepal.crud.DataSupport;
-import org.w3c.dom.Text;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.DialogCallback;
@@ -51,10 +38,10 @@ import com.android.loushi.loushi.ui.activity.LoginFirstActivity;
 import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.ui.activity.PersonalInformationActivity;
 import com.android.loushi.loushi.util.CurrentAccount;
+import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.ToastUtils;
-import com.android.loushi.loushi.util.UnderLineEditText;
-import com.google.gson.Gson;
+import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.umeng.analytics.MobclickAgent;
 
@@ -64,7 +51,6 @@ import java.util.HashMap;
 import cn.sharesdk.framework.CustomPlatform;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
-import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -155,21 +141,20 @@ public class LoginFragment extends Fragment {
             public void onClick(final View view) {
 
                 if (!isMobileNO(login_edit_phone.getText().toString())) {
-                    ToastUtils.show(getActivity(),"请输入有效的电话号码!",ToastUtils.LENGTH_SHORT);
+                    ToastUtils.show(getActivity(), "请输入有效的电话号码!", ToastUtils.LENGTH_SHORT);
                     Log.e(TAG, "请输入有效的电话号码!");
                 }
-                if(login_edit_password.getText().toString().length()<6){
-                    ToastUtils.show(getActivity(),"密码不能少于6位",ToastUtils.LENGTH_SHORT);
-                }
-                else {
+                if (login_edit_password.getText().toString().length() < 6) {
+                    ToastUtils.show(getActivity(), "密码不能少于6位", ToastUtils.LENGTH_SHORT);
+                } else {
 
 
                     Log.e(TAG, login_edit_phone.getText().toString());
                     Log.e(TAG, login_edit_password.getText().toString());
-                    OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
-                            .params("mobile_phone", login_edit_phone.getText().toString())
-                            .params("password", login_edit_password.getText().toString())
-                            .params("isThird", "false")
+                    OkHttpUtils.post(UrlConstant.USERLOGINURL)
+                            .params(KeyConstant.MOBILE_PHONE, login_edit_phone.getText().toString())
+                            .params(KeyConstant.PASSWORD, login_edit_password.getText().toString())
+                            .params(KeyConstant.ISTHIRD, "false")
                             .execute(new DialogCallback<UserLoginJson>((AppCompatActivity) getActivity(), UserLoginJson.class) {
                                 @Override
                                 public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
@@ -177,12 +162,15 @@ public class LoginFragment extends Fragment {
                                     Log.e(TAG, response.toString());
                                     if (userLoginJson.getState()) {
                                         Log.e(TAG, "登录成功！");
-
                                         BaseActivity.user_id = userLoginJson.getBody() + ""; //冗余
                                         Log.e(TAG, userLoginJson.getBody() + "");
                                         CurrentAccount.setLoginOrNot(true);
-                                        CurrentAccount.setThird(false);
-                                        CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", login_edit_phone.getText().toString(), login_edit_password.getText().toString(),false,"0");
+                                        CurrentAccount.storeAccountInfo(
+                                                userLoginJson.getBody()+"" ,
+                                                login_edit_phone.getText().toString().trim(),
+                                                login_edit_password.getText().toString().trim(),
+                                                false,
+                                                "0");
                                         getUserInfo(userLoginJson.getBody());
 
                                         MobclickAgent.onProfileSignIn(login_edit_phone.getText().toString());
@@ -211,8 +199,8 @@ public class LoginFragment extends Fragment {
         Log.e(TAG, "getUserInfo");
         String user_id = id + "";
         Log.e("BIG ", user_id);
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfo.action")
-                .params("user_id", user_id)
+        OkHttpUtils.post(UrlConstant.USERINFOURL)
+                .params(KeyConstant.USER_ID, user_id)
                 .execute(new DialogCallback<UserInfoJson>((AppCompatActivity) getActivity(), UserInfoJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
@@ -222,7 +210,7 @@ public class LoginFragment extends Fragment {
                             Log.e(TAG, response.toString());
 
                             UserInfoJson.BodyBean body = userInfoJson.getBody();
-                            //CurrentAccount.storeDatas(userInfoJson);
+                            //CurrentAccount.storeUserInfo(userInfoJson);
                             Log.e(TAG, "1 :" + body.getNickname());
                             Log.e(TAG, "2 :" + body.getMobilePhone());
                             Log.e(TAG, "3 :" + body.getHeadImgUrl());
@@ -231,7 +219,7 @@ public class LoginFragment extends Fragment {
                             Log.e(TAG, "6 :" + body.isSex());
                             Log.e(TAG, "7 :" + body.getMessageCount());
 
-                            CurrentAccount.storeDatas(userInfoJson);
+                            CurrentAccount.storeUserInfo(userInfoJson);
                             transferMyFragmentToPersonalFragment();
                         }
                     }
@@ -370,11 +358,11 @@ public class LoginFragment extends Fragment {
                     type = "2";
                 }
 
-                OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
-                        .params("account", account)
-                        .params("type", type)
-                        .params("token", token)
-                        .params("isThird", "true")
+                OkHttpUtils.post(UrlConstant.USERLOGINURL)
+                        .params(KeyConstant.ACCOUNT, account)
+                        .params(KeyConstant.TYPE, type)
+                        .params(KeyConstant.TOKEN, token)
+                        .params(KeyConstant.ISTHIRD, "true")
                         .execute(new DialogCallback<UserLoginJson>((AppCompatActivity) getActivity(), UserLoginJson.class) {
                             @Override
                             public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
@@ -382,38 +370,44 @@ public class LoginFragment extends Fragment {
                                 if (userLoginJson.getState()) {
 
                                     CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
-                                    CurrentAccount.storeAccountInfo(userLoginJson.getBody()+"",account,token,true,type);
+                                    CurrentAccount.storeAccountInfo(
+                                            userLoginJson.getBody() + "",
+                                            account,
+                                            token,
+                                            true,
+                                            type);
                                     String code = userLoginJson.getCode();
                                     if (code != null && code.equals("3")) {
                                         Log.e(TAG, "第三方登陆的第一次登陆");
                                         CurrentAccount.setLoginOrNot(true);
-                                        CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", account, token, true, type);
+                                        CurrentAccount.storeAccountInfo(
+                                                userLoginJson.getBody() + "",
+                                                account,
+                                                token,
+                                                true,
+                                                type);
                                         //transferMyFragmentToPersonalInformationActivity();
                                         CurrentAccount.setHeadImgUrl(platform.getDb().getUserIcon());
                                         CurrentAccount.setNickname(platform.getDb().getUserName());
-                                        String sexBool="true";
-                                        String sex="1";
-                                        if(!TextUtils.isEmpty(platform.getDb().getUserGender())&&platform.getDb().getUserGender().equals("f")) {
-                                            sex = "0";
-                                            sexBool="false";
+                                        String sex= "男";
+                                        String sexBool = "true";
+                                        if (!TextUtils.isEmpty(platform.getDb().getUserGender()) && platform.getDb().getUserGender().equals("f")) {
+                                            sexBool = "false";
+                                            sex = "女";
                                         }
-                                        //CurrentAccount.setSex(sex);
-                                        CurrentAccount.storeDatas(platform.getDb().getUserName(), platform.getDb().getUserIcon(), null, sex);
-                                        BaseActivity.user_id=userLoginJson.getBody() +"";
-                                        postUserInfo(userLoginJson.getBody() +"",platform.getDb().getUserName(),platform.getDb().getUserIcon(),sexBool);
+                                        CurrentAccount.storeUserInfo(platform.getDb().getUserName(),
+                                                platform.getDb().getUserIcon(),
+                                                sex,"","","");
+                                        postUserInfo(userLoginJson.getBody() + "", platform.getDb().getUserName(), platform.getDb().getUserIcon(), sexBool);
                                         transferMyFragmentToPersonalFragment();
 
                                     } else {
                                         CurrentAccount.setLoginOrNot(true);
-                                        CurrentAccount.setThird(true);
-                                        CurrentAccount.setThird_type(type);
                                         CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", account, token, true, type);
-
-                                        BaseActivity.user_id =userLoginJson.getBody() +"";
                                         getUserInfo(userLoginJson.getBody());
 
                                     }
-                                    MobclickAgent.onProfileSignIn(platform.getName(),account);
+                                    MobclickAgent.onProfileSignIn(platform.getName(), account);
 
                                 } else {
                                     Log.e(TAG, "登录失败！");
@@ -439,12 +433,13 @@ public class LoginFragment extends Fragment {
         //Log.e("TAG",Boolean.toString(api.getCanLogin()));
 
     }
-    private void postUserInfo(String user_id,String nickname,String headImgUrl,String sex){
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfoAlt.action")
-                .params("user_id", user_id)
-                .params("nickname", nickname)
-                .params("headImgUrl", headImgUrl)
-                .params("sex", sex)
+
+    private void postUserInfo(String user_id, String nickname, String headImgUrl, String sex) {
+        OkHttpUtils.post(UrlConstant.USERINFOALTURL)
+                .params(KeyConstant.USER_ID, user_id)
+                .params(KeyConstant.NICKNAME, nickname)
+                .params(KeyConstant.HEADIMGURL, headImgUrl)
+                .params(KeyConstant.SEX, sex)
                 .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {

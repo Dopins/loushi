@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity {
     private void updateUserInfo() {
         if (!hasLogin()||MyMessageActivity.hasNewMessage())
             return;
-        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userinfo.action")
+        OkHttpUtils.post(UrlConstant.USERINFOURL)
                 .params(KeyConstant.USER_ID, MainActivity.user_id)
                 .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
                     @Override
@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity {
 //                            if(userInfoJson.getBody().getMessageCount()==0)
 //                                return ;
                             Log.i(TAG, "getMessageCount==" + userInfoJson.getBody().getMessageCount());
-                            CurrentAccount.setMessageCount(userInfoJson.getBody().getMessageCount());
+                            CurrentAccount.storeUserInfo(userInfoJson);
                             EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_USERINFO));
                         }
                     }
@@ -122,12 +122,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private boolean hasLogin() {
-        String phone = CurrentAccount.getMobile_phone();
-        String password = CurrentAccount.getPassword();
-        if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(password))
-            return false;
-        else
-            return true;
+        return CurrentAccount.getLoginOrNot();
     }
 
     private void autoLogin() {
@@ -145,10 +140,12 @@ public class MainActivity extends BaseActivity {
                         @Override
                         public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
                             if (userLoginJson.getState()) {
-                                BaseActivity.user_id = userLoginJson.getBody() + "";
+                                CurrentAccount.setUserId(userLoginJson.getBody()+"");
+                                CurrentAccount.setLoginOrNot(true);
                                 Log.e(TAG, "autoLogin 登录成功！");
                             } else {
                                 Log.e(TAG, "autoLogin 登录失败！");
+                                CurrentAccount.setLoginOrNot(false);
                             }
                         }
                     });
@@ -156,13 +153,13 @@ public class MainActivity extends BaseActivity {
         else{
             final String account=CurrentAccount.getAccount();
             String password=CurrentAccount.getPassword();
-            final String type =CurrentAccount.Third_type;
+            final String type =CurrentAccount.getThirdType();
 
-            OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
-                    .params("account", account)
-                    .params("type", type)
-                    .params("token", password)
-                    .params("isThird", "true")
+            OkHttpUtils.post(UrlConstant.USERLOGINURL)
+                    .params(KeyConstant.ACCOUNT, account)
+                    .params(KeyConstant.TYPE, type)
+                    .params(KeyConstant.TOKEN, password)
+                    .params(KeyConstant.ISTHIRD, "true")
                     .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
                         @Override
                         public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
@@ -172,19 +169,15 @@ public class MainActivity extends BaseActivity {
                                 String code = userLoginJson.getCode();
                                 if (code != null && code.equals("3")) {
                                 } else {
-                                    BaseActivity.user_id = userLoginJson.getBody() + "";
-                                    CurrentAccount.setUser_id(userLoginJson.getBody() + "");
+                                    CurrentAccount.setUserId(userLoginJson.getBody()+"");
                                 }
+                                CurrentAccount.setLoginOrNot(true);
 
                             } else {
                                 CurrentAccount.setLoginOrNot(false);
                                 Log.e("splashthirdlogin", "登录失败！");
                             }
-
-
                         }
-
-
                     });
         }
 
@@ -203,7 +196,7 @@ public class MainActivity extends BaseActivity {
 
             final TabHost.TabSpec tabSpec = mTabHost.newTabSpec(mTextviewArray[i]).setIndicator(getTabItemView(i));
             if(i==2) {
-                if(!CurrentAccount.isLoginOrNot())
+                if(!CurrentAccount.getLoginOrNot())
                 mTabHost.addTab(tabSpec, fragmentArray[i], null);
                 else
                     mTabHost.addTab(tabSpec, PersonFragment.class, null);

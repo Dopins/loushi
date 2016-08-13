@@ -105,7 +105,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 intent = new Intent(getContext(), MyMessageActivity.class);
                 startActivity(intent);
                 iv_message_tips.setVisibility(View.GONE);
-                CurrentAccount.setMessageCount(0);
+                CurrentAccount.setMessageCount(0+"");
                 break;
             case R.id.btn_profile:
                 //TODO
@@ -419,8 +419,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
         Log.e(TAG, "onResume");
-        if(!CurrentAccount.LoginOrNot)transferToMyFragment();
-        if(CurrentAccount.isReFresh()){
+        if(!CurrentAccount.getLoginOrNot())transferToMyFragment();
+        if(CurrentAccount.getReFresh()){
             Log.e(TAG, "iniDatas");
             iniDatas();
             CurrentAccount.setReFresh(false);

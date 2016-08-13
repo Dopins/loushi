@@ -21,6 +21,7 @@ import com.squareup.picasso.Picasso;
 
 import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
+
 import org.litepal.LitePalApplication;
 
 import java.util.List;
@@ -37,7 +38,7 @@ import okhttp3.Response;
  */
 public class MyApplication extends LitePalApplication {
     public static final String APP_KEY = "23393904";
-    private static final String TAG="MyApplication";
+    private static final String TAG = "MyApplication";
 
     public void onCreate() {
         super.onCreate();
@@ -48,6 +49,8 @@ public class MyApplication extends LitePalApplication {
                 .setCookieStore(new PersistentCookieStore())
         ;
         CurrentAccount.init(this);
+
+
 //        OkHttpUtils.post(UrlConstant.USERLOGINURL)
 //                .params(KeyConstant.MOBILE_PHONE, phone)
 //                .params(KeyConstant.PASSWORD, password)
@@ -70,21 +73,20 @@ public class MyApplication extends LitePalApplication {
         initUMeng();
 
 
-
     }
 
-    private void initUMeng(){
-        MobclickAgent.UMAnalyticsConfig config=new MobclickAgent.UMAnalyticsConfig(
+    private void initUMeng() {
+        MobclickAgent.UMAnalyticsConfig config = new MobclickAgent.UMAnalyticsConfig(
                 getApplicationContext(),
                 "57a5eda367e58ef278000163",
                 "testchannel",
-                MobclickAgent.EScenarioType. E_UM_NORMAL,
+                MobclickAgent.EScenarioType.E_UM_NORMAL,
                 true);
         MobclickAgent.startWithConfigure(config);
         MobclickAgent.setDebugMode(true);
     }
 
-    private void initBugly(){
+    private void initBugly() {
         CrashReport.initCrashReport(getApplicationContext(), "900045792", true);
     }
 
@@ -129,7 +131,7 @@ public class MyApplication extends LitePalApplication {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("myapplication",Log.getStackTraceString(e));
+            Log.e("myapplication", Log.getStackTraceString(e));
         }
 
     }

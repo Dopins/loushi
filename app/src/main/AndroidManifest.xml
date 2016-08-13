@@ -49,7 +49,8 @@
         <activity android:name=".ui.activity.MyMessageActivity" />
         <activity android:name=".ui.activity.CategoryDetailActivity" />
         <activity android:name=".ui.activity.FeedActivity" />
-        <activity android:name=".ui.activity.LoginFirstActivity"/>
+        <activity android:name=".ui.activity.LoginFirstActivity"
+            android:launchMode="singleTop"/>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"

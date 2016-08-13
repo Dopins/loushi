@@ -30,8 +30,10 @@ import com.android.loushi.loushi.ui.activity.LoginFirstActivity;
 import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.ui.activity.PersonalInformationActivity;
 import com.android.loushi.loushi.util.CurrentAccount;
+import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.UnderLineEditText;
+import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -252,10 +254,10 @@ public class RegistFragment extends Fragment {
                         //完善信息后发送event通知转换界面
                         Log.e(TAG, regist_edit_phone.getText().toString());
                         Log.e(TAG, regist_edit_password.getText().toString());
-                        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
-                                .params("mobile_phone", regist_edit_phone.getText().toString())
-                                .params("password", regist_edit_password.getText().toString())
-                                .params("isThird", "false")
+                        OkHttpUtils.post(UrlConstant.USERLOGINURL)
+                                .params(KeyConstant.MOBILE_PHONE, regist_edit_phone.getText().toString())
+                                .params(KeyConstant.PASSWORD, regist_edit_password.getText().toString())
+                                .params(KeyConstant.ISTHIRD, "false")
                                 .execute(new DialogCallback<UserLoginJson>((AppCompatActivity) getActivity(), UserLoginJson.class) {
                                     @Override
                                     public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
@@ -263,11 +265,7 @@ public class RegistFragment extends Fragment {
                                         Log.e(TAG, response.toString());
                                         if (userLoginJson.getState()) {
                                             Log.e(TAG, "注册-登录成功！");
-
-                                            BaseActivity.user_id = userLoginJson.getBody()+""; //冗余
-
                                             CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", regist_edit_phone.getText().toString(), regist_edit_password.getText().toString(), false, "0");
-
                                             transferMyFragmentToPersonalInformationActivity();
 
 
