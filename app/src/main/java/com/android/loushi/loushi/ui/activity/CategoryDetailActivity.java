@@ -23,8 +23,10 @@ import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.jsonbean.GoodsJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.TopicJson;
+import com.android.loushi.loushi.ui.fragment.CategoryFragment;
 import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.ShareSomeThing;
+import com.android.loushi.loushi.util.UrlConstant;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 
@@ -47,43 +49,45 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
     private TextView tv_collect_count;
     private TextView tv_comment_count;
     private TextView tv_share_count;
-    public static String TYPE="TYPE";
-    public static String JSONSTRING="JSONSTRING";
-    private String jsonstring="";
-    private String type="0";
+    public static String TYPE = "TYPE";
+    public static String JSONSTRING = "JSONSTRING";
+    private String jsonstring = "";
+    private int type = 0;
     private TopicJson.BodyBean topicBean;
-    private String cate_url="";
+    private String cate_url = "";
     private Toolbar toolbar;
     private ImageView back;
     private TextView tv_title;
     private WebView WebView;
+
     //private StrategyJson.BodyBean strategyBean;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_category_detail;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_detail);
-        jsonstring=getIntent().getStringExtra(JSONSTRING);
-        Log.e("stra1",jsonstring);
-        topicBean=new Gson().fromJson(jsonstring, TopicJson.BodyBean.class);
-        Log.e("stra",topicBean.getName());
-        type=getIntent().getStringExtra(TYPE);
-        if(type.equals("2")) {
-            cate_url=topicBean.getImgUrl();
-            if (cate_url.indexOf("|||") >= 0)
-                cate_url = cate_url.substring(cate_url.indexOf("|||")+3);
-            Log.e("url",cate_url);
-            if(TextUtils.isEmpty(cate_url))
-                cate_url="";
+        jsonstring = getIntent().getStringExtra(JSONSTRING);
+        topicBean = new Gson().fromJson(jsonstring, TopicJson.BodyBean.class);
+        type = getIntent().getIntExtra(TYPE, CategoryFragment.TYPE_TOPIC);
+        switch (type) {
+            case CategoryFragment.TYPE_TIP:
+                cate_url = topicBean.getImgUrl();
 
-        }
-        if(type.equals("1")){
-            cate_url="http://www.loushi666.com:8080/loushi/topic.html?user_id="+BaseActivity.user_id
-                    +"&topic_id="+
-            topicBean.getId();
+                String[] urls = cate_url.split("\\|\\|\\|");
+                if (urls.length > 1)
+                    cate_url = urls[1];
+                else
+                    cate_url = UrlConstant.TIPURLPREFIX + BaseActivity.user_id
+                            + "&strategy_id=" + topicBean.getId();
+                break;
+            case CategoryFragment.TYPE_TOPIC:
+                cate_url = UrlConstant.TOPICURLPREFIX + BaseActivity.user_id
+                        + "&topic_id=" + topicBean.getId();
+                break;
         }
         Log.e("cate", cate_url);
 
@@ -98,7 +102,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
     }
 
     private void initWebView() {
-        webView = (WebView)findViewById(R.id.webview);
+        webView = (WebView) findViewById(R.id.webview);
         webView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
                 super.onProgressChanged(view, progress);
@@ -134,7 +138,6 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
         webView.getSettings().setJavaScriptEnabled(true);
 
 
-
         webView.getSettings().setBuiltInZoomControls(true);
 
         webView.getSettings().setSupportZoom(true);
@@ -145,11 +148,11 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
 
         //webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-        int screenDensity = getResources().getDisplayMetrics().densityDpi ;
-        Log.e("density", screenDensity +"");
-        WebSettings.ZoomDensity zoomDensity = WebSettings.ZoomDensity.MEDIUM ;
-        switch (screenDensity){
-            case DisplayMetrics.DENSITY_LOW :
+        int screenDensity = getResources().getDisplayMetrics().densityDpi;
+        Log.e("density", screenDensity + "");
+        WebSettings.ZoomDensity zoomDensity = WebSettings.ZoomDensity.MEDIUM;
+        switch (screenDensity) {
+            case DisplayMetrics.DENSITY_LOW:
                 zoomDensity = WebSettings.ZoomDensity.CLOSE;
                 break;
             case DisplayMetrics.DENSITY_MEDIUM:
@@ -157,7 +160,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
                 break;
             case DisplayMetrics.DENSITY_HIGH:
                 zoomDensity = WebSettings.ZoomDensity.FAR;
-                break ;
+                break;
             default:
                 zoomDensity = WebSettings.ZoomDensity.FAR;
                 break;
@@ -170,15 +173,14 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
         webView.loadUrl(cate_url);
 
 
-
     }
 
     private void getGoodDetail(String good_id) {
-        OkHttpUtils.post(BaseActivity.url_goods).params("user_id",BaseActivity.user_id)
-                .params("good_id",good_id).execute(new DialogCallback<GoodsJson>(CategoryDetailActivity.this,GoodsJson.class) {
+        OkHttpUtils.post(BaseActivity.url_goods).params("user_id", BaseActivity.user_id)
+                .params("good_id", good_id).execute(new DialogCallback<GoodsJson>(CategoryDetailActivity.this, GoodsJson.class) {
             @Override
             public void onResponse(boolean b, GoodsJson goodsJson, Request request, Response response) {
-                if(goodsJson.getState()) {
+                if (goodsJson.getState()) {
                     //ToastUtils.show(CategoryDetailActivity.this, "获取商品", ToastUtils.LENGTH_SHORT);
                     Intent intent = new Intent(CategoryDetailActivity.this, GoodDetailActivity.class);
                     intent.putExtra("GOOD_ID", goodsJson.getBody().getId() + "");
@@ -189,10 +191,10 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
         });
     }
 
-    private void initToolBar(){
-        toolbar = (Toolbar)findViewById(R.id.program_toolbar);
-        back = (ImageView)toolbar.findViewById(R.id.back);
-        tv_title=(TextView)toolbar.findViewById(R.id.tv_title);
+    private void initToolBar() {
+        toolbar = (Toolbar) findViewById(R.id.program_toolbar);
+        back = (ImageView) toolbar.findViewById(R.id.back);
+        tv_title = (TextView) toolbar.findViewById(R.id.tv_title);
         tv_title.setText(topicBean.getName());
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,17 +206,17 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
     }
 
 
-    private void bindCollectBarView(){
+    private void bindCollectBarView() {
 
-        collect_bar=(LinearLayout) findViewById(R.id.collect_bar);
+        collect_bar = (LinearLayout) findViewById(R.id.collect_bar);
         //collect_bar.setVisibility(View.GONE);
-        collect = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_like);
-        comment = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_comment);
-        share = (LinearLayout)collect_bar.findViewById(R.id.collect_bar_linear_share);
-        btn_collect=(ImageButton)collect.findViewById(R.id.collect_bar_btn_like);
-        tv_collect_count=(TextView)collect.findViewById(R.id.collect_bar_tv_like);
-        tv_comment_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_comment);
-        tv_share_count=(TextView)collect_bar.findViewById(R.id.collect_bar_tv_share);
+        collect = (LinearLayout) collect_bar.findViewById(R.id.collect_bar_linear_like);
+        comment = (LinearLayout) collect_bar.findViewById(R.id.collect_bar_linear_comment);
+        share = (LinearLayout) collect_bar.findViewById(R.id.collect_bar_linear_share);
+        btn_collect = (ImageButton) collect.findViewById(R.id.collect_bar_btn_like);
+        tv_collect_count = (TextView) collect.findViewById(R.id.collect_bar_tv_like);
+        tv_comment_count = (TextView) collect_bar.findViewById(R.id.collect_bar_tv_comment);
+        tv_share_count = (TextView) collect_bar.findViewById(R.id.collect_bar_tv_share);
         btn_collect.setSelected(topicBean.getCollected());
         tv_collect_count.setText(topicBean.getCollectionNum() + "");
         tv_comment_count.setText(topicBean.getCommentNum() + "");
@@ -226,18 +228,19 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
     }
 
 
-
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.collect_bar_linear_comment:
-                Intent intent = new Intent(CategoryDetailActivity.this,CommentActivity.class);
-                intent.putExtra(KeyConstant.TYPE,type);
-                intent.putExtra(KeyConstant.PID, topicBean.getId()+"");
+                Intent intent = new Intent(CategoryDetailActivity.this, CommentActivity.class);
+                intent.putExtra(KeyConstant.TYPE, type);
+                intent.putExtra(KeyConstant.PID, topicBean.getId() + "");
                 startActivity(intent);
                 break;
             case R.id.collect_bar_linear_like:
-                OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollect")
-                        .params("user_id", user_id).params("type", type).params("pid", topicBean.getId()+"")
+                OkHttpUtils.post(UrlConstant.USERCOLLECTURL)
+                        .params(KeyConstant.USER_ID, user_id)
+                        .params(KeyConstant.TYPE, type + "")
+                        .params(KeyConstant.PID, topicBean.getId() + "")
                         .tag(this).execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
 
                     @Override
@@ -259,24 +262,24 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
                 });
                 break;
             case R.id.collect_bar_linear_share:
-                String imgurl="";
-                String title="";
-                String text="";
+                String imgurl = "";
+                String title = "";
+                String text = "";
                 if (!TextUtils.isEmpty(topicBean.getImgUrl()))
-                imgurl = topicBean.getImgUrl();
-                if(type.equals("2")){
-                    if(!TextUtils.isEmpty(imgurl.substring(0,imgurl.indexOf("|||"))))
-                    imgurl=imgurl.substring(0,imgurl.indexOf("|||"));
+                    imgurl = topicBean.getImgUrl();
+                if (type==CategoryFragment.TYPE_TIP) {
+                    if (!TextUtils.isEmpty(imgurl.substring(0, imgurl.indexOf("|||"))))
+                        imgurl = imgurl.substring(0, imgurl.indexOf("|||"));
                 }
-                if(!TextUtils.isEmpty(topicBean.getName()))
-                title = topicBean.getName();
+                if (!TextUtils.isEmpty(topicBean.getName()))
+                    title = topicBean.getName();
 
-                if(!TextUtils.isEmpty(topicBean.getDigest()))
-                text = topicBean.getDigest();
+                if (!TextUtils.isEmpty(topicBean.getDigest()))
+                    text = topicBean.getDigest();
 
                 //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
-                if(!TextUtils.isEmpty(imgurl)) {
-                    ShareSomeThing shareSomeThing = new ShareSomeThing(CategoryDetailActivity.this, imgurl, cate_url, text, title, user_id, type, topicBean.getId() + "");
+                if (!TextUtils.isEmpty(imgurl)) {
+                    ShareSomeThing shareSomeThing = new ShareSomeThing(CategoryDetailActivity.this, imgurl, cate_url, text, title, user_id, type+"", topicBean.getId() + "");
                     shareSomeThing.DoShare();
                 }
                 break;

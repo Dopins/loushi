@@ -28,4 +28,8 @@ public class UrlConstant {
 
 
 
+    public static final String TIPURLPREFIX ="http://www.loushi666.com/loushi/strategy.html?user_id=";
+    public static final String TOPICURLPREFIX ="http://www.loushi666.com:8080/loushi/topic.html?user_id=";
+
+
 }
