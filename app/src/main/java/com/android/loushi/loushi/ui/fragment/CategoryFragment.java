@@ -25,6 +25,9 @@ public class CategoryFragment extends BaseFragment {
 
     private static final String TAG="CategoryFragment";
 
+    public static final int TYPE_TOPIC=0;
+    public static final int TYPE_TIP=1;
+
     private View rootView;
     private Toolbar toolbar;
     private TabLayout tablayout_category;

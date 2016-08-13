@@ -82,6 +82,8 @@ public class PersonalInformationActivity extends BaseActivity
     private List<SchoolJson.BodyBean> schoolBeanList;
     private List<ProvinceJson.BodyBean> cityBeanList;
 
+    private static final String sexList[]={"男","女"};
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_personal_information;
@@ -93,21 +95,9 @@ public class PersonalInformationActivity extends BaseActivity
 
         bindViews();
         initDatas();
-        //test();
 //        if(!EventBus.getDefault().isRegistered(this))
 //            EventBus.getDefault().register(this);
 
-    }
-
-    private void test() {
-
-        headImgUrl = CurrentAccount.getHeadImgUrl();
-        if (!headImgUrl.equals("null")) {
-            Log.e(TAG, "test : img_url = " + headImgUrl);
-            Picasso.with(this).load(headImgUrl).fit().into(image_circular);
-        } else {
-            Log.e(TAG, "headImgUrl为空!");
-        }
     }
 
     private void bindViews() {
@@ -126,19 +116,25 @@ public class PersonalInformationActivity extends BaseActivity
     }
 
     private void initDatas() {
+        // init img
         if (CurrentAccount.getHeadImgUrl() != null)
             Picasso.with(this).load(CurrentAccount.getHeadImgUrl()).into(image_circular);
-        if (CurrentAccount.getNickname() != null)
+        //init nickname
+        if (CurrentAccount.getNickname() != null){
             edit_nickname.setText(CurrentAccount.getNickname());
+            edit_nickname.setSelection(CurrentAccount.getNickname().length());
+        }
+        //init phone
         if (CurrentAccount.getMobilePhone() != null)
             edit_phone.setText(CurrentAccount.getMobilePhone());
-
-        spinner_sex.setItems("女", "男");
+        //init sex
+        spinner_sex.setItems(sexList);
         spinner_sex.setDropdownMaxHeight(300);
         if (CurrentAccount.getSex().equals("男")) {
             Log.e(TAG + "sex", CurrentAccount.getSex());
             spinner_sex.setSelectedIndex(1);
         } else spinner_sex.setSelectedIndex(0);
+
         //TODO
 //        if(CurrentAccount.)
         getProvinceList();

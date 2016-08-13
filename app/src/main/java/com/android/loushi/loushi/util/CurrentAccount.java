@@ -181,5 +181,8 @@ public class CurrentAccount {
         return get(USER_ID,"");
     }
 
+    public static String getSchoolName(){
+        return get(SCHOOL_NAME,"");
+    }
 
 }

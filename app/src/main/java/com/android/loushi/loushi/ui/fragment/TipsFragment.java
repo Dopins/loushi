@@ -43,7 +43,7 @@ public class TipsFragment extends LazyFragment {
 
     private Integer mSkip = 0;
     private Integer mTake = 20;
-    private List mTipsList = new ArrayList<>();
+    private List<StrategyJson.BodyBean> mTipsList = new ArrayList<StrategyJson.BodyBean>();
     private TopicItemAdapter mAdapter;
 
     private boolean isFirstShow = true;  //判断是否是第一次加载
@@ -136,11 +136,10 @@ public class TipsFragment extends LazyFragment {
         mAdapter.setmOnItemClickListener(new TopicItemAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), CategoryDetailActivity.class);
                 String jsonString = new Gson().toJson(mTipsList.get(position));
                 Log.e("jsonstring", jsonString);
-                intent.putExtra(CategoryDetailActivity.TYPE, "2");
+                intent.putExtra(CategoryDetailActivity.TYPE, CategoryFragment.TYPE_TIP);
                 intent.putExtra(CategoryDetailActivity.JSONSTRING, jsonString);
                 startActivity(intent);
             }
