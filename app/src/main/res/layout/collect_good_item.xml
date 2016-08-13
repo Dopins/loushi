@@ -25,6 +25,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_alignParentRight="true"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="5dp"
@@ -81,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="555"
-        android:textColor="@color/PrimaryText"
+        android:textColor="#ffffff"
         android:layout_toRightOf="@+id/collect_good_item_btn_like"
         android:id="@+id/collect_good_item_tv_like_count"
         android:layout_marginLeft="10dp"

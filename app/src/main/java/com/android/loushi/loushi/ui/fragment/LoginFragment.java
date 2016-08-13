@@ -42,6 +42,7 @@ import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.ToastUtils;
 import com.android.loushi.loushi.util.UrlConstant;
+import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.umeng.analytics.MobclickAgent;
 
@@ -366,7 +367,7 @@ public class LoginFragment extends Fragment {
                         .execute(new DialogCallback<UserLoginJson>((AppCompatActivity) getActivity(), UserLoginJson.class) {
                             @Override
                             public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-
+                                Log.e("loginthird",new Gson().toJson(userLoginJson));
                                 if (userLoginJson.getState()) {
 
                                     CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
@@ -377,6 +378,8 @@ public class LoginFragment extends Fragment {
                                             true,
                                             type);
                                     String code = userLoginJson.getCode();
+
+
                                     if (code != null && code.equals("3")) {
                                         Log.e(TAG, "第三方登陆的第一次登陆");
                                         CurrentAccount.setLoginOrNot(true);

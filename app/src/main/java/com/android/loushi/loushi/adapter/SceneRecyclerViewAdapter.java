@@ -55,7 +55,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
         SceneJson.BodyBean body = bodyBeanList.get(position);
 
-        Picasso.with(context).setDebugging(true);
+        
         Picasso.with(context).load(body.getImgUrl()).fit().
                 into(holder.image);
 

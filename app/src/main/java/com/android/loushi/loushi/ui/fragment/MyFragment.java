@@ -25,6 +25,7 @@ import com.android.loushi.loushi.util.ViewPagerIndicator;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -144,10 +145,10 @@ public class MyFragment extends BaseFragment {
         Visible();
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(MyfragmentEvent event) {
         Log.e(TAG, event.getmMsg());
-        if (event.getmMsg()=="Transfer MyFragment to PersonalFragment!")
+        if (event.getmMsg().equals("Transfer MyFragment to PersonalFragment!"))
         transferToPersonalFragment();
     }
 
