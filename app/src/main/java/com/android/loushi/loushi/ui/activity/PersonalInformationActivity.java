@@ -289,7 +289,8 @@ public class PersonalInformationActivity extends BaseActivity
         headImgUrl = CurrentAccount.getHeadImgUrl();
         //schoolName=CurrentAccount.getSchoolName();
 
-        schoolName = spinner_university.getSelectedIndex() + 1 + "";
+        //schoolName = spinner_university.getSelectedIndex() + 1 + "";
+        schoolName=schoolBeanList.get(spinner_university.getSelectedIndex()).getId()+"";
         String sexBool = "false";
         if (spinner_sex.getSelectedIndex() == 1)
             sexBool = "true";
