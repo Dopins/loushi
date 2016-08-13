@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -160,7 +161,8 @@ public class SceneDetailActivity extends  BaseActivity {
     }
     private void initTablayout(){
         collapsing_toolbar_layout = (CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar_layout);
-        collapsing_toolbar_layout.setTitle("");
+        if(!TextUtils.isEmpty(scenebean.getName()));
+        collapsing_toolbar_layout.setTitle(scenebean.getName());
         tabLayout=(TabLayout)findViewById(R.id.toolbar_tab);
         viewPager = (ViewPager)findViewById(R.id.main_vp_container);
         sceneDetailGoodFragment = new SceneDetailGoodFragment();

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -126,7 +127,8 @@ public class SceneDetailDesignFragment extends BaseFragment {
             public boolean onTouch(View v, MotionEvent event) {
                 //nestedScrollView.requestDisallowInterceptTouchEvent(true);
                 int action = event.getActionMasked();
-
+                 Log.e("nest", webView.getScrollY() + "");
+                //webView.getScrollY();
                 switch (action){
                     case MotionEvent.ACTION_DOWN:
                          downX=(int)event.getY();
@@ -138,30 +140,15 @@ public class SceneDetailDesignFragment extends BaseFragment {
                                 if(SceneDetailActivity.state==SceneDetailActivity.CollapsingToolbarLayoutState.COLLAPSED)
                                 nestedScrollView.requestDisallowInterceptTouchEvent(true);
                             //}
-
-
-//                        if(SceneDetailActivity.state==SceneDetailActivity.CollapsingToolbarLayoutState.COLLAPSED) {
-//                            //nestedScrollView.requestDisallowInterceptTouchEvent(false);
-//                            Log.e("state","折叠");
-//                            nestedScrollView.requestDisallowInterceptTouchEvent(true);
-//                            int moveY=(int)event.getY();
-//                            if((moveY-downX)> 300) {
-//                                if (nestedScrollView.getScrollY() < ViewConfiguration.getTouchSlop()){
-//
-//
-//                                    nestedScrollView.requestDisallowInterceptTouchEvent(false);
-//                                    return true;
-//                                }
-//
-//                            }
-//                        }
-//                        if(SceneDetailActivity.state==SceneDetailActivity.CollapsingToolbarLayoutState.INTERNEDIATE) {
-//                            //nestedScrollView.requestDisallowInterceptTouchEvent(false);
-//                            Log.e("state","bianhua ");
-//                            nestedScrollView.requestDisallowInterceptTouchEvent(false);
-//
-//                        }
-
+                    case MotionEvent.ACTION_UP:
+                        int nowY=(int)event.getY();
+                        Log.e("nest1",nowY+"^"+downX+"^"+ViewConfiguration.getTouchSlop());
+                        if(webView.getScrollY()==0) {
+                            if (nowY - downX > ViewConfiguration.getTouchSlop()) {
+                                if (SceneDetailActivity.state == SceneDetailActivity.CollapsingToolbarLayoutState.COLLAPSED)
+                                    nestedScrollView.requestDisallowInterceptTouchEvent(false);
+                            }
+                        }
 
                         break;
 

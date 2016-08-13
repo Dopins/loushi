@@ -123,7 +123,7 @@
                         android:layout_width="wrap_content"
 
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="27dp"
+                        android:layout_marginLeft="20dp"
                         android:layout_marginTop="10dp"
                         android:layout_toRightOf="@+id/img_head_small"
                         android:text="matf5"
