@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.DialogCallback;
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.jsonbean.ImageJson;
 import com.android.loushi.loushi.jsonbean.ProvinceJson;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
@@ -38,6 +39,8 @@ import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -343,6 +346,7 @@ public class PersonalInformationActivity extends BaseActivity
                             CurrentAccount.storeUserInfo(nickname, headImgUrl, sex, province, city, schoolName, school_id);
                             CurrentAccount.setReFresh(true);
                             finish();
+                            EventBus.getDefault().post(new MainEvent(MainEvent.LOGIN_UPDATEINFO));
                         }
                     }
                 });

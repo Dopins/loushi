@@ -80,6 +80,7 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
                                         Log.e("callback", "autoLogin 登录成功！");
                                     } else {
                                         Log.e("callback", "autoLogin 登录失败！");
+                                        CurrentAccount.setLoginOrNot(false);
                                     }
                                 }
                             });
@@ -100,7 +101,7 @@ public abstract class JsonCallback<T> extends EncryptCallback<T> {
                                     if (userLoginJson.getState()) {
                                         //CurrentAccount.setLoginOrNot(true);//登录成功，设置登录状态
                                         String code = userLoginJson.getCode();
-                                        if (code != null && code == "3") {
+                                        if (code != null && code.equals("3")) {
 
                                         } else {
                                             BaseActivity.user_id = userLoginJson.getBody() + "";

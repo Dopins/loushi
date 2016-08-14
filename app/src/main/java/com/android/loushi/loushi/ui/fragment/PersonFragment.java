@@ -65,8 +65,6 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     public static final String TAG ="PersonFragment";
 
     private Toolbar mToolbar;
-    private TextView mTv_index;
-    //private TabLayout mtoorbar_tab;
     private SlidingTabLayout mtoorbar_tab;
     private AppBarLayout appBarLayout;
     private TextView tv_name;
@@ -79,10 +77,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     //定义viewPager
     private PersonCollectTabAdapter personCollectTabAdapter;                               //定义adapter
     private List<Fragment> list_fragment = new ArrayList<>();                                //定义要装fragment的列表
-
-
     private List<String> list_count = new ArrayList<>();
-    //private CategoryFragment categoryFragment;
+
     private CollectGoodFragment collectGoodFragment;
     private ViewPager mViewPager;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -141,7 +137,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     private void iniDatas() {
         tv_name.setText(CurrentAccount.getNickname());
-        Log.e("person", CurrentAccount.getHeadImgUrl());
+        //Log.e("person", CurrentAccount.getHeadImgUrl());
         if(!TextUtils.isEmpty(CurrentAccount.getHeadImgUrl())){
             Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head_small);
             Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
@@ -272,8 +268,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         mtoorbar_tab = (SlidingTabLayout) getView().findViewById(R.id.toolbar_tab);
         tv_name = (TextView) getView().findViewById(R.id.tv_nickname);
         tv_school=(TextView)getView().findViewById(R.id.tv_school);
-        if(!TextUtils.isEmpty(CurrentAccount.getSchoolName()))
-            tv_school.setText(CurrentAccount.getSchoolName());
+
         img_head = (CircularImageView) getView().findViewById(R.id.img_head);
         img_head_small = (RoundImageView) mToolbar.findViewById(R.id.img_head_small);
         tv_feed = (TextView) mToolbar.findViewById(R.id.tv_feed);
@@ -358,9 +353,22 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 break;
             case MainEvent.LOGIN_UPDATEINFO:
                 Log.e("person","接收消息"+MainEvent.LOGIN_UPDATEINFO+"");
+                updateUserInfo();
                 break;
 
         }
+    }
+
+    private void updateUserInfo() {
+        tv_name.setText(CurrentAccount.getNickname());
+        Log.e("person", CurrentAccount.getHeadImgUrl());
+        if(!TextUtils.isEmpty(CurrentAccount.getHeadImgUrl())){
+            Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head_small);
+            Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
+        }
+        tv_name_small.setText(CurrentAccount.getNickname());
+        if(!TextUtils.isEmpty(CurrentAccount.getSchoolName()))
+            tv_school.setText(CurrentAccount.getSchoolName());
     }
 
     @Subscribe

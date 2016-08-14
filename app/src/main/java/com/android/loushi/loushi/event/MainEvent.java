@@ -11,6 +11,7 @@ public class MainEvent {
     public final static int LOGIN_UPDATEINFO=8;
     public final static int STATE_CONNECT_FAIL=9;
 
+
     public MainEvent(){
         super();
     }

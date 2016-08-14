@@ -1,11 +1,21 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.Manifest;
+import android.app.DownloadManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTabHost;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +23,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.alibaba.sdk.android.AlibabaSDK;
@@ -20,6 +31,7 @@ import com.alibaba.sdk.android.AlibabaSDK;
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.event.MainEvent;
+import com.android.loushi.loushi.jsonbean.UpdateVersionJson;
 import com.android.loushi.loushi.jsonbean.UserInfoJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.ui.fragment.CategoryFragment;
@@ -38,6 +50,10 @@ import com.umeng.analytics.MobclickAgent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.StringReader;
 
 import okhttp3.Call;
 import okhttp3.Request;
@@ -89,7 +105,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         initView();
-
+        CheckUpdate();
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
         mTabHost.getTabWidget().setDividerDrawable(android.R.color.transparent);
@@ -276,6 +292,158 @@ public class MainActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
         handler.removeCallbacksAndMessages(null);
         handler = null;
+    }
+
+
+    private void CheckUpdate(){
+        OkHttpUtils.post(BaseActivity.url_update).execute(new JsonCallback<UpdateVersionJson>(UpdateVersionJson.class) {
+            @Override
+            public void onResponse(boolean b, UpdateVersionJson updateVersionJson, Request request, Response response) {
+                if(updateVersionJson.isState()){
+                    pareseXMLWithPull(updateVersionJson.getBody());
+                }
+            }
+        });
+    }
+
+    private void pareseXMLWithPull(String xmlData){
+        try{
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser xmlPullParser =factory.newPullParser();
+            xmlPullParser.setInput(new StringReader(xmlData));
+            int eventType = xmlPullParser.getEventType();
+            String version="";
+            String url = "";
+            String description="";
+            while(eventType!= XmlPullParser.END_DOCUMENT){
+                String nodeName = xmlPullParser.getName();
+                switch (eventType){
+                    case XmlPullParser.START_TAG:{
+                        if("version".equals(nodeName)){
+                            version = xmlPullParser.nextText();
+                            Log.e("splash", version);
+                        }
+                        else if("url".equals(nodeName)){
+                            url = xmlPullParser.nextText();
+                            Log.e("splash",url);
+                        }
+                        else if ("description".equals(nodeName)){
+                            description = xmlPullParser.nextText();
+                            Log.e("splash",description);
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                eventType = xmlPullParser.next();
+
+            }
+            Log.e("splash",version+"|"+GetVersionCode());
+            if (!version.equals(GetVersionCode())){
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("检测到新版本")
+                        .setMessage(description)
+                        .setNegativeButton("cancel",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.e("splash", "选择取消");
+                                //CheckPermission();
+                                Toast.makeText(MainActivity.this, "取消更新", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.e("splash","选择确定");
+                                CheckPermission();
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    private String GetVersionCode(){
+        PackageManager pm = this.getPackageManager();//context为当前Activity上下文
+        PackageInfo pi;
+        try {
+            pi = pm.getPackageInfo(this.getPackageName(), 0);
+            return pi.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+    private void CheckPermission(){
+        if(Build.VERSION.SDK_INT>=23) {
+            if (getApplicationContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                //申请WRITE_EXTERNAL_STORAGE权限
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            } else {
+                downloadApp("http://119.147.33.13/beta.myapp.com/myapp/rdmexp/exp/file/comandroidloushi_10_48b260d2-f18e-4da6-9edd-8a055868a975.apk?mkey=57afd712c45c7184&f=8c5d&c=0&p=.apk");
+            }
+        }
+        else{
+            downloadApp("http://119.147.33.13/beta.myapp.com/myapp/rdmexp/exp/file/comandroidloushi_10_48b260d2-f18e-4da6-9edd-8a055868a975.apk?mkey=57afd712c45c7184&f=8c5d&c=0&p=.apk");
+        }
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1){
+            if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    &&grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                //用户同意使用write
+                downloadApp("http://119.147.33.13/beta.myapp.com/myapp/rdmexp/exp/file/comandroidloushi_10_48b260d2-f18e-4da6-9edd-8a055868a975.apk?mkey=57afd712c45c7184&f=8c5d&c=0&p=.apk");
+            }else{
+                //用户不同意
+                //InitTaobao();
+                Toast.makeText(MainActivity.this,"取消更新",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void downloadApp(String url){
+        DownloadManager dManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri uri = Uri.parse(url);
+
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+
+        // 设置下载路径和文件名
+
+        request.setDestinationInExternalPublicDir("download", "loushiv"+GetVersionCode()+".apk");
+
+        request.setDescription("陋室新版本下载");
+
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        request.setMimeType("application/vnd.android.package-archive");
+
+        // 设置为可被媒体扫描器找到
+
+        request.allowScanningByMediaScanner();
+
+        // 设置为可见和可管理
+
+        request.setVisibleInDownloadsUi(true);
+
+
+        //dManager.enqueue(request);
+
+        final long refernece = dManager.enqueue(request);
+
+        // 把当前下载的ID保存起来
+
+        SharedPreferences sPreferences = getSharedPreferences("downloadplato", 0);
+        Log.e("splashid",refernece+"");
+
+        sPreferences.edit().putLong("plato", refernece).commit();
+
+        //InitTaobao();
+        //继续执行
     }
 
 
