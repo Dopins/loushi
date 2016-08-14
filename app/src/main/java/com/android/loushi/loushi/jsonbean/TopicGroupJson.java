@@ -14,7 +14,7 @@ public class TopicGroupJson implements Serializable {
      * body : [{"id":21,"name":"名称","topicNum":52,"imgUrl":"asdad.jpg"}]
      */
 
-    private int state;
+    private boolean state;
     private String code;
     private String return_info;
     /**
@@ -26,11 +26,11 @@ public class TopicGroupJson implements Serializable {
 
     private List<BodyBean> body;
 
-    public int getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 

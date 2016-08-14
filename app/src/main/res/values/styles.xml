@@ -13,6 +13,15 @@
 
     </style>
 
+    <!-- Base application theme. -->
+    <style name="AppThemeFull" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="android:windowFullscreen">true</item>
+
+    </style>
+
+
+
 
 
     <style name="toolbar_text" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">

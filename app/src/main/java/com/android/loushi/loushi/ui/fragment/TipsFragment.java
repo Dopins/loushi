@@ -54,6 +54,7 @@ public class TipsFragment extends LazyFragment {
         setContentView(R.layout.fragment_tips);
         initView();
         if (isFirstShow) {
+            swipeRefreshLayout.setRefreshing(true);
             loadData(false);
             isFirstShow = false;
         }
@@ -112,7 +113,6 @@ public class TipsFragment extends LazyFragment {
                 0,
                 (int) TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,24,getResources().getDisplayMetrics()));
-        swipeRefreshLayout.setRefreshing(true);
         recycleViewTips = (RecyclerView) findViewById(R.id.recycleView);
         mAdapter = new TopicItemAdapter(getContext(),
                 mTipsList,

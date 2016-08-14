@@ -2,37 +2,37 @@ package com.android.loushi.loushi.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
+import com.android.loushi.loushi.jsonbean.TopicGroupJson;
+import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by binpeiluo on 2016/7/21 0021.
  */
 public class TopicRecycleViewAdapter extends RecyclerView.Adapter<TopicRecycleViewAdapter.ViewHolder>{
 
-    private static final int topicCount=8;
-    private final int[] mTopicImageId={
-            R.drawable.project_light,R.drawable.project_it,
-            R.drawable.project_food,R.drawable.project_strange,
-            R.drawable.project_old,R.drawable.project_star,
-            R.drawable.project_store,R.drawable.project_cartoon};
+    private static final String TAG="TopicRvAdapter";
 
+    public static final String[] IMAGETIPS_CN={"收纳储物仓","实用精品仓","装饰改造仓"};
+    private static final String[] IMAGETIPS_EN={"Better storage","Practical products","Decoration&Renovation"};
 
     private Context mContext;
     private OnItemClickListener mOnItemClickListener;
+    private List<TopicGroupJson.BodyBean> topicList;
 
-    public TopicRecycleViewAdapter(Context context){
+    public TopicRecycleViewAdapter(Context context, List<TopicGroupJson.BodyBean> topicList){
         this.mContext=context;
+        this.topicList=topicList;
     }
-
 
     @Override
     public TopicRecycleViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -42,21 +42,28 @@ public class TopicRecycleViewAdapter extends RecyclerView.Adapter<TopicRecycleVi
 
     @Override
     public void onBindViewHolder(TopicRecycleViewAdapter.ViewHolder holder, int position) {
-        holder.imageView.setImageResource(mTopicImageId[position]);
+        TopicGroupJson.BodyBean topic=topicList.get(position);
+        if(!TextUtils.isEmpty(topic.getImgUrl()))
+            Picasso.with(mContext).load(topic.getImgUrl()).into(holder.imageView);
+        holder.tipsCn.setText(topic.getName());
     }
 
     @Override
     public int getItemCount() {
-        return this.topicCount;
+        return this.topicList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ImageView imageView;
+        public TextView tipsCn;
+        public TextView tipsEn;
 
         public ViewHolder(View itemView) {
             super(itemView);
             imageView= (ImageView) itemView.findViewById(R.id.item_imageView_guide);
+            tipsCn=(TextView)itemView.findViewById(R.id.item_tips_cn);
+            tipsEn=(TextView)itemView.findViewById(R.id.item_tips_en);
             itemView.setOnClickListener(this);
         }
 

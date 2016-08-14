@@ -128,13 +128,14 @@ public class MaterialSpinner extends TextView {
             textColor = ta.getColor(R.styleable.MaterialSpinner_ms_text_color, defaultColor);
             arrowColor = ta.getColor(R.styleable.MaterialSpinner_ms_arrow_tint, textColor);
             hideArrow = ta.getBoolean(R.styleable.MaterialSpinner_ms_hide_arrow, false);
-            popupWindowMaxHeight = ta.getDimensionPixelSize(R.styleable.MaterialSpinner_ms_dropdown_max_height, 0);
+            popupWindowMaxHeight = (int) ta.getDimension(R.styleable.MaterialSpinner_ms_dropdown_max_height, 0f);
             popupWindowHeight = ta.getLayoutDimension(R.styleable.MaterialSpinner_ms_dropdown_height,
                     WindowManager.LayoutParams.WRAP_CONTENT);
             arrowColorDisabled = Utils.lighter(arrowColor, 0.8f);
         } finally {
             ta.recycle();
         }
+        Log.i("mytest","popupWindowMaxHeight=="+popupWindowMaxHeight);
 
         Resources resources = getResources();
         int left, right, bottom, top;
@@ -227,6 +228,7 @@ public class MaterialSpinner extends TextView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         popupWindow.setWidth(MeasureSpec.getSize(widthMeasureSpec));
         popupWindow.setHeight(calculatePopupWindowHeight());
+//        popupWindow.setHeight(popupWindowMaxHeight);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
@@ -478,6 +480,8 @@ public class MaterialSpinner extends TextView {
             return WindowManager.LayoutParams.WRAP_CONTENT;
         }
         float listViewHeight = adapter.getCount() * getResources().getDimension(R.dimen.ms__item_height);
+
+        Log.i("mytest","listViewHeight,popupWindowMaxHeight=="+listViewHeight+","+popupWindowMaxHeight);
         if (popupWindowMaxHeight > 0 && listViewHeight > popupWindowMaxHeight) {
             return popupWindowMaxHeight;
         } else if (popupWindowHeight != WindowManager.LayoutParams.MATCH_PARENT

@@ -15,6 +15,7 @@ public class KeyConstant {
     public static final String CONTENT="content";
 
     public static final String TOPIC_ID = "topic_id";
+    public static final String TOPIC_NAME = "topic_name";
 
     public static final String COMMENT_ID ="comment_id";
 
@@ -33,5 +34,7 @@ public class KeyConstant {
     public static final String IMG ="img";
     public static final String IMGFILENAME ="imgFileName";
     public static final String school_id ="school.id";
+
+    public static final String TOPIC_GROUP_ID="topic_group_id";
 
 }

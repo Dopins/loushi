@@ -116,6 +116,7 @@
                 <com.android.loushi.loushi.util.MaterialSpinner
                     android:id="@+id/spinner_sex"
                     android:layout_width="match_parent"
+                    app:ms_dropdown_height="400dp"
                     android:layout_height="wrap_content"
                     android:textColor="@color/hint" />
 
@@ -147,6 +148,7 @@
                     <com.android.loushi.loushi.util.MaterialSpinner
                         android:id="@+id/spinner_province"
                         android:layout_width="wrap_content"
+                        app:ms_dropdown_max_height="400dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.25"
                         android:textColor="@color/hint" />
@@ -154,6 +156,7 @@
                     <com.android.loushi.loushi.util.MaterialSpinner
                         android:id="@+id/spinner_city"
                         android:layout_width="wrap_content"
+                        app:ms_dropdown_max_height="400dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.25"
                         android:textColor="@color/hint" />
@@ -162,6 +165,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
+                        app:ms_dropdown_max_height="400dp"
                         android:layout_weight="0.5"
                         android:textColor="@color/hint" />
 
@@ -193,18 +197,24 @@
                     android:textSize="15dp" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_save"
-                android:layout_width="297dp"
-                android:layout_height="46dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="center"
                 android:layout_below="@+id/layout_phone"
-                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/shape_btn_finish"
-                android:onClick="onClick_btn_save"
-                android:text="保存修改"
-                android:textColor="@color/colorWhite"
-                android:textSize="15dp" />
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_save"
+                    android:layout_width="297dp"
+                    android:layout_height="46dp"
+                    android:background="@drawable/shape_btn_finish"
+                    android:onClick="onClick_btn_save"
+                    android:text="保存修改"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="15dp" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 

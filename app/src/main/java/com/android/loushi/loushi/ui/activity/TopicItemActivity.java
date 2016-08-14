@@ -15,8 +15,11 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.TopicItemAdapter;
+import com.android.loushi.loushi.adapter.TopicRecycleViewAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
 import com.android.loushi.loushi.jsonbean.TopicJson;
+import com.android.loushi.loushi.ui.fragment.CategoryFragment;
+import com.android.loushi.loushi.ui.fragment.TopicFragment;
 import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
@@ -36,13 +39,11 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
 
     private static final String TAG = "TopicItemActivity";
 
-    private static final String[] titlesName = {"文艺清新仓", "科技数码仓", "美食味道仓", "怪咖另类仓"
-            , "欧式复古仓", "追星必备仓", "收纳储物仓", "次元趣味仓"};
-
     private Integer mSkip = 0; //数据从哪里开始取
     private Integer mTake = 20;   //一次加载多少item
-    private List mTopicList;
+    private List mTopicList=new ArrayList<TopicJson.BodyBean>();;
     private Integer mTopic_id = 0;     //专题分类的item id
+    private String mTopicName;       //专题名称
     private Toolbar mToolbar;
     private RecyclerView recyclerView;
     private ImageView imageViewSearch;
@@ -66,8 +67,8 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
 
     //初始化变量
     private void initVariables() {
-        mTopicList = new ArrayList<TopicJson.BodyBean>();
         mTopic_id = getIntent().getIntExtra(KeyConstant.TOPIC_ID, 0);
+        mTopicName=getIntent().getStringExtra(KeyConstant.TOPIC_NAME);
     }
 
     private void initView() {
@@ -106,7 +107,8 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
         setSupportActionBar(mToolbar);
         //init title
         textViewTitle = (TextView) findViewById(R.id.textView_title);
-        textViewTitle.setText(titlesName[mTopic_id - 1]);//init imageview
+        textViewTitle.setText(mTopicName);
+        //init imageview
         imageViewSearch = (ImageView) findViewById(R.id.imageView_search);
         imageViewBack = (ImageView) findViewById(R.id.imageView_back);
         imageViewSearch.setOnClickListener(this);
@@ -116,10 +118,10 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
     private void loadSomeData(String userID, Integer groupId, Integer skip, Integer take,final boolean isClean) {
         OkHttpUtils.post(UrlConstant.TOPICURL)
                 .tag(this)
-                .params("user_id", userID)
-                .params("topic_group_id", groupId.toString())
-                .params("skip", skip.toString())
-                .params("take", take.toString())
+                .params(KeyConstant.USER_ID, userID)
+                .params(KeyConstant.TOPIC_GROUP_ID, groupId+"")
+                .params(KeyConstant.SKIP, skip.toString())
+                .params(KeyConstant.TAKE, take.toString())
                 .execute(new JsonCallback<TopicJson>(TopicJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, TopicJson topicJson, Request request, @Nullable Response response) {
@@ -132,11 +134,6 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
                         }else
                             Toast.makeText(mContext,topicJson.getReturn_info(),Toast.LENGTH_SHORT).show();
                         swipeRefreshLayout.setRefreshing(false);
-//                        if (topicJson == null || topicJson.getBody() == null)
-//                            return;
-//                        mTopicList.addAll(topicJson.getBody());
-//                        mAdapter.notifyDataSetChanged();
-//                        mSkip+=topicJson.getBody().size();
                     }
                 });
     }
@@ -149,7 +146,7 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
                 Intent intent = new Intent(TopicItemActivity.this, CategoryDetailActivity.class);
                 String jsonString = new Gson().toJson(mTopicList.get(position));
                 Log.e("jsonstring", jsonString);
-                intent.putExtra(CategoryDetailActivity.TYPE, "1");
+                intent.putExtra(CategoryDetailActivity.TYPE, CategoryFragment.TYPE_TOPIC);
                 intent.putExtra(CategoryDetailActivity.JSONSTRING, jsonString);
                 startActivity(intent);
             }

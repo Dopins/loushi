@@ -25,7 +25,7 @@ public  class  BaseFragment extends Fragment {
     public static String url = "";
     protected LayoutInflater inflater;
     private View contentView;
-    private Context context;
+    protected Context context;
     private ViewGroup container;
 
 

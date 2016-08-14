@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -84,7 +85,8 @@ public class PersonalInformationActivity extends BaseActivity
     private List<SchoolJson.BodyBean> schoolBeanList;
     private List<ProvinceJson.BodyBean> cityBeanList;
 
-    private static final String sexList[]={"男","女"};
+    private static final String sexList[] = {"男", "女"};
+
 
     @Override
     protected int getLayoutId() {
@@ -99,8 +101,8 @@ public class PersonalInformationActivity extends BaseActivity
         initDatas();
 //        if(!EventBus.getDefault().isRegistered(this))
 //            EventBus.getDefault().register(this);
-
     }
+
 
     private void bindViews() {
 
@@ -117,12 +119,12 @@ public class PersonalInformationActivity extends BaseActivity
         text_exit = (TextView) findViewById(R.id.Exit);
 
         spinner_sex.setItems(sexList);
-        spinner_sex.setDropdownMaxHeight(300);
         spinner_province.setOnItemSelectedListener(this);
-        spinner_province.setDropdownMaxHeight(300);
+//        spinner_province.setDropdownMaxHeight(popupHeight);
         spinner_province.setOnClickListener(this);
-        spinner_city.setDropdownMaxHeight(300);
+//        spinner_city.setDropdownMaxHeight(popupHeight);
         spinner_city.setOnItemSelectedListener(this);
+//        spinner_university.setDropdownHeight(popupHeight);
     }
 
     private void initDatas() {
@@ -130,7 +132,7 @@ public class PersonalInformationActivity extends BaseActivity
         if (!TextUtils.isEmpty(CurrentAccount.getHeadImgUrl()))
             Picasso.with(this).load(CurrentAccount.getHeadImgUrl()).into(image_circular);
         //init nickname
-        if (!TextUtils.isEmpty(CurrentAccount.getNickname())){
+        if (!TextUtils.isEmpty(CurrentAccount.getNickname())) {
             edit_nickname.setText(CurrentAccount.getNickname());
             edit_nickname.setSelection(CurrentAccount.getNickname().length());
         }
@@ -143,20 +145,19 @@ public class PersonalInformationActivity extends BaseActivity
             spinner_sex.setSelectedIndex(1);
         } else
             spinner_sex.setSelectedIndex(0);
-        //init provice
-        if(TextUtils.isEmpty(CurrentAccount.getProvince()))
+
+        Log.i("mytest","schoolname="+CurrentAccount.getSchoolName());
+
+        //init provice school
+        if (TextUtils.isEmpty(CurrentAccount.getSchoolName()))
             getProvinceList();
-        else{
+        else {
             spinner_province.setText(CurrentAccount.getProvince());
+            spinner_university.setText(CurrentAccount.getSchoolName());
         }
         //init city
-        if(!TextUtils.isEmpty(CurrentAccount.getCity()))
-            spinner_city.setText(CurrentAccount.getProvince());
-        //init school
-        if(!TextUtils.isEmpty(CurrentAccount.getSchoolName()))
-            spinner_university.setText(CurrentAccount.getSchoolName());
-
-
+        if (!TextUtils.isEmpty(CurrentAccount.getCity()))
+            spinner_city.setText(CurrentAccount.getCity());
     }
 
     public void onClickbtn_return(View view) {
@@ -302,17 +303,17 @@ public class PersonalInformationActivity extends BaseActivity
         nickname = edit_nickname.getText().toString();
         headImgUrl = CurrentAccount.getHeadImgUrl();
         schoolName = spinner_university.getSelectedIndex() + 1 + "";
-        String provice=spinner_province.getText().toString();
-        String city=spinner_city.getText().toString();
-        String schoolName=spinner_university.getText().toString();
+        String provice = spinner_province.getText().toString();
+        String city = spinner_city.getText().toString();
+        String schoolName = spinner_university.getText().toString();
         final String school_id;
-        if(schoolBeanList!=null&&schoolBeanList.size()!=0)
-            school_id= schoolBeanList.get(spinner_university.getSelectedIndex()).getId()+"";
+        if (schoolBeanList != null && schoolBeanList.size() != 0)
+            school_id = schoolBeanList.get(spinner_university.getSelectedIndex()).getId() + "";
         else
-            school_id=CurrentAccount.getSchoolId();
-        String sex=spinner_sex.getText().toString();
+            school_id = CurrentAccount.getSchoolId();
+        String sex = spinner_sex.getText().toString();
         String sexBool = "true";
-        String phone=edit_phone.getText().toString();
+        String phone = edit_phone.getText().toString();
         if (spinner_sex.getSelectedIndex() == 1)
             sexBool = "false";
 
@@ -335,11 +336,11 @@ public class PersonalInformationActivity extends BaseActivity
                         Log.e(TAG, "userInfoJson.getState: " + userInfoJson.isState());
                         if (userInfoJson.isState()) {
                             Log.e(TAG, "onResponse: 资料提交成功 ！");
-                            String province=spinner_province.getText().toString();
-                            String city=spinner_city.getText().toString();
-                            String sex=spinner_sex.getText().toString();
-                            String schoolName=spinner_university.getText().toString();
-                            CurrentAccount.storeUserInfo(nickname, headImgUrl, sex,province,city,schoolName,school_id);
+                            String province = spinner_province.getText().toString();
+                            String city = spinner_city.getText().toString();
+                            String sex = spinner_sex.getText().toString();
+                            String schoolName = spinner_university.getText().toString();
+                            CurrentAccount.storeUserInfo(nickname, headImgUrl, sex, province, city, schoolName, school_id);
                             CurrentAccount.setReFresh(true);
                             finish();
                         }
@@ -368,8 +369,9 @@ public class PersonalInformationActivity extends BaseActivity
                             List<String> schools = new ArrayList<String>();
                             for (int i = 0; i < len; i++)
                                 schools.add(schoolBeanList.get(i).getName());
-                            Log.i(TAG,"size=="+schools.size());
+                            Log.i(TAG, "size==" + schools.size());
                             spinner_university.setItems(schools);
+
                         } else
                             Toast.makeText(mContext, schoolJson.getReturn_info(), Toast.LENGTH_SHORT).show();
 
@@ -377,23 +379,24 @@ public class PersonalInformationActivity extends BaseActivity
                 });
 
     }
+
     public void getProvinceList() {
         OkHttpUtils.post(UrlConstant.USERAREAGURL)
                 .execute(new JsonCallback<ProvinceJson>(ProvinceJson.class) {
-            @Override
-            public void onResponse(boolean b, ProvinceJson provinceJson, Request request, @Nullable Response response) {
-                if (provinceJson.isState()) {
-                    provinceBeanList = new ArrayList<ProvinceJson.BodyBean>();
-                    provinceBeanList.addAll(provinceJson.getBody());
-                    int len = provinceBeanList.size();
-                    List<String> provices = new ArrayList<String>();
-                    for (int i = 0; i < len; i++)
-                        provices.add(provinceBeanList.get(i).getProvince());
-                    spinner_province.setItems(provices);
-                   initDefaultCity();
-                }
-            }
-        });
+                    @Override
+                    public void onResponse(boolean b, ProvinceJson provinceJson, Request request, @Nullable Response response) {
+                        if (provinceJson.isState()) {
+                            provinceBeanList = new ArrayList<ProvinceJson.BodyBean>();
+                            provinceBeanList.addAll(provinceJson.getBody());
+                            int len = provinceBeanList.size();
+                            List<String> provices = new ArrayList<String>();
+                            for (int i = 0; i < len; i++)
+                                provices.add(provinceBeanList.get(i).getProvince());
+                            spinner_province.setItems(provices);
+                            initDefaultCity();
+                        }
+                    }
+                });
     }
 
 
@@ -415,12 +418,12 @@ public class PersonalInformationActivity extends BaseActivity
                                 citys.add(cityBeanList.get(i).getCity());
                             }
                             spinner_city.setItems(citys);
+
                             initDefaultSchool();
                         }
                     }
                 });
     }
-
 
 
     @Override
@@ -432,11 +435,11 @@ public class PersonalInformationActivity extends BaseActivity
     @Override
     public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
 
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.spinner_sex:
                 break;
             case R.id.spinner_province:
-                getCityList(provinceBeanList.get(position).getId()+"");
+                getCityList(provinceBeanList.get(position).getId() + "");
                 break;
             case R.id.spinner_city:
                 getSchoolList(cityBeanList.get(position).getId() + "");
@@ -446,21 +449,21 @@ public class PersonalInformationActivity extends BaseActivity
         }
     }
 
-    private void initDefaultCity(){
-        if(provinceBeanList ==null||provinceBeanList.size()==0)
+    private void initDefaultCity() {
+        if (provinceBeanList == null || provinceBeanList.size() == 0)
             return;
         getCityList(provinceBeanList.get(0).getId() + "");
     }
 
-    private void initDefaultSchool(){
-        if(cityBeanList==null||cityBeanList.size()==0)
+    private void initDefaultSchool() {
+        if (cityBeanList == null || cityBeanList.size() == 0)
             return;
         getSchoolList(cityBeanList.get(0).getId() + "");
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.spinner_province:
                 getProvinceList();
                 break;

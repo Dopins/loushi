@@ -147,6 +147,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
             Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
         }
         tv_name_small.setText(CurrentAccount.getNickname());
+        tv_school.setText(CurrentAccount.getSchoolName());
     }
 
     @Override
