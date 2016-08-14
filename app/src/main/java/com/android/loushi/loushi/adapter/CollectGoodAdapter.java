@@ -54,7 +54,7 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
 
     @Override
     public void onBindViewHolder(final CollectGoodViewHolder holder, final int position) {
-        holder.img_good.setAlpha(200);
+        //holder.img_good.setAlpha(200);
         if(type.equals("3")) {
             final UserCollectionsJson.BodyBean.GoodsBean goodsBean = beanList.get(position).getGoods();
             holder.tv_name.setText(goodsBean.getName());

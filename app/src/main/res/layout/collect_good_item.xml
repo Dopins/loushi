@@ -15,12 +15,20 @@
         card_view:cardElevation="3dp"
 
         >
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
     <ImageView
         android:layout_width="104dp"
         android:layout_height="133dp"
-        android:src="@drawable/test_collect_good"
+        android:src="@drawable/loading_small"
         android:id="@+id/collect_good_item_img_good"
-        android:background="@drawable/bg_collect_item"/>
+        android:background="@drawable/bg_collect_item"/> <LinearLayout
+            android:layout_width="104dp"
+            android:layout_height="133dp"
+            android:background="#80A1C1C2"></LinearLayout></FrameLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -49,14 +57,14 @@
 
 
 
-    android:text="222"
+    android:text=""
         android:textColor="#ffffffff"
     />
     </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="木头质感"
+        android:text=""
         android:textSize="10dp"
         android:id="@+id/collect_good_item_tv_name"
         android:textColor="#ffffffff"
@@ -73,7 +81,7 @@
         <CheckBox
             android:id="@+id/collect_good_item_btn_like"
 
-            android:button="@drawable/selector_zan"
+            android:button="@drawable/selector_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -81,7 +89,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="555"
+        android:text=""
         android:textColor="#ffffff"
         android:layout_toRightOf="@+id/collect_good_item_btn_like"
         android:id="@+id/collect_good_item_tv_like_count"
