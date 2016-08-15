@@ -11,6 +11,6 @@
     <dimen name="default_collapsed_text_size">18sp</dimen>
     <dimen name="default_expanded_text_size">19sp</dimen>
 
-    <dimen name="toolbar_height">80dp</dimen>
-    <dimen name="toolbar_padding_height">25dp</dimen>
+    <dimen name="toolbar_height">55dp</dimen>
+    <dimen name="toolbar_padding_height">0dp</dimen>
 </resources>

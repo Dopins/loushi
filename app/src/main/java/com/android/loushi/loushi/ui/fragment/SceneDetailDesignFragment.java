@@ -44,7 +44,7 @@ import okhttp3.Response;
 public class SceneDetailDesignFragment extends BaseFragment {
     private WebView webView;
     private LinearLayout collect_bar;
-   private RelativeLayout layout_scene_design;
+    private RelativeLayout layout_scene_design;
     private LinearLayout collect;
     private LinearLayout comment;
     private LinearLayout share;
@@ -127,19 +127,19 @@ public class SceneDetailDesignFragment extends BaseFragment {
             public boolean onTouch(View v, MotionEvent event) {
                 //nestedScrollView.requestDisallowInterceptTouchEvent(true);
                 int action = event.getActionMasked();
-                 Log.e("nest", webView.getScrollY() + "");
+                Log.e("nest", webView.getScrollY() + "");
                 //webView.getScrollY();
                 switch (action){
                     case MotionEvent.ACTION_DOWN:
-                         downX=(int)event.getY();
+                        downX=(int)event.getY();
                         break;
                     case MotionEvent.ACTION_MOVE:
 
                         int moveY=(int)event.getY();
 //                            if(Math.abs((moveY-downX))> ViewConfiguration.getTouchSlop()) {
-                                if(SceneDetailActivity.state==SceneDetailActivity.CollapsingToolbarLayoutState.COLLAPSED)
-                                nestedScrollView.requestDisallowInterceptTouchEvent(true);
-                            //}
+                        if(SceneDetailActivity.state==SceneDetailActivity.CollapsingToolbarLayoutState.COLLAPSED)
+                            nestedScrollView.requestDisallowInterceptTouchEvent(true);
+                        //}
                     case MotionEvent.ACTION_UP:
                         int nowY=(int)event.getY();
                         Log.e("nest1",nowY+"^"+downX+"^"+ViewConfiguration.getTouchSlop());

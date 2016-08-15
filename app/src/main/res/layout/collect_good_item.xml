@@ -65,9 +65,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
-        android:textSize="10dp"
+        android:textSize="15sp"
         android:id="@+id/collect_good_item_tv_name"
         android:textColor="#ffffffff"
+        android:maxLength="5"
         android:layout_marginTop="92dp"
         android:layout_marginLeft="12dp"/>
     <LinearLayout
@@ -93,7 +94,7 @@
         android:textColor="#ffffff"
         android:layout_toRightOf="@+id/collect_good_item_btn_like"
         android:id="@+id/collect_good_item_tv_like_count"
-        android:layout_marginLeft="10dp"
+
        />
 </LinearLayout>
 

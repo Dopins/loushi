@@ -34,7 +34,8 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/program_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="@dimen/toolbar_height"
+        android:paddingTop="@dimen/toolbar_padding_height"
         app:contentInsetStart="0dp"
         >
         <ImageView

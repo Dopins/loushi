@@ -1,6 +1,7 @@
 package com.android.loushi.loushi.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
@@ -15,12 +16,15 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.AdViewpagerAdapter;
@@ -48,7 +52,7 @@ import okhttp3.Response;
  * Created by Administrator on 2016/7/24.
  */
 public class SceneDetailActivity extends  BaseActivity {
-    private CarouselViewPager carouselViewPager;
+    private ImageView carouselViewPager;
     private SceneDetailGoodFragment sceneDetailGoodFragment;
     private SceneDetailDesignFragment sceneDetailDesignFragment;
     private CollapsingToolbarLayout collapsing_toolbar_layout;
@@ -77,11 +81,9 @@ public class SceneDetailActivity extends  BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scene_detail);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//
-//            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//        }
+
+
+
         if(getIntent().getStringExtra("SCENE_STRING")!=null)
         sceneJsonString = getIntent().getStringExtra("SCENE_STRING");
         Log.e("sceneJson",sceneJsonString);
@@ -132,32 +134,32 @@ public class SceneDetailActivity extends  BaseActivity {
     }
 
     private void initView() {
-        carouselViewPager =(CarouselViewPager)findViewById(R.id.ad_viewPager);
+        carouselViewPager =(ImageView)findViewById(R.id.ad_viewPager);
         viewPager = (ViewPager)findViewById(R.id.main_vp_container);
-        ImageView view1 = (ImageView) LayoutInflater.from(
-                getApplicationContext()).inflate(R.layout.ad_image, null);
-        ImageView view2 = (ImageView) LayoutInflater.from(
-                getApplicationContext()).inflate(R.layout.ad_image, null);
-        ImageView view3 = (ImageView) LayoutInflater.from(
-                getApplicationContext()).inflate(R.layout.ad_image, null);
-        ImageView view4 = (ImageView) LayoutInflater.from(
-                getApplicationContext()).inflate(R.layout.ad_image, null);
+//        ImageView view1 = (ImageView) LayoutInflater.from(
+//                getApplicationContext()).inflate(R.layout.ad_image, null);
+//        ImageView view2 = (ImageView) LayoutInflater.from(
+//                getApplicationContext()).inflate(R.layout.ad_image, null);
+//        ImageView view3 = (ImageView) LayoutInflater.from(
+//                getApplicationContext()).inflate(R.layout.ad_image, null);
+//        ImageView view4 = (ImageView) LayoutInflater.from(
+//                getApplicationContext()).inflate(R.layout.ad_image, null);
         ArrayList<ImageView> views = new ArrayList<ImageView>();
         //ImageView img = new ImageView(getApplicationContext());
 
-        views.add(view1);
-        views.add(view2);
-        views.add(view3);
-        views.add(view4);
+//        views.add(view1);
+//        views.add(view2);
+//        views.add(view3);
+//        views.add(view4);
 
 
-        AdViewpagerAdapter adViewpagerAdapter = new AdViewpagerAdapter(views);
+//        AdViewpagerAdapter adViewpagerAdapter = new AdViewpagerAdapter(views);
 
-        carouselViewPager.setAdapter(adViewpagerAdapter);
-        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view1);
-        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view2);
+        //carouselViewPager.setAdapter(adViewpagerAdapter);
+        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).fit().placeholder(R.drawable.loading_big).into(carouselViewPager);
+        /*Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view2);
         Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view3);
-        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view4);
+        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view4);*/
     }
     private void initTablayout(){
         collapsing_toolbar_layout = (CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar_layout);
@@ -186,6 +188,7 @@ public class SceneDetailActivity extends  BaseActivity {
         //为TabLayout添加tab名称
         tabLayout.addTab(tabLayout.newTab().setText("设计"));
         tabLayout.addTab(tabLayout.newTab().setText("购买"));
+        tabLayout.setTabTextColors(R.color.hint, Color.BLACK);
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), list_fragment, list_title);
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

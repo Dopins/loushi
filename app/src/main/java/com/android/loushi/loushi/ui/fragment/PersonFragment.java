@@ -2,6 +2,7 @@ package com.android.loushi.loushi.ui.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -132,7 +134,20 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         iniDatas();
        if(!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
-        //mToolbar.setTitle("loushi");
+        //mToolbar.setTitle("loushi")
+
+//        ViewGroup.LayoutParams linearParams =(ViewGroup.LayoutParams) mToolbar.getLayoutParams();
+//
+//        linearParams.height +=25;
+//        mToolbar.setLayoutParams(linearParams);
+//        mToolbar.setPadding(0,25,0,0);
+    }
+    private void setStatusBar(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //mToolbar.setLayoutParams();
+            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
     }
 
     private void iniDatas() {
@@ -172,6 +187,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         initButton();
         initAppBar();
     }
+
 
     private void initTablayout() {
         mViewPager = (ViewPager) getView().findViewById(R.id.main_vp_container);
@@ -262,7 +278,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     }
 
     public void initToolBar() {
-        mToolbar = (Toolbar) getView().findViewById(R.id.program_toolbar);
+        mCollapsingToolbarLayout =(CollapsingToolbarLayout)getView().findViewById(R.id.collapsing_toolbar_layout);
+        mToolbar = (Toolbar) mCollapsingToolbarLayout.findViewById(R.id.program_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         mToolbar.setTitle("");
         mtoorbar_tab = (SlidingTabLayout) getView().findViewById(R.id.toolbar_tab);
@@ -317,7 +334,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                         Log.e("coll", "折叠");
                         tv_feed.setVisibility(View.GONE);
                         img_head_small.setVisibility(View.VISIBLE);
-                        tv_name_small.setVisibility(View.VISIBLE);
+                        //tv_name_small.setVisibility(View.VISIBLE);
                         //collapsingToolbarLayout.setTitle("");//设置title不显示
                         //playButton.setVisibility(View.VISIBLE);//隐藏播放按钮
                         state = CollapsingToolbarLayoutState.COLLAPSED;//修改状态标记为折叠
@@ -327,7 +344,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                         Log.e("coll", "中间");
                         if (state == CollapsingToolbarLayoutState.COLLAPSED) {
                             img_head_small.setVisibility(View.GONE);
-                            tv_name_small.setVisibility(View.GONE);
+                            //tv_name_small.setVisibility(View.GONE);
                             tv_feed.setVisibility(View.VISIBLE);
                             //playButton.setVisibility(View.GONE);//由折叠变为中间状态时隐藏播放按钮
                         }

@@ -25,7 +25,7 @@
     <application
         android:name=".util.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo_loushi"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
@@ -43,8 +43,10 @@
             android:name=".ui.activity.SearchActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".ui.activity.TopicItemActivity" />
-        <activity android:name=".ui.activity.SceneDetailActivity" />
-        <activity android:name=".ui.activity.GoodDetailActivity" />
+        <activity android:name=".ui.activity.SceneDetailActivity"
+            android:theme="@style/AppThemeFull"/>
+        <activity android:name=".ui.activity.GoodDetailActivity"
+            android:theme="@style/AppThemeFull"/>
         <activity android:name=".ui.activity.ForgetPasswordActivity" />
         <activity android:name=".ui.activity.PersonalInformationActivity" />
         <activity android:name=".ui.activity.CommentActivity" />
