@@ -13,8 +13,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerVertical="true"
-        android:layout_marginRight="16dp"
-        tools:src="@drawable/bs" />
+        android:layout_marginRight="16dp"/>
 
     <LinearLayout
         android:id="@+id/layout_content"

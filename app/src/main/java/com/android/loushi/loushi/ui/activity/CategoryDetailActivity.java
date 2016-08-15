@@ -1,6 +1,8 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -39,6 +41,9 @@ import okhttp3.Response;
  * Created by Administrator on 2016/7/29.
  */
 public class CategoryDetailActivity extends BaseActivity implements View.OnClickListener {
+
+    private static final String TAG="CategoryDetail";
+
     private WebView webView;
     private LinearLayout collect_bar;
     private LinearLayout collect;
@@ -58,7 +63,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
     private Toolbar toolbar;
     private ImageView back;
     private TextView tv_title;
-    private WebView WebView;
+    private ProgressDialog progressDialog;
 
     //private StrategyJson.BodyBean strategyBean;
     @Override
@@ -95,10 +100,18 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
     }
 
     private void initView() {
+        initProgress();
         initWebView();
         initToolBar();
         bindCollectBarView();
 
+    }
+
+    private void initProgress(){
+        progressDialog=new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("玩命加载中...");
+        progressDialog.setMax(100);
     }
 
     private void initWebView() {
@@ -106,14 +119,17 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
         webView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
                 super.onProgressChanged(view, progress);
+                if(progress>=100&&progressDialog.isShowing())
+                    progressDialog.dismiss();
             }
         });
-        webView.setWebViewClient(new WebViewClient() {
 
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-            }
+        //设置 缓存模式
+        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        // 开启 DOM storage API 功能
+        webView.getSettings().setDomStorageEnabled(true);
+
+        webView.setWebViewClient(new WebViewClient() {
 
             public boolean shouldOverrideUrlLoading(WebView view, final String url) {
                 //获取web跳转的url 根据 url的后缀来确定商品id
@@ -132,6 +148,12 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
                 } else
                     return false;
 
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                progressDialog.show();
             }
         });
 

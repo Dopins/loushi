@@ -234,7 +234,7 @@ public class MainActivity extends BaseActivity {
 
         TextView textView = (TextView) view.findViewById(R.id.textview);
         textView.setText(mTextviewArray[index]);
-
+//        textView.setTextColor(getResources().getColor(R.drawable.tab_text_color));
         return view;
     }
 

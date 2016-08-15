@@ -11,15 +11,18 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.jsonbean.GoodsJson;
+import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -99,7 +102,7 @@ public class GoodDetailAdapter extends RecyclerView.Adapter<GoodDetailAdapter.Go
         dialog.show();
     }
 
-    private class InnerViewPager extends PagerAdapter implements PhotoViewAttacher.OnPhotoTapListener{
+    private class InnerViewPager extends PagerAdapter implements PhotoViewAttacher.OnPhotoTapListener {
 
         @Override
         public int getCount() {
@@ -120,23 +123,25 @@ public class GoodDetailAdapter extends RecyclerView.Adapter<GoodDetailAdapter.Go
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             PhotoView img_big = new PhotoView(context);
-            img_big.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
-                    ,ViewGroup.LayoutParams.MATCH_PARENT));
+            img_big.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
+                    ,ViewGroup.LayoutParams.WRAP_CONTENT));
             Picasso.with(context).load(list.get(position).getUrl()).into(img_big);
             PhotoViewAttacher attacher = new PhotoViewAttacher(img_big);
-            attacher.update();
             attacher.setOnPhotoTapListener(this);
+            attacher.update();
             container.addView(img_big);
             return img_big;
         }
 
         @Override
         public void onPhotoTap(View view, float x, float y) {
+            Toast.makeText(context,"onPhotoTap",Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         }
 
         @Override
         public void onOutsidePhotoTap() {
+            Toast.makeText(context,"onPhotoTap",Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         }
     }

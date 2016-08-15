@@ -45,9 +45,10 @@
                         android:layout_marginLeft="10dp"
                         android:ellipsize="end"
                         android:maxLines="1"
+                        android:maxLength="8"
                         tools:text="标题标题标题标题标题标题标题标题标题"
                         android:textColor="@color/colorTitle"
-                        android:textSize="15sp" />
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/date"

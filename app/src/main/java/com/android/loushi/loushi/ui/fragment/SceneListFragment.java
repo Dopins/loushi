@@ -120,7 +120,6 @@ public class SceneListFragment extends LazyFragment {
     }
     protected void initSearchList(){
         get_total = 0;
-        bodyBeanList.clear();
         has_data=true;
         addSomething2Scene();
     }

@@ -23,6 +23,7 @@ import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.cache.CacheMode;
 
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import okhttp3.Response;
 /**
  * Created by binpeiluo on 2016/7/21 0021.
  */
-public class TipsFragment extends LazyFragment {
+public class TipsFragment extends LazyFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "TipsFragment";
 
@@ -61,15 +62,17 @@ public class TipsFragment extends LazyFragment {
     }
 
     private void loadData(boolean isClean) {
-        loadData(MainActivity.user_id, mSkip, mTake,isClean);
+        loadData(MainActivity.user_id, mSkip, mTake, isClean);
     }
 
 
     private void loadData(String userId, Integer skip, final Integer take, final boolean isClean) {
 
-        Log.i("test", "tips load --skip,take==" + skip + "," + take + ",,,isFirstShow==" + isFirstShow);
+//        Log.i("test", "tips load --skip,take==" + skip + "," + take + ",,,isFirstShow==" + isFirstShow);
         OkHttpUtils.post(UrlConstant.TIPSCURL)
                 .tag(this)
+                .cacheKey("tips")
+                .cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
                 .params(KeyConstant.USER_ID, userId)
                 .params(KeyConstant.SKIP, skip.toString())
                 .params(KeyConstant.TAKE, take.toString())
@@ -79,7 +82,7 @@ public class TipsFragment extends LazyFragment {
 
                         Log.i(TAG, "onResponse-- " + new Gson().toJson(strategyJson));
                         if (strategyJson.getState()) {
-                            if(isClean)
+                            if (isClean)
                                 mTipsList.clear();
                             mTipsList.addAll(strategyJson.getBody());
                             mAdapter.notifyDataSetChanged();
@@ -94,17 +97,7 @@ public class TipsFragment extends LazyFragment {
     }
 
     private void initView() {
-
-        initRecycleView();
-
-        addRefreshListener();
-        addOnBottomListener();
-        addItemClickListener();
-
-    }
-
-    private void initRecycleView() {
-
+        //init swipe
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
@@ -112,50 +105,37 @@ public class TipsFragment extends LazyFragment {
                 true,
                 0,
                 (int) TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,24,getResources().getDisplayMetrics()));
+                        TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+        swipeRefreshLayout.setOnRefreshListener(this);
+        //init recylerview
         recycleViewTips = (RecyclerView) findViewById(R.id.recycleView);
         mAdapter = new TopicItemAdapter(getContext(),
                 mTipsList,
                 TopicItemAdapter.AdapterType.TIPS);
-        recycleViewTips.setLayoutManager(new LinearLayoutManager(getContext()));
-        recycleViewTips.addItemDecoration(new SpaceItemDecoration(getContext(), 10));
-        recycleViewTips.setAdapter(mAdapter);
-    }
-
-    private void addOnBottomListener() {
-        recycleViewTips.addOnScrollListener(new MyRecyclerOnScrollListener() {
-            @Override
-            public void onBottom() {
-//                loadData(tempUserID,mSkip,mTake);
-            }
-        });
-
-    }
-
-    private void addItemClickListener() {
         mAdapter.setmOnItemClickListener(new TopicItemAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 Intent intent = new Intent(getActivity(), CategoryDetailActivity.class);
                 String jsonString = new Gson().toJson(mTipsList.get(position));
-                Log.e("jsonstring", jsonString);
                 intent.putExtra(CategoryDetailActivity.TYPE, CategoryFragment.TYPE_TIP);
                 intent.putExtra(CategoryDetailActivity.JSONSTRING, jsonString);
                 startActivity(intent);
             }
         });
-    }
-
-    private void addRefreshListener() {
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        recycleViewTips.setLayoutManager(new LinearLayoutManager(getContext()));
+        recycleViewTips.addItemDecoration(new SpaceItemDecoration(getContext(), 10));
+        recycleViewTips.setAdapter(mAdapter);
+        recycleViewTips.addOnScrollListener(new MyRecyclerOnScrollListener() {
             @Override
-            public void onRefresh() {
-                mSkip = 0;
-                loadData(true);
+            public void onBottom() {
+                loadData(false);
             }
         });
     }
 
-
+    @Override
+    public void onRefresh() {
+        mSkip = 0;
+        loadData(true);
+    }
 }

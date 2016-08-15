@@ -23,6 +23,7 @@ import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.cache.CacheMode;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -92,6 +93,8 @@ public class MyMessageActivity extends BaseActivity implements
     private void loadComment(String user_id,int skip,int take) {
         OkHttpUtils.post(UrlConstant.MYMESSAGE)
                 .tag(this)
+                .cacheKey("message")
+                .cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
                 .params(KeyConstant.USER_ID, user_id)
 //                .params(KeyConstant.SKIP, skip+"")
 //                .params(KeyConstant.TAKE, take+"")

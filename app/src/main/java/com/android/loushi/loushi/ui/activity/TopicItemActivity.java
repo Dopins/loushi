@@ -25,6 +25,7 @@ import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.cache.CacheMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,6 +119,8 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
     private void loadSomeData(String userID, Integer groupId, Integer skip, Integer take,final boolean isClean) {
         OkHttpUtils.post(UrlConstant.TOPICURL)
                 .tag(this)
+                .cacheKey("topicItem")
+                .cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
                 .params(KeyConstant.USER_ID, userID)
                 .params(KeyConstant.TOPIC_GROUP_ID, groupId+"")
                 .params(KeyConstant.SKIP, skip.toString())
@@ -145,7 +148,6 @@ public class TopicItemActivity extends BaseActivity implements View.OnClickListe
                 //Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(TopicItemActivity.this, CategoryDetailActivity.class);
                 String jsonString = new Gson().toJson(mTopicList.get(position));
-                Log.e("jsonstring", jsonString);
                 intent.putExtra(CategoryDetailActivity.TYPE, CategoryFragment.TYPE_TOPIC);
                 intent.putExtra(CategoryDetailActivity.JSONSTRING, jsonString);
                 startActivity(intent);

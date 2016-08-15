@@ -29,14 +29,12 @@ public class CategoryFragment extends BaseFragment {
     public static final int TYPE_TIP=1;
 
     private View rootView;
-    private Toolbar toolbar;
     private TabLayout tablayout_category;
     private ViewPager viewPager_category;
 
     private List<String> mTitleList;
     private List<Fragment> mFragmentList;
     private CategoryViewPagerAdapter mAdapter;
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -61,27 +59,24 @@ public class CategoryFragment extends BaseFragment {
 
     private void initView(){
 
+        //init title
         mTitleList=new ArrayList<String>();
         mTitleList.add("专题");
         mTitleList.add("贴士");
+        //add fragment
         mFragmentList=new ArrayList<Fragment>();
         mFragmentList.add(new TopicFragment());
         mFragmentList.add(new TipsFragment());
-//        mFragmentList.add(new StyleFragment());
-
-
-        toolbar= (Toolbar) rootView.findViewById(R.id.toolbar);
+        //init tablayout
         tablayout_category= (TabLayout) rootView.findViewById(R.id.tablayout_category);
         tablayout_category.setTabMode(TabLayout.MODE_FIXED);
         viewPager_category= (ViewPager) rootView.findViewById(R.id.viewPager_category);
-
         for(String title:mTitleList){
             tablayout_category.addTab(tablayout_category.newTab().setText(title));
         }
 
         mAdapter=new CategoryViewPagerAdapter(
                 getChildFragmentManager(),mTitleList,mFragmentList);
-//                getActivity().getSupportFragmentManager(),mTitleList,mFragmentList);
         viewPager_category.setAdapter(mAdapter);
         tablayout_category.setupWithViewPager(viewPager_category);
     }

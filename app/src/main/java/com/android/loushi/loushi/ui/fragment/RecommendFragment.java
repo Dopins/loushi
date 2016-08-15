@@ -10,6 +10,7 @@ import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.adapter.RecommendRecycleViewAdapter;
 import com.android.loushi.loushi.callback.JsonCallback;
@@ -23,10 +24,12 @@ import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.cache.CacheMode;
 import com.lzy.okhttputils.cookie.store.PersistentCookieStore;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -42,35 +45,37 @@ public class RecommendFragment extends LazyFragment {
     private SwipeRefreshLayout swipeRefreshLayout;  //下拉刷新组件
 
     private String rDate;
-    private final int oneTakeNum = 3 ;
+    private final int oneTakeNum = 3;
 
     private boolean has_data;
     SimpleDateFormat simpleDateFormat;
+
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
         setContentView(R.layout.fragment_recommend);
         init();
     }
-//    protected void onDestroyViewLazy() {
+
+    //    protected void onDestroyViewLazy() {
 //        Log.e("tag","onDestroyViewLazy");
 //    }
     private void init() {
-        boolean have_data=false;
-        if(bodyBeanList==null){
-            has_data=true;
+        boolean have_data = false;
+        if (bodyBeanList == null) {
+            has_data = true;
             bodyBeanList = new ArrayList<>();
-            Date date=new Date();
+            Date date = new Date();
             simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            rDate=simpleDateFormat.format(date.getTime()).substring(0,10);
-        }else{
-            have_data=true;
+            rDate = simpleDateFormat.format(date.getTime()).substring(0, 10);
+        } else {
+            have_data = true;
         }
-        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_widget);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_widget);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
 
-        if(recommendRecycleViewAdapter==null)
-        recommendRecycleViewAdapter = new RecommendRecycleViewAdapter(getContext(), bodyBeanList);
+        if (recommendRecycleViewAdapter == null)
+            recommendRecycleViewAdapter = new RecommendRecycleViewAdapter(getContext(), bodyBeanList);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycleView);
         mRecyclerView.addItemDecoration(new SpacesItemDecoration(0, 0, 0, 10));//设置recycleview间距
@@ -80,13 +85,14 @@ public class RecommendFragment extends LazyFragment {
         setClickListener();
         setRefreshingListener();
         setLoadMoreListener();
-        if(have_data){
+        if (have_data) {
             recommendRecycleViewAdapter.notifyDataSetChanged();
-        }else{
+        } else {
             addSomething2Scene();
         }
     }
-    private void setClickListener(){
+
+    private void setClickListener() {
         recommendRecycleViewAdapter.setOnItemClickListener(new RecommendRecycleViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -118,6 +124,7 @@ public class RecommendFragment extends LazyFragment {
             }
         });
     }
+
     private void setLoadMoreListener() {
         mRecyclerView.addOnScrollListener(new MyRecyclerOnScrollListener() {
             @Override
@@ -129,7 +136,7 @@ public class RecommendFragment extends LazyFragment {
         });
     }
 
-    private void setRefreshingListener(){
+    private void setRefreshingListener() {
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -138,9 +145,7 @@ public class RecommendFragment extends LazyFragment {
                 Date date = new Date();
                 rDate = simpleDateFormat.format(date.getTime()).substring(0, 10);
 
-                bodyBeanList.clear();
                 addSomething2Scene();
-                recommendRecycleViewAdapter.notifyDataSetChanged();
                 //Toast.makeText(getContext(), "下拉更新完成", Toast.LENGTH_SHORT).show();
             }
         });
@@ -148,47 +153,48 @@ public class RecommendFragment extends LazyFragment {
 
     private void addSomething2Scene() {
 
-            GetSomeScene(oneTakeNum);
+        GetSomeScene(oneTakeNum);
 
     }
+
     private void GetSomeScene(int take) {
 
         swipeRefreshLayout.setRefreshing(true);
-        OkHttpUtils.post(BaseActivity.url+"base/recommendation")
+        OkHttpUtils.post(BaseActivity.url + "base/recommendation")
                 // 请求方式和请求url
-                .params("user_id",BaseActivity.user_id)
+                .cacheKey("recomment")
+                .cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
+                .params("user_id", BaseActivity.user_id)
                 .params("rdate", rDate)
                 .params("take", take + "").cacheKey("recommend").cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
                 .execute(new JsonCallback<RecommendJson>(RecommendJson.class) {
                     @Override
                     public void onResponse(boolean b, RecommendJson recommendJson, Request request, Response response) {
                         if (recommendJson.getState()) {
-                            Log.e("recommendjson",new Gson().toJson(recommendJson));
+                            Log.e("recommendjson", new Gson().toJson(recommendJson));
                             if (recommendJson.getBody().size() < oneTakeNum) has_data = false;
 
-                          //  if (isEmpty(recommendJson)) {
-//                                Log.e("recomend","没数据");
-//                                has_data = false;
-//                            } else {
-                                Log.e("recomend","数据");
-                                bodyBeanList.addAll(recommendJson.getBody());
-                                rDate = bodyBeanList.get(bodyBeanList.size() - 1).getRDate().substring(0, 10);
-                                Log.e("tag",rDate);
-                                recommendRecycleViewAdapter.notifyDataSetChanged();
-                                Log.e("recomend", "更新");
-                           // }
-                            swipeRefreshLayout.setRefreshing(false);
+                            bodyBeanList.clear();
+                            Log.e("recomend", "数据");
+                            bodyBeanList.addAll(recommendJson.getBody());
+                            rDate = bodyBeanList.get(bodyBeanList.size() - 1).getRDate().substring(0, 10);
+                            Log.e("tag", rDate);
+                            recommendRecycleViewAdapter.notifyDataSetChanged();
+                            Log.e("recomend", "更新");
 
                         } else {
                             Log.d("error", recommendJson.getReturn_info());
                         }
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
     }
-    private boolean isEmpty(RecommendJson recommendJson){
-        for(int i=0;i<recommendJson.getBody().size();i++){
-            RecommendJson.BodyBean body=recommendJson.getBody().get(i);
-            if(body.getScene()==null&&body.getStrategy()==null&&body.getTopic()==null) return true;
+
+    private boolean isEmpty(RecommendJson recommendJson) {
+        for (int i = 0; i < recommendJson.getBody().size(); i++) {
+            RecommendJson.BodyBean body = recommendJson.getBody().get(i);
+            if (body.getScene() == null && body.getStrategy() == null && body.getTopic() == null)
+                return true;
         }
         return false;
     }

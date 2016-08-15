@@ -44,14 +44,15 @@ public class SceneListMainPageFragment extends SceneListFragment {
                     @Override
                     public void onResponse(boolean b, SceneJson sceneJson, Request request, Response response) {
                         if (sceneJson.getState()) {
+                            bodyBeanList.clear();
                             bodyBeanList.addAll(sceneJson.getBody());
                             get_total += bodyBeanList.size();
                             if (sceneJson.getBody().size() < oneTakeNum) has_data = false;
                             sceneRecyclerViewAdapter.notifyDataSetChanged();
-                            swipeRefreshLayout.setRefreshing(false);
                         } else {
                             Log.d("error", sceneJson.getReturn_info());
                         }
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
     }

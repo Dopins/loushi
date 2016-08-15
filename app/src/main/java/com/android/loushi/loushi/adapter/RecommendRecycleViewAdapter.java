@@ -103,7 +103,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         false));
             } else if (viewType == ITEM_TYPE_TIP) {
                 return new TipViewHolder(LayoutInflater.from(
-                        context).inflate(R.layout.cardview_tip, parent,
+                        context).inflate(R.layout.cardview_topic, parent,
                         false));
             } else if (viewType == ITEM_TYPE_TOPIC){
                 return new TopicViewHolder(LayoutInflater.from(
@@ -182,7 +182,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
             holder.dateText.setText("昨天");
         }else{
             String str_date=bodyBeanList.get(position).getRDate().substring(0,10);
-            holder.dateText.setText(str_date);
+//            holder.dateText.setText(str_date);
         }
 
     }

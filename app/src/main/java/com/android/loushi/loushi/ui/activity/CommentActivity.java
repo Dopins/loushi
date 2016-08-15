@@ -26,6 +26,7 @@ import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.cache.CacheMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,10 +131,10 @@ public class CommentActivity extends BaseActivity implements
                             mCommentList.clear();
                             mCommentList.addAll(commentJson.getBody());
                             mAdapter.notifyDataSetChanged();
-                            swipeRefreshLayout.setRefreshing(false);
                             skipComment();
                         } else
-                            Toast.makeText(CommentActivity.this, "请重试", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CommentActivity.this, "请重试"+commentJson.getReturn_info(), Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
     }
@@ -150,8 +151,8 @@ public class CommentActivity extends BaseActivity implements
         recycleView = (RecyclerView) findViewById(R.id.recycleView);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setProgressViewOffset(true, 0, 24);
-        swipeRefreshLayout.setEnabled(false);
-        swipeRefreshLayout.setColorSchemeColors(R.color.colorPrimary);
+        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         swipeRefreshLayout.setOnRefreshListener(this);
         manager = new LinearLayoutManager(this);
         recycleView.setLayoutManager(manager);
@@ -207,7 +208,7 @@ public class CommentActivity extends BaseActivity implements
         textViewTitle = (TextView) findViewById(R.id.textView_title);
         imageViewSearch = (ImageView) findViewById(R.id.imageView_search);
         textViewTitle.setText("评论");
-        imageViewBack.setImageResource(R.drawable.arrow_back_s);
+        imageViewBack.setImageResource(R.drawable.arrow_back);
         imageViewBack.setOnClickListener(this);
         imageViewSearch.setVisibility(View.GONE);
     }
@@ -272,9 +273,6 @@ public class CommentActivity extends BaseActivity implements
     @Override
     public void onRefresh() {
         loadComment();
-        swipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(this, "下拉刷新成功", Toast.LENGTH_SHORT).show();
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override

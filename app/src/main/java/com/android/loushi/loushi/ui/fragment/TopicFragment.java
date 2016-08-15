@@ -22,6 +22,7 @@ import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.cache.CacheMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,8 @@ public class TopicFragment extends LazyFragment implements SwipeRefreshLayout.On
     private void loadTopicGroup(final boolean isClean){
         OkHttpUtils.post(UrlConstant.TOPICGROUPURL)
                 .tag(this)
+                .cacheKey("topic")
+                .cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
                 .execute(new JsonCallback<TopicGroupJson>(TopicGroupJson.class){
                     @Override
                     public void onResponse(boolean isFromCache, TopicGroupJson topicGroupJson, Request request, @Nullable Response response) {
@@ -80,7 +83,7 @@ public class TopicFragment extends LazyFragment implements SwipeRefreshLayout.On
     }
 
     private void initView(){
-
+        //init swipe
         swipeRefreshLayout= (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
@@ -90,6 +93,7 @@ public class TopicFragment extends LazyFragment implements SwipeRefreshLayout.On
                 (int) TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,24,getResources().getDisplayMetrics()));
         swipeRefreshLayout.setOnRefreshListener(this);
+        //init recyclerview
         recyclerView= (RecyclerView) findViewById(R.id.recycleView);
         mAdapter=new TopicRecycleViewAdapter(getContext(),topicList);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(),1));
@@ -115,6 +119,6 @@ public class TopicFragment extends LazyFragment implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
-        loadTopicGroup();
+        loadTopicGroup(true);
     }
 }
