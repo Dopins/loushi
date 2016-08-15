@@ -21,7 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_phone"
-        android:text="18819475167"
         android:ems="13"
         android:inputType="phone"
         android:singleLine="true"/>
@@ -41,7 +40,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/text_keyword"
         android:ems="10"
-        android:text="l123321"
         android:inputType="textPassword"
         android:singleLine="true"/>
 

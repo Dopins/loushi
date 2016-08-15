@@ -40,8 +40,7 @@ public class SceneDetailGoodFragment extends  LazyFragment {
     }
 
     private void init() {
-        recyclerView = (RecyclerView)getView().findViewById(R.id.recycleView);
-
+        recyclerView = (RecyclerView)findViewById(R.id.recycleView);
         sceneDetailGoodAdapter = new SceneDetailGoodAdapter(getContext(),bodyBeanList);
         getSceneGood();
         final GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);

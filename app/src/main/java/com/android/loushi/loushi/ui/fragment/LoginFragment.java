@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -288,19 +289,21 @@ public class LoginFragment extends Fragment {
                 if (!Tool.canGetUserInfo(platform)) {
                     i++;
                     continue;
-
                 }
-
                 if (platform instanceof CustomPlatform) {
                     i++;
                     continue;
                 }
-
-
                 imgbtn.get(i).setTag(platform);
                 imgbtn.get(i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //TODO 微信登陆尚未支持
+                        if(v.getId()==R.id.btn_weixin){
+                            Toast.makeText(getContext(),"敬请期待",Toast.LENGTH_SHORT).show();
+                            return ;
+                        }
+
                         Object tag = v.getTag();
                         if (tag != null) {
                             Platform platform = (Platform) tag;

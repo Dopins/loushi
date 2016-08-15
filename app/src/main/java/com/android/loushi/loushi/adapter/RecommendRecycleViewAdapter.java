@@ -206,7 +206,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
         adViewpagerAdapter.setOnItemClickListener(new AdViewpagerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(view.getContext(), "点击adItem" + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(view.getContext(), "点击adItem" + position, Toast.LENGTH_SHORT).show();
             }
         });
         viewPager.setAdapter(adViewpagerAdapter);

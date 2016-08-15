@@ -128,6 +128,7 @@ public class GoodDetailAdapter extends RecyclerView.Adapter<GoodDetailAdapter.Go
             Picasso.with(context).load(list.get(position).getUrl()).into(img_big);
             PhotoViewAttacher attacher = new PhotoViewAttacher(img_big);
             attacher.setOnPhotoTapListener(this);
+
             attacher.update();
             container.addView(img_big);
             return img_big;
@@ -135,13 +136,11 @@ public class GoodDetailAdapter extends RecyclerView.Adapter<GoodDetailAdapter.Go
 
         @Override
         public void onPhotoTap(View view, float x, float y) {
-            Toast.makeText(context,"onPhotoTap",Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         }
 
         @Override
         public void onOutsidePhotoTap() {
-            Toast.makeText(context,"onPhotoTap",Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         }
     }
