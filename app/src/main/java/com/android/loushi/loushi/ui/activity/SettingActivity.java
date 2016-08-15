@@ -48,6 +48,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private LinearLayout ll_clear_cache;
     private LinearLayout ll_feedback;
     private LinearLayout ll_about_us;
+    private String url="";
     private TextView tv_cache;
     @Override
     protected int getLayoutId() {
@@ -144,7 +145,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             xmlPullParser.setInput(new StringReader(xmlData));
             int eventType = xmlPullParser.getEventType();
             String version="";
-            String url = "";
+
             String description="";
             while(eventType!= XmlPullParser.END_DOCUMENT){
                 String nodeName = xmlPullParser.getName();
@@ -172,6 +173,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             }
             Log.e("splash",version+"|"+GetVersionCode());
             if (!version.equals(GetVersionCode())){
+                final String finalUrl = url;
                 new AlertDialog.Builder(SettingActivity.this)
                         .setTitle("检测到新版本")
                         .setMessage("message")
@@ -187,7 +189,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Log.e("splash","选择确定");
-                                CheckPermission();
+                                CheckPermission(finalUrl);
                             }
                         })
                         .create()
@@ -211,18 +213,18 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         return "";
 
     }
-    private void CheckPermission(){
+    private void CheckPermission(String url){
         if(Build.VERSION.SDK_INT>=23) {
             if (getApplicationContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 //申请WRITE_EXTERNAL_STORAGE权限
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             } else {
-                downloadApp();
+                downloadApp(url);
             }
         }
         else{
-            downloadApp();
+            downloadApp(url);
         }
 
     }
@@ -232,7 +234,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     &&grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 //用户同意使用write
-                downloadApp();
+                downloadApp(url);
             }else{
                 //用户不同意，自行处理即可
                 //InitTaobao();
@@ -241,9 +243,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             }
         }
     }
-    private void downloadApp(){
+    private void downloadApp(String url){
         DownloadManager dManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        Uri uri = Uri.parse("http://dingphone.ufile.ucloud.com.cn/apk/guanwang/time2plato.apk");
+        Uri uri = Uri.parse(url);
 
         DownloadManager.Request request = new DownloadManager.Request(uri);
 

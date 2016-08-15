@@ -3,9 +3,9 @@
 
 
 
-    <item android:drawable="@drawable/favorite_s" android:state_selected="true"/>
-    <item android:drawable="@drawable/favorite" android:state_selected="false"/>
-    <item android:drawable="@drawable/favorite"/>
+    <item android:drawable="@drawable/shape_s" android:state_selected="true"/>
+    <item android:drawable="@drawable/shape" android:state_selected="false"/>
+    <item android:drawable="@drawable/shape"/>
 
 
 </selector>

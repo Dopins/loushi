@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -65,6 +66,7 @@ public class MainActivity extends BaseActivity {
     private LayoutInflater layoutInflater;
     private Class fragmentArray[] = {SceneFragment.class, CategoryFragment.class, MyFragment.class};
     private String mTextviewArray[] = {"场景", "指南", "我的"};
+    String url = "";
     //定义数组来存放按钮图片
     private int mImageViewArray[] = {
             R.drawable.tab_scene_button,
@@ -103,6 +105,11 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+        }
+
+
 
         initView();
         CheckUpdate();
@@ -142,7 +149,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void autoLogin() {
-        //TODO 第三方登录？？
+
         if (!hasLogin())
             return;
         if(!CurrentAccount.isThird()) {
@@ -313,7 +320,7 @@ public class MainActivity extends BaseActivity {
             xmlPullParser.setInput(new StringReader(xmlData));
             int eventType = xmlPullParser.getEventType();
             String version="";
-            String url = "";
+
             String description="";
             while(eventType!= XmlPullParser.END_DOCUMENT){
                 String nodeName = xmlPullParser.getName();
@@ -341,6 +348,7 @@ public class MainActivity extends BaseActivity {
             }
             Log.e("splash",version+"|"+GetVersionCode());
             if (!version.equals(GetVersionCode())){
+                final String finalUrl = url;
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("检测到新版本")
                         .setMessage(description)
@@ -356,7 +364,7 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Log.e("splash","选择确定");
-                                CheckPermission();
+                                CheckPermission(finalUrl);
                             }
                         })
                         .create()
@@ -377,18 +385,18 @@ public class MainActivity extends BaseActivity {
         }
         return "";
     }
-    private void CheckPermission(){
+    private void CheckPermission(String url){
         if(Build.VERSION.SDK_INT>=23) {
             if (getApplicationContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 //申请WRITE_EXTERNAL_STORAGE权限
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             } else {
-                downloadApp("http://119.147.33.13/beta.myapp.com/myapp/rdmexp/exp/file/comandroidloushi_10_48b260d2-f18e-4da6-9edd-8a055868a975.apk?mkey=57afd712c45c7184&f=8c5d&c=0&p=.apk");
+                downloadApp(url);
             }
         }
         else{
-            downloadApp("http://119.147.33.13/beta.myapp.com/myapp/rdmexp/exp/file/comandroidloushi_10_48b260d2-f18e-4da6-9edd-8a055868a975.apk?mkey=57afd712c45c7184&f=8c5d&c=0&p=.apk");
+            downloadApp(url);
         }
 
     }

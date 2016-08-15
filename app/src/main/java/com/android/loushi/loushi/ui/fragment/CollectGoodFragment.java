@@ -1,6 +1,7 @@
 package com.android.loushi.loushi.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -40,7 +41,7 @@ import okhttp3.Response;
 /**
  * Created by Administrator on 2016/7/22.
  */
-public class CollectGoodFragment extends LazyFragment {
+public class CollectGoodFragment extends LazyFragment implements SwipeRefreshLayout.OnRefreshListener{
     private RecyclerView recyclerView;
     private List<UserCollectionsJson.BodyBean> beanList=new ArrayList<UserCollectionsJson.BodyBean>();
     private UserCollectionsJson.BodyBean.GoodsBean goodsBean;
@@ -51,6 +52,8 @@ public class CollectGoodFragment extends LazyFragment {
     private Boolean is_tip_all;
     private int skip=0;
     private int skip_s;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
@@ -66,20 +69,15 @@ public class CollectGoodFragment extends LazyFragment {
         if(!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
     }
-//@Override
-//public void onActivityCreated(Bundle savedInstanceState) {
-//    super.onActivityCreated(savedInstanceState);
-//    initview();
-////        Log.e(TAG,"onActivityCreated");
-//}
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//
-//        View view=inflater.inflate(R.layout.fragment_collect_good,null);
-//
-//        return view;
-//    }
+    private void initSwipeLayout() {
+        //init swipe
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        swipeRefreshLayout.setColorSchemeColors(this.getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setOnRefreshListener(this);
+    }
+
     private void initview(){
         //beanList = new ArrayList<UserCollectionsJson.BodyBean>();
         Log.e("tes1", beanList.size() + "");
@@ -98,18 +96,18 @@ public class CollectGoodFragment extends LazyFragment {
             @Override
             public void onBottom() {
                 super.onBottom();
-                if(!is_all) {
+                if (!is_all) {
 
                     addSomething2Good();
-                }
-                else {
-                    if (type.equals("1")){
-                        if(!is_tip_all)
+                } else {
+                    if (type.equals("1")) {
+                        if (!is_tip_all)
                             addStrategy();
                     }
                 }
             }
         });
+        initSwipeLayout();
     }
     private void addSomething2Good(){
 
@@ -130,12 +128,13 @@ public class CollectGoodFragment extends LazyFragment {
                                  }
                                  if(userCollectionsJson.getState()) {
                                      skip+=6;
-                                     if(skip>Integer.parseInt(userCollectionsJson.getReturn_info()))
+                                     if(skip>=Integer.parseInt(userCollectionsJson.getReturn_info()))
                                          is_all=true;
                                      beanList.addAll(userCollectionsJson.getBody());
 
                                      collectGoodAdapter.notifyDataSetChanged();
                                  }
+                                 swipeRefreshLayout.setRefreshing(false);
                              }
 
                          }
@@ -157,11 +156,9 @@ public class CollectGoodFragment extends LazyFragment {
                              public void onResponse(boolean b, UserCollectionsJson userCollectionsJson, Request request, Response response) {
                                  if (userCollectionsJson.getState()) {
                                      skip_s += 6;
-                                     if (skip > Integer.parseInt(userCollectionsJson.getReturn_info()))
+                                     if (skip_s >= Integer.parseInt(userCollectionsJson.getReturn_info()))
                                          is_tip_all = true;
                                      beanList.addAll(userCollectionsJson.getBody());
-
-
                                      collectGoodAdapter.notifyDataSetChanged();
                                  }
                              }
@@ -195,4 +192,12 @@ public class CollectGoodFragment extends LazyFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public void onRefresh() {
+        beanList = new ArrayList<UserCollectionsJson.BodyBean>();
+        skip=0;
+        skip_s=0;
+        addSomething2Good();
+
+    }
 }
