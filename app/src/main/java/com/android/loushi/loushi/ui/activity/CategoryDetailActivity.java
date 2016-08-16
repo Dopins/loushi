@@ -301,7 +301,7 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
 
                 //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
                 if (!TextUtils.isEmpty(imgurl)) {
-                    ShareSomeThing shareSomeThing = new ShareSomeThing(CategoryDetailActivity.this, imgurl, cate_url, text, title, user_id, type+"", topicBean.getId() + "");
+                    ShareSomeThing shareSomeThing = new ShareSomeThing(CategoryDetailActivity.this, imgurl, cate_url+"&isForward=1", text, title, user_id, type+"", topicBean.getId() + "");
                     shareSomeThing.DoShare();
 
                 }

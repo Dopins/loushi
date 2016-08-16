@@ -206,12 +206,11 @@ public class SceneDetailDesignFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 String imgurl = sceneJson.getImgUrl();
-
                 String title = sceneJson.getName();
                 String text = sceneJson.getDigest();
 
                 //Toast.makeText(this, "click clean ", Toast.LENGTH_SHORT).show();
-                ShareSomeThing shareSomeThing = new ShareSomeThing(getApplicationContext(), imgurl, url, text, title, BaseActivity.user_id, "1", sceneJson.getId() + "");
+                ShareSomeThing shareSomeThing = new ShareSomeThing(getApplicationContext(), imgurl, url+"&isForward=1", text, title, BaseActivity.user_id, "1", sceneJson.getId() + "");
                 shareSomeThing.DoShare();
             }
         });
