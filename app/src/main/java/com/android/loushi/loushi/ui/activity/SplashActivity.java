@@ -204,7 +204,7 @@ public class SplashActivity extends BaseActivity {
             AliTradeSDK.asyncInit(this, APP_KEY, new AliTradeInitCallback() {
                 @Override
                 public void onSuccess() {
-                    Toast.makeText(SplashActivity.this, "初始化成功", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SplashActivity.this, "初始化成功", Toast.LENGTH_SHORT).show();
                     Log.e("myapplication", "chenggong");
                     AliTradeTaokeParams taokeParams = new AliTradeTaokeParams("mm_114880276_0_0", "", "");
                     AliTradeSDK.setTaokeParams(taokeParams);
@@ -213,7 +213,7 @@ public class SplashActivity extends BaseActivity {
 
                 @Override
                 public void onFailure(int code, String msg) {
-                    Toast.makeText(SplashActivity.this, "初始化失败" + code + msg, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SplashActivity.this, "初始化失败" + code + msg, Toast.LENGTH_SHORT).show();
                     Log.e("myapplication", "shibai" + code + msg);
                 }
             });
