@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.android.loushi.loushi.R;
 import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.event.MainEvent;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.StrategyJson;
 import com.android.loushi.loushi.jsonbean.TopicJson;
@@ -22,6 +23,8 @@ import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -119,6 +122,7 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
                                         holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText() + "") - 1 + "");
                                     }
                                     holder.checkbox_prefer.setChecked(isChecked);
+                                    EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_COLLECT));
                                 } else {
                                     Toast.makeText(mContext, "出了点小问题，请重试..." + responseJson.getReturn_info(), Toast.LENGTH_SHORT).show();
                                 }
@@ -173,6 +177,7 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
                                         holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText() + "") - 1 + "");
                                     }
                                     holder.checkbox_prefer.setChecked(isChecked);
+                                    EventBus.getDefault().post(new MainEvent(MainEvent.UPDATE_COLLECT));
                                 } else {
                                     Toast.makeText(mContext, "出了点小问题，请重试" + responseJson.getReturn_info(), Toast.LENGTH_SHORT).show();
                                 }

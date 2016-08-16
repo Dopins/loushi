@@ -151,13 +151,17 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void iniDatas() {
-        tv_name.setText(CurrentAccount.getNickname());
-        //Log.e("person", CurrentAccount.getHeadImgUrl());
+        if(!TextUtils.isEmpty(CurrentAccount.getNickname())) {
+            tv_name.setText(CurrentAccount.getNickname());
+            tv_name_small.setText(CurrentAccount.getNickname());
+        }
+
         if(!TextUtils.isEmpty(CurrentAccount.getHeadImgUrl())){
             Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head_small);
             Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
         }
-        tv_name_small.setText(CurrentAccount.getNickname());
+
+        if(!TextUtils.isEmpty(CurrentAccount.getNickname()))
         tv_school.setText(CurrentAccount.getSchoolName());
     }
 
@@ -191,7 +195,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     private void initTablayout() {
         mViewPager = (ViewPager) getView().findViewById(R.id.main_vp_container);
-        Log.e("personinit", list_count.size() + "");
+
         if (list_count.size() == 0) {
             OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollectionsNum.action")
                     .params("user_id", BaseActivity.user_id).tag(this).cacheKey("usercollectnums").cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE).

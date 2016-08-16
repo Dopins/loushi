@@ -64,6 +64,7 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
             holder.tv_price.setText(goodsBean.getPrice() + "");
             if (!TextUtils.isEmpty(goodsBean.getCollectionNum()+""))
             holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
+            if(goodsBean.getCollected())
             holder.btn_like.setChecked(true);
             holder.img_good.setOnClickListener(new View.OnClickListener() {
                 @Override

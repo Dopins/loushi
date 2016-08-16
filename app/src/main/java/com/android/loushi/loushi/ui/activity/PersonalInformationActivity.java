@@ -280,7 +280,8 @@ public class PersonalInformationActivity extends BaseActivity
                             .execute(new DialogCallback<ImageJson>(this, ImageJson.class) {
                                 @Override
                                 public void onResponse(boolean isFromCache, ImageJson imageJson, Request request, @Nullable Response response) {
-                                    if (imageJson.getState()) {
+                                    if (imageJson.getState()!=null&&imageJson.getState()) {
+                                        if(imageJson.getBody()!=null)
                                         headImgUrl = imageJson.getBody();
 
                                         Log.e(TAG, "上传头像成功！");
