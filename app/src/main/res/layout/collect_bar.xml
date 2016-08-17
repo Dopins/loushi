@@ -29,15 +29,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:text="1364"
+        android:text="0"
+        android:textStyle="bold"
         android:textSize="10sp"
-        android:textColor="@color/PrimaryText"
+        android:textColor="@color/colorCollect"
         android:id="@+id/collect_bar_tv_like"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:textSize="10sp"
+        android:textColor="@color/colorCollect"
         android:text="收藏"/>
 
 </LinearLayout>
@@ -60,14 +62,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:text="1364"
+            android:text="0"
             android:textSize="10sp"
-            android:textColor="@color/PrimaryText"
+            android:textStyle="bold"
+            android:textColor="@color/colorCollect"
             android:id="@+id/collect_bar_tv_comment"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:textColor="@color/colorCollect"
             android:textSize="10sp"
             android:text="评论"/>
 
@@ -91,15 +95,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:text="1364"
+            android:text="0"
             android:textSize="10sp"
-            android:textColor="@color/PrimaryText"
+            android:textStyle="bold"
+            android:textColor="@color/colorCollect"
             android:id="@+id/collect_bar_tv_share"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:textSize="10sp"
+            android:textColor="@color/colorCollect"
             android:text="转发"/>
 
     </LinearLayout>

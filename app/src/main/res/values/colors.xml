@@ -23,5 +23,6 @@
     
     <color name="colorCommentName">#4D4D4D</color>
     <color name="colorCommentContent">#A2A2A2</color>
+    <color name="colorCollect">#7B7F87</color>
 
 </resources>

@@ -25,7 +25,8 @@
         android:layout_height="133dp"
         android:src="@drawable/loading_small"
         android:id="@+id/collect_good_item_img_good"
-        android:background="@drawable/bg_collect_item"/> <LinearLayout
+        android:background="@drawable/bg_collect_item"/>
+            <LinearLayout
             android:layout_width="104dp"
             android:layout_height="133dp"
             android:background="#80A1C1C2"></LinearLayout></FrameLayout>
@@ -65,9 +66,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
-        android:textSize="15sp"
+        android:textSize="16sp"
         android:id="@+id/collect_good_item_tv_name"
         android:textColor="#ffffffff"
+
         android:maxLength="5"
         android:layout_marginTop="92dp"
         android:layout_marginLeft="12dp"/>
@@ -76,6 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="110dp"
         android:layout_marginLeft="12dp"
+
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -91,6 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
+        android:textSize="12sp"
         android:textColor="#ffffff"
         android:layout_toRightOf="@+id/collect_good_item_btn_like"
         android:id="@+id/collect_good_item_tv_like_count"

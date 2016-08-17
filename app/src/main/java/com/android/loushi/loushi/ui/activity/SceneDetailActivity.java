@@ -113,9 +113,6 @@ public class SceneDetailActivity extends  BaseActivity {
                 } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
                     if (state != CollapsingToolbarLayoutState.COLLAPSED) {
                         Log.e("coll", "折叠");
-
-                        //collapsingToolbarLayout.setTitle("");//设置title不显示
-                        //playButton.setVisibility(View.VISIBLE);//隐藏播放按钮
                         state = CollapsingToolbarLayoutState.COLLAPSED;//修改状态标记为折叠
                     }
                 } else {
@@ -123,7 +120,6 @@ public class SceneDetailActivity extends  BaseActivity {
                         Log.e("coll", "中间");
                         if (state == CollapsingToolbarLayoutState.COLLAPSED) {
 
-                            //playButton.setVisibility(View.GONE);//由折叠变为中间状态时隐藏播放按钮
                         }
                         //collapsingToolbarLayout.setTitle("INTERNEDIATE");//设置title为INTERNEDIATE
                         state = CollapsingToolbarLayoutState.INTERNEDIATE;//修改状态标记为中间
@@ -136,30 +132,8 @@ public class SceneDetailActivity extends  BaseActivity {
     private void initView() {
         carouselViewPager =(ImageView)findViewById(R.id.ad_viewPager);
         viewPager = (ViewPager)findViewById(R.id.main_vp_container);
-//        ImageView view1 = (ImageView) LayoutInflater.from(
-//                getApplicationContext()).inflate(R.layout.ad_image, null);
-//        ImageView view2 = (ImageView) LayoutInflater.from(
-//                getApplicationContext()).inflate(R.layout.ad_image, null);
-//        ImageView view3 = (ImageView) LayoutInflater.from(
-//                getApplicationContext()).inflate(R.layout.ad_image, null);
-//        ImageView view4 = (ImageView) LayoutInflater.from(
-//                getApplicationContext()).inflate(R.layout.ad_image, null);
-        ArrayList<ImageView> views = new ArrayList<ImageView>();
-        //ImageView img = new ImageView(getApplicationContext());
-
-//        views.add(view1);
-//        views.add(view2);
-//        views.add(view3);
-//        views.add(view4);
-
-
-//        AdViewpagerAdapter adViewpagerAdapter = new AdViewpagerAdapter(views);
-
-        //carouselViewPager.setAdapter(adViewpagerAdapter);
         Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).fit().placeholder(R.drawable.loading_big).into(carouselViewPager);
-        /*Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view2);
-        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view3);
-        Picasso.with(getApplicationContext()).load(scenebean.getImgUrl()).into(view4);*/
+
     }
     private void initTablayout(){
         collapsing_toolbar_layout = (CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar_layout);
@@ -188,7 +162,7 @@ public class SceneDetailActivity extends  BaseActivity {
         //为TabLayout添加tab名称
         tabLayout.addTab(tabLayout.newTab().setText("设计"));
         tabLayout.addTab(tabLayout.newTab().setText("购买"));
-        tabLayout.setTabTextColors(R.color.hint, Color.BLACK);
+        tabLayout.setTabTextColors(R.color.hint, R.color.hint);
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), list_fragment, list_title);
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

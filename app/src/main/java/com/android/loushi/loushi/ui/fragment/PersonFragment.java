@@ -227,7 +227,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                                 personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(), list_fragment, list_count, getContext());
                                 mViewPager.setAdapter(personCollectTabAdapter);
 
-                                mtoorbar_tab.setTabStripWidth(120);
+                                mtoorbar_tab.setTabStripWidth(150);
 
 
                                 //mtoorbar_tab.setSelectedIndicatorColors(R.color.colorPrimary);
