@@ -41,6 +41,8 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.StringReader;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.Call;
 import okhttp3.Request;
@@ -60,8 +62,9 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        Timer timer = new Timer();
+        timer.schedule(task,3000);
         InitTaobao();
-
         CheckCanLogin();
 
 
@@ -79,8 +82,8 @@ public class SplashActivity extends BaseActivity {
             }
 
         }
-        else
-            GoMainACtivity();
+       /* else
+            GoMainACtivity();*/
     }
     private void LoginThird(){
         final String account=CurrentAccount.getAccount();
@@ -113,7 +116,7 @@ public class SplashActivity extends BaseActivity {
                             CurrentAccount.setLoginOrNot(false);
                             Log.e("splashthirdlogin", "登录失败！");
                         }
-                        GoMainACtivity();
+                        //GoMainACtivity();
 
                     }
 
@@ -121,7 +124,7 @@ public class SplashActivity extends BaseActivity {
                     public void onError(boolean isFromCache, Call call, @Nullable Response response, @Nullable Exception e) {
                         super.onError(isFromCache, call, response, e);
                         Log.e("splash", "loginerror");
-                        GoMainACtivity();
+                        //GoMainACtivity();
                     }
                 });
     }
@@ -148,13 +151,13 @@ public class SplashActivity extends BaseActivity {
                             Log.e("splashnotthirdlogin", "登录失败！");
                         }
                         //SystemClock.sleep(2000);
-                        GoMainACtivity();
+                        //GoMainACtivity();
                     }
                     @Override
                     public void onError(boolean isFromCache, Call call, @Nullable Response response, @Nullable Exception e) {
                         super.onError(isFromCache, call, response, e);
                         Log.e("splash", "loginerror");
-                        GoMainACtivity();
+                        //GoMainACtivity();
                     }
                 });
     }
@@ -178,28 +181,9 @@ public class SplashActivity extends BaseActivity {
                 });
     }
     private void InitTaobao() {
-        /*TradeConfigs.defaultTaokePid = "mm_114880276_0_0";
-        AlibabaSDK.asyncInit(this, new InitResultCallback() {
 
-            @Override
-            public void onSuccess() {
-//                Toast.makeText(getApplicationContext(), "初始化成功", Toast.LENGTH_SHORT)
-//                        .show();
-                Log.e("splash", "success");
-                //showItemDetailP
-                age(ll);
-            }
-
-            @Override
-            public void onFailure(int code, String message) {
-//                Toast.makeText(getApplicationContext(), "初始化异常", Toast.LENGTH_SHORT)
-//                        .show();
-                Log.e("splash", "nosuccess" + message);
-            }
-
-        });*/
         try {
-            AlibabaSDK.turnOnDebug();
+            //AlibabaSDK.turnOnDebug();
             //电商SDK初始化
             AliTradeSDK.asyncInit(this, APP_KEY, new AliTradeInitCallback() {
                 @Override
@@ -228,5 +212,11 @@ public class SplashActivity extends BaseActivity {
         startActivity(intent);
         finish();
     }
+    TimerTask task = new TimerTask() { //timertask实现runnable接口,TimerTask类就代表一个在指定时间内执行的task
+        @Override
+        public void run() {
+           GoMainACtivity();
+        }
+    };
 
 }

@@ -145,44 +145,47 @@ public class LoginFragment extends Fragment {
                 if (!isMobileNO(login_edit_phone.getText().toString())) {
                     ToastUtils.show(getActivity(), "请输入有效的电话号码!", ToastUtils.LENGTH_SHORT);
                     Log.e(TAG, "请输入有效的电话号码!");
-                }
-                if (login_edit_password.getText().toString().length() < 6) {
-                    ToastUtils.show(getActivity(), "密码不能少于6位", ToastUtils.LENGTH_SHORT);
                 } else {
+                    if (login_edit_password.getText().toString().length() < 6) {
+                        ToastUtils.show(getActivity(), "密码不能少于6位", ToastUtils.LENGTH_SHORT);
+                    } else {
 
 
-                    Log.e(TAG, login_edit_phone.getText().toString());
-                    Log.e(TAG, login_edit_password.getText().toString());
-                    OkHttpUtils.post(UrlConstant.USERLOGINURL)
-                            .params(KeyConstant.MOBILE_PHONE, login_edit_phone.getText().toString())
-                            .params(KeyConstant.PASSWORD, login_edit_password.getText().toString())
-                            .params(KeyConstant.ISTHIRD, "false")
-                            .execute(new DialogCallback<UserLoginJson>((AppCompatActivity) getActivity(), UserLoginJson.class) {
-                                @Override
-                                public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-                                    Log.e(TAG, request.toString());
-                                    Log.e(TAG, response.toString());
-                                    if (userLoginJson.getState()) {
-                                        Log.e(TAG, "登录成功！");
-                                        BaseActivity.user_id = userLoginJson.getBody() + ""; //冗余
-                                        Log.e(TAG, userLoginJson.getBody() + "");
-                                        CurrentAccount.setLoginOrNot(true);
-                                        CurrentAccount.storeAccountInfo(
-                                                userLoginJson.getBody()+"" ,
-                                                login_edit_phone.getText().toString().trim(),
-                                                login_edit_password.getText().toString().trim(),
-                                                false,
-                                                "0");
-                                        getUserInfo(userLoginJson.getBody());
+                        Log.e(TAG, login_edit_phone.getText().toString());
+                        Log.e(TAG, login_edit_password.getText().toString());
+                        OkHttpUtils.post(UrlConstant.USERLOGINURL)
+                                .params(KeyConstant.MOBILE_PHONE, login_edit_phone.getText().toString())
+                                .params(KeyConstant.PASSWORD, login_edit_password.getText().toString())
+                                .params(KeyConstant.ISTHIRD, "false")
+                                .execute(new DialogCallback<UserLoginJson>((AppCompatActivity) getActivity(), UserLoginJson.class) {
+                                    @Override
+                                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
+                                        Log.e(TAG, request.toString());
+                                        Log.e(TAG, response.toString());
+                                        if (userLoginJson.getState()) {
+                                            Log.e(TAG, "登录成功！");
+                                            BaseActivity.user_id = userLoginJson.getBody() + ""; //冗余
+                                            Log.e(TAG, userLoginJson.getBody() + "");
+                                            CurrentAccount.setLoginOrNot(true);
+                                            CurrentAccount.storeAccountInfo(
+                                                    userLoginJson.getBody() + "",
+                                                    login_edit_phone.getText().toString().trim(),
+                                                    login_edit_password.getText().toString().trim(),
+                                                    false,
+                                                    "0");
+                                            getUserInfo(userLoginJson.getBody());
 
-                                        MobclickAgent.onProfileSignIn(login_edit_phone.getText().toString());
+                                            MobclickAgent.onProfileSignIn(login_edit_phone.getText().toString());
 
-                                    } else {
-                                        Log.e(TAG, "登录失败！");
+                                        } else {
+                                            if(!TextUtils.isEmpty(userLoginJson.getReturn_info()))
+                                                ToastUtils.show(getActivity(),userLoginJson.getReturn_info(),ToastUtils.LENGTH_SHORT);
+                                            Log.e(TAG, "登录失败！");
+                                        }
                                     }
-                                }
-                            });
+                                });
 
+                    }
                 }
             }
         });

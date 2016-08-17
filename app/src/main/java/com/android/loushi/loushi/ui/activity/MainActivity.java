@@ -109,8 +109,6 @@ public class MainActivity extends BaseActivity {
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
         }
 
-
-
         initView();
         CheckUpdate();
         if (!EventBus.getDefault().isRegistered(this))

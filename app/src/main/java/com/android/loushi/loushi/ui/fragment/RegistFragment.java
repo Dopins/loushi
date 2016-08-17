@@ -3,6 +3,7 @@ package com.android.loushi.loushi.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -55,7 +56,7 @@ public class RegistFragment extends Fragment {
     public static final String BUNDLE_TITLE = "title";
     public static final String TAG = "RegistFragment";
 
-    
+    private TimeCount checking_time;
 
     // Content View Elements
 
@@ -72,12 +73,13 @@ public class RegistFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(!EventBus.getDefault().isRegistered(this))
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
 
         initEvent();
         initSDK();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -135,13 +137,20 @@ public class RegistFragment extends Fragment {
                         Toast.makeText(getContext(), "密码不能少于6位", Toast.LENGTH_SHORT).show();
                     } else
                         //获取验证码
+                    {
+                        initTimeCount();
                         getVerificationCode("86", regist_edit_phone.getText().toString());
+                    }
                 }
             }
         });
     }
 
     private void initView() {
+    }
+    private void initTimeCount(){
+        checking_time = new TimeCount(60000, 1000);
+        checking_time.start();
     }
 
     private void bindViews() {
@@ -172,7 +181,8 @@ public class RegistFragment extends Fragment {
         SMSSDK.initSDK(getContext(), "15bf245471948", "584e01d3ab9afb7bcb9e1d0120037cdf");
         SMSSDK.registerEventHandler(eh); //注册短信回调
     }
-    EventHandler eh=new EventHandler(){
+
+    EventHandler eh = new EventHandler() {
         @Override
         public void afterEvent(int event, int result, Object data) {
 
@@ -182,26 +192,27 @@ public class RegistFragment extends Fragment {
                     EventBus.getDefault().post(
                             new MainEvent(1));
                     //验证码验证成功
-                }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
+                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                     EventBus.getDefault().post(
                             new MainEvent(2));
 
                     //获取验证码成功
-                }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
+                } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
                     EventBus.getDefault().post(
                             new MainEvent(3));
                     //返回支持发送验证码的国家列表
                 }
-            }else{
+            } else {
                 EventBus.getDefault().post(
                         new MainEvent(4));
                 //Toast.makeText(getActivity(), "失败", Toast.LENGTH_SHORT).show();
-                ((Throwable)data).printStackTrace();
-                Log.e("regist",Log.getStackTraceString((Throwable)data));
+                ((Throwable) data).printStackTrace();
+                Log.e("regist", Log.getStackTraceString((Throwable) data));
             }
             //Looper.loop();
         }
     };
+
     private String generateToken(String account) {
         char[] charTmp = account.toCharArray();
         int[] intTmp = new int[account.length()];
@@ -216,11 +227,12 @@ public class RegistFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         //SMSSDK.unregisterEventHandler(eh);
     }
+
     //手机号码正则匹配
     public boolean isMobileNO(String mobiles) {
 		/*
@@ -233,17 +245,18 @@ public class RegistFragment extends Fragment {
         if (TextUtils.isEmpty(mobiles)) return false;
         else return mobiles.matches(telRegex);
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(MainEvent event) {
-        if(event.getMsg()==1){
+        if (event.getMsg() == 1) {
             Log.e("event", "1");
             //Toast.makeText(getContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
             //生成Token
-            String token = generateToken(regist_edit_phone.getText().toString()+regist_edit_checkword.getText().toString());
+            String token = generateToken(regist_edit_phone.getText().toString() + regist_edit_checkword.getText().toString());
             //发送注册请求
-            OkHttpUtils.post(BaseActivity.url+"user/userRegisterAndroid").
-                    params("mobile_phone",regist_edit_phone.getText().toString()).
-                    params("password",regist_edit_password.getText().toString()).
+            OkHttpUtils.post(BaseActivity.url + "user/userRegisterAndroid").
+                    params("mobile_phone", regist_edit_phone.getText().toString()).
+                    params("password", regist_edit_password.getText().toString()).
                     params("verify_code", regist_edit_checkword.getText().toString()).
                     params("token", token).execute(new DialogCallback<ResponseJson>((AppCompatActivity) getActivity(), ResponseJson.class) {
                 @Override
@@ -281,10 +294,10 @@ public class RegistFragment extends Fragment {
             });
 
         }
-        if(event.getMsg()==2){
+        if (event.getMsg() == 2) {
             Toast.makeText(getContext(), "获取验证码成功", Toast.LENGTH_SHORT).show();
         }
-        if(event.getMsg()==4){
+        if (event.getMsg() == 4) {
             Toast.makeText(getContext(), "失败", Toast.LENGTH_SHORT).show();
         }
 
@@ -312,5 +325,23 @@ public class RegistFragment extends Fragment {
         }
     }
 
+    class TimeCount extends CountDownTimer {
+        public TimeCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
+        }
 
+        @Override
+        public void onFinish() {//计时完毕时触发
+            btn_getcheckword.setText("重新验证");
+            btn_getcheckword.setClickable(true);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {//计时过程显示
+            btn_getcheckword.setClickable(false);
+            btn_getcheckword.setText(millisUntilFinished / 1000 + "秒");
+        }
+
+
+    }
 }

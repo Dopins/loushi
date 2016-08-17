@@ -51,24 +51,6 @@ public class MyApplication extends LitePalApplication {
         CurrentAccount.init(this);
 
 
-//        OkHttpUtils.post(UrlConstant.USERLOGINURL)
-//                .params(KeyConstant.MOBILE_PHONE, phone)
-//                .params(KeyConstant.PASSWORD, password)
-//                .params(KeyConstant.ISTHIRD, "false")
-//                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
-//                    @Override
-//                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-//                        if (userLoginJson.getState()) {
-//                            BaseActivity.user_id = userLoginJson.getBody() + "";
-//                            Log.e(TAG, "autoLogin 登录成功！");
-//                        } else {
-//                            Log.e(TAG, "autoLogin 登录失败！");
-//                        }
-//                    }
-//                });
-
-        //InitTaobao();
-
         initBugly();
         initUMeng();
 
@@ -91,27 +73,9 @@ public class MyApplication extends LitePalApplication {
     }
 
     private void InitTaobao() {
-/*        TradeConfigs.defaultTaokePid = "mm_114880276_0_0";
-        AlibabaSDK.asyncInit(this, new InitResultCallback() {
 
-            @Override
-            public void onSuccess() {
-//                Toast.makeText(getApplicationContext(), "初始化成功", Toast.LENGTH_SHORT)
-//                        .show();
-                Log.e("splash", "success");
-                //showItemDetailPage(ll);
-            }
-
-            @Override
-            public void onFailure(int code, String message) {
-//                Toast.makeText(getApplicationContext(), "初始化异常", Toast.LENGTH_SHORT)
-//                        .show();
-                Log.e("splash", "nosuccess" + message);
-            }
-
-        });*/
         try {
-            AlibabaSDK.turnOnDebug();
+            //AlibabaSDK.turnOnDebug();
             //电商SDK初始化
             AliTradeSDK.asyncInit(this, APP_KEY, new AliTradeInitCallback() {
                 @Override

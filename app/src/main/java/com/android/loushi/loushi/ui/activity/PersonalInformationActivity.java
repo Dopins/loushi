@@ -472,10 +472,7 @@ public class PersonalInformationActivity extends BaseActivity
             case R.id.spinner_province:
                 getProvinceList();
                 break;
-//            case R.id.spinner_city:
-//                break;
-//            case R.id.spinner_university:
-//                break;
+
         }
     }
 }
