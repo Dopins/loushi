@@ -242,7 +242,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
                             adList.addAll(carouselJson.getBody());
                             loadAdImage();
                         } else {
-                            Log.d("error", carouselJson.getReturn_info());
+                            //Log.d("error", carouselJson.getReturn_info());
                         }
                     }
                 });
@@ -382,7 +382,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
                             changeSelectedState(type,holder,position);
 
                         } else {
-                            Log.d("error", responseJson.getReturn_info());
+                            //Log.d("error", responseJson.getReturn_info());
                         }
                     }
                 });

@@ -166,11 +166,13 @@ public class RecommendFragment extends LazyFragment {
                 .cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
                 .params("user_id", BaseActivity.user_id)
                 .params("rdate", rDate)
-                .params("take", take + "").cacheKey("recommend").cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
+                .params("take", take + "")
+                .cacheKey("recommend")
+                .cacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
                 .execute(new JsonCallback<RecommendJson>(RecommendJson.class) {
                     @Override
                     public void onResponse(boolean b, RecommendJson recommendJson, Request request, Response response) {
-                        if (recommendJson.getState()) {
+                       /* if (recommendJson.getState()) {
                             Log.e("recommendjson", new Gson().toJson(recommendJson));
                             if (recommendJson.getBody().size() < oneTakeNum) has_data = false;
 
@@ -185,7 +187,7 @@ public class RecommendFragment extends LazyFragment {
                         } else {
                             Log.d("error", recommendJson.getReturn_info());
                         }
-                        swipeRefreshLayout.setRefreshing(false);
+                        swipeRefreshLayout.setRefreshing(false);*/
                     }
                 });
     }
