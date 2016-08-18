@@ -233,8 +233,9 @@ public class GoodDetailActivity extends BaseActivity {
                     Toast.LENGTH_SHORT).show();
             return;
         }
+
         AliTradeTaokeParams aliTradeTaokeParams = new AliTradeTaokeParams("mm_114880276_0_0", "", "");
-        aliTradeService.show(GoodDetailActivity.this, aliTradeBasePage, aliTradeShowParams, aliTradeTaokeParams, exParams, new AliTradeProcessCallback() {
+        aliTradeService.show(GoodDetailActivity.this, aliTradeBasePage, aliTradeShowParams,aliTradeTaokeParams, exParams, new AliTradeProcessCallback() {
 
             @Override
             public void onTradeSuccess(AliTradeResult tradeResult) {
