@@ -35,7 +35,6 @@
 
 -keep interface android.support.v4.app.** { *; }
 -keep public class * extends android.support.v4.**
--keep public class * extends android.app.Fragment
 
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
@@ -47,7 +46,9 @@
 -keep public class * extends com.sqlcrypt.database.sqlite
 -keep public class * extends com.treecore.**
 -keep public class * extends de.greenrobot.dao.**
-
+#model
+-keep class * com.android.loushi.loushi.jsonbean
+-keep class * com.android.loushi.loushi.util
 
 -keepclasseswithmembernames class * {		# 保持 native 方法不被混淆
     native <methods>;
@@ -65,6 +66,18 @@
    public void *(android.view.View);
 }
 
+#webview
+-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+   public *;
+}
+-keepclassmembers class * extends android.webkit.webViewClient {
+    public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
+    public boolean *(android.webkit.WebView, java.lang.String);
+}
+-keepclassmembers class * extends android.webkit.webViewClient {
+    public void *(android.webkit.webView, jav.lang.String);
+}
+
 -keepclassmembers enum * {					# 保持枚举 enum 类不被混淆
     public static **[] values();
     public static ** valueOf(java.lang.String);
@@ -79,3 +92,38 @@
 -keepclassmembers class * {
    public <init> (org.json.JSONObject);
 }
+
+
+#eventbus
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+#picasso
+-dontwarn com.squareup.**
+-keep class com.squareup.** { *;}
+
+#淘宝
+-keepattributes Signature
+    -keep class sun.misc.Unsafe { *; }
+    -keep class com.taobao.** {*;}
+    -keep class com.alibaba.** {*;}
+    -keep class com.alipay.** {*;}
+    -dontwarn com.taobao.**
+    -dontwarn com.alibaba.**
+    -dontwarn com.alipay.**
+    -keep class com.ut.** {*;}
+    -dontwarn com.ut.**
+    -keep class com.ta.** {*;}
+    -dontwarn com.ta.**
+
+
+ #gson
+
+ #-libraryjars libs/gson-2.2.2.jar
+ -keepattributes Signature
+     # Gson specific classes
+     -keep class sun.misc.Unsafe { *; }
+     # Application classes that will be serialized/deserialized over Gson
+     -keep class com.google.gson.examples.android.model.** { *; }

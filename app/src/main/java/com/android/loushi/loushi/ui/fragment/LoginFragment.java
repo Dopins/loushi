@@ -120,6 +120,7 @@ public class LoginFragment extends Fragment {
         login_edit_phone.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (getActivity() instanceof MainActivity)
                 MyFragment.Gone();
                 view.requestFocus();
                 return false;
@@ -128,7 +129,8 @@ public class LoginFragment extends Fragment {
 
         login_edit_password.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            public boolean onTouch(View view, MotionEvent motionEvent){
+                if (getActivity() instanceof MainActivity)
                 MyFragment.Gone();
                 view.requestFocus();
                 return false;
@@ -178,8 +180,8 @@ public class LoginFragment extends Fragment {
                                             MobclickAgent.onProfileSignIn(login_edit_phone.getText().toString());
 
                                         } else {
-                                            if(!TextUtils.isEmpty(userLoginJson.getReturn_info()))
-                                                ToastUtils.show(getActivity(),userLoginJson.getReturn_info(),ToastUtils.LENGTH_SHORT);
+                                            if (!TextUtils.isEmpty(userLoginJson.getReturn_info()))
+                                                ToastUtils.show(getActivity(), userLoginJson.getReturn_info(), ToastUtils.LENGTH_SHORT);
                                             Log.e(TAG, "登录失败！");
                                         }
                                     }

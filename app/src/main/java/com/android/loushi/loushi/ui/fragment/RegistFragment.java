@@ -96,6 +96,7 @@ public class RegistFragment extends Fragment {
         regist_edit_phone.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (getActivity() instanceof MainActivity)
                 MyFragment.Gone();
                 return false;
             }
@@ -103,6 +104,7 @@ public class RegistFragment extends Fragment {
         regist_edit_password.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (getActivity() instanceof MainActivity)
                 MyFragment.Gone();
                 return false;
             }
@@ -110,6 +112,7 @@ public class RegistFragment extends Fragment {
         regist_edit_checkword.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (getActivity() instanceof MainActivity)
                 MyFragment.Gone();
                 return false;
             }

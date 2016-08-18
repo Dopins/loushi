@@ -290,8 +290,10 @@ public class CategoryDetailActivity extends BaseActivity implements View.OnClick
                 if (!TextUtils.isEmpty(topicBean.getImgUrl()))
                     imgurl = topicBean.getImgUrl();
                 if (type==CategoryFragment.TYPE_TIP) {
-                    if (!TextUtils.isEmpty(imgurl.substring(0, imgurl.indexOf("|||"))))
-                        imgurl = imgurl.substring(0, imgurl.indexOf("|||"));
+                    if(imgurl.indexOf("|||")>=0) {
+                        if (!TextUtils.isEmpty(imgurl.substring(0, imgurl.indexOf("|||"))))
+                            imgurl = imgurl.substring(0, imgurl.indexOf("|||"));
+                    }
                 }
                 if (!TextUtils.isEmpty(topicBean.getName()))
                     title = topicBean.getName();
