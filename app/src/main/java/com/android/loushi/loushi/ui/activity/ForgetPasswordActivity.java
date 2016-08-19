@@ -18,6 +18,7 @@ import com.android.loushi.loushi.event.ReceiveSmsEvent;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.util.CurrentAccount;
+import com.android.loushi.loushi.util.MD5Utils;
 import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.ToastUtils;
 import com.android.loushi.loushi.util.UnderLineEditText;
@@ -146,10 +147,11 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
             Log.e("event", "1");
             Toast.makeText(ForgetPasswordActivity.this, "提交验证码成功", Toast.LENGTH_SHORT).show();
             //生成Token
+            final String encry_password = edit_newpassword.getText().toString();
             String token = generateToken(edit_phone.getText().toString()+regist_edit_checkword.getText().toString());
             //发送请求
             OkHttpUtils.post(String.format("%s%s",BaseActivity.url,"user/userForgetPassword")).params("mobile_phone", edit_phone.getText().toString())
-                    .params("newpassword", edit_newpassword.getText().toString())
+                    .params("newpassword", encry_password)
                     .params("verify_code", regist_edit_checkword.getText().toString())
                     .params("token", token).execute(new DialogCallback<ResponseJson>(this, ResponseJson.class) {
                 @Override
