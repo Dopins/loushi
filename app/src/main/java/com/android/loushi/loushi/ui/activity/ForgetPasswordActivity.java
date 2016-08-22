@@ -147,7 +147,7 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
             Log.e("event", "1");
             Toast.makeText(ForgetPasswordActivity.this, "提交验证码成功", Toast.LENGTH_SHORT).show();
             //生成Token
-            final String encry_password = edit_newpassword.getText().toString();
+            final String encry_password = MD5Utils.encode(edit_newpassword.getText().toString());
             String token = generateToken(edit_phone.getText().toString()+regist_edit_checkword.getText().toString());
             //发送请求
             OkHttpUtils.post(String.format("%s%s",BaseActivity.url,"user/userForgetPassword")).params("mobile_phone", edit_phone.getText().toString())
@@ -189,8 +189,6 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
                 }
 
             });
-
-
         }
         if(event.getMsg()==2){
             Toast.makeText(ForgetPasswordActivity.this, "获取验证码成功", Toast.LENGTH_SHORT).show();

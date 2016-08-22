@@ -256,7 +256,7 @@ public class RegistFragment extends Fragment {
             Log.e("event", "1");
             //Toast.makeText(getContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
             //生成Token
-            final String encry_password = regist_edit_password.getText().toString();
+            final String encry_password = MD5Utils.encode(regist_edit_password.getText().toString());
             String token = generateToken(regist_edit_phone.getText().toString() + regist_edit_checkword.getText().toString());
             //发送注册请求
             OkHttpUtils.post(BaseActivity.url + "user/userRegisterAndroid").

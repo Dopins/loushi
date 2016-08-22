@@ -65,7 +65,7 @@ public class MyApplication extends LitePalApplication {
                 MobclickAgent.EScenarioType.E_UM_NORMAL,
                 true);
         MobclickAgent.startWithConfigure(config);
-        MobclickAgent.setDebugMode(true);
+        //MobclickAgent.setDebugMode(true);
     }
 
     private void initBugly() {
