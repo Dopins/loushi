@@ -171,6 +171,7 @@ public class MaterialSpinner extends TextView {
         listView.setId(getId());
         listView.setDivider(null);
         listView.setItemsCanFocus(true);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -413,16 +414,16 @@ public class MaterialSpinner extends TextView {
             animateArrow(true);
         }
         nothingSelected = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             popupWindow.setOverlapAnchor(false);
             popupWindow.showAsDropDown(this);
-        } else {
+        } else {*/
             int[] location = new int[2];
             getLocationOnScreen(location);
             int x = location[0];
             int y = getHeight() + location[1];
             popupWindow.showAtLocation(this, Gravity.TOP | Gravity.START, x, y);
-        }
+        //}
     }
 
     /**

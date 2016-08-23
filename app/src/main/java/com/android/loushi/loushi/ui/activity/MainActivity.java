@@ -245,7 +245,7 @@ public class MainActivity extends BaseActivity {
 
 
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+        //super.onSaveInstanceState(outState);
 
 
     }

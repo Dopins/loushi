@@ -22,6 +22,7 @@ import com.alibaba.nb.android.trade.callback.AliTradeProcessCallback;
 import com.alibaba.nb.android.trade.constants.AliTradeConstants;
 import com.alibaba.nb.android.trade.model.AliOpenType;
 import com.alibaba.nb.android.trade.model.AliTradeResult;
+import com.alibaba.nb.android.trade.model.AliTradeResultType;
 import com.alibaba.nb.android.trade.model.AliTradeShowParams;
 import com.alibaba.nb.android.trade.model.AliTradeTaokeParams;
 import com.alibaba.nb.android.trade.uibridge.AliTradeBasePage;
@@ -41,6 +42,7 @@ import com.android.loushi.loushi.util.SpaceItemDecoration;
 import com.google.gson.Gson;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
+import com.umeng.analytics.MobclickAgent;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -239,9 +241,15 @@ public class GoodDetailActivity extends BaseActivity {
 
             @Override
             public void onTradeSuccess(AliTradeResult tradeResult) {
-                Toast.makeText(GoodDetailActivity.this, "显示商品详情页成功",
-                        Toast.LENGTH_SHORT).show();
+               /* Toast.makeText(GoodDetailActivity.this, "显示商品详情页成功",
+                        Toast.LENGTH_SHORT).show();*/
                 //打开电商组件，用户操作中成功信息回调。tradeResult：成功信息（结果类型：加购，支付；支付结果）
+                //TODO 删除test
+                Map map=new HashMap<String,String>();
+                map.put("user_id",BaseActivity.user_id);
+                map.put("good_id",good_id);
+                MobclickAgent.onEventValue(GoodDetailActivity.this,
+                        "购买", map,0);
             }
 
             @Override

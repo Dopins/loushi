@@ -2,6 +2,7 @@ package com.android.loushi.loushi.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -137,8 +138,12 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private void setTipView(TipViewHolder holder, int position) {
         RecommendJson.BodyBean body = bodyBeanList.get(position);
         if(body.getStrategy()==null) return;
-
-        Picasso.with(context).load(body.getStrategy().getImgUrl()).fit().
+        String imgurl=body.getStrategy().getImgUrl();
+        if(imgurl.indexOf("|||")>=0) {
+            if (!TextUtils.isEmpty(imgurl.substring(0, imgurl.indexOf("|||"))))
+                imgurl = imgurl.substring(0, imgurl.indexOf("|||"));
+        }
+        Picasso.with(context).load(imgurl).fit().
                 into(holder.image);
 
         holder.title.setText(body.getStrategy().getName());
@@ -226,6 +231,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private void loadAdImage(){
         for(int i=0;i<adList.size()&&i<4;i++){
             String imgUrl=adList.get(i).getImgUrl();
+            if(!TextUtils.isEmpty(imgUrl))
             Picasso.with(views.get(i).getContext()).load(imgUrl).fit().
                     into(views.get(i));
         }

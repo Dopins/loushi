@@ -153,7 +153,7 @@ public class RegistFragment extends Fragment {
     private void initView() {
     }
     private void initTimeCount(){
-        checking_time = new TimeCount(60000, 1000);
+        checking_time = new TimeCount(90000, 1000);
         checking_time.start();
     }
 
@@ -321,8 +321,10 @@ public class RegistFragment extends Fragment {
 
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
-        if (getActivity() instanceof MainActivity)
+        if (getActivity() instanceof MainActivity) {
+            Log.e("zhuce","跳转");
             EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
+        }
         if (getActivity() instanceof LoginFirstActivity) {
             EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
             EventBus.getDefault().post(new MyfragmentEvent("Finish LoginFirstActivity"));

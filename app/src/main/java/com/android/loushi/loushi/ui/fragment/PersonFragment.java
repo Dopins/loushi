@@ -451,7 +451,10 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
         Log.e(TAG, "onResume");
-        if(!CurrentAccount.getLoginOrNot())transferToMyFragment();
+        if(!CurrentAccount.getLoginOrNot()) {
+            Log.e("zhuce","false");
+            transferToMyFragment();
+        }
         if(CurrentAccount.getReFresh()){
             Log.e(TAG, "iniDatas");
             iniDatas();

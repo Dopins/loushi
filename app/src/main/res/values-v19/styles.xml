@@ -12,4 +12,48 @@
                 <item name="colorControlActivated">#69B8BB</item>
                 <!--<item name="android:windowIsTranslucent">true</item>-->
         </style>
+        <!-- Base application theme. -->
+        <style name="AppThemeFull" parent="AppTheme">
+                <!-- Customize your theme here. -->
+                <item name="android:windowFullscreen">true</item>
+
+        </style>
+
+
+
+
+
+        <style name="toolbar_text" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+
+                <item name="android:textSize">14sp</item>
+                <!--<item name="app:tabTextColor">#ffffff</item>-->
+                <item name="android:textColor">#ffffff</item>
+
+        </style>
+
+        <style name="transparentText" parent="TextAppearance.AppCompat.Small">
+                <item name="android:textColor" >#00000000</item>
+
+        </style>
+        <style name="ToolBarTitleText" parent="TextAppearance.AppCompat.Medium">
+                <item name="android:textColor">#ffffffff</item>
+                <item name="android:textSize">16sp</item>
+                <item name="android:textStyle">bold</item></style>
+
+        <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+                <item name="android:textSize">14sp</item>
+        </style>
+        <style name="TipsZanTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+                <item name="android:button">@drawable/cb_zan</item>
+        </style>
+
+        <style name="AnimBottom" parent="@android:style/Animation">
+                <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
+                <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
+
+        </style>
+        <style name="Dialog_Fullscreen">
+                <item name="android:windowFullscreen">true</item>
+                <item name="android:windowNoTitle">true</item>
+        </style>
 </resources>

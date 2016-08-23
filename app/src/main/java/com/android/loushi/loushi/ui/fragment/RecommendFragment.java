@@ -108,7 +108,7 @@ public class RecommendFragment extends LazyFragment {
                     Intent intent = new Intent(getActivity(), CategoryDetailActivity.class);
                     String jsonString = new Gson().toJson(bodyBeanList.get(position / 4).getTopic());
                     Log.e("jsonstring", jsonString);
-                    intent.putExtra(CategoryDetailActivity.TYPE, "1");
+                    intent.putExtra(CategoryDetailActivity.TYPE, CategoryFragment.TYPE_TOPIC);
                     intent.putExtra(CategoryDetailActivity.JSONSTRING, jsonString);
                     startActivity(intent);
                 }
@@ -116,7 +116,7 @@ public class RecommendFragment extends LazyFragment {
                     Intent intent = new Intent(getActivity(), CategoryDetailActivity.class);
                     String jsonString = new Gson().toJson(bodyBeanList.get(position / 4).getStrategy());
                     Log.e("jsonstring", jsonString);
-                    intent.putExtra(CategoryDetailActivity.TYPE, "2");
+                    intent.putExtra(CategoryDetailActivity.TYPE, CategoryFragment.TYPE_TIP);
                     intent.putExtra(CategoryDetailActivity.JSONSTRING, jsonString);
                     startActivity(intent);
                 }
