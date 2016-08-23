@@ -93,17 +93,17 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
                                 if (isChecked) {
 
                                 //good.setCollectionNum(good.getCollectionNum() + 1);
-                                holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
+                                //holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
                                 //goodsList.remove(position);
                             } else {
 
                                 //good.setCollectionNum(good.getCollectionNum() - 1);
-                                holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
+                                //holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
 
                             }
-                            beanList.remove(position);
+                            /*beanList.remove(position);
 
-                            notifyDataSetChanged();
+                            notifyDataSetChanged();*/
                             }
                         }
                     });

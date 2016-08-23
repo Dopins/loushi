@@ -34,6 +34,7 @@ import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.MD5Utils;
 import com.android.loushi.loushi.util.MyfragmentEvent;
+import com.android.loushi.loushi.util.ToastUtils;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
@@ -287,6 +288,8 @@ public class RegistFragment extends Fragment {
 
 
                                         } else {
+                                            if(!TextUtils.isEmpty(userLoginJson.getReturn_info()))
+                                                ToastUtils.show(getActivity(),userLoginJson.getReturn_info(),ToastUtils.LENGTH_SHORT);
                                             Log.e(TAG, "登录失败！");
                                         }
                                     }
@@ -302,7 +305,7 @@ public class RegistFragment extends Fragment {
             Toast.makeText(getContext(), "获取验证码成功", Toast.LENGTH_SHORT).show();
         }
         if (event.getMsg() == 4) {
-            Toast.makeText(getContext(), "失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "验证码错误", Toast.LENGTH_SHORT).show();
         }
 
     }

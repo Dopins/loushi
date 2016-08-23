@@ -41,14 +41,7 @@ android {
                 abiFilters "armeabi", "armeabi-v7a", "x86"
             }
         }
-        wandoujia {}
-        baidu {}
-        c360 {}
-        uc {}
 
-        productFlavors.all { flavor ->
-            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
-        }
     }
 }
 repositories{

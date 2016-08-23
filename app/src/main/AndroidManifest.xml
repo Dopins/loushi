@@ -59,6 +59,7 @@
         <activity android:name=".ui.activity.CategoryDetailActivity" />
         <activity android:name=".ui.activity.FeedActivity" />
         <activity android:name=".ui.activity.LoginFirstActivity"
+            android:windowSoftInputMode="adjustUnspecified"
             android:launchMode="singleTop"/>
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -98,7 +99,7 @@
             android:value="57a5eda367e58ef278000163" />
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="${UMENG_CHANNEL_VALUE}" />
+            android:value="yingyongbao" />
 
 
         <receiver android:name=".broadcastreceiver.ApkInstallReceiver">
