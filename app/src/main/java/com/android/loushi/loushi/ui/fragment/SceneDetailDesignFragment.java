@@ -45,6 +45,7 @@ public class SceneDetailDesignFragment extends BaseFragment {
     private WebView webView;
     private LinearLayout collect_bar;
     private RelativeLayout layout_scene_design;
+    private boolean mIsWebViewAvailable;
     private LinearLayout collect;
     private LinearLayout comment;
     private LinearLayout share;
@@ -68,29 +69,27 @@ public class SceneDetailDesignFragment extends BaseFragment {
         sceneJson=new Gson().fromJson(sceneJsonString, SceneJson.BodyBean.class);
         nestedScrollView=(NestedScrollView)getView().findViewById(R.id.nestedscrollview);
 
-        if (savedInstanceState != null) {
-            webView.restoreState(savedInstanceState);
-        } else {
-            initWebview();
-            //webView.loadUrl();
-        }
+
+        initWebview();
+
+
         initCollectBar();
 
-//        Log.e(TAG,"onActivityCreated");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        view=inflater.inflate(R.layout.fragment_category, container, false);
         View view=inflater.inflate(R.layout.fragment_scene_detail_design,null);
 
         return view;
     }
     private void initWebview(){
         //layout_scene_design =(RelativeLayout)findViewById(R.id.layout_scene_design);
-
+        if(webView!=null)
+            webView.destroy();
         webView=(WebView)getView().findViewById(R.id.webview);
+        mIsWebViewAvailable=true;
         //webView=new WebView(getContext());
         webView.getSettings().setAppCacheEnabled(true);
         //设置缓存模式
@@ -111,7 +110,6 @@ public class SceneDetailDesignFragment extends BaseFragment {
             }
 
             public boolean shouldOverrideUrlLoading(WebView view, final String url) {
-                //获取web跳转的url 根据 url的后缀来确定商品id
 
 
                 return false;
@@ -225,23 +223,49 @@ public class SceneDetailDesignFragment extends BaseFragment {
         tv_share_count.setText(sceneJson.getForwordNum() + "");
     }
 
-    @Override
-     public void onDetach() {
-        super.onDetach();
-        Log.e("webview", "ondetach");
-        webView.destroy();
-    }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.e("webview","ondestory");
-    }
+
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.e("webview","onsave");
         webView.saveState(outState);
 
+    }
+    public void onPause() {
+        super.onPause();
+        webView.onPause();
+    }
+
+    /**
+     * Called when the fragment is no longer resumed. Pauses the WebView.
+     */
+    @Override
+    public void onResume() {
+        webView.onResume();
+        super.onResume();
+    }
+
+    /**
+     * Called when the WebView has been detached from the fragment.
+     * The WebView is no longer available after this time.
+     */
+    @Override
+    public void onDestroyView() {
+        mIsWebViewAvailable = false;
+        super.onDestroyView();
+    }
+
+    /**
+     * Called when the fragment is no longer in use. Destroys the internal state of the WebView.
+     */
+    @Override
+    public void onDestroy() {
+        if (webView != null) {
+            webView.destroy();
+            webView = null;
+        }
+        super.onDestroy();
     }
 }
