@@ -12,9 +12,9 @@
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+   public *;
+}
 
 
 -ignorewarnings						# 忽略警告，避免打包时某些警告出现
@@ -53,9 +53,9 @@
 #-keep class * com.android.loushi.loushi.jsonbean
 #-keep class * com.android.loushi.loushi.util
 #-keep class * com.android.loushi.loushi.callback
--keep class com.google.gson.examples.android.jsonbean.** { *; }
--keep class com.google.gson.examples.android.util.** { *; }
--keep class com.google.gson.examples.android.callback.** { *; }
+-keep class com.android.loushi.loushi.jsonbean.** { *; }
+-keep class com.android.loushi.loushi.util.** { *; }
+-keep class com.android.loushi.loushi.callback.** { *; }
 -keepclasseswithmembernames class * {		# 保持 native 方法不被混淆
     native <methods>;
 }
@@ -124,6 +124,8 @@
     -keep class com.taobao.** {*;}
     -keep class com.alibaba.** {*;}
     -keep class com.alipay.** {*;}
+    -keep class com.alibaba.nb.** {*;}
+    -dontwarn com.alibaba.nb.**
     -dontwarn com.taobao.**
     -dontwarn com.alibaba.**
     -dontwarn com.alipay.**
@@ -132,7 +134,12 @@
     -keep class com.ta.** {*;}
     -dontwarn com.ta.**
 
-
+-keepclasseswithmembers class * {
+    void onClick*(...);
+}
+-keepclasseswithmembers class * {
+    *** *Callback(...);
+}
  #gson
 
  #-libraryjars libs/gson-2.2.2.jar
@@ -167,3 +174,12 @@ public static final int *;
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
+
+#mob
+-keep class android.net.http.SslError
+-keep class android.webkit.**{*;}
+-keep class cn.sharesdk.**{*;}
+-keep class cn.smssdk.**{*;}
+-keep class com.mob.**{*;}
+
+-keep class com.sina.**{*;}

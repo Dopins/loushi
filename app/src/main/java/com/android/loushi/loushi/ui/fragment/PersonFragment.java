@@ -106,7 +106,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 CurrentAccount.setMessageCount(0+"");
                 break;
             case R.id.btn_profile:
-                //TODO
+            case R.id.img_head:
                 intent = new Intent(getActivity(), PersonalInformationActivity.class);
                 startActivity(intent);
                 break;
@@ -305,7 +305,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         btn_my_message.setOnClickListener(this);
         btn_my_setting = (ImageView) mToolbar.findViewById(R.id.my_settings);
         btn_my_setting.setOnClickListener(this);
-
+        img_head.setOnClickListener(this);
         iv_message_tips = (ImageView) mToolbar.findViewById(R.id.iv_messagetips);
         updataMsgTips();
     }
@@ -451,7 +451,10 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
         Log.e(TAG, "onResume");
-        if(!CurrentAccount.getLoginOrNot())transferToMyFragment();
+        if(!CurrentAccount.getLoginOrNot()) {
+            Log.e("zhuce","false");
+            transferToMyFragment();
+        }
         if(CurrentAccount.getReFresh()){
             Log.e(TAG, "iniDatas");
             iniDatas();

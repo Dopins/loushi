@@ -40,6 +40,7 @@ import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.ui.activity.PersonalInformationActivity;
 import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.MD5Utils;
 import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.ToastUtils;
 import com.android.loushi.loushi.util.UrlConstant;
@@ -152,12 +153,12 @@ public class LoginFragment extends Fragment {
                         ToastUtils.show(getActivity(), "密码不能少于6位", ToastUtils.LENGTH_SHORT);
                     } else {
 
-
-                        Log.e(TAG, login_edit_phone.getText().toString());
+                        final String encry_password= MD5Utils.encode(login_edit_password.getText().toString());
+                                Log.e(TAG, login_edit_phone.getText().toString());
                         Log.e(TAG, login_edit_password.getText().toString());
                         OkHttpUtils.post(UrlConstant.USERLOGINURL)
                                 .params(KeyConstant.MOBILE_PHONE, login_edit_phone.getText().toString())
-                                .params(KeyConstant.PASSWORD, login_edit_password.getText().toString())
+                                .params(KeyConstant.PASSWORD, encry_password)
                                 .params(KeyConstant.ISTHIRD, "false")
                                 .execute(new DialogCallback<UserLoginJson>((AppCompatActivity) getActivity(), UserLoginJson.class) {
                                     @Override
@@ -172,7 +173,7 @@ public class LoginFragment extends Fragment {
                                             CurrentAccount.storeAccountInfo(
                                                     userLoginJson.getBody() + "",
                                                     login_edit_phone.getText().toString().trim(),
-                                                    login_edit_password.getText().toString().trim(),
+                                                    encry_password,
                                                     false,
                                                     "0");
                                             getUserInfo(userLoginJson.getBody());
@@ -212,20 +213,8 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
                         if (userInfoJson.isState()) {
-                            Log.e(TAG, "成功获取用户信息");
-                            Log.e(TAG, request.toString());
-                            Log.e(TAG, response.toString());
-
                             UserInfoJson.BodyBean body = userInfoJson.getBody();
                             //CurrentAccount.storeUserInfo(userInfoJson);
-                            Log.e(TAG, "1 :" + body.getNickname());
-                            Log.e(TAG, "2 :" + body.getMobilePhone());
-                            Log.e(TAG, "3 :" + body.getHeadImgUrl());
-                            Log.e(TAG, "4 :" + body.getEmail());
-//                            Log.e(TAG,"5 :"+ body.getSchool().getName());
-                            Log.e(TAG, "6 :" + body.isSex());
-                            Log.e(TAG, "7 :" + body.getMessageCount());
-
                             CurrentAccount.storeUserInfo(userInfoJson);
                             transferMyFragmentToPersonalFragment();
                         }
@@ -454,10 +443,7 @@ public class LoginFragment extends Fragment {
                 .execute(new JsonCallback<UserInfoJson>(UserInfoJson.class) {
                     @Override
                     public void onResponse(boolean isFromCache, UserInfoJson userInfoJson, Request request, @Nullable Response response) {
-                        Log.e(TAG, "UserInfoJson.onResponse: " + response.toString());
-                        Log.e(TAG, "userInfoJson.getState: " + userInfoJson.isState());
                         if (userInfoJson.isState()) {
-                            Log.e(TAG, "onResponse: 资料提交成功 ！");
                             CurrentAccount.setReFresh(true);
                         }
                     }

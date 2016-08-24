@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.ui.activity;
 
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import com.android.loushi.loushi.event.ReceiveSmsEvent;
 import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.UserLoginJson;
 import com.android.loushi.loushi.util.CurrentAccount;
+import com.android.loushi.loushi.util.MD5Utils;
 import com.android.loushi.loushi.util.MyfragmentEvent;
 import com.android.loushi.loushi.util.ToastUtils;
 import com.android.loushi.loushi.util.UnderLineEditText;
@@ -52,7 +54,7 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
     private TextView text_newkeyword_confirm;
     private EditText edit_newkeyword_confirm;
     private Button btn_finish;
-
+    private TimeCount checking_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,39 +148,18 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
             Log.e("event", "1");
             Toast.makeText(ForgetPasswordActivity.this, "提交验证码成功", Toast.LENGTH_SHORT).show();
             //生成Token
+            final String encry_password = MD5Utils.encode(edit_newpassword.getText().toString());
             String token = generateToken(edit_phone.getText().toString()+regist_edit_checkword.getText().toString());
             //发送请求
             OkHttpUtils.post(String.format("%s%s",BaseActivity.url,"user/userForgetPassword")).params("mobile_phone", edit_phone.getText().toString())
-                    .params("newpassword", edit_newpassword.getText().toString())
+                    .params("newpassword", encry_password)
                     .params("verify_code", regist_edit_checkword.getText().toString())
                     .params("token", token).execute(new DialogCallback<ResponseJson>(this, ResponseJson.class) {
                 @Override
                 public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
                     if(responseJson.getState()){
                         ToastUtils.show(ForgetPasswordActivity.this, "修改密码成功", Toast.LENGTH_SHORT);
-//                        OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userLogin.action")
-//                                .params("mobile_phone", edit_phone.getText().toString())
-//                                .params("password", edit_newpassword.getText().toString())
-//                                .params("isThird", "false")
-//                                .execute(new JsonCallback<UserLoginJson>(UserLoginJson.class) {
-//                                    @Override
-//                                    public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-//
-//                                        if (userLoginJson.getState()) {
-//                                            Log.e("forget", "忘记密码-登录成功！");
-//
-//                                            BaseActivity.user_id = userLoginJson.getBody() + ""; //冗余
-//
-//                                            CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", edit_phone.getText().toString(), edit_newpassword.getText().toString());
-//
-//                                            //transferMyFragmentToPersonalInformationActivity();
-//                                            EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
-//                                            finish();
-//                                        } else {
-//                                            Log.e("forget", "登录失败！");
-//                                        }
-//                                    }
-//                                });
+
                         finish();
                     }
                     else
@@ -187,8 +168,6 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
                 }
 
             });
-
-
         }
         if(event.getMsg()==2){
             Toast.makeText(ForgetPasswordActivity.this, "获取验证码成功", Toast.LENGTH_SHORT).show();
@@ -211,8 +190,10 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
             case R.id.btn_getcheckword:
                 if(!isMobileNO(edit_phone.getText().toString()))
                     Toast.makeText(ForgetPasswordActivity.this,"请输入正确的手机号",Toast.LENGTH_SHORT).show();
-                else
+                else {
+                    initTimeCount();
                     getVerificationCode("86", edit_phone.getText().toString());
+                }
                 break;
             case R.id.btn_finish:
                 if(edit_newpassword.getText().toString().length()<6)
@@ -226,5 +207,28 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
                 finish();
                 break;
         }
+    }
+    private void initTimeCount(){
+        checking_time = new TimeCount(90000, 1000);
+        checking_time.start();
+    }
+    class TimeCount extends CountDownTimer {
+        public TimeCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
+        }
+
+        @Override
+        public void onFinish() {//计时完毕时触发
+            btn_getcheckword.setText("重新验证");
+            btn_getcheckword.setClickable(true);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {//计时过程显示
+            btn_getcheckword.setClickable(false);
+            btn_getcheckword.setText(millisUntilFinished / 1000 + "秒");
+        }
+
+
     }
 }

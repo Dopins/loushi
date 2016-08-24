@@ -108,7 +108,7 @@ public class RecommendFragment extends LazyFragment {
                     Intent intent = new Intent(getActivity(), CategoryDetailActivity.class);
                     String jsonString = new Gson().toJson(bodyBeanList.get(position / 4).getTopic());
                     Log.e("jsonstring", jsonString);
-                    intent.putExtra(CategoryDetailActivity.TYPE, "1");
+                    intent.putExtra(CategoryDetailActivity.TYPE, CategoryFragment.TYPE_TOPIC);
                     intent.putExtra(CategoryDetailActivity.JSONSTRING, jsonString);
                     startActivity(intent);
                 }
@@ -116,7 +116,7 @@ public class RecommendFragment extends LazyFragment {
                     Intent intent = new Intent(getActivity(), CategoryDetailActivity.class);
                     String jsonString = new Gson().toJson(bodyBeanList.get(position / 4).getStrategy());
                     Log.e("jsonstring", jsonString);
-                    intent.putExtra(CategoryDetailActivity.TYPE, "2");
+                    intent.putExtra(CategoryDetailActivity.TYPE, CategoryFragment.TYPE_TIP);
                     intent.putExtra(CategoryDetailActivity.JSONSTRING, jsonString);
                     startActivity(intent);
                 }
@@ -172,7 +172,7 @@ public class RecommendFragment extends LazyFragment {
                 .execute(new JsonCallback<RecommendJson>(RecommendJson.class) {
                     @Override
                     public void onResponse(boolean b, RecommendJson recommendJson, Request request, Response response) {
-                       /* if (recommendJson.getState()) {
+                        if (recommendJson.getState()) {
                             Log.e("recommendjson", new Gson().toJson(recommendJson));
                             if (recommendJson.getBody().size() < oneTakeNum) has_data = false;
 
@@ -187,7 +187,7 @@ public class RecommendFragment extends LazyFragment {
                         } else {
                             Log.d("error", recommendJson.getReturn_info());
                         }
-                        swipeRefreshLayout.setRefreshing(false);*/
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
     }

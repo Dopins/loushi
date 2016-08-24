@@ -32,7 +32,9 @@ import com.android.loushi.loushi.ui.activity.MainActivity;
 import com.android.loushi.loushi.ui.activity.PersonalInformationActivity;
 import com.android.loushi.loushi.util.CurrentAccount;
 import com.android.loushi.loushi.util.KeyConstant;
+import com.android.loushi.loushi.util.MD5Utils;
 import com.android.loushi.loushi.util.MyfragmentEvent;
+import com.android.loushi.loushi.util.ToastUtils;
 import com.android.loushi.loushi.util.UnderLineEditText;
 import com.android.loushi.loushi.util.UrlConstant;
 import com.lzy.okhttputils.OkHttpUtils;
@@ -152,7 +154,7 @@ public class RegistFragment extends Fragment {
     private void initView() {
     }
     private void initTimeCount(){
-        checking_time = new TimeCount(60000, 1000);
+        checking_time = new TimeCount(90000, 1000);
         checking_time.start();
     }
 
@@ -255,11 +257,12 @@ public class RegistFragment extends Fragment {
             Log.e("event", "1");
             //Toast.makeText(getContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
             //生成Token
+            final String encry_password = MD5Utils.encode(regist_edit_password.getText().toString());
             String token = generateToken(regist_edit_phone.getText().toString() + regist_edit_checkword.getText().toString());
             //发送注册请求
             OkHttpUtils.post(BaseActivity.url + "user/userRegisterAndroid").
                     params("mobile_phone", regist_edit_phone.getText().toString()).
-                    params("password", regist_edit_password.getText().toString()).
+                    params("password", encry_password).
                     params("verify_code", regist_edit_checkword.getText().toString()).
                     params("token", token).execute(new DialogCallback<ResponseJson>((AppCompatActivity) getActivity(), ResponseJson.class) {
                 @Override
@@ -272,20 +275,21 @@ public class RegistFragment extends Fragment {
                         Log.e(TAG, regist_edit_password.getText().toString());
                         OkHttpUtils.post(UrlConstant.USERLOGINURL)
                                 .params(KeyConstant.MOBILE_PHONE, regist_edit_phone.getText().toString())
-                                .params(KeyConstant.PASSWORD, regist_edit_password.getText().toString())
+                                .params(KeyConstant.PASSWORD, encry_password)
                                 .params(KeyConstant.ISTHIRD, "false")
                                 .execute(new DialogCallback<UserLoginJson>((AppCompatActivity) getActivity(), UserLoginJson.class) {
                                     @Override
                                     public void onResponse(boolean isFromCache, UserLoginJson userLoginJson, Request request, Response response) {
-                                        Log.e(TAG, request.toString());
-                                        Log.e(TAG, response.toString());
                                         if (userLoginJson.getState()) {
                                             Log.e(TAG, "注册-登录成功！");
-                                            CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", regist_edit_phone.getText().toString(), regist_edit_password.getText().toString(), false, "0");
+
+                                            CurrentAccount.storeAccountInfo(userLoginJson.getBody() + "", regist_edit_phone.getText().toString(), encry_password, false, "0");
                                             transferMyFragmentToPersonalInformationActivity();
 
 
                                         } else {
+                                            if(!TextUtils.isEmpty(userLoginJson.getReturn_info()))
+                                                ToastUtils.show(getActivity(),userLoginJson.getReturn_info(),ToastUtils.LENGTH_SHORT);
                                             Log.e(TAG, "登录失败！");
                                         }
                                     }
@@ -301,7 +305,7 @@ public class RegistFragment extends Fragment {
             Toast.makeText(getContext(), "获取验证码成功", Toast.LENGTH_SHORT).show();
         }
         if (event.getMsg() == 4) {
-            Toast.makeText(getContext(), "失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "验证码错误", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -320,8 +324,10 @@ public class RegistFragment extends Fragment {
 
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
-        if (getActivity() instanceof MainActivity)
+        if (getActivity() instanceof MainActivity) {
+            Log.e("zhuce","跳转");
             EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
+        }
         if (getActivity() instanceof LoginFirstActivity) {
             EventBus.getDefault().post(new MyfragmentEvent("Transfer MyFragment to PersonalFragment!"));
             EventBus.getDefault().post(new MyfragmentEvent("Finish LoginFirstActivity"));

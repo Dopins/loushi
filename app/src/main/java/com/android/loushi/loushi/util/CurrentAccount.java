@@ -61,6 +61,7 @@ public class CurrentAccount {
         editor.putString(THIRD_TYPE, Third_type);
         BaseActivity.user_id=user_id;
         editor.commit();
+        setLoginOrNot(true);
     }
 
     public static void storeUserInfo(UserAreaJson userAreaJson) {

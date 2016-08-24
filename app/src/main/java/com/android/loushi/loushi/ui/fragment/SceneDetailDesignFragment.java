@@ -67,7 +67,13 @@ public class SceneDetailDesignFragment extends BaseFragment {
         sceneJsonString=getArguments().getString("SCENE_STRING");
         sceneJson=new Gson().fromJson(sceneJsonString, SceneJson.BodyBean.class);
         nestedScrollView=(NestedScrollView)getView().findViewById(R.id.nestedscrollview);
-        initWebview();
+
+        if (savedInstanceState != null) {
+            webView.restoreState(savedInstanceState);
+        } else {
+            initWebview();
+            //webView.loadUrl();
+        }
         initCollectBar();
 
 //        Log.e(TAG,"onActivityCreated");
@@ -222,6 +228,7 @@ public class SceneDetailDesignFragment extends BaseFragment {
     @Override
      public void onDetach() {
         super.onDetach();
+        Log.e("webview", "ondetach");
         webView.destroy();
     }
 
@@ -229,5 +236,12 @@ public class SceneDetailDesignFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         Log.e("webview","ondestory");
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.e("webview","onsave");
+        webView.saveState(outState);
+
     }
 }

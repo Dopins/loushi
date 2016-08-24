@@ -17,19 +17,25 @@ import android.widget.TextView;
 
 import com.android.loushi.loushi.R;
 
+import com.android.loushi.loushi.callback.JsonCallback;
+import com.android.loushi.loushi.jsonbean.ResponseJson;
 import com.android.loushi.loushi.jsonbean.UserCollectionsGood;
 import com.android.loushi.loushi.jsonbean.UserCollectionsJson;
 import com.android.loushi.loushi.ui.activity.BaseActivity;
 import com.android.loushi.loushi.ui.activity.CategoryDetailActivity;
 import com.android.loushi.loushi.ui.activity.GoodDetailActivity;
 import com.android.loushi.loushi.ui.activity.SceneDetailActivity;
+import com.android.loushi.loushi.util.KeyConstant;
 import com.google.gson.Gson;
+import com.lzy.okhttputils.OkHttpUtils;
 import com.squareup.picasso.Picasso;
 
 
 import java.util.List;
 
 import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Administrator on 2016/7/22.
@@ -73,6 +79,34 @@ public class CollectGoodAdapter  extends RecyclerView.Adapter<CollectGoodAdapter
                     intent.putExtra(BaseActivity.GOOD_STRING, new Gson().toJson(goodsBean));
                     intent.putExtra("GOOD_ID", goodsBean.getId()+"");
                     context.startActivity(intent);
+                }
+            });
+            holder.btn_like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                    OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollect")
+                            .params(KeyConstant.USER_ID,BaseActivity.user_id).params(KeyConstant.TYPE,"3")
+                            .params("pid",goodsBean.getId()+"").execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
+                        @Override
+                        public void onResponse(boolean b, ResponseJson responseJson, Request request, Response response) {
+                            if(responseJson.getState()){
+                                if (isChecked) {
+
+                                //good.setCollectionNum(good.getCollectionNum() + 1);
+                                //holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
+                                //goodsList.remove(position);
+                            } else {
+
+                                //good.setCollectionNum(good.getCollectionNum() - 1);
+                                //holder.tv_like_count.setText(Integer.toString(goodsBean.getCollectionNum()));
+
+                            }
+                            /*beanList.remove(position);
+
+                            notifyDataSetChanged();*/
+                            }
+                        }
+                    });
                 }
             });
 

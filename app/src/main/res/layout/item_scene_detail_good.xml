@@ -24,7 +24,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="110dp"
         android:textSize="15sp"
-        android:maxLength="7"
+        android:maxLength="6"
         android:background="@drawable/bg_good_item_tag"
         android:text="可以"
 

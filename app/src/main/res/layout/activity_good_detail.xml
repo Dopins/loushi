@@ -80,9 +80,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:textColor="#909090"
-            android:textSize="12sp"
-            android:lineSpacingMultiplier="1.7"
+            android:textColor="#A5AAB6"
+            android:textSize="13sp"
+            android:lineSpacingMultiplier="1.2
+            "
             android:id="@+id/tv_introduce"
             android:text="title"/>
         <RelativeLayout
@@ -97,7 +98,7 @@
                 android:layout_alignParentBottom="true"
                 android:text="￥"
                 android:id="@+id/price_symbol"
-                android:textSize="25sp"/>
+                android:textSize="30sp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,15 +106,16 @@
                 android:text="price"
                 android:textSize="30sp"
                 android:layout_toRightOf="@+id/price_symbol"
+                android:layout_alignParentBottom="true"
                 android:layout_marginLeft="8dp"/>
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="30dp"
                 android:background="@drawable/bg_btn_buy"
                 android:textColor="#A5AAB6"
                 android:id="@+id/btn_buy"
                 android:text="购买该产品"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"/>
         </RelativeLayout>

@@ -114,7 +114,7 @@ public class CollectGoodFragment extends LazyFragment implements SwipeRefreshLay
                 OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollections")
                 // 请求方式和请求url
                 .tag(this).params("type", type).params("user_id", BaseActivity.user_id)
-                .params("skip", skip + "").params("take", "6")
+                .params("skip", skip + "").params("take", "9")
 
 
                         // 请求的 tag, 主要用于取消对应的请求
@@ -127,7 +127,7 @@ public class CollectGoodFragment extends LazyFragment implements SwipeRefreshLay
                                          return;
                                  }
                                  if(userCollectionsJson.getState()) {
-                                     skip+=6;
+                                     skip+=userCollectionsJson.getBody().size();
                                      if(skip>=Integer.parseInt(userCollectionsJson.getReturn_info()))
                                          is_all=true;
                                      beanList.addAll(userCollectionsJson.getBody());
@@ -147,7 +147,7 @@ public class CollectGoodFragment extends LazyFragment implements SwipeRefreshLay
         OkHttpUtils.post("http://www.loushi666.com/LouShi/user/userCollections")
                 // 请求方式和请求url
                 .tag(this).params("type", "2").params("user_id", BaseActivity.user_id)
-                .params("skip", skip+"").params("take", "6")
+                .params("skip", skip+"").params("take", "9")
 
                 // 请求的 tag, 主要用于取消对应的请求
                 // 缓存模式，详细请看缓存介绍
@@ -155,7 +155,7 @@ public class CollectGoodFragment extends LazyFragment implements SwipeRefreshLay
                              @Override
                              public void onResponse(boolean b, UserCollectionsJson userCollectionsJson, Request request, Response response) {
                                  if (userCollectionsJson.getState()) {
-                                     skip_s += 6;
+                                     skip_s += 9;
                                      if (skip_s >= Integer.parseInt(userCollectionsJson.getReturn_info()))
                                          is_tip_all = true;
                                      beanList.addAll(userCollectionsJson.getBody());
