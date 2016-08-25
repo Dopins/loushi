@@ -15,10 +15,10 @@
         <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/program_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="@dimen/toolbar_height"
             android:background="@color/colorPrimary"
 
-
+            android:paddingTop="@dimen/toolbar_padding_height"
             app:layout_scrollFlags="scroll|enterAlways">
 
             <LinearLayout

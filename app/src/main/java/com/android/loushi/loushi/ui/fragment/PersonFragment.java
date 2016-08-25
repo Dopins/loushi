@@ -134,21 +134,9 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         iniDatas();
        if(!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
-        //mToolbar.setTitle("loushi")
 
-//        ViewGroup.LayoutParams linearParams =(ViewGroup.LayoutParams) mToolbar.getLayoutParams();
-//
-//        linearParams.height +=25;
-//        mToolbar.setLayoutParams(linearParams);
-//        mToolbar.setPadding(0,25,0,0);
     }
-    private void setStatusBar(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //mToolbar.setLayoutParams();
-            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
-    }
+
 
     private void iniDatas() {
         if(!TextUtils.isEmpty(CurrentAccount.getNickname())) {
@@ -250,12 +238,6 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         } else {
             mViewPager = (ViewPager) getView().findViewById(R.id.main_vp_container);
 
-
-//                list_count.add("32");
-//
-//                list_count.add("44");
-//                list_count.add("11");
-
             personCollectTabAdapter = new PersonCollectTabAdapter(getChildFragmentManager(), list_fragment, list_count, getContext());
             mViewPager.setAdapter(personCollectTabAdapter);
 
@@ -328,19 +310,13 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
                 if (verticalOffset == 0) {
                     if (state != CollapsingToolbarLayoutState.EXPANDED) {
-                        Log.e("coll", "展开");
                         state = CollapsingToolbarLayoutState.EXPANDED;//修改状态标记为展开
 
-                        //collapsingToolbarLayout.setTitle("EXPANDED");//设置title为EXPANDED
                     }
                 } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
                     if (state != CollapsingToolbarLayoutState.COLLAPSED) {
-                        Log.e("coll", "折叠");
                         tv_feed.setVisibility(View.GONE);
                         img_head_small.setVisibility(View.VISIBLE);
-                        //tv_name_small.setVisibility(View.VISIBLE);
-                        //collapsingToolbarLayout.setTitle("");//设置title不显示
-                        //playButton.setVisibility(View.VISIBLE);//隐藏播放按钮
                         state = CollapsingToolbarLayoutState.COLLAPSED;//修改状态标记为折叠
                     }
                 } else {
@@ -348,11 +324,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                         Log.e("coll", "中间");
                         if (state == CollapsingToolbarLayoutState.COLLAPSED) {
                             img_head_small.setVisibility(View.GONE);
-                            //tv_name_small.setVisibility(View.GONE);
                             tv_feed.setVisibility(View.VISIBLE);
-                            //playButton.setVisibility(View.GONE);//由折叠变为中间状态时隐藏播放按钮
                         }
-                        //collapsingToolbarLayout.setTitle("INTERNEDIATE");//设置title为INTERNEDIATE
                         state = CollapsingToolbarLayoutState.INTERNEDIATE;//修改状态标记为中间
                     }
                 }
@@ -362,11 +335,9 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(MainEvent event) {
-        Log.e("person", "接收消息");
 
         switch (event.getMsg()) {
             case MainEvent.UPDATE_COLLECT:
-                Log.e("person", "接收消息" + MainEvent.UPDATE_COLLECT + "");
                 updateCollect();
                 break;
             case MainEvent.UPDATE_USERINFO:
@@ -382,7 +353,6 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     private void updateUserInfo() {
         tv_name.setText(CurrentAccount.getNickname());
-        Log.e("person", CurrentAccount.getHeadImgUrl());
         if(!TextUtils.isEmpty(CurrentAccount.getHeadImgUrl())){
             Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head_small);
             Picasso.with(getContext()).load(CurrentAccount.getHeadImgUrl()).into(img_head);
@@ -413,9 +383,6 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                         list_count.set(0, userCollectsNum.getBody().getSceneNum() + "");
                         list_count.set(1, userCollectsNum.getBody().getTopicNum() + userCollectsNum.getBody().getStrategyNum() + "");
                         list_count.set(2, userCollectsNum.getBody().getGoodsNum() + "");
-                        Log.e("collectnumnew", list_count.get(0));
-                        Log.e("collectnumnew", list_count.get(1));
-                        Log.e("collectnumnew", list_count.get(2));
                         personCollectTabAdapter.setListCount(list_count);
                         personCollectTabAdapter.notifyDataSetChanged();
                         mViewPager.setAdapter(personCollectTabAdapter);
