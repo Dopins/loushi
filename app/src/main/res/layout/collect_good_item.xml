@@ -96,6 +96,7 @@
         android:text=""
         android:textSize="12sp"
         android:textColor="#ffffff"
+        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/collect_good_item_btn_like"
         android:id="@+id/collect_good_item_tv_like_count"
 
