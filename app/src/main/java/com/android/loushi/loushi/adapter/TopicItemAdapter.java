@@ -105,7 +105,6 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
         holder.btn_prefer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final boolean isChecked = !holder.checkbox_prefer.isChecked();
                 OkHttpUtils.post(UrlConstant.USERCOLLECTURL)
                         .tag(this)
                         .params(KeyConstant.USER_ID, MainActivity.user_id)
@@ -114,6 +113,7 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
                         .execute(new JsonCallback<ResponseJson>(ResponseJson.class) {
                             @Override
                             public void onResponse(boolean isFromCache, ResponseJson responseJson, Request request, @Nullable Response response) {
+                                final boolean isChecked = !holder.checkbox_prefer.isChecked();
                                 if (responseJson.getState()) {
                                     if (isChecked) {
                                         holder.num_prefer.setText(Integer.parseInt(holder.num_prefer.getText() + "") + 1 + "");
