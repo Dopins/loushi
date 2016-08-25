@@ -69,6 +69,12 @@ public class SearchFragment extends Fragment {
 
 
     }
+    private boolean listHaveRecord(List<Map<String,String>> list,String keyword){
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).get("record").equals(keyword)) return true;
+        }
+        return false;
+    }
     private void setSearchRecode(View view){
         allNews = DataSupport.findAll(SearchWords.class);
         int len = allNews.size();
@@ -77,10 +83,12 @@ public class SearchFragment extends Fragment {
             linearLayout.setVisibility(View.GONE);
         }else{
             for(int i=len-1;i>=0&&len-i-1<5;i--){
-                Map map=new HashMap();
-                map.put("record",allNews.get(i).getWords());
-                map.put("date", allNews.get(i).getDate());
-                search_record_list.add(map);
+                if(!listHaveRecord(search_record_list,allNews.get(i).getWords())){
+                    Map map=new HashMap();
+                    map.put("record",allNews.get(i).getWords());
+                    map.put("date", allNews.get(i).getDate());
+                    search_record_list.add(map);
+                }
             }
         }
         searchRecordAdapter=new SearchRecordAdapter(view.getContext(),search_record_list);

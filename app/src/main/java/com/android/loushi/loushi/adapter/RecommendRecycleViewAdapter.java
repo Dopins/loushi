@@ -78,9 +78,9 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }else if (position % 3 == 1 && bodyBeanList.get(getBodyBeanListPosition(position)).getScene()!=null ) {
             return ITEM_TYPE_SCENE;
         } else if (position % 3 == 2 && bodyBeanList.get(getBodyBeanListPosition(position)).getStrategy()!=null ) {
-            return ITEM_TYPE_TIP;
-        } else if (position % 3 == 0 && bodyBeanList.get(getBodyBeanListPosition(position)).getTopic()!=null ) {
             return ITEM_TYPE_TOPIC;
+        } else if (position % 3 == 0 && bodyBeanList.get(getBodyBeanListPosition(position)).getTopic()!=null ) {
+            return ITEM_TYPE_TIP;
         }
         return -1;
     }
@@ -187,7 +187,7 @@ public class RecommendRecycleViewAdapter extends RecyclerView.Adapter<RecyclerVi
             holder.dateText.setText("昨天");
         }else{
             String str_date=bodyBeanList.get(position).getRDate().substring(0,10);
-//            holder.dateText.setText(str_date);
+            holder.dateText.setText(str_date);
         }
 
     }

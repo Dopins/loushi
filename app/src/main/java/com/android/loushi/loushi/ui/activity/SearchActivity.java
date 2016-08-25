@@ -95,6 +95,7 @@ public class SearchActivity extends BaseActivity {
             if(keyword.length()>10){
                 keyword=keyword.substring(0,9);
             }
+
             SearchWords searchWords = new SearchWords();
             searchWords.setWords(keyword);
             android.text.format.Time time=new android.text.format.Time();
