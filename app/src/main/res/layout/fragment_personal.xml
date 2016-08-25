@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="215dp"
-                    android:text="matf5"
+                    android:text="路人甲"
                     android:textColor="#ACB7C1"
                     app:layout_collapseMode="parallax"
                     android:textSize="20sp" />
@@ -76,7 +76,7 @@
                     android:layout_below="@+id/tv_nickname"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
-                    android:text="华南理工大学"
+                    tools:text="华南理工大学"
                     android:textColor="#D9D8DE"
                     android:textSize="15sp"
                     app:layout_collapseMode="parallax"/>

@@ -3,8 +3,6 @@ package com.android.loushi.loushi.ui.activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -13,19 +11,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.android.loushi.loushi.R;
-import com.android.loushi.loushi.callback.JsonCallback;
-import com.android.loushi.loushi.jsonbean.UserLoginJson;
-import com.android.loushi.loushi.util.CurrentAccount;
-import com.android.loushi.loushi.util.KeyConstant;
-import com.android.loushi.loushi.util.UrlConstant;
-import com.lzy.okhttputils.OkHttpUtils;
-import com.umeng.analytics.MobclickAgent;
-
-import org.greenrobot.eventbus.EventBus;
-import org.w3c.dom.Text;
-
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Created by Administrator on 2016/7/17.
@@ -68,6 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 //        MobclickAgent.onResume(this);
+
     }
 
     @Override

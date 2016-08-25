@@ -178,7 +178,7 @@ public class LoginFragment extends Fragment {
                                                     "0");
                                             getUserInfo(userLoginJson.getBody());
 
-                                            MobclickAgent.onProfileSignIn(login_edit_phone.getText().toString());
+                                            MobclickAgent.onProfileSignIn(userLoginJson.getBody()+"");
 
                                         } else {
                                             if (!TextUtils.isEmpty(userLoginJson.getReturn_info()))
@@ -400,6 +400,7 @@ public class LoginFragment extends Fragment {
                                                 sex,"","","","");
                                         postUserInfo(userLoginJson.getBody() + "", platform.getDb().getUserName(), platform.getDb().getUserIcon(), sexBool);
                                         transferMyFragmentToPersonalFragment();
+                                        MobclickAgent.onProfileSignIn(platform.getName(), userLoginJson.getBody()+"");
 
                                     } else {
                                         CurrentAccount.setLoginOrNot(true);
@@ -407,7 +408,6 @@ public class LoginFragment extends Fragment {
                                         getUserInfo(userLoginJson.getBody());
 
                                     }
-                                    MobclickAgent.onProfileSignIn(platform.getName(), account);
 
                                 } else {
                                     Log.e(TAG, "登录失败！");

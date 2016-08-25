@@ -99,7 +99,6 @@ public class TopicItemAdapter extends RecyclerView.Adapter<TopicItemAdapter.View
 //        holder.card_date.setText(tips.getWDate());
         holder.num_prefer.setText(tips.getCollectionNum() + "");
         holder.num_watch.setText(tips.getBrowseNum() + "");
-        //TODO 没提供标题
         holder.card_title.setText(tips.getName());
         holder.card_detail.setText(tips.getDigest());
         // 设置点赞响应

@@ -94,6 +94,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Jordin Spark"
                     android:textColor="@color/hint"
+                    android:singleLine="true"
                     android:textColorHint="@color/hint"
                     android:textSize="15dp" />
 
@@ -194,6 +195,7 @@
                     android:layout_height="wrap_content"
                     android:hint="请输入手机号码"
                     android:textColor="@color/hint"
+                    android:singleLine="true"
                     android:textColorHint="@color/hint"
                     android:textSize="15dp" />
             </LinearLayout>
