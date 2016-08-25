@@ -1,5 +1,6 @@
 package com.android.loushi.loushi.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,8 @@ import com.android.loushi.loushi.adapter.SceneRecyclerViewAdapter;
 import com.android.loushi.loushi.jsonbean.GuideJson;
 import com.android.loushi.loushi.jsonbean.SceneJson;
 import com.android.loushi.loushi.jsonbean.TopicJson;
+import com.android.loushi.loushi.ui.activity.TopicItemActivity;
+import com.android.loushi.loushi.util.KeyConstant;
 import com.android.loushi.loushi.util.MyRecyclerOnScrollListener;
 import com.android.loushi.loushi.util.SpacesItemDecoration;
 
@@ -73,22 +76,17 @@ public class GuideListFragment extends LazyFragment {
         guideRecyclerViewAdapter.setOnItemClickListener(new GuideRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getContext(), "点击item" + position, Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(getActivity(), WebViewActivity.class);
-//                //intent.putExtra
-//                //传入参数 给webview Post
-//                int pos = position;
-//                if (tabIndex == 0)
-//                    pos = position - 1;
-//                //pos -=1;
-//                intent.putExtra(WebViewActivity.TYPE, "0");
-//                //将scene以json格式传入
-//                intent.putExtra(WebViewActivity.SCENE, new Gson().toJson(bodyBeanList.get(pos)));
-//
-//
-//                startActivityForResult(intent, 2);
+                clickTopicItem(position);
             }
         });
+    }
+    private void clickTopicItem(int position){
+        Intent intent=new Intent(getContext(), TopicItemActivity.class);
+        int topicId=bodyBeanList.get(position).getId();
+        String topicName=bodyBeanList.get(position).getName();
+        intent.putExtra(KeyConstant.TOPIC_ID,topicId);
+        intent.putExtra(KeyConstant.TOPIC_NAME,topicName);
+        startActivity(intent);
     }
     protected void setLoadMoreListener() {
         mRecyclerView.addOnScrollListener(new MyRecyclerOnScrollListener() {

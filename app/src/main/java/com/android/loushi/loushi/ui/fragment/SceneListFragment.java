@@ -81,19 +81,7 @@ public class SceneListFragment extends LazyFragment {
                 String sceneJsonString=new Gson().toJson(bodyBeanList.get(position));
                 intent.putExtra("SCENE_STRING",sceneJsonString);
                 getContext().startActivity(intent);
-//                Intent intent = new Intent(getActivity(), WebViewActivity.class);
-//                //intent.putExtra
-//                //传入参数 给webview Post
-//                int pos = position;
-//                if (tabIndex == 0)
-//                    pos = position - 1;
-//                //pos -=1;
-//                intent.putExtra(WebViewActivity.TYPE, "0");
-//                //将scene以json格式传入
-//                intent.putExtra(WebViewActivity.SCENE, new Gson().toJson(bodyBeanList.get(pos)));
-//
-//
-//                startActivityForResult(intent, 2);
+
             }
         });
     }
