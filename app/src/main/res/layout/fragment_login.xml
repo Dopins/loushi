@@ -12,22 +12,24 @@
         android:id="@+id/login_edit_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="13"
-        android:textColorHint="@color/hint"
-        android:inputType="phone"
         android:drawableLeft="@drawable/call"
-        android:drawablePadding="5dp"/>
+        android:drawablePadding="5dp"
+        android:ems="13"
+        android:inputType="phone"
+        android:singleLine="true"
+        android:textColorHint="@color/hint" />
 
     <EditText
         android:id="@+id/login_edit_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/login_edit_phone"
-        android:ems="10"
-        android:textColorHint="@color/hint"
-        android:inputType="textPassword"
         android:drawableLeft="@drawable/password"
-        android:drawablePadding="5dp"/>
+        android:drawablePadding="5dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:textColorHint="@color/hint" />
 
     <Button
         android:id="@+id/btn_login"
@@ -41,18 +43,18 @@
         android:textColor="@color/hint" />
 
     <RelativeLayout
+        android:id="@+id/btn_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btn_login"
-        android:layout_marginTop="16dp"
-        android:id="@+id/btn_layout">
+        android:layout_marginTop="16dp">
 
         <ImageButton
             android:id="@+id/btn_xinlang"
             android:layout_width="82dp"
             android:layout_height="46dp"
-            android:background="@drawable/shape_btn_xinlang"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/shape_btn_xinlang"
             android:scaleType="center"
             android:src="@drawable/weibo" />
 
@@ -60,20 +62,20 @@
             android:id="@+id/btn_weixin"
             android:layout_width="82dp"
             android:layout_height="46dp"
-            android:background="@drawable/shape_btn_weixin"
             android:layout_toLeftOf="@+id/btn_xinlang"
+            android:background="@drawable/shape_btn_weixin"
             android:scaleType="center"
-            android:src="@drawable/wechat"/>
+            android:src="@drawable/wechat" />
 
         <ImageButton
             android:id="@+id/btn_qq"
             android:layout_width="82dp"
             android:layout_height="46dp"
             android:layout_gravity="right"
-            android:background="@drawable/shape_btn_qq"
             android:layout_toRightOf="@+id/btn_xinlang"
+            android:background="@drawable/shape_btn_qq"
             android:scaleType="center"
-            android:src="@drawable/qq"/>
+            android:src="@drawable/qq" />
 
     </RelativeLayout>
 
@@ -81,12 +83,12 @@
         android:id="@+id/btn_forgetpassword"
         android:layout_width="wrap_content"
         android:layout_height="46dp"
+        android:layout_below="@+id/btn_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         android:background="@null"
         android:text="忘记密码？请点击此处找回密码"
-        android:textColor="@color/hint"
-        android:layout_below="@+id/btn_layout"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"/>
+        android:textColor="@color/hint" />
 
 
 </RelativeLayout>
